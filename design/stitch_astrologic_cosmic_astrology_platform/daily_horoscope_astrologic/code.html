@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .cosmic-stars { background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 60px 90px, #acedff, rgba(0,0,0,0)), radial-gradient(1px 1px at 150px 70px, #d2bbff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 210px 180px, #ffffff, rgba(0,0,0,0)), radial-gradient(2px 2px at 320px 120px, #4cd7f6, rgba(0,0,0,0)), radial-gradient(1px 1px at 400px 240px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 480px 60px, #cebdff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 550px 350px; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#732ee4", "surface-variant": "#333345", "inverse-surface": "#e3e0f8", "surface-container-highest": "#333345", "tertiary-fixed": "#e8ddff", "on-surface": "#e3e0f8", "surface-dim": "#121222", "on-tertiary-container": "#ebe1ff", "on-surface-variant": "#ccc3d8", "on-secondary-fixed": "#001f26", "secondary-fixed": "#acedff", "primary": "#d2bbff", "surface-container-high": "#29283a", "primary-container": "#7c3aed", "on-tertiary": "#381385", "surface-tint": "#d2bbff", "on-primary": "#3f008e", "primary-fixed": "#eaddff", "tertiary": "#cebdff", "secondary": "#4cd7f6", "on-primary-fixed": "#25005a", "on-secondary-container": "#00424e", "on-primary-fixed-variant": "#5a00c6", "secondary-container": "#03b5d3", "inverse-on-surface": "#2f2f40", "on-secondary": "#003640", "surface-container-low": "#1a1a2b", "secondary-fixed-dim": "#4cd7f6", "surface-container": "#1e1e2f", "surface-container-lowest": "#0c0c1d", "on-tertiary-fixed-variant": "#4f319c", "error": "#ffb4ab", "on-secondary-fixed-variant": "#004e5c", "on-primary-container": "#ede0ff", "tertiary-fixed-dim": "#cebdff", "on-error-container": "#ffdad6", "outline": "#958da1", "surface": "#121222", "background": "#121222", "error-container": "#93000a", "on-tertiary-fixed": "#21005e", "on-error": "#690005", "outline-variant": "#4a4455", "primary-fixed-dim": "#d2bbff", "on-background": "#e3e0f8", "tertiary-container": "#6f54bf", "surface-bright": "#38374a" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "space-2xs": "0.25rem", "space-xl": "2rem", "gutter-mobile": "1rem", "space-2xl": "3rem", "margin-mobile": "1.25rem", "gutter-desktop": "1.5rem", "space-sm": "0.75rem", "space-md": "1rem", "space-3xl": "4rem", "margin-desktop": "3rem", "space-xs": "0.5rem" }, "fontFamily": { "headline-sm": [ "sora" ], "body-md": [ "inter" ], "display-lg": [ "sora" ], "body-sm": [ "inter" ], "body-lg": [ "inter" ], "headline-md": [ "sora" ], "label-code-sm": [ "jetbrainsMono" ], "label-code-md": [ "jetbrainsMono" ], "headline-lg-mobile": [ "sora" ], "headline-lg": [ "sora" ], "display-lg-mobile": [ "sora" ], "pill-tag": [ "jetbrainsMono" ] }, "fontSize": { "headline-sm": [ "18px", { "lineHeight": "26px", "fontWeight": "600" } ], "body-md": [ "14px", { "lineHeight": "22px", "fontWeight": "400" } ], "display-lg": [ "48px", { "lineHeight": "56px", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "26px", "fontWeight": "400" } ], "headline-md": [ "22px", { "lineHeight": "30px", "fontWeight": "500" } ], "label-code-sm": [ "11px", { "lineHeight": "16px", "fontWeight": "400" } ], "label-code-md": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-lg-mobile": [ "24px", { "lineHeight": "32px", "fontWeight": "500" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "fontWeight": "500" } ], "display-lg-mobile": [ "32px", { "lineHeight": "40px", "fontWeight": "600" } ], "pill-tag": [ "10px", { "lineHeight": "12px", "fontWeight": "600" } ] } } } };</script></head><body class="bg-background font-body-md text-body-md text-on-surface min-h-screen relative selection:bg-primary-container selection:text-on-primary-container"><div class="fixed inset-0 pointer-events-none cosmic-stars opacity-40 z-0"></div><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]"><div class="h-16 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-4"><div class="flex items-center gap-3 shrink-0"><img alt="AstroLogic Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VfiGozCCUXO_8FqxqveKQFHzchohl1tff_8RcvnqMh3SFjAQc86Wx-ByhvqHskYokS4OB6j2jNNhJhl-e8Pk4YIZdsQPoxn1tqh-A0pK-5rTu3UGqwhL6WVtvilbjsxP_b-L-mlb9Dml2htrsFjjQPHEyC9Vxt7qZvkIHGzis7Nno7y1Oh2D0tg40Hubswd-KVfwH4U93amMSawtkeZck8YBKs0cAjifYCxm94iZoTYiLcmN3sl8ByPrf0"/><a class="font-headline-sm text-headline-sm tracking-tight bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent hover:opacity-90 transition-opacity" data-path="home" href="#">AstroLogic</a></div><nav class="hidden xl:flex items-center gap-1 overflow-x-auto py-1" data-active-classes="bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]"><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="home" href="#">Home</a><a aria-current="page" class="px-3 py-1.5 rounded-full transition-all bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]" data-path="dashboard" href="#">Dashboard</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tarot-reading" href="#">Tarot Reading</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="birth-chart" href="#">Birth Chart</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="zodiac" href="#">Zodiac</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tarot-deck" href="#">Tarot Deck</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="ai-guide" href="#">AI Guide</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="compatibility" href="#">Compatibility</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="horoscope" href="#">Horoscope</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="card-scanner" href="#">Card Scanner</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="history" href="#">History</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="analytics" href="#">Analytics</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about" href="#">About</a></nav><div class="flex items-center gap-3 shrink-0"><button class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-sm text-body-sm font-medium shadow-[0_0_20px_rgba(124,58,237,0.35)] hover:shadow-[0_0_24px_rgba(76,215,246,0.5)] transition-all" type="button"><span class="material-symbols-outlined text-base">auto_awesome</span><span>New Reading</span></button><button aria-label="Notifications" class="relative p-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6]"></span></button><div class="relative p-0.5 rounded-full bg-gradient-to-tr from-primary via-secondary to-tertiary shadow-[0_0_12px_rgba(206,189,255,0.4)]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover block" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSV7G4_DEeDlwa2Rh3F3KalyNxpnNh7UTQTXyBW9QwReJ4keNr8GY4iLIsgogUWE9-aDhso5fQFeWClly8lXyAWfvNKne5azfUFMyJjxd_-X2cFNicdglSfrTRa4o2J1ywBVzT0fu8-RdywOAvjLI4K-k7wyPoAOQfTvGUrV7RaltIj9nCHAAeDrg_ZWFTnWfnVVVDErtiAFPC26CjiZHN0cMgTKO2aBPLI9Zv9SBXHTyROhjCeM7Ppw"/></div></div></div></header><main class="relative z-10 w-full pt-16 bg-transparent"><div class="max-w-7xl mx-auto px-6 lg:px-12 py-8"><div class="flex flex-col w-full gap-8">
+<!-- Top Telemetry & User Zodiac Alignment Block -->
+<section class="relative overflow-hidden rounded-xl bg-surface-container-lowest/70 backdrop-blur-xl p-6 lg:p-8 shadow-2xl">
+<div class="absolute -right-24 -top-24 w-96 h-96 rounded-full bg-primary/10 blur-3xl pointer-events-none"></div>
+<div class="absolute -left-20 bottom-0 w-80 h-80 rounded-full bg-secondary/10 blur-3xl pointer-events-none"></div>
+<div class="relative z-10 flex flex-col gap-6">
+<!-- Section Titles -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-4">
+<div class="space-y-2">
+<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/80 text-secondary font-pill-tag text-pill-tag uppercase tracking-widest">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
+            Telemetry Stream Active • Epoch 2024.849
+          </div>
+<h1 class="font-headline-lg text-headline-lg tracking-tight text-on-surface">Daily Celestial Horoscope &amp; Ephemeris Transits</h1>
+<p class="font-body-md text-body-md text-on-surface-variant max-w-3xl">
+            Real-time planetary transits mapped against your Scorpio natal houses and elemental coordinates.
+          </p>
+</div>
+<button class="shrink-0 inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary-container via-inverse-primary to-secondary-container text-on-primary font-headline-sm text-headline-sm shadow-xl hover:shadow-secondary/30 transition-all duration-300 group" id="recalibrate-btn" type="button">
+<span class="material-symbols-outlined text-base group-hover:rotate-180 transition-transform duration-500">satellite_alt</span>
+<span>Recalibrate Transit Forecast</span>
+</button>
+</div>
+<!-- Badge, Longitude & Transit Alert Card -->
+<div class="grid grid-cols-1 lg:grid-cols-12 gap-4 mt-2">
+<div class="lg:col-span-4 rounded-lg bg-surface-container/60 p-5 flex items-center gap-5 shadow-sm backdrop-blur-md">
+<div class="relative flex items-center justify-center w-16 h-16 rounded-full bg-surface-container-highest/60 text-secondary shadow-lg">
+<span class="text-3xl font-bold select-none">♏</span>
+<div class="absolute inset-0 rounded-full bg-secondary/20 blur-md animate-pulse"></div>
+</div>
+<div class="flex flex-col">
+<div class="flex items-center gap-2">
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">Scorpio</span>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary font-pill-tag text-pill-tag uppercase tracking-wider">Water • Fixed</span>
+</div>
+<span class="font-label-code-md text-label-code-md text-on-surface-variant mt-1">Solar Longitude: <span class="text-primary font-medium">224° 18' 42"</span></span>
+<span class="font-body-sm text-body-sm text-outline mt-0.5">Lunar Mansion: Anuradha (16th Nakshatra)</span>
+</div>
+</div>
+<div class="lg:col-span-5 rounded-lg bg-surface-container/60 p-5 flex flex-col justify-between shadow-sm backdrop-blur-md">
+<div class="flex items-center justify-between">
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-secondary font-semibold flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">radar</span> Active Aspect Anchor
+            </span>
+<span class="font-label-code-sm text-label-code-sm text-primary px-2 py-0.5 rounded-full bg-primary-container/20">Orb: 0° 24' Peak</span>
+</div>
+<div class="my-2">
+<p class="font-headline-sm text-headline-sm text-on-surface flex items-center gap-2">
+<span class="material-symbols-outlined text-secondary text-lg">change_circle</span>
+              Mars Trine Saturn — Grounded Ambition
+            </p>
+<p class="font-body-sm text-body-sm text-on-surface-variant line-clamp-1 mt-0.5">
+              Natal 1st House Scorpio resonates with 5th House Pisces; hyper-focus unlocked for structured creation.
+            </p>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-1.5 overflow-hidden">
+<div class="bg-gradient-to-r from-primary to-secondary h-1.5 rounded-full w-4/5 shadow-[0_0_8px_currentColor]"></div>
+</div>
+</div>
+<div class="lg:col-span-3 rounded-lg bg-surface-container/60 p-5 flex flex-col justify-between shadow-sm backdrop-blur-md">
+<div class="flex items-center justify-between">
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-on-surface-variant">Observer Resonance</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">94.2%</span>
+</div>
+<div class="flex items-center gap-3 py-1">
+<svg class="w-10 h-10 shrink-0 text-secondary" viewbox="0 0 36 36">
+<path class="text-surface-container-highest" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-width="3"></path>
+<path class="text-secondary" d="M18 2.0845 a 15.9155 15.9155 0 0 1 0 31.831 a 15.9155 15.9155 0 0 1 0 -31.831" fill="none" stroke="currentColor" stroke-dasharray="94, 100" stroke-linecap="round" stroke-width="3"></path>
+<text class="text-center font-label-code-sm" fill="currentColor" font-size="8" text-anchor="middle" x="18" y="21">Ψ</text>
+</svg>
+<div class="flex flex-col">
+<span class="font-body-sm text-body-sm text-on-surface font-medium">Deep-Void Coherence</span>
+<span class="font-label-code-sm text-label-code-sm text-outline">Deterministic Clarity</span>
+</div>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-tertiary">Solar-Ascendant Node: Intact</span>
+</div>
+</div>
+<!-- Interactive Mood State Selector -->
+<div class="flex flex-col gap-3 pt-2">
+<div class="flex items-center justify-between">
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-on-surface-variant flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">neurology</span> Current Subjective State Integration
+          </span>
+<span class="font-label-code-sm text-label-code-sm text-outline" id="selected-mood-indicator">Active Vector: Reflective (Hydraulic Mind)</span>
+</div>
+<div class="flex flex-wrap items-center gap-2.5" id="mood-pill-container">
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Happy" type="button">Happy</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Calm" type="button">Calm</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Excited" type="button">Excited</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Uncertain" type="button">Uncertain</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Stressed" type="button">Stressed</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-secondary/15 text-secondary shadow-lg font-pill-tag text-pill-tag uppercase tracking-wider shadow-secondary/30 transition-all active-mood" data-mood="Reflective" type="button">Reflective</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Curious" type="button">Curious</button>
+<button class="mood-pill px-4 py-1.5 rounded-full bg-surface-container-high/60 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider hover:bg-surface-bright transition-all" data-mood="Neutral" type="button">Neutral</button>
+</div>
+</div>
+</div>
+</section>
+<!-- Hero Highlight Card: The Daily Axiom -->
+<section class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-stretch">
+<div class="lg:col-span-8 relative rounded-xl bg-gradient-to-br from-surface-container-high/70 via-surface-container/80 to-surface-container-lowest p-8 shadow-2xl backdrop-blur-xl overflow-hidden flex flex-col justify-between">
+<div class="absolute top-0 right-0 p-8 text-outline-variant/20 pointer-events-none select-none">
+<span class="material-symbols-outlined text-9xl">cyclone</span>
+</div>
+<div class="space-y-4 relative z-10">
+<div class="flex items-center gap-3">
+<span class="px-3 py-1 rounded-full bg-primary-container/30 text-primary font-pill-tag text-pill-tag uppercase tracking-widest">
+            Axiom Transduction #1449
+          </span>
+<span class="font-label-code-sm text-label-code-sm text-outline">Harmonic Key: Octave VIII</span>
+</div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface font-semibold leading-tight">
+          "The oceanic trench yields to sustained subterranean pressure, transmuting silent friction into obsidian authority."
+        </h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+          Your fixed water archetype meets the rigorous structural alignment of Saturn's discipline today. As the Moon enters its waning trine phase, stop scattering intent across multiple horizons. The cosmos does not demand rapid expansion—it invites an impenetrable consolidation of will. Speak less, fortify your sanctuary, and permit internal architecture to solidify before revealing tomorrow's moves.
+        </p>
+</div>
+<div class="mt-8 pt-6 grid grid-cols-3 gap-4 relative z-10 bg-surface-container-lowest/50 rounded-lg p-4">
+<div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant block">Energetic Vector</span>
+<span class="font-headline-sm text-headline-sm text-secondary font-medium">Inward Centrifugal</span>
+</div>
+<div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant block">Governing Decan</span>
+<span class="font-headline-sm text-headline-sm text-tertiary font-medium">Scorpio II (Sun)</span>
+</div>
+<div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant block">Alchemical Resonance</span>
+<span class="font-headline-sm text-headline-sm text-primary font-medium">Nigredo to Rubedo</span>
+</div>
+</div>
+</div>
+<!-- Visual Cosmic Telemetry Widget -->
+<div class="lg:col-span-4 rounded-xl bg-surface-container/60 p-6 flex flex-col justify-between shadow-xl backdrop-blur-xl">
+<div class="flex items-center justify-between">
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-secondary font-semibold">Ephemeris Vectors</span>
+<span class="material-symbols-outlined text-on-surface-variant text-base">all_inclusive</span>
+</div>
+<div class="relative flex items-center justify-center my-6">
+<!-- Generative Astrological Radar SVG -->
+<svg class="w-56 h-56 text-outline-variant" viewbox="0 0 200 200">
+<circle cx="100" cy="100" fill="none" opacity="0.3" r="90" stroke="currentColor" stroke-width="1"></circle>
+<circle cx="100" cy="100" fill="none" opacity="0.4" r="60" stroke="currentColor" stroke-width="1"></circle>
+<circle cx="100" cy="100" fill="none" opacity="0.5" r="30" stroke="currentColor" stroke-width="1"></circle>
+<line opacity="0.25" stroke="currentColor" stroke-width="1" x1="100" x2="100" y1="10" y2="190"></line>
+<line opacity="0.25" stroke="currentColor" stroke-width="1" x1="10" x2="190" y1="100" y2="100"></line>
+<!-- Planet Nodes & Aspect chords -->
+<polygon fill="rgba(124, 58, 237, 0.15)" points="100,25 165,135 35,135" stroke="#7c3aed" stroke-width="1.5"></polygon>
+<line stroke="#4cd7f6" stroke-dasharray="3,3" stroke-width="1.5" x1="100" x2="145" y1="25" y2="160"></line>
+<circle class="shadow-lg shadow-secondary" cx="100" cy="25" fill="#4cd7f6" r="5"></circle>
+<circle cx="165" cy="135" fill="#d2bbff" r="5"></circle>
+<circle cx="35" cy="135" fill="#cebdff" r="5"></circle>
+<circle cx="145" cy="160" fill="#ffb4ab" r="4"></circle>
+<text fill="#4cd7f6" font-family="jetbrainsMono" font-size="8" text-anchor="middle" x="100" y="18">♂ Mars</text>
+<text fill="#d2bbff" font-family="jetbrainsMono" font-size="8" x="175" y="145">♄ Sat</text>
+<text fill="#cebdff" font-family="jetbrainsMono" font-size="8" text-anchor="end" x="25" y="145">☉ Sun</text>
+<text fill="#ffb4ab" font-family="jetbrainsMono" font-size="8" x="155" y="172">☽ Moon</text>
+</svg>
+</div>
+<div class="space-y-2">
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Primal Polar Equilibrium</span>
+<span class="font-label-code-sm text-label-code-sm text-secondary">78% Yin / Water</span>
+</div>
+<div class="flex justify-between items-center text-body-sm font-body-sm">
+<span class="text-on-surface-variant">Occultation Ingress</span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface">19:42:10 UTC</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Planetary Transits Matrix -->
+<section class="rounded-xl bg-surface-container-lowest/60 backdrop-blur-xl p-6 lg:p-8 shadow-xl">
+<div class="flex flex-col md:flex-row md:items-center justify-between pb-6 gap-3">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Planetary Transits Matrix</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Live planetary telemetry calculated through astronomical ephemeris offsets.</p>
+</div>
+<div class="flex items-center gap-2">
+<span class="px-3 py-1 rounded-full bg-surface-container-high text-on-surface-variant font-label-code-sm text-label-code-sm">Topocentric Horizon</span>
+<span class="px-3 py-1 rounded-full bg-secondary-container/20 text-secondary font-label-code-sm text-label-code-sm">Placidus Houses</span>
+</div>
+</div>
+<div class="overflow-x-auto">
+<table class="w-full text-left">
+<thead>
+<tr class="bg-surface-container-high/40 text-on-surface-variant font-pill-tag text-pill-tag uppercase tracking-wider">
+<th class="p-4 rounded-l-lg">Aspect Configuration</th>
+<th class="p-4">Type</th>
+<th class="p-4 text-right">Exact Orb</th>
+<th class="p-4">Ingress Window</th>
+<th class="p-4 rounded-r-lg">Natal Impact Zone</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm">
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="p-4 font-medium text-on-surface flex items-center gap-3">
+<span class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-secondary font-label-code-md">☍</span>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Moon Opposition Sun</span>
+<span class="block font-label-code-sm text-label-code-sm text-outline">☽ Taurus 18° 12' — ☉ Scorpio 18° 36'</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2.5 py-1 rounded-full bg-error-container/30 text-error font-label-code-sm text-label-code-sm">Major Hard (180°)</span>
+</td>
+<td class="p-4 font-label-code-md text-label-code-md text-right text-secondary">0° 24' Separation</td>
+<td class="p-4 font-label-code-sm text-label-code-sm text-on-surface-variant">14:28 UTC – 22:15 UTC</td>
+<td class="p-4 text-tertiary">House VII (Relational Mirror &amp; Compromise)</td>
+</tr>
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="p-4 font-medium text-on-surface flex items-center gap-3">
+<span class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-primary font-label-code-md">✶</span>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Venus Sextile Jupiter</span>
+<span class="block font-label-code-sm text-label-code-sm text-outline">♀ Capricorn 08° 04' — ♃ Pisces 08° 52'</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2.5 py-1 rounded-full bg-primary-container/20 text-primary font-label-code-sm text-label-code-sm">Harmonic Soft (60°)</span>
+</td>
+<td class="p-4 font-label-code-md text-label-code-md text-right text-primary">0° 48' Applying</td>
+<td class="p-4 font-label-code-sm text-label-code-sm text-on-surface-variant">Full Day Resonance</td>
+<td class="p-4 text-tertiary">House III &amp; V (Creative Architecture)</td>
+</tr>
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="p-4 font-medium text-on-surface flex items-center gap-3">
+<span class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-error font-label-code-md">℞</span>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Mercury Post-Shadow Integration</span>
+<span class="block font-label-code-sm text-label-code-sm text-outline">☿ Sagittarius 29° 11' — Direct Ingress</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2.5 py-1 rounded-full bg-surface-variant text-on-surface-variant font-label-code-sm text-label-code-sm">Critical Boundary</span>
+</td>
+<td class="p-4 font-label-code-md text-label-code-md text-right text-outline">Stationary Direct</td>
+<td class="p-4 font-label-code-sm text-label-code-sm text-on-surface-variant">Through Nov 28</td>
+<td class="p-4 text-tertiary">House II (Resource Contracts &amp; Sovereignty)</td>
+</tr>
+<tr class="hover:bg-surface-container-high/30 transition-colors">
+<td class="p-4 font-medium text-on-surface flex items-center gap-3">
+<span class="w-7 h-7 rounded-full bg-surface-container-high flex items-center justify-center text-secondary font-label-code-md">△</span>
+<div>
+<span class="font-headline-sm text-headline-sm text-on-surface">Mars Trine Saturn</span>
+<span class="block font-label-code-sm text-label-code-sm text-outline">♂ Scorpio 19° 44' — ♄ Pisces 19° 20'</span>
+</div>
+</td>
+<td class="p-4">
+<span class="px-2.5 py-1 rounded-full bg-secondary-container/20 text-secondary font-label-code-sm text-label-code-sm">Grand Trine Water (120°)</span>
+</td>
+<td class="p-4 font-label-code-md text-label-code-md text-right text-secondary">0° 24' Exact</td>
+<td class="p-4 font-label-code-sm text-label-code-sm text-on-surface-variant">Peak Active (18h remaining)</td>
+<td class="p-4 text-tertiary">House I &amp; House V (Endurance Mastery)</td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<!-- 4 Pillar Guidance Cards -->
+<section class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+<!-- Pillar 1 -->
+<div class="rounded-xl bg-surface-container/60 p-6 flex flex-col justify-between shadow-xl backdrop-blur-xl hover:bg-surface-container-high/60 transition-all duration-300">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="w-9 h-9 rounded-lg bg-primary-container/30 text-primary flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">bolt</span>
+</span>
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-outline">Vector I</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Guidance &amp; Action</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Commit strictly to high-leverage solo initiatives. Mars empowers decisive execution without emotional turbulence. Do not pitch ideas today—implement foundational prototypes quietly.
+        </p>
+</div>
+<div class="mt-6 pt-4 bg-surface-container-lowest/40 rounded-lg p-3">
+<span class="font-label-code-sm text-label-code-sm text-primary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">check_circle</span> Protocol: Uncompromised Focus
+        </span>
+</div>
+</div>
+<!-- Pillar 2 -->
+<div class="rounded-xl bg-surface-container/60 p-6 flex flex-col justify-between shadow-xl backdrop-blur-xl hover:bg-surface-container-high/60 transition-all duration-300">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="w-9 h-9 rounded-lg bg-secondary-container/30 text-secondary flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">dark_mode</span>
+</span>
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-outline">Vector II</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Subconscious Reflection</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Taurus Full Moon residual activates buried control anxieties. Notice where you demand guarantees from partners. Shadow integration requires recognizing resistance as fear of vulnerability.
+        </p>
+</div>
+<div class="mt-6 pt-4 bg-surface-container-lowest/40 rounded-lg p-3">
+<span class="font-label-code-sm text-label-code-sm text-secondary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">visibility</span> Dream Archetype: Deep Geodes
+        </span>
+</div>
+</div>
+<!-- Pillar 3 -->
+<div class="rounded-xl bg-surface-container/60 p-6 flex flex-col justify-between shadow-xl backdrop-blur-xl hover:bg-surface-container-high/60 transition-all duration-300">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="w-9 h-9 rounded-lg bg-tertiary-container/30 text-tertiary flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</span>
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-outline">Vector III</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Cosmic Opportunity</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Venus sextile Jupiter unseals synastry conduits around 16:00 UTC. Financial negotiations, collaborative contracts, and mentorship alignments encounter supernatural smoothness.
+        </p>
+</div>
+<div class="mt-6 pt-4 bg-surface-container-lowest/40 rounded-lg p-3">
+<span class="font-label-code-sm text-label-code-sm text-tertiary flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">hub</span> Window: 15:45 – 18:20 UTC
+        </span>
+</div>
+</div>
+<!-- Pillar 4 -->
+<div class="rounded-xl bg-surface-container/60 p-6 flex flex-col justify-between shadow-xl backdrop-blur-xl hover:bg-surface-container-high/60 transition-all duration-300">
+<div class="space-y-3">
+<div class="flex items-center justify-between">
+<span class="w-9 h-9 rounded-lg bg-error-container/30 text-error flex items-center justify-center">
+<span class="material-symbols-outlined text-lg">shield</span>
+</span>
+<span class="font-pill-tag text-pill-tag uppercase tracking-widest text-outline">Vector IV</span>
+</div>
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold">Cautionary Boundary</h4>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+          Beware abrupt digital commitments. Post-shadow Mercury in Sagittarius induces premature overpromising. Reject verbal pacts that lack written parameters.
+        </p>
+</div>
+<div class="mt-6 pt-4 bg-surface-container-lowest/40 rounded-lg p-3">
+<span class="font-label-code-sm text-label-code-sm text-error flex items-center gap-1">
+<span class="material-symbols-outlined text-sm">crisis_alert</span> Trap: Ambiguous Verbal Assents
+        </span>
+</div>
+</div>
+</section>
+<!-- Prolog Engine Symbolic Verification Box -->
+<section class="rounded-xl bg-surface-container-lowest/90 backdrop-blur-xl p-6 shadow-2xl space-y-4">
+<div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+<div class="flex items-center gap-3">
+<span class="w-2.5 h-2.5 rounded-full bg-secondary animate-pulse shadow-[0_0_10px_#4cd7f6]"></span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Prolog Astrological Deduction Engine</h3>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline">Kernel: SWI-Prolog v9.2.4-CELESTIAL</span>
+</div>
+<!-- Terminal Code Block -->
+<div class="rounded-lg bg-surface-container-lowest p-4 font-label-code-sm text-label-code-sm text-on-surface-variant overflow-x-auto space-y-1.5 shadow-inner">
+<div class="text-secondary/70">% ASTROLOGIC DETERMINISTIC REASONING ENGINE v4.2</div>
+<div class="text-tertiary">?- query_daily_horoscope(subject(scorpio, 224.31), ActiveAxiom, Confidence).</div>
+<div class="text-on-surface/90">
+<span class="text-primary">fact_transit(</span>mars, 229.73, house_1<span class="text-primary">).</span>
+<span class="text-primary">fact_transit(</span>saturn, 349.33, house_5<span class="text-primary">).</span>
+</div>
+<div>
+<span class="text-secondary">rule_aspect(</span>Mars, Saturn, Trine<span class="text-secondary">) :-</span>
+        abs(229.73 - 349.33) =:= 119.6, orb(119.6, 120.0, 0.40), 0.40 &lt;= 3.0.
+      </div>
+<div class="text-on-surface/90">
+<span class="text-tertiary-fixed-dim">deduce_axiom(</span>scorpio, mars_trine_saturn, 'Consolidation of Will'<span class="text-tertiary-fixed-dim">) :-</span>
+        element(scorpio, water), element(pisces, water), mutual_receptive(true).
+      </div>
+<div class="text-secondary font-medium pt-1">
+        ✓ Proof verified: Axiom #1449 logically unified in 2.34ms. Model state: STABLE.
+      </div>
+</div>
+</section>
+</div>
+<!-- Inline Interaction Logic -->
+<script>
+  (function() {
+    const pills = document.querySelectorAll('.mood-pill');
+    const moodIndicator = document.getElementById('selected-mood-indicator');
+    const recalibrateBtn = document.getElementById('recalibrate-btn');
+
+    const descriptions = {
+      'Happy': 'Active Vector: Radiant (Expansion Harmonic)',
+      'Calm': 'Active Vector: Equilibrium (Hydrodynamic Peace)',
+      'Excited': 'Active Vector: Kinetic Ignition (Solar Flare Trine)',
+      'Uncertain': 'Active Vector: Fog Navigation (Neptunian Ingress)',
+      'Stressed': 'Active Vector: Compressed Core (Saturnian Pressure)',
+      'Reflective': 'Active Vector: Reflective (Hydraulic Mind)',
+      'Curious': 'Active Vector: Synaptic Quest (Mercurial Probe)',
+      'Neutral': 'Active Vector: Ground Zero (Ephemeris Baseline)'
+    };
+
+    pills.forEach(pill => {
+      pill.addEventListener('click', function() {
+        pills.forEach(p => {
+          p.classList.remove('bg-secondary/15', 'text-secondary', 'shadow-lg', 'shadow-secondary/30');
+          p.classList.add('bg-surface-container-high/60', 'text-on-surface-variant');
+        });
+        this.classList.remove('bg-surface-container-high/60', 'text-on-surface-variant');
+        this.classList.add('bg-secondary/15', 'text-secondary', 'shadow-lg', 'shadow-secondary/30');
+
+        const mood = this.getAttribute('data-mood');
+        if (moodIndicator && descriptions[mood]) {
+          moodIndicator.textContent = descriptions[mood];
+        }
+      });
+    });
+
+    if (recalibrateBtn) {
+      recalibrateBtn.addEventListener('click', function() {
+        const originalText = this.innerHTML;
+        this.innerHTML = '<span class="material-symbols-outlined text-base animate-spin">autorenew</span><span>Recalibrating Orbit...</span>';
+        this.disabled = true;
+        this.classList.add('opacity-80');
+
+        setTimeout(() => {
+          this.innerHTML = '<span class="material-symbols-outlined text-base">done</span><span>Telemetry Synced</span>';
+          setTimeout(() => {
+            this.innerHTML = originalText;
+            this.disabled = false;
+            this.classList.remove('opacity-80');
+          }, 1500);
+        }, 1200);
+      });
+    }
+  })();
+</script></div></main><footer class="relative z-10 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/20 py-12 mt-16"><div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6"><div class="flex items-center gap-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/80 border border-secondary/30 font-pill-tag text-pill-tag uppercase text-secondary tracking-widest"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse shadow-[0_0_6px_#4cd7f6]"></span><span>Prolog Symbolic Engine Active</span></div><span class="text-on-surface-variant font-body-sm text-body-sm">© 2024 AstroLogic Celestial Labs.</span></div><nav class="flex items-center gap-6 font-body-sm text-body-sm" data-active-classes="text-primary font-medium"><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="birth-chart" href="#">Ephemeris</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="tarot-deck" href="#">Arcana</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="ai-guide" href="#">Oracle Docs</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="about" href="#">About</a></nav><p class="text-on-surface-variant/70 font-body-sm text-body-sm text-center md:text-right max-w-xs">Synthesizing deep-space telemetry with deterministic symbolic divination. For entertainment &amp; self-reflection purposes only.</p></div></footer></body></html>

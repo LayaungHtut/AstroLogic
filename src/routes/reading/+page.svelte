@@ -1,0 +1,467 @@
+<script lang="ts">
+	import { profile } from '$lib/stores';
+	import { analyzeReading, saveReading } from '$lib/utils/api';
+	import { SPREAD_TYPES } from '$lib/types';
+	import type { ReadingResult } from '$lib/types';
+	import TarotCard from '$lib/components/TarotCard.svelte';
+	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
+	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
+	import MarkdownText from '$lib/components/MarkdownText.svelte';
+
+	let question = $state('');
+	let selectedSpread = $state('three_card');
+	let selectedTopic = $state('general');
+	let reading = $state<ReadingResult | null>(null);
+	let loading = $state(false);
+	let loadingText = $state('');
+	let error = $state('');
+	let showReasoning = $state(true);
+
+	const currentProfile = $derived($profile);
+
+	const topics = [
+		{ id: 'love', label: 'Love', icon: '❤️', color: 'from-pink-500 to-rose-600' },
+		{ id: 'career', label: 'Career', icon: '💼', color: 'from-blue-500 to-indigo-600' },
+		{ id: 'finance', label: 'Finance', icon: '💰', color: 'from-green-500 to-emerald-600' },
+		{ id: 'personal_growth', label: 'Growth', icon: '🌱', color: 'from-amber-500 to-orange-600' },
+		{ id: 'communication', label: 'Communication', icon: '🗣️', color: 'from-cyan-500 to-teal-600' },
+		{ id: 'general', label: 'General', icon: '✨', color: 'from-purple-500 to-violet-600' }
+	];
+
+	const topicSpreadMap: Record<string, string> = {
+		love: 'relationship',
+		career: 'career',
+		finance: 'decision',
+		personal_growth: 'self_reflection',
+		communication: 'three_card',
+		general: 'three_card'
+	};
+
+	function selectTopic(topicId: string) {
+		selectedTopic = topicId;
+		selectedSpread = topicSpreadMap[topicId] || 'three_card';
+	}
+
+	async function startReading() {
+		if (!question.trim()) return;
+
+		loading = true;
+		error = '';
+		reading = null;
+		showReasoning = false;
+
+		const steps = [
+			'Analyzing your question...',
+			'Consulting symbolic knowledge...',
+			'Drawing your cards...',
+			'Preparing your interpretation...'
+		];
+
+		let step = 0;
+		const stepInterval = setInterval(() => {
+			step = (step + 1) % steps.length;
+			loadingText = steps[step];
+		}, 2000);
+
+		try {
+			reading = await analyzeReading(question, currentProfile.zodiac_sign, selectedSpread);
+
+			await saveReading({
+				question: reading.question,
+				category: reading.category,
+				zodiac_sign: reading.zodiac_sign,
+				spread_type: reading.spread_type,
+				cards: reading.cards,
+				orientations: reading.cards.map((c) => c.is_reversed),
+				themes: reading.themes,
+				reasoning: reading.reasoning,
+				ai_interpretation: reading.ai_interpretation
+			});
+		} catch (e) {
+			error = e instanceof Error ? e.message : 'Failed to generate reading';
+		} finally {
+			clearInterval(stepInterval);
+			loading = false;
+			loadingText = '';
+		}
+	}
+
+	function resetReading() {
+		reading = null;
+		question = '';
+		error = '';
+		showReasoning = true;
+	}
+</script>
+
+<svelte:head>
+	<title>Tarot Reading - AstroLogic</title>
+</svelte:head>
+
+<div class="page-container">
+	<div class="relative w-full overflow-hidden">
+		<div
+			class="pointer-events-none absolute -top-24 left-1/4 -z-10 h-96 w-96 rounded-full bg-primary-container/20 blur-3xl"
+		></div>
+		<div
+			class="pointer-events-none absolute top-1/3 right-10 -z-10 h-80 w-80 rounded-full bg-secondary/10 blur-3xl"
+		></div>
+
+		<div class="mb-10 flex flex-col justify-between gap-6 md:flex-row md:items-end">
+			<div class="flex flex-col gap-2">
+				<div
+					class="inline-flex w-max items-center gap-2 rounded-full bg-surface-container-high px-3 py-1"
+				>
+					<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary"></span>
+					<span class="font-mono-data text-[10px] tracking-widest text-secondary uppercase"
+						>Autonomous Divination Array</span
+					>
+				</div>
+				<h1 class="font-headline text-3xl font-semibold tracking-tight text-on-surface md:text-4xl">
+					Tarot Reading <span class="gradient-text">Matrix</span>
+				</h1>
+				<p class="max-w-xl text-on-surface-variant">
+					Harnessing symbolic logic engines and cosmic archetypal harmonics to synthesize your
+					divination.
+				</p>
+			</div>
+			{#if currentProfile?.zodiac_sign}
+				<div
+					class="flex items-center gap-4 rounded-xl bg-surface-container-low/90 px-4 py-3 shadow-md backdrop-blur-md"
+				>
+					<div class="flex flex-col">
+						<span class="font-mono-data text-[10px] text-on-surface-variant uppercase"
+							>Seeker Sign</span
+						>
+						<span class="font-mono-data text-sm font-medium text-primary"
+							>{currentProfile.zodiac_sign}</span
+						>
+					</div>
+					<div class="h-8 w-px bg-surface-variant"></div>
+					<div class="flex flex-col">
+						<span class="font-mono-data text-[10px] text-on-surface-variant uppercase"
+							>Selected Array</span
+						>
+						<span class="font-mono-data text-sm font-medium text-secondary"
+							>{selectedSpread.replace(/_/g, ' ')}</span
+						>
+					</div>
+				</div>
+			{/if}
+		</div>
+
+		{#if !reading}
+			<div class="grid grid-cols-1 items-start gap-8 xl:grid-cols-12">
+				<!-- LEFT COLUMN: Workflow controller -->
+				<div class="flex flex-col gap-6 xl:col-span-5">
+					<div
+						class="flex flex-col gap-7 rounded-2xl bg-surface-container-lowest/80 p-6 shadow-xl backdrop-blur-xl sm:p-7"
+					>
+						<!-- STEP 1: Cosmic Query -->
+						<div class="flex flex-col gap-3">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-2">
+									<span
+										class="font-mono-data flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[11px] font-semibold text-primary"
+										>1</span
+									>
+									<label
+										class="font-headline text-base font-semibold text-on-surface"
+										for="cosmic-query">Cosmic Query</label
+									>
+								</div>
+								<span
+									class="font-mono-data text-[11px] font-medium tracking-tight {question.length >=
+									480
+										? 'text-error'
+										: 'text-primary'}">{question.length}/500</span
+								>
+							</div>
+							<div class="group relative">
+								<textarea
+									id="cosmic-query"
+									bind:value={question}
+									class="min-h-[100px] w-full resize-none rounded-xl bg-surface-container-high/40 p-4 text-sm text-on-surface transition-all duration-300 placeholder:text-outline/60 focus:ring-2 focus:ring-secondary/40 focus:outline-none"
+									maxlength="500"
+									placeholder="What celestial guidance do you seek from the arcana?"></textarea>
+								<div
+									class="pointer-events-none absolute right-3 bottom-3 flex items-center gap-1 opacity-50"
+								>
+									<span class="material-symbols-outlined text-[16px] text-secondary">tune</span>
+								</div>
+							</div>
+						</div>
+
+						<!-- STEP 2: Topic Selector Pills -->
+						<div class="flex flex-col gap-3">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-2">
+									<span
+										class="font-mono-data flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[11px] font-semibold text-primary"
+										>2</span
+									>
+									<span class="font-headline text-base font-semibold text-on-surface"
+										>Divination Plane</span
+									>
+								</div>
+							</div>
+							<div class="flex flex-wrap gap-2" role="radiogroup" aria-label="Reading topic">
+								{#each topics as topic}
+									<button
+										type="button"
+										class="font-mono-data flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium transition-all
+											{selectedTopic === topic.id
+											? 'bg-primary-container text-on-primary-container shadow-sm'
+											: 'bg-surface-container text-on-surface-variant hover:bg-surface-bright hover:text-on-surface'}"
+										onclick={() => selectTopic(topic.id)}
+									>
+										<span>{topic.icon}</span>
+										<span>{topic.label}</span>
+									</button>
+								{/each}
+							</div>
+						</div>
+
+						<!-- STEP 3: Spread Type Selector -->
+						<div class="flex flex-col gap-3">
+							<div class="flex items-center justify-between">
+								<div class="flex items-center gap-2">
+									<span
+										class="font-mono-data flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[11px] font-semibold text-primary"
+										>3</span
+									>
+									<span class="font-headline text-base font-semibold text-on-surface"
+										>Geometric Array</span
+									>
+								</div>
+								<span class="font-mono-data text-[10px] tracking-wider text-secondary uppercase">
+									{SPREAD_TYPES.find((s) => s.id === selectedSpread)?.count ?? ''} card{(SPREAD_TYPES.find(
+										(s) => s.id === selectedSpread
+									)?.count ?? 0) === 1
+										? ''
+										: 's'}
+								</span>
+							</div>
+							<div id="spread" class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+								{#each SPREAD_TYPES as spread}
+									<button
+										type="button"
+										class="relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 text-left transition-all
+											{selectedSpread === spread.id
+											? 'bg-primary-container/20 text-on-surface shadow-md'
+											: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
+										onclick={() => (selectedSpread = spread.id)}
+									>
+										{#if selectedSpread === spread.id}
+											<div
+												class="pointer-events-none absolute -right-6 -bottom-6 h-16 w-16 rounded-full bg-primary/20 blur-xl"
+											></div>
+										{/if}
+										<div class="relative z-10 mb-1 flex items-start justify-between gap-2">
+											<div class="flex items-center gap-1.5">
+												{#if selectedSpread === spread.id}
+													<span class="h-2 w-2 shrink-0 rounded-full bg-secondary shadow-sm"></span>
+												{/if}
+												<span class="text-sm font-semibold text-on-surface">{spread.name}</span>
+											</div>
+											<span class="font-mono-data shrink-0 text-[10px] text-outline"
+												>{spread.count}</span
+											>
+										</div>
+										<span
+											class="relative z-10 text-xs {selectedSpread === spread.id
+												? 'text-primary'
+												: 'text-on-surface-variant'}">{spread.description}</span
+										>
+									</button>
+								{/each}
+							</div>
+						</div>
+
+						{#if error}
+							<div class="rounded-xl border border-error/30 bg-error-container/10 p-4">
+								<p class="text-sm text-error">{error}</p>
+							</div>
+						{/if}
+
+						<button
+							type="button"
+							class="font-headline group flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary-container via-tertiary-container to-secondary-container px-6 py-3.5 text-base font-semibold tracking-wide text-on-primary shadow-lg transition-all hover:shadow-primary-container/40 disabled:cursor-not-allowed disabled:opacity-50"
+							onclick={startReading}
+							disabled={!question.trim() || loading}
+						>
+							<span
+								class="material-symbols-outlined transition-transform duration-500 group-hover:rotate-180"
+								>cyclone</span
+							>
+							<span>{loading ? loadingText || 'Reading the arcana...' : 'Begin Reading'}</span>
+						</button>
+					</div>
+
+					{#if loading}
+						<div class="rounded-2xl bg-surface-container-low p-5">
+							<LoadingSpinner text={loadingText} />
+						</div>
+					{/if}
+				</div>
+
+				<!-- RIGHT COLUMN: Idle / status panel -->
+				<div class="flex flex-col gap-6 xl:col-span-7">
+					<div
+						class="flex min-h-[380px] flex-col items-center justify-center gap-4 rounded-2xl bg-surface-container-lowest/80 p-8 text-center shadow-xl backdrop-blur-xl sm:p-10"
+					>
+						{#if loading}
+							<span class="h-2.5 w-2.5 animate-ping rounded-full bg-secondary"></span>
+							<p class="font-mono-data text-sm tracking-tight text-secondary">
+								{loadingText || 'Consulting the arcana...'}
+							</p>
+							<p class="max-w-sm text-sm text-on-surface-variant">
+								The Prolog inference engine is evaluating elemental dignities and archetypal
+								harmonics for your query.
+							</p>
+						{:else}
+							<span class="material-symbols-outlined text-5xl text-outline">auto_awesome</span>
+							<p class="font-headline text-lg text-on-surface">Awaiting Transmission</p>
+							<p class="max-w-sm text-sm text-on-surface-variant">
+								Compose your query, choose a topic and a geometric array, then begin your reading to
+								reveal the drawn cards here.
+							</p>
+						{/if}
+					</div>
+				</div>
+			</div>
+		{:else}
+			<!-- RESULTS -->
+			<div class="flex flex-col gap-8">
+				<div
+					class="flex flex-col gap-4 rounded-2xl bg-surface-container-lowest/80 p-6 shadow-xl backdrop-blur-xl"
+				>
+					<div class="flex flex-wrap items-center justify-between gap-4">
+						<div>
+							<h2 class="font-headline text-lg font-semibold text-on-surface">Your Reading</h2>
+							<p class="text-sm text-on-surface-variant">
+								{reading.spread_name} Spread &middot; Topic: {selectedTopic.replace(/_/g, ' ')}
+							</p>
+						</div>
+						<button type="button" class="btn-secondary text-sm" onclick={resetReading}
+							>New Reading</button
+						>
+					</div>
+					<div
+						class="rounded-xl bg-surface-container-high/40 p-3 text-sm text-on-surface-variant italic"
+					>
+						&ldquo;{reading.question}&rdquo;
+					</div>
+				</div>
+
+				<!-- ACTIVE DRAWN CARDS -->
+				<div class="flex flex-col gap-4">
+					<div class="flex items-center justify-between px-1">
+						<div class="flex items-center gap-2">
+							<span class="material-symbols-outlined text-xl text-primary">view_column</span>
+							<h2 class="font-headline text-xl font-semibold text-on-surface">Active Spread</h2>
+						</div>
+						<span class="font-mono-data text-[11px] text-on-surface-variant"
+							>{reading.cards.length} CARDS DRAWN</span
+						>
+					</div>
+					<div class="grid grid-cols-2 gap-4 [perspective:1000px] md:grid-cols-4">
+						{#each reading.cards as card, i (card.card + i)}
+							<div class="flex flex-col gap-2">
+								<TarotCard {card} index={i} />
+								<div class="text-center">
+									<div class="font-mono-data text-xs font-medium tracking-wider text-primary">
+										{card.position}
+									</div>
+								</div>
+							</div>
+						{/each}
+					</div>
+				</div>
+
+				<!-- SYNTHESIS PANEL -->
+				<div
+					class="relative flex flex-col gap-6 overflow-hidden rounded-2xl bg-surface-container-low/95 p-6 shadow-xl backdrop-blur-xl sm:p-8"
+				>
+					<div
+						class="pointer-events-none absolute top-0 right-0 h-64 w-64 bg-gradient-to-bl from-primary/10 via-secondary/5 to-transparent"
+					></div>
+
+					<div
+						class="relative z-10 flex flex-col justify-between gap-4 sm:flex-row sm:items-center"
+					>
+						<div class="flex items-center gap-3">
+							<div
+								class="flex h-10 w-10 items-center justify-center rounded-full bg-primary-container/30 text-primary shadow-sm"
+							>
+								<span class="material-symbols-outlined">psychology_alt</span>
+							</div>
+							<div>
+								<h3 class="font-headline text-lg font-semibold text-on-surface">
+									Synthesized Oracle Interpretation
+								</h3>
+								<span class="font-mono-data text-[11px] text-on-surface-variant"
+									>Harmonic Convergence Analysis</span
+								>
+							</div>
+						</div>
+						{#if reading.themes.length > 0}
+							<div class="flex flex-wrap items-center gap-2">
+								{#each reading.themes as theme}
+									<span
+										class="font-mono-data rounded-full bg-primary-container px-3 py-1 text-[10px] tracking-wider text-on-primary-container uppercase"
+									>
+										{theme.replace(/_/g, ' ')}
+									</span>
+								{/each}
+							</div>
+						{/if}
+					</div>
+
+					<div class="relative z-10 rounded-xl bg-surface-container-lowest/60 p-5">
+						<MarkdownText content={reading.ai_interpretation} />
+					</div>
+
+					<!-- PROLOG SYMBOLIC REASONING TRACE -->
+					<div
+						class="relative z-10 flex flex-col overflow-hidden rounded-xl bg-surface-container-lowest/80 shadow-inner"
+					>
+						<button
+							type="button"
+							class="flex w-full cursor-pointer items-center justify-between bg-surface-container-high/60 px-5 py-3.5 text-left"
+							onclick={() => (showReasoning = !showReasoning)}
+						>
+							<div class="flex items-center gap-2.5">
+								<span
+									class="h-2 w-2 rounded-full bg-secondary {loading
+										? 'animate-ping'
+										: 'animate-pulse'}"
+								></span>
+								<span class="font-mono-data text-sm font-medium tracking-tight text-secondary"
+									>PROLOG LOGICAL INFERENCE ENGINE</span
+								>
+								<span
+									class="font-mono-data rounded bg-surface-container px-2 py-0.5 text-[10px] text-outline"
+									>DETERMINISTIC</span
+								>
+							</div>
+							<span
+								class="material-symbols-outlined text-[18px] text-secondary transition-transform {showReasoning
+									? 'rotate-180'
+									: ''}">expand_more</span
+							>
+						</button>
+
+						{#if showReasoning}
+							<div class="font-mono-data flex flex-col gap-4 p-5 text-xs">
+								{#each reading.reasoning as step, i}
+									<ReasoningStep {step} index={i} />
+								{/each}
+							</div>
+						{/if}
+					</div>
+				</div>
+			</div>
+		{/if}
+	</div>
+</div>

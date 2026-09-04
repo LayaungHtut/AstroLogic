@@ -1,0 +1,26 @@
+services:
+  backend:
+    build: ./backend
+    ports:
+      - "8000:8000"
+    environment:
+      - OPENROUTER_API_KEY=${OPENROUTER_API_KEY}
+      - OPENROUTER_MODEL=${OPENROUTER_MODEL:-openai/gpt-3.5-turbo}
+    volumes:
+      - ./prolog:/app/prolog
+      - ./database:/app/database
+    depends_on:
+      - prolog
+
+  frontend:
+    build: ./frontend
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+
+  prolog:
+    image: swipl/swipl:latest
+    volumes:
+      - ./prolog:/prolog
+    command: "true"

@@ -1,0 +1,407 @@
+<!DOCTYPE html>
+
+<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .cosmic-stars { background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 60px 90px, #acedff, rgba(0,0,0,0)), radial-gradient(1px 1px at 150px 70px, #d2bbff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 210px 180px, #ffffff, rgba(0,0,0,0)), radial-gradient(2px 2px at 320px 120px, #4cd7f6, rgba(0,0,0,0)), radial-gradient(1px 1px at 400px 240px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 480px 60px, #cebdff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 550px 350px; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#732ee4", "surface-variant": "#333345", "inverse-surface": "#e3e0f8", "surface-container-highest": "#333345", "tertiary-fixed": "#e8ddff", "on-surface": "#e3e0f8", "surface-dim": "#121222", "on-tertiary-container": "#ebe1ff", "on-surface-variant": "#ccc3d8", "on-secondary-fixed": "#001f26", "secondary-fixed": "#acedff", "primary": "#d2bbff", "surface-container-high": "#29283a", "primary-container": "#7c3aed", "on-tertiary": "#381385", "surface-tint": "#d2bbff", "on-primary": "#3f008e", "primary-fixed": "#eaddff", "tertiary": "#cebdff", "secondary": "#4cd7f6", "on-primary-fixed": "#25005a", "on-secondary-container": "#00424e", "on-primary-fixed-variant": "#5a00c6", "secondary-container": "#03b5d3", "inverse-on-surface": "#2f2f40", "on-secondary": "#003640", "surface-container-low": "#1a1a2b", "secondary-fixed-dim": "#4cd7f6", "surface-container": "#1e1e2f", "surface-container-lowest": "#0c0c1d", "on-tertiary-fixed-variant": "#4f319c", "error": "#ffb4ab", "on-secondary-fixed-variant": "#004e5c", "on-primary-container": "#ede0ff", "tertiary-fixed-dim": "#cebdff", "on-error-container": "#ffdad6", "outline": "#958da1", "surface": "#121222", "background": "#121222", "error-container": "#93000a", "on-tertiary-fixed": "#21005e", "on-error": "#690005", "outline-variant": "#4a4455", "primary-fixed-dim": "#d2bbff", "on-background": "#e3e0f8", "tertiary-container": "#6f54bf", "surface-bright": "#38374a" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "space-2xs": "0.25rem", "space-xl": "2rem", "gutter-mobile": "1rem", "space-2xl": "3rem", "margin-mobile": "1.25rem", "gutter-desktop": "1.5rem", "space-sm": "0.75rem", "space-md": "1rem", "space-3xl": "4rem", "margin-desktop": "3rem", "space-xs": "0.5rem" }, "fontFamily": { "headline-sm": [ "sora" ], "body-md": [ "inter" ], "display-lg": [ "sora" ], "body-sm": [ "inter" ], "body-lg": [ "inter" ], "headline-md": [ "sora" ], "label-code-sm": [ "jetbrainsMono" ], "label-code-md": [ "jetbrainsMono" ], "headline-lg-mobile": [ "sora" ], "headline-lg": [ "sora" ], "display-lg-mobile": [ "sora" ], "pill-tag": [ "jetbrainsMono" ] }, "fontSize": { "headline-sm": [ "18px", { "lineHeight": "26px", "fontWeight": "600" } ], "body-md": [ "14px", { "lineHeight": "22px", "fontWeight": "400" } ], "display-lg": [ "48px", { "lineHeight": "56px", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "26px", "fontWeight": "400" } ], "headline-md": [ "22px", { "lineHeight": "30px", "fontWeight": "500" } ], "label-code-sm": [ "11px", { "lineHeight": "16px", "fontWeight": "400" } ], "label-code-md": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-lg-mobile": [ "24px", { "lineHeight": "32px", "fontWeight": "500" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "fontWeight": "500" } ], "display-lg-mobile": [ "32px", { "lineHeight": "40px", "fontWeight": "600" } ], "pill-tag": [ "10px", { "lineHeight": "12px", "fontWeight": "600" } ] } } } };</script></head><body class="bg-background font-body-md text-body-md text-on-surface min-h-screen relative selection:bg-primary-container selection:text-on-primary-container"><div class="fixed inset-0 pointer-events-none cosmic-stars opacity-40 z-0"></div><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]"><div class="h-16 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-4"><div class="flex items-center gap-3 shrink-0"><img alt="AstroLogic Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VfiGozCCUXO_8FqxqveKQFHzchohl1tff_8RcvnqMh3SFjAQc86Wx-ByhvqHskYokS4OB6j2jNNhJhl-e8Pk4YIZdsQPoxn1tqh-A0pK-5rTu3UGqwhL6WVtvilbjsxP_b-L-mlb9Dml2htrsFjjQPHEyC9Vxt7qZvkIHGzis7Nno7y1Oh2D0tg40Hubswd-KVfwH4U93amMSawtkeZck8YBKs0cAjifYCxm94iZoTYiLcmN3sl8ByPrf0"/><a class="font-headline-sm text-headline-sm tracking-tight bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent hover:opacity-90 transition-opacity" data-path="home" href="#">AstroLogic</a></div><nav class="hidden xl:flex items-center gap-1 overflow-x-auto py-1" data-active-classes="bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]"><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="home" href="#">Home</a><a aria-current="page" class="px-3 py-1.5 rounded-full transition-all bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]" data-path="dashboard" href="#">Dashboard</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tarot-reading" href="#">Tarot Reading</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="birth-chart" href="#">Birth Chart</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="zodiac" href="#">Zodiac</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tarot-deck" href="#">Tarot Deck</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="ai-guide" href="#">AI Guide</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="compatibility" href="#">Compatibility</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="horoscope" href="#">Horoscope</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="card-scanner" href="#">Card Scanner</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="history" href="#">History</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="analytics" href="#">Analytics</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about" href="#">About</a></nav><div class="flex items-center gap-3 shrink-0"><button class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-sm text-body-sm font-medium shadow-[0_0_20px_rgba(124,58,237,0.35)] hover:shadow-[0_0_24px_rgba(76,215,246,0.5)] transition-all" type="button"><span class="material-symbols-outlined text-base">auto_awesome</span><span>New Reading</span></button><button aria-label="Notifications" class="relative p-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6]"></span></button><div class="relative p-0.5 rounded-full bg-gradient-to-tr from-primary via-secondary to-tertiary shadow-[0_0_12px_rgba(206,189,255,0.4)]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover block" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSV7G4_DEeDlwa2Rh3F3KalyNxpnNh7UTQTXyBW9QwReJ4keNr8GY4iLIsgogUWE9-aDhso5fQFeWClly8lXyAWfvNKne5azfUFMyJjxd_-X2cFNicdglSfrTRa4o2J1ywBVzT0fu8-RdywOAvjLI4K-k7wyPoAOQfTvGUrV7RaltIj9nCHAAeDrg_ZWFTnWfnVVVDErtiAFPC26CjiZHN0cMgTKO2aBPLI9Zv9SBXHTyROhjCeM7Ppw"/></div></div></div></header><main class="relative z-10 w-full pt-16 bg-transparent"><div class="max-w-7xl mx-auto px-6 lg:px-12 py-8"><div class="flex flex-col w-full">
+<!-- Dynamic Spatial Ambient Glows -->
+<div class="relative w-full overflow-hidden rounded-xl bg-surface-container-lowest shadow-2xl">
+<div class="absolute -top-32 -left-32 w-96 h-96 rounded-full bg-primary-container/15 blur-3xl pointer-events-none"></div>
+<div class="absolute top-1/2 -right-48 w-[32rem] h-[32rem] rounded-full bg-secondary/10 blur-3xl pointer-events-none"></div>
+<!-- Screen Sub-Header / Oracle Status Ribbon -->
+<section class="relative z-10 px-6 py-4 bg-surface-container/60 backdrop-blur-md flex flex-wrap items-center justify-between gap-4">
+<div class="flex items-center gap-3 min-w-0">
+<div class="w-10 h-10 rounded-xl bg-primary-container/30 flex items-center justify-center text-primary shadow-sm">
+<span class="material-symbols-outlined text-2xl" style="font-variation-settings: 'FILL' 1;">psychology_alt</span>
+</div>
+<div>
+<div class="flex items-center gap-2">
+<h1 class="font-headline-sm text-headline-sm text-on-surface tracking-tight">Socratic AI Oracle &amp; Hermetic Guide</h1>
+<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary font-pill-tag text-pill-tag uppercase tracking-wider">v4.8 Ephemeris</span>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Deterministic astronomical inference blended with archetypal esoteric dialectics</p>
+</div>
+</div>
+<!-- Engine Live Telemetry -->
+<div class="flex items-center gap-3">
+<div class="px-3 py-1.5 rounded-full bg-surface-container-high/80 backdrop-blur-sm flex items-center gap-2">
+<span class="w-2 h-2 rounded-full bg-secondary animate-pulse shadow-sm"></span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface">Prolog Logic Core Online</span>
+<span class="text-outline text-xs">•</span>
+<span class="font-label-code-sm text-label-code-sm text-primary">32k Symbolic Context</span>
+</div>
+<button class="p-2 rounded-lg bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-variant transition-all" id="clearChatBtn" title="Archive dialectic thread" type="button">
+<span class="material-symbols-outlined text-lg">auto_delete</span>
+</button>
+</div>
+</section>
+<!-- Split Observatory Layout -->
+<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 min-h-[760px]">
+<!-- Left Sidebar: Consultations, Dialectics & Ephemeris Feed -->
+<aside class="lg:col-span-4 xl:col-span-3 bg-surface-container-low/70 backdrop-blur-xl p-5 flex flex-col justify-between gap-6">
+<div class="space-y-6">
+<!-- Ephemeris Vector Card -->
+<div class="p-3.5 rounded-xl bg-surface-container/80 shadow-sm relative overflow-hidden group">
+<div class="flex items-center justify-between mb-2">
+<span class="font-pill-tag text-pill-tag uppercase text-secondary tracking-widest flex items-center gap-1.5">
+<span class="material-symbols-outlined text-sm">satellite_alt</span> Transit Telemetry
+              </span>
+<span class="font-label-code-sm text-label-code-sm text-primary">UTC 19:42:01</span>
+</div>
+<div class="grid grid-cols-2 gap-2 text-on-surface">
+<div class="bg-surface-container-lowest/60 p-2 rounded-lg">
+<span class="block font-pill-tag text-pill-tag text-on-surface-variant uppercase">Moon Arc</span>
+<span class="font-label-code-md text-label-code-md text-secondary">♉ 18° 24' Gibbous</span>
+</div>
+<div class="bg-surface-container-lowest/60 p-2 rounded-lg">
+<span class="block font-pill-tag text-pill-tag text-on-surface-variant uppercase">Sun Transit</span>
+<span class="font-label-code-md text-label-code-md text-tertiary">♏ 17° 12' Nox</span>
+</div>
+</div>
+</div>
+<!-- Historic Symbolic Dialogues -->
+<div>
+<div class="flex items-center justify-between mb-3 px-1">
+<span class="font-label-code-sm text-label-code-sm uppercase tracking-wider text-outline">Recent Sessions</span>
+<span class="font-pill-tag text-pill-tag px-2 py-0.5 rounded bg-surface-container-highest text-on-surface-variant">3 Active</span>
+</div>
+<div class="space-y-1.5">
+<button class="w-full text-left p-3 rounded-xl bg-surface-container-high/90 text-on-surface shadow-sm hover:bg-surface-container-highest transition-all group flex items-start justify-between gap-2">
+<div class="min-w-0">
+<p class="font-headline-sm text-headline-sm truncate text-primary group-hover:text-primary-fixed">Taurus Moon &amp; Scorpio Sun</p>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate mt-0.5">Gibbous lunar opposition dialectic</p>
+</div>
+<span class="material-symbols-outlined text-sm text-secondary mt-1">lens</span>
+</button>
+<button class="w-full text-left p-3 rounded-xl bg-surface-container/40 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-start justify-between gap-2">
+<div class="min-w-0">
+<p class="font-body-md text-body-md truncate font-medium">Celtic Cross: Career Path</p>
+<p class="font-body-sm text-body-sm text-outline truncate mt-0.5">Card 7: The Hierophant reversed</p>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline">2d</span>
+</button>
+<button class="w-full text-left p-3 rounded-xl bg-surface-container/40 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-start justify-between gap-2">
+<div class="min-w-0">
+<p class="font-body-md text-body-md truncate font-medium">Scorpio-Pisces Natal Synthesis</p>
+<p class="font-body-sm text-body-sm text-outline truncate mt-0.5">Trine 120° harmonic audit</p>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline">5d</span>
+</button>
+<button class="w-full text-left p-3 rounded-xl bg-surface-container/40 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all flex items-start justify-between gap-2">
+<div class="min-w-0">
+<p class="font-body-md text-body-md truncate font-medium">Shadow Integration: Mercury Rx</p>
+<p class="font-body-sm text-body-sm text-outline truncate mt-0.5">Epistemic revision logs</p>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-outline">1w</span>
+</button>
+</div>
+</div>
+<!-- Suggested Dialectics Seeders -->
+<div>
+<span class="block font-label-code-sm text-label-code-sm uppercase tracking-wider text-outline mb-3 px-1">Suggested Dialectics</span>
+<div class="flex flex-col gap-2">
+<button class="text-left text-on-surface-variant hover:text-on-surface p-2.5 rounded-lg bg-surface-container-lowest/50 hover:bg-surface-container-highest transition-all flex items-center gap-2 group" onclick="injectPrompt('Explain elemental dignity between Mars and Moon in Aries-Cancer axis')">
+<span class="material-symbols-outlined text-base text-primary group-hover:rotate-45 transition-transform">flare</span>
+<span class="font-body-sm text-body-sm">Elemental dignity: Mars vs Moon</span>
+</button>
+<button class="text-left text-on-surface-variant hover:text-on-surface p-2.5 rounded-lg bg-surface-container-lowest/50 hover:bg-surface-container-highest transition-all flex items-center gap-2 group" onclick="injectPrompt('What is the esoteric hermetic meaning of The Hierophant in spiritual crisis?')">
+<span class="material-symbols-outlined text-base text-secondary group-hover:rotate-45 transition-transform">psychology</span>
+<span class="font-body-sm text-body-sm">Esoteric role of The Hierophant</span>
+</button>
+<button class="text-left text-on-surface-variant hover:text-on-surface p-2.5 rounded-lg bg-surface-container-lowest/50 hover:bg-surface-container-highest transition-all flex items-center gap-2 group" onclick="injectPrompt('Examine transit square Saturn to 10th house Midheaven and career restructuring')">
+<span class="material-symbols-outlined text-base text-tertiary group-hover:rotate-45 transition-transform">all_inclusive</span>
+<span class="font-body-sm text-body-sm">Examine transit square Saturn</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Sidebar Footer Visual Element: Alchemical Engine Dial -->
+<div class="pt-4 mt-2">
+<div class="p-3 rounded-xl bg-surface-container-high/60 flex items-center gap-3">
+<!-- Inline Mini Harmonic Wave SVG Chart -->
+<svg class="w-12 h-12 text-secondary shrink-0" fill="none" viewbox="0 0 48 48">
+<circle cx="24" cy="24" r="20" stroke="currentColor" stroke-opacity="0.2" stroke-width="2"></circle>
+<circle cx="24" cy="24" r="14" stroke="currentColor" stroke-dasharray="3 3" stroke-opacity="0.4" stroke-width="1.5"></circle>
+<path d="M12 24C16 18 20 30 24 24C28 18 32 30 36 24" stroke="currentColor" stroke-linecap="round" stroke-width="2.5"></path>
+<circle cx="24" cy="24" fill="#d2bbff" r="3"></circle>
+</svg>
+<div class="min-w-0">
+<span class="font-pill-tag text-pill-tag text-primary uppercase">Hermetic Lattice</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant truncate">Orbital resonance at 98.4% balance</p>
+</div>
+</div>
+</div>
+</aside>
+<!-- Main Conversation Stream Area -->
+<main class="lg:col-span-8 xl:col-span-9 flex flex-col justify-between bg-surface-dim/40 backdrop-blur-md">
+<!-- Stream Messages Container -->
+<div class="flex-1 p-6 md:p-8 space-y-8 overflow-y-auto max-h-[640px]" id="dialogueStream">
+<!-- System Context Epoch Notification -->
+<div class="flex items-center justify-center">
+<div class="px-4 py-1.5 rounded-full bg-surface-container-low/90 text-on-surface-variant flex items-center gap-2 shadow-sm">
+<span class="material-symbols-outlined text-sm text-primary">cyclone</span>
+<span class="font-label-code-sm text-label-code-sm">Ephemeris Sync: Taurus Ingress 18°24' • Scorpio Underworld Gate</span>
+</div>
+</div>
+<!-- USER MESSAGE: Right-Aligned Deep Violet Glass Bubble -->
+<div class="flex justify-end">
+<div class="max-w-2xl bg-gradient-to-br from-primary-container to-surface-container-highest text-on-primary-container p-5 rounded-2xl rounded-tr-none shadow-xl relative overflow-hidden">
+<div class="flex items-center justify-between gap-4 mb-2">
+<div class="flex items-center gap-2">
+<span class="w-6 h-6 rounded-full bg-surface-container-lowest/40 flex items-center justify-center font-pill-tag text-pill-tag text-primary-fixed">SEEKER</span>
+<span class="font-pill-tag text-pill-tag tracking-wider text-on-primary-container/80">ALIGNED ORB</span>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-primary-container/70">19:41</span>
+</div>
+<p class="font-body-lg text-body-lg leading-relaxed text-on-primary-container">
+                How does the Waxing Gibbous Moon in Taurus affect my natal Scorpio Sun regarding creative commitments?
+              </p>
+<div class="mt-3 flex items-center gap-2 text-on-primary-container/80">
+<span class="material-symbols-outlined text-sm">schedule</span>
+<span class="font-label-code-sm text-label-code-sm">Query Vector: Lunar Opposition (178.2°)</span>
+</div>
+</div>
+</div>
+<!-- AI ORACLE RESPONSE: Left-Aligned Dark Obsidian Glass Card -->
+<div class="flex justify-start">
+<div class="max-w-3xl w-full bg-surface-container/80 backdrop-blur-2xl text-on-surface p-6 md:p-7 rounded-2xl rounded-tl-none shadow-2xl relative group">
+<!-- Subtle Cyan/Purple Accent Aura -->
+<div class="absolute -inset-0.5 rounded-2xl bg-gradient-to-r from-secondary/30 via-primary/20 to-transparent -z-10 blur-sm pointer-events-none"></div>
+<!-- Header bar of AI Oracle -->
+<div class="flex flex-wrap items-center justify-between gap-3 mb-5 pb-3">
+<div class="flex items-center gap-3">
+<div class="w-8 h-8 rounded-lg bg-gradient-to-tr from-primary-container to-secondary-container flex items-center justify-center text-on-primary shadow-sm">
+<span class="material-symbols-outlined text-lg">auto_awesome</span>
+</div>
+<div>
+<h2 class="font-headline-sm text-headline-sm text-on-surface">Oracle Dialectic Core</h2>
+<span class="font-pill-tag text-pill-tag text-secondary uppercase tracking-widest">Socratic Hermetic Deduction</span>
+</div>
+</div>
+<div class="flex items-center gap-1.5 bg-surface-container-highest/60 px-3 py-1 rounded-full">
+<span class="w-1.5 h-1.5 rounded-full bg-secondary"></span>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Confidence: 0.994</span>
+</div>
+</div>
+<!-- Structural Hermetic Sections -->
+<div class="space-y-4">
+<!-- Section 1: Celestial Axiom -->
+<div class="p-4 rounded-xl bg-surface-container-low/70">
+<div class="flex items-center gap-2 text-secondary mb-1.5">
+<span class="material-symbols-outlined text-base">brightness_low</span>
+<h3 class="font-label-code-md text-label-code-md uppercase tracking-wider font-semibold">Celestial Axiom</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed">
+                    A cardinal tension of the 2nd/8th house energetic axis. The <strong class="text-secondary font-medium">Waxing Gibbous Moon in Taurus</strong> commands sensorial grounding, methodical accumulation, and visible materiality. Conversely, your <strong class="text-tertiary font-medium">Natal Scorpio Sun</strong> demands transformative catharsis, psychic descent, and the refusal of surface-level comfort. This is not friction of decay, but the forge of manifestation.
+                  </p>
+</div>
+<!-- Section 2: Prolog Symbolic Engine Deduction Rule -->
+<div class="p-4 rounded-xl bg-surface-container-lowest/90 relative overflow-hidden font-label-code-md text-label-code-md">
+<div class="flex items-center justify-between mb-2">
+<span class="font-pill-tag text-pill-tag uppercase text-primary tracking-wider flex items-center gap-1.5">
+<span class="w-1.5 h-1.5 rounded-full bg-primary animate-ping"></span>
+                      Deterministic Prolog Logic Evaluation
+                    </span>
+<span class="font-label-code-sm text-label-code-sm text-outline">Engine ID: PR-9021</span>
+</div>
+<div class="bg-surface-container-high/40 p-3 rounded-lg text-secondary space-y-1">
+<p class="text-on-surface-variant">/* Hermetic rule resolution for transit polarity */</p>
+<p>rule_lunar_aspect(<span class="text-primary">taurus_moon</span>, <span class="text-tertiary">scorpio_sun</span>, opposition) :-</p>
+<p class="pl-4">elemental_polarity(earth, water, complementary_stress),</p>
+<p class="pl-4">harmonic_tension_index(<span class="text-error">0.84</span>),</p>
+<p class="pl-4">alchemical_prescription(<span class="text-secondary-fixed">fixatio_tangible_craft</span>).</p>
+</div>
+</div>
+<!-- Section 3: Actionable Divination & Hermetic Guidance -->
+<div class="p-4 rounded-xl bg-surface-container-low/70">
+<div class="flex items-center gap-2 text-tertiary mb-1.5">
+<span class="material-symbols-outlined text-base">magic_button</span>
+<h3 class="font-label-code-md text-label-code-md uppercase tracking-wider font-semibold">Actionable Hermetic Divination</h3>
+</div>
+<p class="font-body-md text-body-md text-on-surface leading-relaxed mb-3">
+                    Transmute the Scorpio urge for total reinvention into physical permanence. While the moon swells towards fullness in fertile Venusian earth, resist tearing down the scaffolding of works in progress.
+                  </p>
+<ul class="space-y-2 font-body-sm text-body-sm text-on-surface-variant">
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-base shrink-0 mt-0.5">check_circle</span>
+<span><strong>Anchor the Abstract:</strong> Draft physical contracts, outline exact book chapters, or mix final pigment values before the Full Moon apex.</span>
+</li>
+<li class="flex items-start gap-2">
+<span class="material-symbols-outlined text-secondary text-base shrink-0 mt-0.5">check_circle</span>
+<span><strong>Audit Resource Leakage:</strong> Taurus demands you inspect what physical energy is lost to emotional or spiritual warfare. Conserve to construct.</span>
+</li>
+</ul>
+</div>
+<!-- Visual Arcana Anchor Card Placeholder -->
+<div class="p-3 rounded-xl bg-surface-container-highest/40 flex items-center justify-between gap-4">
+<div class="flex items-center gap-3">
+<img class="w-12 h-16 object-cover rounded-lg shadow-md shrink-0" data-alt="Mystical tarot card illustration representing The Empress and The King of Pentacles combined under a glowing purple and cyan celestial nebula, glowing golden symbols of Taurus and Scorpio entwined, glassmorphism framing." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAb8VnDyG7x8zHWRB8H50w3mfjlk7eNn1SMUb5wkbJoLhBI9Hw7Hf4AaOqZkGlEkYu0T02Ef9cPi7HNuYJgRxbuiKXnsr-skC8KbGzwdpqYUjd5oeprZsr6tPFq9OOn-2uAJ1fAWi-KgpfJSA5dmfK6tnNLBk4PeNtNEkc56aVZPTDX_YhZ7UU_SFeZxb3SXs95axq8zyrjT7XohKrj3uvSOGfZe-YWu6YqbWiY4FdTAdcwkXUdkNVgtw"/>
+<div>
+<span class="font-pill-tag text-pill-tag text-primary uppercase">Active Archetype Reflection</span>
+<h4 class="font-headline-sm text-headline-sm text-on-surface">Card IV: The Emperor (Aries Decan) &amp; Queen of Pentacles</h4>
+<p class="font-body-sm text-body-sm text-outline">Harmonic stability index: 84% resonant</p>
+</div>
+</div>
+<button class="px-3 py-1.5 rounded-lg bg-surface-container-high hover:bg-surface-variant text-on-surface font-body-sm text-body-sm transition-all flex items-center gap-1">
+<span>Inspect</span>
+<span class="material-symbols-outlined text-sm">open_in_new</span>
+</button>
+</div>
+</div>
+<!-- Action Bar for Response -->
+<div class="mt-4 pt-3 flex items-center justify-between text-outline text-body-sm font-body-sm">
+<div class="flex items-center gap-3">
+<button class="hover:text-secondary flex items-center gap-1 transition-colors" title="Harmonic Confirmation">
+<span class="material-symbols-outlined text-base">thumb_up</span>
+<span class="font-label-code-sm text-label-code-sm">Resonant</span>
+</button>
+<button class="hover:text-error flex items-center gap-1 transition-colors" title="Dissonant Logic">
+<span class="material-symbols-outlined text-base">thumb_down</span>
+<span class="font-label-code-sm text-label-code-sm">Dissonant</span>
+</button>
+<button class="hover:text-primary flex items-center gap-1 transition-colors" onclick="copyDialectic()" title="Copy Prolog trace">
+<span class="material-symbols-outlined text-base">content_copy</span>
+<span class="font-label-code-sm text-label-code-sm">Copy Deduction</span>
+</button>
+</div>
+<span class="font-label-code-sm text-label-code-sm text-on-surface-variant/60">Computation latency: 412ms</span>
+</div>
+</div>
+</div>
+</div>
+<!-- Interactive Suggestions Chips Strip -->
+<div class="px-6 py-3 bg-surface-container-lowest/80 backdrop-blur-md flex items-center gap-2 overflow-x-auto">
+<span class="font-pill-tag text-pill-tag uppercase text-outline shrink-0 mr-1 flex items-center gap-1">
+<span class="material-symbols-outlined text-sm text-secondary">explore</span> Inquire:
+          </span>
+<button class="shrink-0 px-3 py-1.5 rounded-full bg-surface-container-high/70 hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-all" onclick="injectPrompt('What somatic ritual can reconcile this Taurus-Scorpio axis tension?')">
+            ✦ Somatic ritual for Taurus-Scorpio tension?
+          </button>
+<button class="shrink-0 px-3 py-1.5 rounded-full bg-surface-container-high/70 hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-all" onclick="injectPrompt('Which gemstone or talisman grounds Gibbous Moon in Taurus?')">
+            ✦ Gemstone talisman for this transit?
+          </button>
+<button class="shrink-0 px-3 py-1.5 rounded-full bg-surface-container-high/70 hover:bg-surface-container-highest text-on-surface-variant hover:text-on-surface font-body-sm text-body-sm transition-all" onclick="injectPrompt('How will the upcoming Scorpio Full Moon culminate this cycle?')">
+            ✦ Upcoming Scorpio Full Moon culmination?
+          </button>
+</div>
+<!-- Cosmic Query Input Cockpit -->
+<div class="p-4 md:p-6 bg-surface-container-low/90 backdrop-blur-2xl">
+<div class="relative bg-surface-container-lowest/90 rounded-2xl p-3 shadow-xl">
+<textarea class="w-full bg-transparent text-on-surface placeholder:text-outline font-body-md text-body-md focus:outline-none resize-none px-2 pt-1" id="oracleInput" placeholder="Formulate your cosmological or tarot inquiry for the Socratic Hermetic Engine..." rows="2"></textarea>
+<!-- Control Ribbon & Actions -->
+<div class="flex items-center justify-between pt-2 px-1">
+<div class="flex items-center gap-1 text-on-surface-variant">
+<button class="p-2 rounded-lg hover:bg-surface-container-high hover:text-secondary transition-all" title="Attach Natal Chart / Ephemeris Symbol" type="button">
+<span class="material-symbols-outlined text-lg">token</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container-high hover:text-tertiary transition-all" title="Cast Major Arcana Card Seed" type="button">
+<span class="material-symbols-outlined text-lg">style</span>
+</button>
+<button class="p-2 rounded-lg hover:bg-surface-container-high hover:text-primary transition-all" id="voiceDictateBtn" title="Cosmic Voice Dictation" type="button">
+<span class="material-symbols-outlined text-lg">mic</span>
+</button>
+<div class="hidden sm:inline-flex items-center gap-1.5 px-2.5 py-1 rounded bg-surface-container/70 text-outline font-label-code-sm text-label-code-sm ml-2">
+<span>Logic Mode:</span>
+<span class="text-secondary font-medium">Hermetic Dialectic</span>
+</div>
+</div>
+<!-- Submit CTA -->
+<button class="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-primary-container via-inverse-primary to-secondary-container text-on-primary font-body-md text-body-md font-semibold shadow-lg hover:shadow-secondary/25 hover:scale-[1.02] active:scale-[0.98] transition-all" id="sendQueryBtn" type="button">
+<span>Send Oracle Query</span>
+<span class="material-symbols-outlined text-base">send</span>
+</button>
+</div>
+</div>
+<!-- Cryptographic Context Proof Footer -->
+<div class="flex items-center justify-between mt-2.5 px-2 text-outline">
+<span class="font-label-code-sm text-label-code-sm flex items-center gap-1.5">
+<span class="material-symbols-outlined text-xs text-secondary">verified_user</span>
+              Deterministic AI with Zero Astrological Hallucination Verification
+            </span>
+<span class="font-label-code-sm text-label-code-sm">Shift + Enter for multi-line synthesis</span>
+</div>
+</div>
+</main>
+</div>
+</div>
+</div>
+<script>
+  function injectPrompt(text) {
+    const input = document.getElementById('oracleInput');
+    if (input) {
+      input.value = text;
+      input.focus();
+    }
+  }
+
+  function copyDialectic() {
+    const textToCopy = "rule_lunar_aspect(taurus_moon, scorpio_sun, opposition) -> harmonic_tension_index(0.84)";
+    navigator.clipboard?.writeText(textToCopy).then(() => {
+      alert("Prolog inference logic rule copied to clipboard.");
+    });
+  }
+
+  document.getElementById('sendQueryBtn')?.addEventListener('click', () => {
+    const input = document.getElementById('oracleInput');
+    if (!input || !input.value.trim()) return;
+
+    const userText = input.value.trim();
+    const stream = document.getElementById('dialogueStream');
+
+    // Create User Bubble
+    const userBubble = document.createElement('div');
+    userBubble.className = 'flex justify-end';
+    userBubble.innerHTML = `
+      <div class="max-w-2xl bg-gradient-to-br from-primary-container to-surface-container-highest text-on-primary-container p-5 rounded-2xl rounded-tr-none shadow-xl">
+        <div class="flex items-center justify-between gap-4 mb-2">
+          <div class="flex items-center gap-2">
+            <span class="w-6 h-6 rounded-full bg-surface-container-lowest/40 flex items-center justify-center font-pill-tag text-pill-tag text-primary-fixed">SEEKER</span>
+            <span class="font-pill-tag text-pill-tag tracking-wider text-on-primary-container/80">ALIGNED ORB</span>
+          </div>
+          <span class="font-label-code-sm text-label-code-sm text-on-primary-container/70">Just Now</span>
+        </div>
+        <p class="font-body-lg text-body-lg leading-relaxed text-on-primary-container">${userText.replace(/</g, "&lt;").replace(/>/g, "&gt;")}</p>
+      </div>
+    `;
+    stream.appendChild(userBubble);
+    input.value = '';
+
+    // Scroll to bottom
+    stream.scrollTop = stream.scrollHeight;
+
+    // Simulate Socratic Engine Processing Pulse
+    setTimeout(() => {
+      const oracleBubble = document.createElement('div');
+      oracleBubble.className = 'flex justify-start';
+      oracleBubble.innerHTML = `
+        <div class="max-w-3xl w-full bg-surface-container/80 backdrop-blur-2xl text-on-surface p-6 rounded-2xl rounded-tl-none shadow-2xl relative">
+          <div class="flex items-center gap-2 text-secondary mb-2">
+            <span class="material-symbols-outlined text-base animate-spin">cyclone</span>
+            <span class="font-label-code-md text-label-code-md">Prolog Solver: Traversing Zodiac Lattice...</span>
+          </div>
+          <p class="font-body-md text-body-md text-on-surface">The Celestial Engine is indexing your planetary decan. The tension between mutable will and fixed stars requires conscious alignment.</p>
+        </div>
+      `;
+      stream.appendChild(oracleBubble);
+      stream.scrollTop = stream.scrollHeight;
+    }, 600);
+  });
+
+  document.getElementById('voiceDictateBtn')?.addEventListener('click', () => {
+    alert("Cosmic Audio Sensor: Listening for hermetic voice frequency...");
+  });
+
+  document.getElementById('clearChatBtn')?.addEventListener('click', () => {
+    if (confirm("Seal and archive this astrological dialectic thread?")) {
+      const stream = document.getElementById('dialogueStream');
+      if (stream) {
+        stream.innerHTML = `
+          <div class="flex items-center justify-center">
+            <div class="px-4 py-1.5 rounded-full bg-surface-container-low/90 text-on-surface-variant flex items-center gap-2 shadow-sm">
+              <span class="material-symbols-outlined text-sm text-primary">restart_alt</span>
+              <span class="font-label-code-sm text-label-code-sm">Thread Cleared • Ephemeris Synchronized</span>
+            </div>
+          </div>
+        `;
+      }
+    }
+  });
+</script></div></main><footer class="relative z-10 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/20 py-12 mt-16"><div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6"><div class="flex items-center gap-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/80 border border-secondary/30 font-pill-tag text-pill-tag uppercase text-secondary tracking-widest"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse shadow-[0_0_6px_#4cd7f6]"></span><span>Prolog Symbolic Engine Active</span></div><span class="text-on-surface-variant font-body-sm text-body-sm">© 2024 AstroLogic Celestial Labs.</span></div><nav class="flex items-center gap-6 font-body-sm text-body-sm" data-active-classes="text-primary font-medium"><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="birth-chart" href="#">Ephemeris</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="tarot-deck" href="#">Arcana</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="ai-guide" href="#">Oracle Docs</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="about" href="#">About</a></nav><p class="text-on-surface-variant/70 font-body-sm text-body-sm text-center md:text-right max-w-xs">Synthesizing deep-space telemetry with deterministic symbolic divination. For entertainment &amp; self-reflection purposes only.</p></div></footer></body></html>

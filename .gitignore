@@ -1,0 +1,34 @@
+# Byte-compiled / optimized / DLL files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.env
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Database
+database/*.db
+
+# Node
+node_modules/
+.svelte-kit/
+build/
+dist/
+
+# Environment
+backend/.env
+
+# Logs
+*.log
