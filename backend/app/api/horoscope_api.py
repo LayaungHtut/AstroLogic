@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import APIRouter
 from app.services.horoscope_service import HoroscopeService
 from app.services.prolog_service import PrologService
@@ -8,8 +10,10 @@ router = APIRouter(prefix="/api/horoscope", tags=["horoscope"])
 
 @router.post("/generate")
 async def generate_horoscope(request: HoroscopeRequest):
-    guidance = PrologService.get_horoscope_guidance(
-        request.zodiac_sign, request.mood
+    # PrologService calls are synchronous, blocking pyswip queries — run each
+    # off the event loop so one slow query doesn't stall every other request.
+    guidance = await asyncio.to_thread(
+        PrologService.get_horoscope_guidance, request.zodiac_sign, request.mood
     )
     if not guidance:
         return {"error": "Could not generate horoscope"}
@@ -18,8 +22,8 @@ async def generate_horoscope(request: HoroscopeRequest):
         request.zodiac_sign, request.mood
     )
 
-    trace = PrologService.generate_horoscope_trace(
-        request.zodiac_sign, request.mood
+    trace = await asyncio.to_thread(
+        PrologService.generate_horoscope_trace, request.zodiac_sign, request.mood
     )
 
     if result:

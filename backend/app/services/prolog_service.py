@@ -1,7 +1,9 @@
 from pyswip import Prolog
 from pathlib import Path
 from app.config import PROLOG_DIR
+import ast
 import logging
+import re
 
 logger = logging.getLogger(__name__)
 
@@ -39,6 +41,23 @@ def _load_prolog_files():
 _load_prolog_files()
 
 
+def _quote_atom_list(items: list[str]) -> str:
+    """Build a Prolog list literal from user-derived strings, each safely quoted."""
+    return "[" + ",".join(_quote_atom(item) for item in items) + "]"
+
+
+def _quote_atom(text: str) -> str:
+    """Safely embed arbitrary user text as a single-quoted Prolog atom.
+
+    Backslashes must be escaped *before* quotes, or a value ending in a
+    backslash immediately followed by a quote (e.g. "foo\\'") can escape
+    the quoting and inject additional Prolog syntax into the query string
+    built around it. Escaping only quotes (the old behavior) is not safe.
+    """
+    escaped = text.replace("\\", "\\\\").replace("'", "\\'")
+    return f"'{escaped}'"
+
+
 def _safe_query(query_str: str) -> list[dict]:
     try:
         results = list(prolog.query(query_str))
@@ -53,15 +72,64 @@ def _first_result(query_str: str) -> dict | None:
     return results[0] if results else None
 
 
+def _decode_format_term(value: str) -> str:
+    """Render a stringified, unevaluated `format(Template, Args)` term.
+
+    Some Prolog trace predicates build dict fields like
+    `rule: format('~w foo', [X])` directly, instead of binding the result
+    to an atom first (`format(atom(R), '~w foo', [X]), rule: R`). SWI never
+    evaluates the format call in that position, so pyswip hands back the
+    compound term's own string form — e.g. "format(~w foo, [bar])" — which
+    would otherwise leak into the UI verbatim. Detect that shape and render
+    it in Python instead. Returns `value` unchanged if it doesn't match.
+
+    The args list is found by matching brackets from the end rather than a
+    greedy regex, since a naive `(.*), (\\[.*\\])` split picks the *last*
+    top-level ", [" it can find — which is wrong whenever an arg is itself
+    a list (e.g. `format('~w: ~w', [sign, [trait1, trait2]])` would get
+    split inside the nested list instead of before the outer one).
+    """
+    if not isinstance(value, str):
+        return value
+    if not (value.startswith("format(") and value.endswith(")") and value.endswith("])")):
+        return value
+    inner = value[len("format("):-1]
+
+    depth = 0
+    start = None
+    for i in range(len(inner) - 1, -1, -1):
+        ch = inner[i]
+        if ch == "]":
+            depth += 1
+        elif ch == "[":
+            depth -= 1
+            if depth == 0:
+                start = i
+                break
+    if start is None or not inner[:start].endswith(", "):
+        return value
+
+    template, args_repr = inner[: start - 2], inner[start:]
+    try:
+        args = ast.literal_eval(args_repr)
+    except (ValueError, SyntaxError):
+        return value
+    it = iter(args)
+    try:
+        return re.sub("~w", lambda _: str(next(it)), template)
+    except StopIteration:
+        return value
+
+
 def _extract_trace(trace_list: list) -> list[dict]:
     """Extract reasoning trace from Prolog result list."""
     steps = []
     for step in trace_list:
         steps.append({
-            "rule": str(step.get("rule", "")),
-            "result": str(step.get("result", "")),
-            "input": str(step.get("input", "")) if "input" in step else "",
-            "explanation": str(step.get("explanation", "")) if "explanation" in step else "",
+            "rule": _decode_format_term(str(step.get("rule", ""))),
+            "result": _decode_format_term(str(step.get("result", ""))),
+            "input": _decode_format_term(str(step.get("input", ""))) if "input" in step else "",
+            "explanation": _decode_format_term(str(step.get("explanation", ""))) if "explanation" in step else "",
         })
     return steps
 
@@ -74,7 +142,7 @@ class PrologService:
     @staticmethod
     def get_zodiac_profile(sign: str) -> dict | None:
         """Full zodiac profile via zodiac_profile/2."""
-        result = _first_result(f"zodiac_profile({sign}, Profile)")
+        result = _first_result(f"zodiac_profile({_quote_atom(sign)}, Profile)")
         if result:
             p = result["Profile"]
             return {
@@ -92,7 +160,7 @@ class PrologService:
     @staticmethod
     def generate_profile(sign: str) -> dict | None:
         """Extended profile via generate_profile/2."""
-        result = _first_result(f"generate_profile({sign}, Profile)")
+        result = _first_result(f"generate_profile({_quote_atom(sign)}, Profile)")
         if result:
             p = result["Profile"]
             base = p.get("base_profile", {})
@@ -147,7 +215,8 @@ class PrologService:
         """Build the symbolic chart from Sun/Moon/Rising signs already computed
         from real ecliptic positions (see app.services.ephemeris_service)."""
         result = _first_result(
-            f"full_birth_chart_precise({sun_sign}, {moon_sign}, {rising_sign}, Chart)"
+            f"full_birth_chart_precise({_quote_atom(sun_sign)}, {_quote_atom(moon_sign)}, "
+            f"{_quote_atom(rising_sign)}, Chart)"
         )
         if result:
             c = result["Chart"]
@@ -178,14 +247,14 @@ class PrologService:
         rising_degree: float,
     ) -> list[dict]:
         result = _first_result(
-            f"birth_chart_reasoning_trace_precise({sun_sign}, {moon_sign}, {rising_sign}, "
-            f"{sun_degree}, {moon_degree}, {rising_degree}, Trace)"
+            f"birth_chart_reasoning_trace_precise({_quote_atom(sun_sign)}, {_quote_atom(moon_sign)}, "
+            f"{_quote_atom(rising_sign)}, {sun_degree}, {moon_degree}, {rising_degree}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []
 
     @staticmethod
     def get_zodiac_info(sign: str) -> dict | None:
-        result = _first_result(f"zodiac_info({sign}, Info)")
+        result = _first_result(f"zodiac_info({_quote_atom(sign)}, Info)")
         if result:
             info = result["Info"]
             return {
@@ -211,36 +280,36 @@ class PrologService:
 
     @staticmethod
     def get_element(sign: str) -> str:
-        result = _first_result(f"get_element({sign}, Element)")
+        result = _first_result(f"get_element({_quote_atom(sign)}, Element)")
         return str(result["Element"]) if result else "fire"
 
     @staticmethod
     def get_modality(sign: str) -> str:
-        result = _first_result(f"get_modality({sign}, Modality)")
+        result = _first_result(f"get_modality({_quote_atom(sign)}, Modality)")
         return str(result["Modality"]) if result else "cardinal"
 
     @staticmethod
     def get_ruling_planet(sign: str) -> str:
-        result = _first_result(f"get_ruling_planet({sign}, Planet)")
+        result = _first_result(f"get_ruling_planet({_quote_atom(sign)}, Planet)")
         return str(result["Planet"]) if result else "sun"
 
     @staticmethod
     def get_zodiac_traits(sign: str) -> list[str]:
-        result = _first_result(f"zodiac_traits_of({sign}, Traits)")
+        result = _first_result(f"zodiac_traits_of({_quote_atom(sign)}, Traits)")
         if result:
             return [str(t) for t in result["Traits"]]
         return []
 
     @staticmethod
     def get_zodiac_strengths(sign: str) -> list[str]:
-        result = _first_result(f"zodiac_strengths({sign}, Strengths)")
+        result = _first_result(f"zodiac_strengths({_quote_atom(sign)}, Strengths)")
         if result:
             return [str(s) for s in result["Strengths"]]
         return []
 
     @staticmethod
     def get_zodiac_challenges(sign: str) -> list[str]:
-        result = _first_result(f"zodiac_challenges({sign}, Challenges)")
+        result = _first_result(f"zodiac_challenges({_quote_atom(sign)}, Challenges)")
         if result:
             return [str(c) for c in result["Challenges"]]
         return []
@@ -253,7 +322,8 @@ class PrologService:
     @staticmethod
     def get_chart_profile(sign: str, birth_time: str = "unknown", birth_location: str = "unknown") -> dict | None:
         result = _first_result(
-            f"chart_profile({sign}, {birth_time}, {birth_location}, Chart)"
+            f"chart_profile({_quote_atom(sign)}, {_quote_atom(birth_time)}, "
+            f"{_quote_atom(birth_location)}, Chart)"
         )
         if result:
             c = result["Chart"]
@@ -272,17 +342,17 @@ class PrologService:
 
     @staticmethod
     def get_element_compatibility(e1: str, e2: str) -> str:
-        result = _first_result(f"element_compatibility({e1}, {e2}, Level)")
+        result = _first_result(f"element_compatibility({_quote_atom(e1)}, {_quote_atom(e2)}, Level)")
         return str(result["Level"]) if result else "moderate"
 
     @staticmethod
     def get_modality_compatibility(m1: str, m2: str) -> str:
-        result = _first_result(f"modality_compatibility({m1}, {m2}, Level)")
+        result = _first_result(f"modality_compatibility({_quote_atom(m1)}, {_quote_atom(m2)}, Level)")
         return str(result["Level"]) if result else "moderate"
 
     @staticmethod
     def get_profile_reasoning_trace(sign: str) -> list[dict]:
-        result = _first_result(f"profile_reasoning_trace({sign}, Trace)")
+        result = _first_result(f"profile_reasoning_trace({_quote_atom(sign)}, Trace)")
         return _extract_trace(result["Trace"]) if result else []
 
     @staticmethod
@@ -296,8 +366,8 @@ class PrologService:
 
     @staticmethod
     def classify_question(question: str) -> str:
-        safe_q = question.replace("'", "\\'")
-        result = _first_result(f"question_category('{safe_q}', Category)")
+        safe_q = _quote_atom(question)
+        result = _first_result(f"question_category({safe_q}, Category)")
         if result:
             return str(result["Category"])
         return "general"
@@ -305,8 +375,8 @@ class PrologService:
     @staticmethod
     def classify_topic(question: str) -> str:
         """Classify a question into a tarot topic."""
-        safe_q = question.replace("'", "\\'")
-        result = _first_result(f"classify_topic('{safe_q}', Topic)")
+        safe_q = _quote_atom(question)
+        result = _first_result(f"classify_topic({safe_q}, Topic)")
         if result:
             return str(result["Topic"])
         return "general"
@@ -314,9 +384,10 @@ class PrologService:
     @staticmethod
     def get_topic_info(topic: str) -> dict | None:
         """Get topic description and related info."""
-        desc_result = _first_result(f"topic_description({topic}, Desc)")
-        spread_result = _first_result(f"topic_spread({topic}, Spread)")
-        element_result = _first_result(f"topic_element({topic}, Element)")
+        topic_q = _quote_atom(topic)
+        desc_result = _first_result(f"topic_description({topic_q}, Desc)")
+        spread_result = _first_result(f"topic_spread({topic_q}, Spread)")
+        element_result = _first_result(f"topic_element({topic_q}, Element)")
         if desc_result:
             return {
                 "topic": topic,
@@ -341,7 +412,7 @@ class PrologService:
     def select_eligible_cards(sign: str, category: str) -> dict | None:
         """Use Prolog to select eligible cards for a context."""
         result = _first_result(
-            f"select_cards({sign}, {category}, Selection)"
+            f"select_cards({_quote_atom(sign)}, {_quote_atom(category)}, Selection)"
         )
         if result:
             s = result["Selection"]
@@ -360,7 +431,8 @@ class PrologService:
         """Filter spreads based on context using Prolog."""
         element = PrologService.get_element(sign)
         results = _safe_query(
-            f"filter_spreads_detailed(context({category}, {sign}, {element}), Spreads)"
+            f"filter_spreads_detailed(context({_quote_atom(category)}, {_quote_atom(sign)}, "
+            f"{_quote_atom(element)}), Spreads)"
         )
         if results:
             return [
@@ -376,9 +448,9 @@ class PrologService:
 
     @staticmethod
     def recommend_spread(question: str, sign: str) -> dict | None:
-        safe_q = question.replace("'", "\\'")
+        safe_q = _quote_atom(question)
         result = _first_result(
-            f"spread_recommendation('{safe_q}', {sign}, Rec)"
+            f"spread_recommendation({safe_q}, {_quote_atom(sign)}, Rec)"
         )
         if result:
             rec = result["Rec"]
@@ -401,9 +473,10 @@ class PrologService:
         spreads = []
         for r in results:
             s = str(r["Spread"])
-            pos_result = _first_result(f"spread_positions({s}, Positions)")
-            desc_result = _first_result(f"spread_description({s}, Desc)")
-            count_result = _first_result(f"spread_card_count({s}, Count)")
+            s_q = _quote_atom(s)
+            pos_result = _first_result(f"spread_positions({s_q}, Positions)")
+            desc_result = _first_result(f"spread_description({s_q}, Desc)")
+            count_result = _first_result(f"spread_card_count({s_q}, Count)")
             spreads.append({
                 "id": s,
                 "positions": [str(p) for p in pos_result["Positions"]] if pos_result else [],
@@ -414,20 +487,20 @@ class PrologService:
 
     @staticmethod
     def get_card_orientation_meaning(card: str, orientation: str) -> list[str]:
-        result = _first_result(f"card_meaning({card}, {orientation}, Meaning)")
+        result = _first_result(f"card_meaning({_quote_atom(card)}, {_quote_atom(orientation)}, Meaning)")
         if result:
             return [str(m) for m in result["Meaning"]]
         return []
 
     @staticmethod
     def get_card_themes(card: str) -> list[str]:
-        results = _safe_query(f"card_theme({card}, Theme)")
+        results = _safe_query(f"card_theme({_quote_atom(card)}, Theme)")
         return [str(r["Theme"]) for r in results]
 
     @staticmethod
     def get_select_cards_reasoning(sign: str, category: str) -> list[dict]:
         result = _first_result(
-            f"select_cards_reasoning({sign}, {category}, Trace)"
+            f"select_cards_reasoning({_quote_atom(sign)}, {_quote_atom(category)}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []
 
@@ -438,7 +511,7 @@ class PrologService:
     @staticmethod
     def analyze_card(card: str, orientation: str) -> dict | None:
         result = _first_result(
-            f"analyze_card({card}, {orientation}, Analysis)"
+            f"analyze_card({_quote_atom(card)}, {_quote_atom(orientation)}, Analysis)"
         )
         if result:
             a = result["Analysis"]
@@ -458,7 +531,8 @@ class PrologService:
     @staticmethod
     def interpret_card_position(card: str, position: str, orientation: str) -> dict | None:
         result = _first_result(
-            f"interpret_card_position({card}, {position}, {orientation}, Interp)"
+            f"interpret_card_position({_quote_atom(card)}, {_quote_atom(position)}, "
+            f"{_quote_atom(orientation)}, Interp)"
         )
         if result:
             i = result["Interp"]
@@ -476,9 +550,9 @@ class PrologService:
 
     @staticmethod
     def analyze_reading(cards: list[str], positions: list[str], orientations: list[str]) -> dict | None:
-        cards_str = "[" + ",".join(cards) + "]"
-        positions_str = "[" + ",".join(positions) + "]"
-        orientations_str = "[" + ",".join(orientations) + "]"
+        cards_str = _quote_atom_list(cards)
+        positions_str = _quote_atom_list(positions)
+        orientations_str = _quote_atom_list(orientations)
         result = _first_result(
             f"analyze_reading_oriented({cards_str}, {positions_str}, {orientations_str}, Analysis)"
         )
@@ -496,7 +570,7 @@ class PrologService:
 
     @staticmethod
     def get_reading_themes(cards: list[str]) -> list[str]:
-        cards_str = "[" + ",".join(cards) + "]"
+        cards_str = _quote_atom_list(cards)
         result = _first_result(f"reading_themes({cards_str}, Themes)")
         if result:
             return [str(t) for t in result["Themes"]]
@@ -504,13 +578,13 @@ class PrologService:
 
     @staticmethod
     def get_dominant_theme(cards: list[str]) -> str:
-        cards_str = "[" + ",".join(cards) + "]"
+        cards_str = _quote_atom_list(cards)
         result = _first_result(f"dominant_theme({cards_str}, Theme)")
         return str(result["Theme"]) if result else "balance"
 
     @staticmethod
     def get_reading_conflicts(cards: list[str]) -> list[str]:
-        cards_str = "[" + ",".join(cards) + "]"
+        cards_str = _quote_atom_list(cards)
         result = _first_result(f"reading_conflicts({cards_str}, Conflicts)")
         if result:
             return [str(c) for c in result["Conflicts"]]
@@ -518,7 +592,7 @@ class PrologService:
 
     @staticmethod
     def get_reading_summary(cards: list[str]) -> dict | None:
-        cards_str = "[" + ",".join(cards) + "]"
+        cards_str = _quote_atom_list(cards)
         result = _first_result(f"reading_summary({cards_str}, Summary)")
         if result:
             s = result["Summary"]
@@ -534,19 +608,19 @@ class PrologService:
     @staticmethod
     def get_reading_advice(category: str, sign: str) -> str:
         result = _first_result(
-            f"reading_advice(context({category}, _, {sign}), Advice)"
+            f"reading_advice(context({_quote_atom(category)}, _, {_quote_atom(sign)}), Advice)"
         )
         return str(result["Advice"]) if result else "Trust your intuition and stay present."
 
     @staticmethod
     def get_theme_based_advice(theme: str) -> str:
-        result = _first_result(f"theme_based_advice({theme}, Advice)")
+        result = _first_result(f"theme_based_advice({_quote_atom(theme)}, Advice)")
         return str(result["Advice"]) if result else ""
 
     @staticmethod
     def get_zodiac_tarot_theme(sign: str, card: str) -> dict | None:
         result = _first_result(
-            f"zodiac_tarot_theme({sign}, {card}, Theme)"
+            f"zodiac_tarot_theme({_quote_atom(sign)}, {_quote_atom(card)}, Theme)"
         )
         if result:
             t = result["Theme"]
@@ -561,8 +635,8 @@ class PrologService:
 
     @staticmethod
     def get_reading_analysis_trace(cards: list[str], positions: list[str]) -> list[dict]:
-        cards_str = "[" + ",".join(cards) + "]"
-        positions_str = "[" + ",".join(positions) + "]"
+        cards_str = _quote_atom_list(cards)
+        positions_str = _quote_atom_list(positions)
         result = _first_result(
             f"reading_analysis_trace({cards_str}, {positions_str}, Trace)"
         )
@@ -571,9 +645,9 @@ class PrologService:
     @staticmethod
     def interpret_cards(cards: list[str], sign: str, category: str) -> dict | None:
         """Legacy wrapper for card interpretation."""
-        cards_str = "[" + ",".join(cards) + "]"
+        cards_str = _quote_atom_list(cards)
         result = _first_result(
-            f"analyze_reading({cards_str}, {sign}, {category}, Analysis)"
+            f"analyze_reading({cards_str}, {_quote_atom(sign)}, {_quote_atom(category)}, Analysis)"
         )
         if result:
             a = result["Analysis"]
@@ -592,7 +666,7 @@ class PrologService:
     @staticmethod
     def analyze_compatibility(sign1: str, sign2: str) -> dict | None:
         result = _first_result(
-            f"zodiac_compatibility({sign1}, {sign2}, Result)"
+            f"zodiac_compatibility({_quote_atom(sign1)}, {_quote_atom(sign2)}, Result)"
         )
         if result:
             r = result["Result"]
@@ -611,7 +685,7 @@ class PrologService:
     @staticmethod
     def analyze_synastry(sign1: str, sign2: str) -> dict | None:
         result = _first_result(
-            f"synastry({sign1}, {sign2}, Analysis)"
+            f"synastry({_quote_atom(sign1)}, {_quote_atom(sign2)}, Analysis)"
         )
         if result:
             a = result["Analysis"]
@@ -639,7 +713,7 @@ class PrologService:
     @staticmethod
     def get_compatibility_explanation(sign1: str, sign2: str) -> dict | None:
         result = _first_result(
-            f"compatibility_explanation({sign1}, {sign2}, Explanation)"
+            f"compatibility_explanation({_quote_atom(sign1)}, {_quote_atom(sign2)}, Explanation)"
         )
         if result:
             e = result["Explanation"]
@@ -675,7 +749,7 @@ class PrologService:
     @staticmethod
     def get_compatibility_score_breakdown(sign1: str, sign2: str) -> dict | None:
         result = _first_result(
-            f"compatibility_score_breakdown({sign1}, {sign2}, Breakdown)"
+            f"compatibility_score_breakdown({_quote_atom(sign1)}, {_quote_atom(sign2)}, Breakdown)"
         )
         if result:
             b = result["Breakdown"]
@@ -691,14 +765,14 @@ class PrologService:
     @staticmethod
     def get_synastry_reasoning_trace(sign1: str, sign2: str) -> list[dict]:
         result = _first_result(
-            f"synastry_reasoning_trace({sign1}, {sign2}, Trace)"
+            f"synastry_reasoning_trace({_quote_atom(sign1)}, {_quote_atom(sign2)}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []
 
     @staticmethod
     def get_compatibility_level(sign1: str, sign2: str) -> str:
         result = _first_result(
-            f"zodiac_compatibility({sign1}, {sign2}, Result)"
+            f"zodiac_compatibility({_quote_atom(sign1)}, {_quote_atom(sign2)}, Result)"
         )
         return str(result["Result"]["level"]) if result else "moderate"
 
@@ -709,7 +783,7 @@ class PrologService:
     @staticmethod
     def get_horoscope_guidance(sign: str, mood: str) -> dict | None:
         result = _first_result(
-            f"horoscope_guidance({sign}, {mood}, Guidance)"
+            f"horoscope_guidance({_quote_atom(sign)}, {_quote_atom(mood)}, Guidance)"
         )
         if result:
             g = result["Guidance"]
@@ -727,7 +801,7 @@ class PrologService:
     @staticmethod
     def get_relevant_facts(sign: str, category: str) -> dict | None:
         result = _first_result(
-            f"get_relevant_facts({sign}, {category}, Facts)"
+            f"get_relevant_facts({_quote_atom(sign)}, {_quote_atom(category)}, Facts)"
         )
         if result:
             f = result["Facts"]
@@ -745,32 +819,32 @@ class PrologService:
 
     @staticmethod
     def get_zodiac_card_affinity(sign: str) -> list[str]:
-        results = _safe_query(f"zodiac_card({sign}, Card)")
+        results = _safe_query(f"zodiac_card({_quote_atom(sign)}, Card)")
         return [str(r["Card"]) for r in results]
 
     @staticmethod
     def get_element_card_affinity(element: str) -> list[str]:
-        results = _safe_query(f"element_card_affinity({element}, Card)")
+        results = _safe_query(f"element_card_affinity({_quote_atom(element)}, Card)")
         return [str(r["Card"]) for r in results]
 
     @staticmethod
     def generate_reading_trace(question: str, sign: str) -> list[dict]:
-        safe_q = question.replace("'", "\\'")
+        safe_q = _quote_atom(question)
         result = _first_result(
-            f"generate_full_trace('{safe_q}', {sign}, Trace)"
+            f"generate_full_trace({safe_q}, {_quote_atom(sign)}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []
 
     @staticmethod
     def generate_compatibility_trace(sign1: str, sign2: str) -> list[dict]:
         result = _first_result(
-            f"generate_compatibility_trace({sign1}, {sign2}, Trace)"
+            f"generate_compatibility_trace({_quote_atom(sign1)}, {_quote_atom(sign2)}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []
 
     @staticmethod
     def generate_horoscope_trace(sign: str, mood: str) -> list[dict]:
         result = _first_result(
-            f"generate_horoscope_trace({sign}, {mood}, Trace)"
+            f"generate_horoscope_trace({_quote_atom(sign)}, {_quote_atom(mood)}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []

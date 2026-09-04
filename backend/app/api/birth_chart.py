@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import APIRouter
 from app.services.prolog_service import PrologService
 from app.services.ephemeris_service import compute_natal_positions
@@ -57,12 +59,16 @@ async def calculate_birth_chart(data: dict):
         if not (-180 <= longitude <= 180):
             return {"error": "longitude must be between -180 and 180"}
 
-        positions = compute_natal_positions(
-            year, month, day, hour, minute, latitude, longitude
+        # compute_natal_positions and every PrologService call are synchronous,
+        # blocking calls (pyswisseph, timezonefinder, pyswip) — run each off
+        # the event loop so one slow request doesn't stall every other one.
+        positions = await asyncio.to_thread(
+            compute_natal_positions, year, month, day, hour, minute, latitude, longitude
         )
         if positions:
-            chart = PrologService.get_full_birth_chart_precise(
-                positions["sun_sign"], positions["moon_sign"], positions["rising_sign"]
+            chart = await asyncio.to_thread(
+                PrologService.get_full_birth_chart_precise,
+                positions["sun_sign"], positions["moon_sign"], positions["rising_sign"],
             )
             if chart:
                 chart["sun_degree"] = positions["sun_degree"]
@@ -71,7 +77,8 @@ async def calculate_birth_chart(data: dict):
                 chart["timezone"] = positions["timezone"]
                 chart["precise"] = True
 
-                reasoning = PrologService.get_birth_chart_reasoning_precise(
+                reasoning = await asyncio.to_thread(
+                    PrologService.get_birth_chart_reasoning_precise,
                     positions["sun_sign"],
                     positions["moon_sign"],
                     positions["rising_sign"],
@@ -83,12 +90,14 @@ async def calculate_birth_chart(data: dict):
         # Ephemeris/timezone lookup failed (e.g. unresolvable coordinates) —
         # fall through to the approximate calculation below.
 
-    chart = PrologService.get_full_birth_chart(month, day, hour)
+    chart = await asyncio.to_thread(PrologService.get_full_birth_chart, month, day, hour)
     if not chart:
         return {"error": "Could not calculate birth chart"}
     chart["precise"] = False
 
-    reasoning = PrologService.get_birth_chart_reasoning(month, day, hour)
+    reasoning = await asyncio.to_thread(
+        PrologService.get_birth_chart_reasoning, month, day, hour
+    )
 
     return {
         "chart": chart,

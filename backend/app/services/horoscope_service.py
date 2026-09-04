@@ -1,3 +1,5 @@
+import asyncio
+
 from app.services.prolog_service import PrologService
 
 MOOD_KEYWORDS = {
@@ -15,7 +17,11 @@ MOOD_KEYWORDS = {
 class HoroscopeService:
     @staticmethod
     async def generate_horoscope(zodiac_sign: str, mood: str) -> dict | None:
-        guidance = PrologService.get_horoscope_guidance(zodiac_sign, mood)
+        # PrologService calls are synchronous, blocking pyswip queries — run
+        # off the event loop so one slow query doesn't stall other requests.
+        guidance = await asyncio.to_thread(
+            PrologService.get_horoscope_guidance, zodiac_sign, mood
+        )
         if not guidance:
             return None
 

@@ -1,3 +1,5 @@
+import asyncio
+
 from fastapi import APIRouter
 from app.schemas.models import CompatibilityRequest
 from app.services.prolog_service import PrologService
@@ -9,17 +11,19 @@ router = APIRouter(prefix="/api/compatibility", tags=["compatibility"])
 async def analyze_compatibility(request: CompatibilityRequest):
     # The endpoint displays the detailed element/modality analysis.  The
     # scoring-only compatibility result does not contain those fields.
-    analysis = PrologService.analyze_synastry(
-        request.sign1, request.sign2
+    # PrologService calls are synchronous, blocking pyswip queries — run each
+    # off the event loop so one slow query doesn't stall every other request.
+    analysis = await asyncio.to_thread(
+        PrologService.analyze_synastry, request.sign1, request.sign2
     )
     if not analysis:
         return {"error": "Could not analyze compatibility"}
 
-    level = PrologService.get_compatibility_level(
-        request.sign1, request.sign2
+    level = await asyncio.to_thread(
+        PrologService.get_compatibility_level, request.sign1, request.sign2
     )
-    trace = PrologService.generate_compatibility_trace(
-        request.sign1, request.sign2
+    trace = await asyncio.to_thread(
+        PrologService.generate_compatibility_trace, request.sign1, request.sign2
     )
 
     return {

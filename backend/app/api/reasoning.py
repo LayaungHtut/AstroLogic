@@ -4,6 +4,7 @@ from app.services.openrouter_service import generate_tarot_interpretation
 from app.services.tarot_service import TarotService
 from app.schemas.models import ReadingAnalyzeRequest
 from app.database import get_db
+import asyncio
 import json
 
 router = APIRouter(prefix="/api/reading", tags=["reading"])
@@ -11,9 +12,13 @@ router = APIRouter(prefix="/api/reading", tags=["reading"])
 
 @router.post("/analyze")
 async def analyze_reading(request: ReadingAnalyzeRequest):
-    category = PrologService.classify_question(request.question)
-    spread_rec = PrologService.recommend_spread(
-        request.question, request.zodiac_sign
+    # PrologService calls are synchronous, blocking pyswip queries — run each
+    # off the event loop so one slow query doesn't stall every other request.
+    category = await asyncio.to_thread(
+        PrologService.classify_question, request.question
+    )
+    spread_rec = await asyncio.to_thread(
+        PrologService.recommend_spread, request.question, request.zodiac_sign
     )
 
     if not spread_rec:
@@ -35,16 +40,18 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     )
 
     card_ids = [c["card"] for c in cards]
-    prolog_analysis = PrologService.interpret_cards(
-        card_ids, request.zodiac_sign, category
+    prolog_analysis = await asyncio.to_thread(
+        PrologService.interpret_cards, card_ids, request.zodiac_sign, category
     )
     themes = prolog_analysis["themes"] if prolog_analysis else []
 
-    reasoning = PrologService.generate_reading_trace(
-        request.question, request.zodiac_sign
+    reasoning = await asyncio.to_thread(
+        PrologService.generate_reading_trace, request.question, request.zodiac_sign
     )
 
-    facts = PrologService.get_relevant_facts(request.zodiac_sign, category)
+    facts = await asyncio.to_thread(
+        PrologService.get_relevant_facts, request.zodiac_sign, category
+    )
 
     ai_interpretation = await generate_tarot_interpretation(
         question=request.question,
