@@ -23,6 +23,7 @@ def _load_prolog_files():
         "spread_rules.pl",
         "recommendation_rules.pl",
         "reasoning.pl",
+        "history_analysis.pl",
         "main.pl",
     ]
     for f in pl_files:
@@ -56,6 +57,22 @@ def _quote_atom(text: str) -> str:
     """
     escaped = text.replace("\\", "\\\\").replace("'", "\\'")
     return f"'{escaped}'"
+
+
+def _quote_pair_list(pairs: list[tuple[str, str]]) -> str:
+    """Build a Prolog list of Key-Value atom pairs, e.g. [the_fool-upright, ...]."""
+    return "[" + ",".join(f"{_quote_atom(a)}-{_quote_atom(b)}" for a, b in pairs) + "]"
+
+
+def _quote_reading_records(records: list[dict]) -> str:
+    """Build a Prolog list of reading_record{category:.., cards:..} dicts."""
+    rendered = []
+    for r in records:
+        cards_str = _quote_atom_list(r.get("cards", []))
+        rendered.append(
+            f"reading_record{{category: {_quote_atom(r.get('category', 'general'))}, cards: {cards_str}}}"
+        )
+    return "[" + ",".join(rendered) + "]"
 
 
 def _safe_query(query_str: str) -> list[dict]:
@@ -969,3 +986,98 @@ class PrologService:
             f"generate_horoscope_trace({_quote_atom(sign)}, {_quote_atom(mood)}, Trace)"
         )
         return _extract_trace(result["Trace"]) if result else []
+
+    @staticmethod
+    def classify_mood(text: str) -> str:
+        """Classify free-text mood via classify_mood/2 (horoscope_rules.pl).
+
+        Scores the fixed mood vocabulary against Input and returns the best
+        match, or `neutral` if nothing scores. Replaces the old Python
+        MOOD_KEYWORDS dict in horoscope_service.py.
+        """
+        result = _first_result(f"classify_mood({_quote_atom(text)}, Mood)")
+        return str(result["Mood"]) if result else "neutral"
+
+    # ============================================================
+    # Module: Reading History Analytics & Pattern Insights
+    # ============================================================
+
+    @staticmethod
+    def get_history_analytics(
+        card_orientations: list[tuple[str, str]],
+        themes: list[str],
+        categories: list[str],
+    ) -> dict | None:
+        """Whole-history aggregate stats via history_analytics/4.
+
+        card_orientations is a flat (card, 'upright'|'reversed') pair per
+        card ever drawn; themes/categories are flat across every saved
+        reading. Every count here is computed in Prolog, not Python.
+        """
+        query = (
+            "history_analytics("
+            f"{_quote_pair_list(card_orientations)}, "
+            f"{_quote_atom_list(themes)}, "
+            f"{_quote_atom_list(categories)}, Analytics)"
+        )
+        result = _first_result(query)
+        if not result:
+            return None
+        a = result["Analytics"]
+        return {
+            "total_readings": int(a["total_readings"]),
+            "most_drawn_cards": [
+                {"card": str(c["card"]), "count": int(c["count"])}
+                for c in a["most_drawn_cards"]
+            ],
+            "most_common_suit": str(a["most_common_suit"]),
+            "major_vs_minor": {
+                "major": int(a["major_vs_minor"]["major"]),
+                "minor": int(a["major_vs_minor"]["minor"]),
+            },
+            "most_common_themes": [
+                {"theme": str(t["theme"]), "count": int(t["count"])}
+                for t in a["most_common_themes"]
+            ],
+            "most_common_categories": [
+                {"category": str(c["category"]), "count": int(c["count"])}
+                for c in a["most_common_categories"]
+            ],
+            "upright_vs_reversed": {
+                "upright": int(a["upright_vs_reversed"]["upright"]),
+                "reversed": int(a["upright_vs_reversed"]["reversed"]),
+            },
+        }
+
+    @staticmethod
+    def get_history_insights(
+        records: list[dict],
+        themes: list[str],
+        card_orientations: list[tuple[str, str]],
+    ) -> list[dict]:
+        """Cross-reading pattern reasoning via history_insights/4.
+
+        records is one {category, cards} dict per saved reading. Surfaces
+        recurring themes, suit/elemental bias, reversal bias, and
+        per-category suit dominance, each tagged with the rule that fired.
+        """
+        query = (
+            "history_insights("
+            f"{_quote_reading_records(records)}, "
+            f"{_quote_atom_list(themes)}, "
+            f"{_quote_pair_list(card_orientations)}, Insights)"
+        )
+        result = _first_result(query)
+        if not result:
+            return []
+        insights = []
+        for i in result["Insights"]:
+            entry = {"type": str(i["type"]), "rule": _decode_format_term(str(i["rule"]))}
+            for key in ("theme", "count", "suit", "element", "proportion", "bias", "category"):
+                if key in i:
+                    value = i[key]
+                    entry[key] = float(value) if key == "proportion" else (
+                        int(value) if key == "count" else str(value)
+                    )
+            insights.append(entry)
+        return insights

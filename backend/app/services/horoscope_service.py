@@ -2,17 +2,6 @@ import asyncio
 
 from app.services.prolog_service import PrologService
 
-MOOD_KEYWORDS = {
-    "happy": ["happy", "joy", "great", "wonderful", "amazing", "good"],
-    "excited": ["excited", "thrilled", "eager", "looking forward", "can't wait"],
-    "stressed": ["stressed", "overwhelmed", "pressure", "too much", "anxious"],
-    "uncertain": ["unsure", "confused", "lost", "don't know", "uncertain"],
-    "calm": ["calm", "peaceful", "relaxed", "serene", "content"],
-    "frustrated": ["frustrated", "annoyed", "stuck", "angry", "irritated"],
-    "curious": ["curious", "wondering", "interested", "want to know", "exploring"],
-    "reflective": ["thinking", "reflecting", "contemplating", "pondering", "meditating"],
-}
-
 
 class HoroscopeService:
     @staticmethod
@@ -61,18 +50,12 @@ class HoroscopeService:
             }
 
     @staticmethod
-    def classify_mood(text: str) -> str:
+    async def classify_mood(text: str) -> str:
         """Classify free-text mood into one of the fixed moods known to horoscope_rules.pl.
 
-        This is a plain keyword match, not an LLM call — the Prolog rules only
-        recognize this fixed vocabulary, so there's nothing for a model to add.
+        Delegates to classify_mood/2 in Prolog (mood_keyword/2 facts + a
+        scoring rule) — this is a plain keyword match, not an LLM call, and
+        the mood vocabulary now lives in one place instead of being
+        duplicated as a Python dict.
         """
-        text_lower = text.lower()
-        scores = {
-            mood: sum(1 for kw in keywords if kw in text_lower)
-            for mood, keywords in MOOD_KEYWORDS.items()
-        }
-        scores = {mood: score for mood, score in scores.items() if score > 0}
-        if scores:
-            return max(scores, key=scores.get)
-        return "neutral"
+        return await asyncio.to_thread(PrologService.classify_mood, text)

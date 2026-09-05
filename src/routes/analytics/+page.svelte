@@ -26,6 +26,27 @@
 		if (total <= 0) return 0;
 		return Math.round((part / total) * 100);
 	}
+
+	function humanize(text: string | undefined): string {
+		return (text ?? '').replace(/_/g, ' ');
+	}
+
+	function insightText(insight: import('$lib/types').AnalyticsInsight): string {
+		switch (insight.type) {
+			case 'recurring_theme':
+				return `The theme "${humanize(insight.theme)}" has come up in ${insight.count} readings.`;
+			case 'suit_bias':
+				return `${Math.round((insight.proportion ?? 0) * 100)}% of your cards have been ${humanize(insight.suit)} — a strong ${humanize(insight.element)} leaning.`;
+			case 'reversal_bias':
+				return insight.bias === 'mostly_reversed'
+					? 'Most of your recent cards have landed reversed — energy may feel blocked or turned inward.'
+					: 'Most of your recent cards have landed upright — energy has been flowing freely.';
+			case 'category_suit_bias':
+				return `Your "${humanize(insight.category)}" readings keep drawing ${humanize(insight.suit)} — a ${humanize(insight.element)} pattern worth noticing.`;
+			default:
+				return insight.rule;
+		}
+	}
 </script>
 
 <svelte:head>
@@ -114,6 +135,26 @@
 				</div>
 			</div>
 		</div>
+
+		{#if data.insights && data.insights.length > 0}
+			<div class="p-6 rounded-2xl bg-surface-container-lowest/80 backdrop-blur-md shadow-xl mb-6 border border-primary/20">
+				<h3 class="font-mono-data text-xs font-semibold text-on-surface-variant uppercase tracking-wider mb-4 flex items-center gap-2">
+					<span class="material-symbols-outlined text-base text-primary">psychology</span>
+					Pattern Insights
+				</h3>
+				<div class="flex flex-col gap-3">
+					{#each data.insights as insight}
+						<div class="flex items-start gap-3 text-sm">
+							<span class="material-symbols-outlined text-base text-tertiary mt-0.5">auto_awesome</span>
+							<div>
+								<p class="text-on-surface">{insightText(insight)}</p>
+								<p class="font-mono-data text-[10px] text-on-surface-variant/60 mt-0.5">{insight.rule}</p>
+							</div>
+						</div>
+					{/each}
+				</div>
+			</div>
+		{/if}
 
 		{#if data.most_drawn_cards.length > 0}
 			<div class="p-6 rounded-2xl bg-surface-container-lowest/80 backdrop-blur-md shadow-xl mb-6">

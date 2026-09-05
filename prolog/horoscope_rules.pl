@@ -100,24 +100,50 @@ horoscope_guidance(Sign, Mood, Guidance) :-
         focus: Focus
     }.
 
+% --- Mood Keyword Vocabulary ---
+% Every mood the rules below know how to classify text into, and the
+% keyword(s) that count as evidence for it. This used to be a Python
+% dict (MOOD_KEYWORDS in horoscope_service.py) that duplicated the
+% mood vocabulary already implicit here; now it's the one source of
+% truth, and classification is a scoring rule over it.
+mood_keyword(happy, 'happy'). mood_keyword(happy, 'joy'). mood_keyword(happy, 'great').
+mood_keyword(happy, 'wonderful'). mood_keyword(happy, 'amazing'). mood_keyword(happy, 'good').
+mood_keyword(excited, 'excited'). mood_keyword(excited, 'thrilled'). mood_keyword(excited, 'eager').
+mood_keyword(excited, 'looking forward'). mood_keyword(excited, 'can\'t wait').
+mood_keyword(stressed, 'stressed'). mood_keyword(stressed, 'overwhelmed'). mood_keyword(stressed, 'pressure').
+mood_keyword(stressed, 'too much'). mood_keyword(stressed, 'anxious').
+mood_keyword(uncertain, 'unsure'). mood_keyword(uncertain, 'confused'). mood_keyword(uncertain, 'lost').
+mood_keyword(uncertain, 'don\'t know'). mood_keyword(uncertain, 'uncertain'). mood_keyword(uncertain, 'worried').
+mood_keyword(calm, 'calm'). mood_keyword(calm, 'peaceful'). mood_keyword(calm, 'relaxed').
+mood_keyword(calm, 'serene'). mood_keyword(calm, 'content').
+mood_keyword(frustrated, 'frustrated'). mood_keyword(frustrated, 'annoyed'). mood_keyword(frustrated, 'stuck').
+mood_keyword(frustrated, 'angry'). mood_keyword(frustrated, 'irritated').
+mood_keyword(curious, 'curious'). mood_keyword(curious, 'wondering'). mood_keyword(curious, 'interested').
+mood_keyword(curious, 'want to know'). mood_keyword(curious, 'exploring').
+mood_keyword(reflective, 'thinking'). mood_keyword(reflective, 'reflecting'). mood_keyword(reflective, 'contemplating').
+mood_keyword(reflective, 'pondering'). mood_keyword(reflective, 'meditating').
+
+mood_known(happy). mood_known(excited). mood_known(stressed). mood_known(uncertain).
+mood_known(calm). mood_known(frustrated). mood_known(curious). mood_known(reflective).
+
+% mood_score(+Input, +Mood, -Score) - how many of Mood's keywords
+% appear (case-insensitively) in Input.
+mood_score(Input, Mood, Score) :-
+    aggregate_all(
+        count,
+        ( mood_keyword(Mood, Keyword), sub_atom_icasechk(Input, _, Keyword) ),
+        Score
+    ).
+
 % --- Mood Classification from Text ---
+% Scores every known mood against Input and picks the best match
+% (first one reached, in mood_known/1 declaration order, on a tie);
+% falls back to `neutral` when nothing scores above zero.
 classify_mood(Input, Mood) :-
-    (   sub_string(Input, _, _, _, 'happy')
-    ->  Mood = happy
-    ;   sub_string(Input, _, _, _, 'excited')
-    ->  Mood = excited
-    ;   sub_string(Input, _, _, _, 'stressed')
-    ->  Mood = stressed
-    ;   sub_string(Input, _, _, _, 'worried')
-    ->  Mood = uncertain
-    ;   sub_string(Input, _, _, _, 'confused')
-    ->  Mood = uncertain
-    ;   sub_string(Input, _, _, _, 'calm')
-    ->  Mood = calm
-    ;   sub_string(Input, _, _, _, 'curious')
-    ->  Mood = curious
-    ;   sub_string(Input, _, _, _, 'reflective')
-    ->  Mood = reflective
+    findall(Score-M, (mood_known(M), mood_score(Input, M, Score)), Pairs),
+    aggregate_all(max(S), member(S-_, Pairs), MaxScore),
+    (   MaxScore > 0
+    ->  once(member(MaxScore-Mood, Pairs))
     ;   Mood = neutral
     ).
 

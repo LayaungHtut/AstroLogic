@@ -182,6 +182,18 @@ export interface HistoryItem {
 	created_at: string;
 }
 
+export interface AnalyticsInsight {
+	type: 'recurring_theme' | 'suit_bias' | 'reversal_bias' | 'category_suit_bias';
+	rule: string;
+	theme?: string;
+	count?: number;
+	suit?: string;
+	element?: string;
+	proportion?: number;
+	bias?: string;
+	category?: string;
+}
+
 export interface AnalyticsData {
 	total_readings: number;
 	most_drawn_cards: { card: string; count: number }[];
@@ -190,6 +202,7 @@ export interface AnalyticsData {
 	most_common_themes: { theme: string; count: number }[];
 	most_common_categories: { category: string; count: number }[];
 	upright_vs_reversed: { upright: number; reversed: number };
+	insights: AnalyticsInsight[];
 }
 
 export interface UserProfile {

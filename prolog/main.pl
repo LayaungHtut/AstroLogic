@@ -14,6 +14,7 @@
 :- use_module(spread_rules).
 :- use_module(recommendation_rules).
 :- use_module(reasoning).
+:- use_module(history_analysis).
 
 % ============================================================
 % Quick Query Helpers
