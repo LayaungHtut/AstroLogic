@@ -65,6 +65,17 @@ export async function analyzeCompatibility(sign1: string, sign2: string) {
 	});
 }
 
+export async function fetchSynastry(sign1: string, sign2: string) {
+	return apiFetch<import('$lib/types').SynastryResult>('/compatibility/synastry', {
+		method: 'POST',
+		body: JSON.stringify({ sign1, sign2 }),
+	});
+}
+
+export async function fetchZodiacProfile(sign: string) {
+	return apiFetch<import('$lib/types').ZodiacProfileResult>(`/zodiac/${sign}/profile`);
+}
+
 export async function sendChatMessage(
 	message: string,
 	zodiacSign?: string,

@@ -472,3 +472,24 @@ synastry_reasoning_trace(Sign1, Sign2, Trace) :-
             explanation: 'Different approaches create areas requiring understanding and patience'
         }
     ].
+
+% ============================================================
+% SECTION 8: Trait Complementarity (Synastry Deep Dive)
+% ============================================================
+
+% --- synastry_trait_pairs/3 ---
+% Find every complementary trait pairing between two signs' trait sets,
+% using the trait_complementary/2 facts above (e.g. initiative <-> patience).
+
+synastry_trait_pairs(Sign1, Sign2, Pairs) :-
+    zodiac_traits(Sign1, Traits1),
+    zodiac_traits(Sign2, Traits2),
+    findall(
+        trait_pair{trait1: T1, trait2: T2},
+        (
+            member(T1, Traits1),
+            member(T2, Traits2),
+            trait_complementary(T1, T2)
+        ),
+        Pairs
+    ).

@@ -630,8 +630,105 @@ class PrologService:
                 "element_theme": str(t["element_theme"]),
                 "card": str(t["card"]),
                 "card_theme": str(t["card_theme"]),
+                "combined": str(t["combined"]),
             }
         return None
+
+    @staticmethod
+    def get_profile_reading_theme(sign: str, cards: list[str]) -> dict | None:
+        """Overlap between a sign's traits and the themes present in a reading."""
+        cards_str = _quote_atom_list(cards)
+        result = _first_result(
+            f"profile_reading_theme_dict({_quote_atom(sign)}, {cards_str}, Analysis)"
+        )
+        if result:
+            a = result["Analysis"]
+            return {
+                "sign": str(a["sign"]),
+                "traits": [str(t) for t in a["traits"]],
+                "card_themes": [str(t) for t in a["card_themes"]],
+                "overlaps": [
+                    {"theme": str(o["theme"]), "trait": str(o["trait"])} for o in a["overlaps"]
+                ],
+                "description": str(a["description"]),
+            }
+        return None
+
+    @staticmethod
+    def get_reading_card_conflicts(cards: list[str]) -> list[dict]:
+        """Card-level theme tensions within a reading (which two cards, which
+        two themes, and why), unlike get_reading_conflicts which only names
+        the conflicting themes without saying which cards produced them."""
+        cards_str = _quote_atom_list(cards)
+        result = _first_result(f"reading_card_conflicts({cards_str}, Conflicts)")
+        if not result:
+            return []
+        return [
+            {
+                "card1_index": int(c["card1_index"]),
+                "card1": str(c["card1"]),
+                "theme1": str(c["theme1"]),
+                "card2_index": int(c["card2_index"]),
+                "card2": str(c["card2"]),
+                "theme2": str(c["theme2"]),
+                "title": str(c["title"]),
+                "description": str(c["description"]),
+            }
+            for c in result["Conflicts"]
+        ]
+
+    @staticmethod
+    def get_synastry_trait_pairs(sign1: str, sign2: str) -> list[dict]:
+        """Complementary trait pairs between two signs (e.g. initiative <-> patience)."""
+        result = _first_result(
+            f"synastry_trait_pairs({_quote_atom(sign1)}, {_quote_atom(sign2)}, Pairs)"
+        )
+        if not result:
+            return []
+        return [
+            {"trait1": str(p["trait1"]), "trait2": str(p["trait2"])} for p in result["Pairs"]
+        ]
+
+    @staticmethod
+    def get_card_priority_breakdown(card: str, category: str, sign: str, element: str) -> dict:
+        """Priority score (0-6) for one card in a context, plus which of the
+        three scoring criteria it matched — the "why" behind the score."""
+        context = (
+            f"context({_quote_atom(category)}, {_quote_atom(sign)}, {_quote_atom(element)}, _)"
+        )
+        priority_result = _first_result(f"card_priority({_quote_atom(card)}, {context}, Priority)")
+        priority = int(priority_result["Priority"]) if priority_result else 0
+        zodiac_match = _first_result(f"zodiac_card({_quote_atom(sign)}, {_quote_atom(card)})") is not None
+        category_match = _first_result(
+            f"card_matches_question({_quote_atom(card)}, {_quote_atom(category)})"
+        ) is not None
+        element_match = _first_result(
+            f"card_matches_element({_quote_atom(card)}, {_quote_atom(element)})"
+        ) is not None
+        return {
+            "card": card,
+            "priority": priority,
+            "zodiac_affinity_match": zodiac_match,
+            "category_match": category_match,
+            "element_match": element_match,
+        }
+
+    @staticmethod
+    def get_ranked_eligible_cards(category: str, sign: str) -> list[dict]:
+        """All Prolog-eligible cards for this context, scored and ranked by
+        card_priority/3 (zodiac affinity +3, category match +2, element
+        match +1). Highest priority first; ties keep Prolog's own ordering."""
+        element = PrologService.get_element(sign)
+        selection = PrologService.select_eligible_cards(sign, category)
+        eligible = selection["eligible_cards"] if selection else []
+        scored = [
+            PrologService.get_card_priority_breakdown(card, category, sign, element)
+            for card in eligible
+        ]
+        scored.sort(key=lambda s: s["priority"], reverse=True)
+        for i, s in enumerate(scored, start=1):
+            s["rank"] = i
+        return scored
 
     @staticmethod
     def get_reading_analysis_trace(cards: list[str], positions: list[str]) -> list[dict]:
@@ -754,10 +851,10 @@ class PrologService:
         if result:
             b = result["Breakdown"]
             return {
-                "element": {"name": str(b["element"]["name"]), "score": float(b["element"]["score"]), "weight": float(b["element"]["weight"]), "description": str(b["element"]["description"])},
-                "modality": {"name": str(b["modality"]["name"]), "score": float(b["modality"]["score"]), "weight": float(b["modality"]["weight"]), "description": str(b["modality"]["description"])},
-                "traits": {"name": str(b["traits"]["name"]), "score": float(b["traits"]["score"]), "weight": float(b["traits"]["weight"]), "description": str(b["traits"]["description"])},
-                "planetary": {"name": str(b["planetary"]["name"]), "score": float(b["planetary"]["score"]), "weight": float(b["planetary"]["weight"]), "description": str(b["planetary"]["description"])},
+                "element": {"name": str(b["element"]["name"]), "score": float(b["element"]["score"]), "weight": float(b["element"]["weight"]), "description": _decode_format_term(str(b["element"]["description"]))},
+                "modality": {"name": str(b["modality"]["name"]), "score": float(b["modality"]["score"]), "weight": float(b["modality"]["weight"]), "description": _decode_format_term(str(b["modality"]["description"]))},
+                "traits": {"name": str(b["traits"]["name"]), "score": float(b["traits"]["score"]), "weight": float(b["traits"]["weight"]), "description": _decode_format_term(str(b["traits"]["description"]))},
+                "planetary": {"name": str(b["planetary"]["name"]), "score": float(b["planetary"]["score"]), "weight": float(b["planetary"]["weight"]), "description": _decode_format_term(str(b["planetary"]["description"]))},
                 "overall": float(b["overall"]),
             }
         return None

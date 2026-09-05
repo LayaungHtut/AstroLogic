@@ -4,17 +4,33 @@ from app.services.tarot_api_client import TarotAPIClient
 
 class TarotService:
     @staticmethod
+    def to_prolog_card_atom(name: str) -> str:
+        """Convert a card's display name (e.g. "The Hanged Man", "Ace of Wands")
+        into the snake_case atom the Prolog knowledge base uses to identify it
+        (the_hanged_man, ace_of_wands, ...) — see prolog/tarot.pl's
+        tarot_card/3 facts. This is the *only* correct way to hand a drawn
+        card to any Prolog predicate that reasons about specific cards
+        (card_theme/2, analyze_card/3, card_priority/3, etc.): those predicates
+        are keyed on this snake_case naming, not on the short display code
+        ("01", "w01", ...) used for images/UI, which they will silently never
+        match — themes, conflicts, and priority all resolve empty otherwise.
+        """
+        return name.lower().replace(" ", "_").replace("'", "")
+
+    @staticmethod
     async def draw_cards(count: int = 3, spread_type: str | None = None) -> list[dict]:
         cards = await TarotAPIClient.fetch_random_cards(count)
         result = []
         for card in cards:
             is_reversed = random.random() < 0.35
+            name = card.get("name", "")
             result.append({
                 "card": card.get("name_short", ""),
-                "name": card.get("name", ""),
+                "name": name,
+                "prolog_card": TarotService.to_prolog_card_atom(name),
                 "is_reversed": is_reversed,
                 "keywords": TarotAPIClient.extract_keywords(card),
-                "image": TarotAPIClient.get_card_image_url(card.get("name", "")),
+                "image": TarotAPIClient.get_card_image_url(name),
                 "meaning_upright": card.get("meaning_up", ""),
                 "meaning_reversed": card.get("meaning_rev", ""),
             })
@@ -31,13 +47,15 @@ class TarotService:
         result = []
         for i, card in enumerate(cards):
             is_reversed = random.random() < 0.35
+            name = card.get("name", "")
             result.append({
                 "card": card.get("name_short", ""),
-                "name": card.get("name", ""),
+                "name": name,
+                "prolog_card": TarotService.to_prolog_card_atom(name),
                 "position": positions[i] if i < len(positions) else f"Position {i+1}",
                 "is_reversed": is_reversed,
                 "keywords": TarotAPIClient.extract_keywords(card),
-                "image": TarotAPIClient.get_card_image_url(card.get("name", "")),
+                "image": TarotAPIClient.get_card_image_url(name),
                 "meaning_upright": card.get("meaning_up", ""),
                 "meaning_reversed": card.get("meaning_rev", ""),
             })

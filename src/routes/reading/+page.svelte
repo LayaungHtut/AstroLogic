@@ -340,7 +340,8 @@
 						<div>
 							<h2 class="font-headline text-lg font-semibold text-on-surface">Your Reading</h2>
 							<p class="text-sm text-on-surface-variant">
-								{reading.spread_name} Spread &middot; Topic: {selectedTopic.replace(/_/g, ' ')}
+								{reading.spread_name} Spread &middot; Classified as {reading.category?.replace(/_/g, ' ')}
+								{#if reading.topic}&middot; Topic: {reading.topic.replace(/_/g, ' ')}{/if}
 							</p>
 						</div>
 						<button type="button" class="btn-secondary text-sm" onclick={resetReading}
@@ -352,6 +353,12 @@
 					>
 						&ldquo;{reading.question}&rdquo;
 					</div>
+					{#if reading.spread_rationale}
+						<div class="flex items-start gap-2 rounded-xl bg-surface-container-high/30 p-3">
+							<span class="material-symbols-outlined text-base text-secondary mt-0.5">lightbulb</span>
+							<p class="text-xs text-on-surface-variant">{reading.spread_rationale}</p>
+						</div>
+					{/if}
 				</div>
 
 				<!-- ACTIVE DRAWN CARDS -->
@@ -373,7 +380,21 @@
 									<div class="font-mono-data text-xs font-medium tracking-wider text-primary">
 										{card.position}
 									</div>
+									{#if card.ranking}
+										<div
+											class="mt-1 inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2 py-0.5 font-mono-data text-[9px] text-on-surface-variant"
+											title="Priority {card.ranking.priority}/6 — zodiac affinity: {card.ranking.zodiac_affinity_match}, category match: {card.ranking.category_match}, element match: {card.ranking.element_match}"
+										>
+											<span class="material-symbols-outlined text-[11px] text-secondary">military_tech</span>
+											#{card.ranking.rank} of {card.ranking.eligible_pool_size} eligible
+										</div>
+									{/if}
 								</div>
+								{#if card.zodiac_affinity}
+									<p class="text-center text-[11px] leading-snug text-on-surface-variant italic px-1">
+										{card.zodiac_affinity.combined}
+									</p>
+								{/if}
 							</div>
 						{/each}
 					</div>
@@ -421,6 +442,68 @@
 					<div class="relative z-10 rounded-xl bg-surface-container-lowest/60 p-5">
 						<MarkdownText content={reading.ai_interpretation} />
 					</div>
+
+					<!-- READING DIRECTION & ADVICE -->
+					{#if reading.direction || reading.advice}
+						<div class="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
+							{#if reading.direction}
+								{@const directionMeta = {
+									optimistic: { icon: 'trending_up', color: 'text-primary', label: 'Optimistic' },
+									challenging: { icon: 'warning', color: 'text-error', label: 'Challenging' },
+									reflective: { icon: 'nights_stay', color: 'text-secondary', label: 'Reflective' },
+									balanced: { icon: 'balance', color: 'text-tertiary', label: 'Balanced' },
+								}[reading.direction] ?? { icon: 'auto_awesome', color: 'text-secondary', label: reading.direction }}
+								<div class="rounded-xl bg-surface-container-lowest/60 p-5 flex flex-col gap-1.5">
+									<div class="flex items-center gap-2">
+										<span class="material-symbols-outlined {directionMeta.color}">{directionMeta.icon}</span>
+										<span class="font-mono-data text-[11px] uppercase tracking-wider text-on-surface-variant">Reading Direction</span>
+									</div>
+									<span class="font-headline text-lg {directionMeta.color}">{directionMeta.label}</span>
+								</div>
+							{/if}
+							{#if reading.advice}
+								<div class="rounded-xl bg-surface-container-lowest/60 p-5 flex flex-col gap-2">
+									<div class="flex items-center gap-2">
+										<span class="material-symbols-outlined text-primary">tips_and_updates</span>
+										<span class="font-mono-data text-[11px] uppercase tracking-wider text-on-surface-variant">Guidance</span>
+									</div>
+									{#if reading.advice.category_advice}
+										<p class="text-sm text-on-surface">{reading.advice.category_advice}</p>
+									{/if}
+									{#if reading.advice.theme_advice}
+										<p class="text-sm text-on-surface-variant italic">{reading.advice.theme_advice}</p>
+									{/if}
+								</div>
+							{/if}
+						</div>
+					{/if}
+
+					<!-- THEME CONFLICT DETECTOR -->
+					{#if reading.conflicts && reading.conflicts.length > 0}
+						<div class="relative z-10 rounded-xl bg-surface-container-lowest/60 p-5 flex flex-col gap-3">
+							<div class="flex items-center gap-2">
+								<span class="material-symbols-outlined text-tertiary">compare_arrows</span>
+								<span class="font-mono-data text-[11px] uppercase tracking-wider text-on-surface-variant">
+									Symbolic Tension{reading.conflicts.length > 1 ? 's' : ''} Detected
+								</span>
+							</div>
+							{#each reading.conflicts as conflict}
+								<div class="rounded-lg bg-surface-container-high/40 p-3.5">
+									<p class="text-sm font-semibold text-on-surface mb-1">{conflict.title}</p>
+									<p class="text-xs text-on-surface-variant mb-2">
+										<span class="text-primary font-medium">{conflict.card1_name}</span>
+										{#if conflict.card1_position}({conflict.card1_position}){/if}
+										urges <span class="italic">{conflict.theme1.replace(/_/g, ' ')}</span>
+										while
+										<span class="text-secondary font-medium">{conflict.card2_name}</span>
+										{#if conflict.card2_position}({conflict.card2_position}){/if}
+										counsels <span class="italic">{conflict.theme2.replace(/_/g, ' ')}</span>.
+									</p>
+									<p class="text-xs text-on-surface-variant">{conflict.description}</p>
+								</div>
+							{/each}
+						</div>
+					{/if}
 
 					<!-- PROLOG SYMBOLIC REASONING TRACE -->
 					<div

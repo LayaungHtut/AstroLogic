@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { analyzeCompatibility } from '$lib/utils/api';
+	import { analyzeCompatibility, fetchSynastry } from '$lib/utils/api';
 	import { ZODIAC_SIGNS, ZODIAC_SYMBOLS } from '$lib/types';
-	import type { CompatibilityResult } from '$lib/types';
+	import type { CompatibilityResult, SynastryResult } from '$lib/types';
 	import ZodiacBadge from '$lib/components/ZodiacBadge.svelte';
 	import ElementBadge from '$lib/components/ElementBadge.svelte';
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
@@ -14,6 +14,30 @@
 	let loading = $state(false);
 	let error = $state('');
 	let activeTipTab = $state<'approach' | 'say' | 'dates'>('approach');
+
+	// Feature: Synastry Deep Dive
+	let synastry = $state<SynastryResult | null>(null);
+	let synastryLoading = $state(false);
+	let synastryError = $state('');
+
+	async function loadSynastry() {
+		if (!result) return;
+		synastryLoading = true;
+		synastryError = '';
+		synastry = null;
+		try {
+			const r = await fetchSynastry(result.sign1, result.sign2);
+			if ('error' in r) {
+				synastryError = String((r as unknown as { error: string }).error);
+			} else {
+				synastry = r;
+			}
+		} catch (e) {
+			synastryError = e instanceof Error ? e.message : 'Failed to load synastry breakdown';
+		} finally {
+			synastryLoading = false;
+		}
+	}
 
 	const tips = $derived(result ? getApproachTips(result.sign1, result.sign2) : null);
 
@@ -48,6 +72,8 @@
 		}
 		loading = true;
 		error = '';
+		synastry = null;
+		synastryError = '';
 		try {
 			result = await analyzeCompatibility(sign1, sign2);
 		} catch (e) {
@@ -373,6 +399,130 @@
 						</div>
 					{/if}
 
+					<!-- Feature: Synastry Deep Dive -->
+					<div class="rounded-2xl bg-surface-container-lowest/90 backdrop-blur-md p-6 shadow-2xl">
+						<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
+							<div class="flex items-center gap-2">
+								<span class="material-symbols-outlined text-primary text-xl">insights</span>
+								<h3 class="font-headline text-lg text-on-surface">Synastry Deep Dive</h3>
+							</div>
+							{#if !synastry}
+								<button
+									class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-surface-container-high text-on-surface text-xs font-mono-data uppercase tracking-wider hover:bg-surface-container-highest transition-colors disabled:opacity-60"
+									onclick={loadSynastry}
+									disabled={synastryLoading}
+								>
+									<span class="material-symbols-outlined text-base" class:animate-spin={synastryLoading}>autorenew</span>
+									{synastryLoading ? 'Loading...' : 'Load Full Breakdown'}
+								</button>
+							{/if}
+						</div>
+
+						{#if synastryError}
+							<p class="text-error text-sm">{synastryError}</p>
+						{:else if synastry}
+							<!-- Score bars -->
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+								{#each [
+									{ key: 'element', label: 'Element', c: synastry.score_breakdown.element },
+									{ key: 'modality', label: 'Modality', c: synastry.score_breakdown.modality },
+									{ key: 'traits', label: 'Traits', c: synastry.score_breakdown.traits },
+									{ key: 'planetary', label: 'Planetary', c: synastry.score_breakdown.planetary },
+								] as row}
+									<div class="p-4 rounded-xl bg-surface-container-high/60">
+										<div class="flex items-center justify-between mb-1.5">
+											<span class="text-xs font-semibold text-on-surface">{row.label}</span>
+											<span class="font-mono-data text-[10px] text-on-surface-variant">
+												weight {Math.round(row.c.weight * 100)}% &bull; {Math.round(row.c.score)}/100
+											</span>
+										</div>
+										<div class="h-2 rounded-full bg-surface-container-lowest overflow-hidden mb-1.5">
+											<div
+												class="h-full rounded-full bg-gradient-to-r from-primary-container to-secondary-container"
+												style:width="{Math.min(100, Math.max(0, row.c.score))}%"
+											></div>
+										</div>
+										<p class="text-xs text-on-surface-variant">{row.c.description}</p>
+									</div>
+								{/each}
+							</div>
+
+							<div class="text-center mb-6">
+								<span class="font-mono-data text-[10px] uppercase text-on-surface-variant tracking-wider">Overall Synastry Score</span>
+								<div class="font-headline text-2xl text-primary">{Math.round(synastry.overall_score)} / 100</div>
+							</div>
+
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+								<div class="p-4 rounded-xl bg-surface-container-high/60">
+									<h4 class="text-sm font-semibold text-secondary mb-1.5 flex items-center gap-1.5">
+										<span class="material-symbols-outlined text-base">forum</span>
+										Communication Style
+									</h4>
+									<p class="text-sm text-on-surface-variant">{synastry.communication_theme}</p>
+								</div>
+								<div class="p-4 rounded-xl bg-surface-container-high/60">
+									<h4 class="text-sm font-semibold text-tertiary mb-1.5 flex items-center gap-1.5">
+										<span class="material-symbols-outlined text-base">balance</span>
+										Balance Theme
+									</h4>
+									<p class="text-sm text-on-surface-variant">{synastry.balance_theme}</p>
+								</div>
+							</div>
+
+							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
+								<div class="p-4 rounded-xl bg-primary-container/10">
+									<h4 class="text-sm font-semibold text-primary mb-2 flex items-center gap-1.5">
+										<span class="material-symbols-outlined text-base">star</span>
+										Strengths
+									</h4>
+									<ul class="space-y-1.5">
+										{#each synastry.strengths as s}
+											<li class="text-sm text-on-surface flex items-start gap-1.5">
+												<span class="material-symbols-outlined text-sm text-primary mt-0.5">check</span>
+												{s}
+											</li>
+										{/each}
+									</ul>
+								</div>
+								<div class="p-4 rounded-xl bg-error-container/10">
+									<h4 class="text-sm font-semibold text-error mb-2 flex items-center gap-1.5">
+										<span class="material-symbols-outlined text-base">warning</span>
+										Growth Areas
+									</h4>
+									<ul class="space-y-1.5">
+										{#each synastry.challenges as c}
+											<li class="text-sm text-on-surface flex items-start gap-1.5">
+												<span class="material-symbols-outlined text-sm text-error mt-0.5">arrow_forward</span>
+												{c}
+											</li>
+										{/each}
+									</ul>
+								</div>
+							</div>
+
+							{#if synastry.complementary_traits.length > 0}
+								<div class="p-4 rounded-xl bg-surface-container-high/40">
+									<h4 class="text-sm font-semibold text-on-surface mb-2 flex items-center gap-1.5">
+										<span class="material-symbols-outlined text-base">join_inner</span>
+										Complementary Traits
+									</h4>
+									<div class="flex flex-wrap gap-2">
+										{#each synastry.complementary_traits as pair}
+											<span class="px-3 py-1 rounded-full bg-surface-container text-xs font-mono-data text-on-surface-variant">
+												{pair.trait1} <span class="text-primary">&harr;</span> {pair.trait2}
+											</span>
+										{/each}
+									</div>
+								</div>
+							{/if}
+						{:else}
+							<p class="text-sm text-on-surface-variant">
+								Load the full synastry breakdown for numeric score components, communication style,
+								balance themes, and complementary trait pairing.
+							</p>
+						{/if}
+					</div>
+
 					<div class="rounded-xl bg-surface-container/60 p-4 text-center">
 						<p class="text-xs text-on-surface-variant italic">
 							This compatibility analysis is for entertainment and self-reflection purposes only.
@@ -380,7 +530,7 @@
 						</p>
 					</div>
 
-					<button class="btn-secondary w-full" onclick={() => (result = null)}>New Analysis</button>
+					<button class="btn-secondary w-full" onclick={() => { result = null; synastry = null; }}>New Analysis</button>
 				</div>
 			</div>
 		</div>

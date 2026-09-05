@@ -523,8 +523,15 @@ zodiac_tarot_theme(Sign, Card, CombinedTheme) :-
     element(Sign, Element),
     card_theme(Card, Theme),
     element_to_theme(Element, ElementTheme),
-    format(string(CombinedStr), '~w + ~w = ~w through ~w lens', [Element, Theme, Theme, Element]),
-    CombinedTheme = combined_theme(Sign, Element, ElementTheme, Card, Theme, CombinedStr).
+    format(atom(CombinedStr), 'Your ~w ~w amplifies this card''s ~w energy', [Sign, Element, Theme]),
+    CombinedTheme = combined_theme{
+        zodiac: Sign,
+        element: Element,
+        element_theme: ElementTheme,
+        card: Card,
+        card_theme: Theme,
+        combined: CombinedStr
+    }.
 
 % --- profile_reading_theme/3 ---
 % Combine zodiac profile traits with reading themes.
@@ -578,6 +585,54 @@ symbolic_overlap(transformation, independence).
 symbolic_overlap(transformation, courage).
 symbolic_overlap(mastery, determination).
 symbolic_overlap(mastery, discipline).
+
+% --- profile_reading_theme_dict/3 ---
+% Dict-shaped wrapper around profile_reading_theme/3 for the API layer
+% (the underlying predicate returns a positional compound term, which
+% pyswip cannot marshal as named fields).
+
+profile_reading_theme_dict(Sign, Cards, Analysis) :-
+    profile_reading_theme(Sign, Cards, profile_reading_analysis(Sign, Traits, CardThemes, Overlaps, Desc)),
+    findall(
+        overlap{theme: Theme, trait: Trait},
+        member(intersection(Theme, Trait), Overlaps),
+        OverlapDicts
+    ),
+    Analysis = profile_theme_analysis{
+        sign: Sign,
+        traits: Traits,
+        card_themes: CardThemes,
+        overlaps: OverlapDicts,
+        description: Desc
+    }.
+
+% ============================================================
+% SECTION 5B: Card-Level Conflict Detection (Theme Conflict Detector)
+% ============================================================
+
+% --- reading_card_conflicts/2 ---
+% Like reading_conflicts/2, but reports which specific cards (by position
+% index) produced each conflicting theme pair, so the UI can say e.g.
+% "Card 1 urges action while Card 3 counsels patience" instead of just
+% naming the two themes.
+
+reading_card_conflicts(Cards, Conflicts) :-
+    findall(
+        card_conflict{
+            card1_index: I, card1: Card1, theme1: Theme1,
+            card2_index: J, card2: Card2, theme2: Theme2,
+            title: Title, description: Desc
+        },
+        (
+            nth0(I, Cards, Card1),
+            nth0(J, Cards, Card2),
+            I < J,
+            card_theme(Card1, Theme1),
+            card_theme(Card2, Theme2),
+            theme_conflict(Theme1, Theme2, tension(Title, Desc))
+        ),
+        Conflicts
+    ).
 
 % ============================================================
 % SECTION 12: Reasoning Trace for Reading Analysis

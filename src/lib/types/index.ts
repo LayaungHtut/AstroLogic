@@ -20,6 +20,24 @@ export interface TarotCardInfo {
 	image?: string;
 }
 
+export interface ZodiacAffinity {
+	zodiac: string;
+	element: string;
+	element_theme: string;
+	card: string;
+	card_theme: string;
+	combined: string;
+}
+
+export interface CardRanking {
+	rank: number;
+	eligible_pool_size: number;
+	priority: number;
+	zodiac_affinity_match: boolean;
+	category_match: boolean;
+	element_match: boolean;
+}
+
 export interface DrawnCard {
 	card: string;
 	name: string;
@@ -27,6 +45,8 @@ export interface DrawnCard {
 	is_reversed: boolean;
 	keywords: string[];
 	image?: string;
+	zodiac_affinity?: ZodiacAffinity | null;
+	ranking?: CardRanking | null;
 }
 
 export interface DrawResponse {
@@ -40,15 +60,40 @@ export interface ReasoningStep {
 	result: string;
 }
 
+export interface ThemeConflict {
+	card1_position: string | null;
+	card1_name: string;
+	theme1: string;
+	card2_position: string | null;
+	card2_name: string;
+	theme2: string;
+	title: string;
+	description: string;
+}
+
+export interface TopicInfo {
+	topic: string;
+	description: string;
+	spread: string;
+	element: string;
+}
+
 export interface ReadingResult {
 	id?: number;
 	question: string;
 	category: string;
+	topic?: string;
+	topic_info?: TopicInfo | null;
+	spread_rationale?: string;
 	zodiac_sign: string;
 	spread_type: string;
 	spread_name?: string;
 	cards: DrawnCard[];
 	themes: string[];
+	dominant_theme?: string | null;
+	direction?: string;
+	advice?: { category_advice: string; theme_advice: string };
+	conflicts?: ThemeConflict[];
 	reasoning: ReasoningStep[];
 	ai_interpretation: string;
 	facts?: Record<string, unknown>;
@@ -76,6 +121,47 @@ export interface CompatibilityResult {
 	modality2: string;
 	level: string;
 	element_description: string;
+	reasoning: ReasoningStep[];
+}
+
+export interface SynastryScoreComponent {
+	name: string;
+	score: number;
+	weight: number;
+	description: string;
+}
+
+export interface SynastryResult {
+	sign1: string;
+	sign2: string;
+	overall_level: string;
+	overall_score: number;
+	score_breakdown: {
+		element: SynastryScoreComponent;
+		modality: SynastryScoreComponent;
+		traits: SynastryScoreComponent;
+		planetary: SynastryScoreComponent;
+		overall: number;
+	};
+	communication_theme: string;
+	balance_theme: string;
+	strengths: string[];
+	challenges: string[];
+	complementary_traits: { trait1: string; trait2: string }[];
+	reasoning: ReasoningStep[];
+}
+
+export interface ZodiacProfileResult {
+	profile: {
+		sign: string;
+		element: string;
+		modality: string;
+		ruling_planet: string;
+		traits: string[];
+		personality_style: string;
+		approach_to_life: string;
+		planetary_influence: string;
+	};
 	reasoning: ReasoningStep[];
 }
 

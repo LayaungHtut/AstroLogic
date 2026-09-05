@@ -1,18 +1,44 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { page } from '$app/state';
-	import { fetchAllZodiac, fetchZodiac } from '$lib/utils/api';
+	import { fetchAllZodiac, fetchZodiac, fetchZodiacProfile } from '$lib/utils/api';
 	import { ZODIAC_SYMBOLS, ELEMENT_COLORS, ELEMENT_ICONS } from '$lib/types';
-	import type { ZodiacInfo } from '$lib/types';
+	import type { ZodiacInfo, ZodiacProfileResult } from '$lib/types';
 	import ZodiacBadge from '$lib/components/ZodiacBadge.svelte';
 	import ElementBadge from '$lib/components/ElementBadge.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
+	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 
 	let signs = $state<ZodiacInfo[]>([]);
 	let selected = $state<string>('');
 	let selectedInfo = $state<ZodiacInfo | null>(null);
 	let loading = $state(true);
 	let elementFilter = $state<string>('all');
+
+	// Feature: Profile Reasoning Trace ("Why am I like this?")
+	let profileResult = $state<ZodiacProfileResult | null>(null);
+	let profileLoading = $state(false);
+	let profileError = $state('');
+	let profileOpen = $state(false);
+
+	async function loadProfile(sign: string) {
+		profileOpen = true;
+		profileLoading = true;
+		profileError = '';
+		profileResult = null;
+		try {
+			const result = await fetchZodiacProfile(sign);
+			if ('error' in result) {
+				profileError = String((result as unknown as { error: string }).error);
+			} else {
+				profileResult = result;
+			}
+		} catch (e) {
+			profileError = e instanceof Error ? e.message : 'Failed to load profile reasoning';
+		} finally {
+			profileLoading = false;
+		}
+	}
 
 	const ELEMENTS = ['fire', 'earth', 'air', 'water'];
 
@@ -45,6 +71,8 @@
 
 	async function selectSign(sign: string) {
 		selected = sign;
+		profileOpen = false;
+		profileResult = null;
 		try {
 			selectedInfo = await fetchZodiac(sign);
 		} catch {
@@ -218,7 +246,7 @@
 							{/each}
 						</div>
 
-						<div class="pt-2">
+						<div class="pt-2 flex flex-wrap gap-3">
 							<a
 								href="/reading"
 								class="btn-primary inline-flex items-center gap-2.5"
@@ -226,9 +254,57 @@
 								<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
 								<span>Get a Reading for {selectedInfo.sign}</span>
 							</a>
+							<button
+								type="button"
+								class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full font-mono-data text-xs uppercase tracking-wider bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors"
+								onclick={() => (profileOpen && profileResult ? (profileOpen = false) : loadProfile(selectedInfo!.sign))}
+							>
+								<span class="material-symbols-outlined text-[18px]">psychology</span>
+								<span>{profileOpen && profileResult ? 'Hide Reasoning' : 'Why Am I Like This?'}</span>
+							</button>
 						</div>
 					</div>
 				</div>
+
+				{#if profileOpen}
+					<div class="relative z-10 px-6 lg:px-10 pb-8 -mt-2">
+						{#if profileLoading}
+							<LoadingSpinner text="Tracing the reasoning chain..." />
+						{:else if profileError}
+							<div class="p-4 rounded-xl bg-error-container/10 text-error text-sm">{profileError}</div>
+						{:else if profileResult}
+							<div class="rounded-2xl bg-surface-container-lowest/80 backdrop-blur-md shadow-xl p-6 lg:p-8">
+								<h3 class="font-headline text-lg text-on-surface mb-4 flex items-center gap-2">
+									<span class="material-symbols-outlined text-primary">psychology</span>
+									Why You're {profileResult.profile.sign.charAt(0).toUpperCase() + profileResult.profile.sign.slice(1)}
+								</h3>
+								<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
+									<div class="p-4 rounded-xl bg-surface-container-high/60">
+										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">Personality Style</div>
+										<p class="text-sm text-on-surface/90">{profileResult.profile.personality_style}</p>
+									</div>
+									<div class="p-4 rounded-xl bg-surface-container-high/60">
+										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">Approach to Life</div>
+										<p class="text-sm text-on-surface/90">{profileResult.profile.approach_to_life}</p>
+									</div>
+									<div class="p-4 rounded-xl bg-surface-container-high/60">
+										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">Planetary Influence</div>
+										<p class="text-sm text-on-surface/90">{profileResult.profile.planetary_influence}</p>
+									</div>
+								</div>
+								<div class="flex items-center gap-2.5 pb-3 mb-3 border-b border-outline-variant/20">
+									<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6] animate-pulse"></span>
+									<span class="font-mono-data text-xs text-secondary tracking-widest uppercase">Prolog Reasoning Chain</span>
+								</div>
+								<div class="space-y-2">
+									{#each profileResult.reasoning as step, i}
+										<ReasoningStep {step} index={i} />
+									{/each}
+								</div>
+							</div>
+						{/if}
+					</div>
+				{/if}
 			</section>
 		{/if}
 

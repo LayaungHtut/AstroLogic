@@ -91,3 +91,33 @@ class TestBirthChartEndpoint:
         )
         assert resp.status_code == 200
         assert "error" in resp.json()
+
+
+class TestSynastryDeepDiveEndpoint:
+    def test_returns_full_breakdown(self, client):
+        resp = client.post(
+            "/api/compatibility/synastry", json={"sign1": "aries", "sign2": "cancer"}
+        )
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["sign1"] == "aries"
+        assert set(data["score_breakdown"].keys()) == {
+            "element", "modality", "traits", "planetary", "overall"
+        }
+        assert isinstance(data["complementary_traits"], list)
+        assert isinstance(data["strengths"], list)
+
+
+class TestZodiacProfileEndpoint:
+    def test_returns_profile_and_reasoning(self, client):
+        resp = client.get("/api/zodiac/leo/profile")
+        assert resp.status_code == 200
+        data = resp.json()
+        assert data["profile"]["sign"] == "leo"
+        assert data["profile"]["personality_style"]
+        assert len(data["reasoning"]) > 0
+
+    def test_unknown_sign_returns_error(self, client):
+        resp = client.get("/api/zodiac/not_a_real_sign/profile")
+        assert resp.status_code == 200
+        assert "error" in resp.json()

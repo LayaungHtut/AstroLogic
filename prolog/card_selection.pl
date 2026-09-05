@@ -338,35 +338,47 @@ topic_spread(general, three_card).
 % Classify a question into a tarot topic.
 
 classify_topic(Input, Topic) :-
-    (   sub_string(Input, _, _, _, 'love') ; sub_string(Input, _, _, _, 'romantic') ;
-        sub_string(Input, _, _, _, 'partner') ; sub_string(Input, _, _, _, 'relationship') ;
-        sub_string(Input, _, _, _, 'heart') ; sub_string(Input, _, _, _, 'crush') ;
-        sub_string(Input, _, _, _, 'date') ; sub_string(Input, _, _, _, 'marriage') ;
-        sub_string(Input, _, _, _, 'soulmate') ; sub_string(Input, _, _, _, 'attract')
-    ->  Topic = love, !
-    ;   sub_string(Input, _, _, _, 'career') ; sub_string(Input, _, _, _, 'job') ;
-        sub_string(Input, _, _, _, 'work') ; sub_string(Input, _, _, _, 'promotion') ;
-        sub_string(Input, _, _, _, 'boss') ; sub_string(Input, _, _, _, 'colleague') ;
-        sub_string(Input, _, _, _, 'business') ; sub_string(Input, _, _, _, 'professional')
-    ->  Topic = career, !
-    ;   sub_string(Input, _, _, _, 'money') ; sub_string(Input, _, _, _, 'financ') ;
-        sub_string(Input, _, _, _, 'invest') ; sub_string(Input, _, _, _, 'wealth') ;
-        sub_string(Input, _, _, _, 'salary') ; sub_string(Input, _, _, _, 'budget') ;
-        sub_string(Input, _, _, _, 'spend') ; sub_string(Input, _, _, _, 'saving')
-    ->  Topic = finance, !
-    ;   sub_string(Input, _, _, _, 'grow') ; sub_string(Input, _, _, _, 'improve') ;
-        sub_string(Input, _, _, _, 'heal') ; sub_string(Input, _, _, _, 'transform') ;
-        sub_string(Input, _, _, _, 'purpose') ; sub_string(Input, _, _, _, 'meaning') ;
-        sub_string(Input, _, _, _, 'develop') ; sub_string(Input, _, _, _, 'become') ;
-        sub_string(Input, _, _, _, 'myself') ; sub_string(Input, _, _, _, 'inner')
-    ->  Topic = personal_growth, !
-    ;   sub_string(Input, _, _, _, 'communicat') ; sub_string(Input, _, _, _, 'explain') ;
-        sub_string(Input, _, _, _, 'tell') ; sub_string(Input, _, _, _, 'say') ;
-        sub_string(Input, _, _, _, 'listen') ; sub_string(Input, _, _, _, 'understand') ;
-        sub_string(Input, _, _, _, 'express') ; sub_string(Input, _, _, _, 'speak')
-    ->  Topic = communication, !
+    % NOTE: each keyword disjunction below MUST be wrapped in its own parens.
+    % `;` and `->` share the containing (...) without them, so
+    % `A ; B -> C ; D` parses as `A ; (B -> C) ; D`, not `(A ; B) -> C ; D` —
+    % matching keyword A would then succeed the whole clause *without ever
+    % binding Topic*, leaving it a dangling unbound variable. (This is what
+    % made classify_topic effectively non-functional before this fix.)
+    (   (   sub_string(Input, _, _, _, 'love') ; sub_string(Input, _, _, _, 'romantic') ;
+            sub_string(Input, _, _, _, 'partner') ; sub_string(Input, _, _, _, 'relationship') ;
+            sub_string(Input, _, _, _, 'heart') ; sub_string(Input, _, _, _, 'crush') ;
+            sub_string(Input, _, _, _, 'date') ; sub_string(Input, _, _, _, 'marriage') ;
+            sub_string(Input, _, _, _, 'soulmate') ; sub_string(Input, _, _, _, 'attract')
+        )
+    ->  Topic = love
+    ;   (   sub_string(Input, _, _, _, 'career') ; sub_string(Input, _, _, _, 'job') ;
+            sub_string(Input, _, _, _, 'work') ; sub_string(Input, _, _, _, 'promotion') ;
+            sub_string(Input, _, _, _, 'boss') ; sub_string(Input, _, _, _, 'colleague') ;
+            sub_string(Input, _, _, _, 'business') ; sub_string(Input, _, _, _, 'professional')
+        )
+    ->  Topic = career
+    ;   (   sub_string(Input, _, _, _, 'money') ; sub_string(Input, _, _, _, 'financ') ;
+            sub_string(Input, _, _, _, 'invest') ; sub_string(Input, _, _, _, 'wealth') ;
+            sub_string(Input, _, _, _, 'salary') ; sub_string(Input, _, _, _, 'budget') ;
+            sub_string(Input, _, _, _, 'spend') ; sub_string(Input, _, _, _, 'saving')
+        )
+    ->  Topic = finance
+    ;   (   sub_string(Input, _, _, _, 'grow') ; sub_string(Input, _, _, _, 'improve') ;
+            sub_string(Input, _, _, _, 'heal') ; sub_string(Input, _, _, _, 'transform') ;
+            sub_string(Input, _, _, _, 'purpose') ; sub_string(Input, _, _, _, 'meaning') ;
+            sub_string(Input, _, _, _, 'develop') ; sub_string(Input, _, _, _, 'become') ;
+            sub_string(Input, _, _, _, 'myself') ; sub_string(Input, _, _, _, 'inner')
+        )
+    ->  Topic = personal_growth
+    ;   (   sub_string(Input, _, _, _, 'communicat') ; sub_string(Input, _, _, _, 'explain') ;
+            sub_string(Input, _, _, _, 'tell') ; sub_string(Input, _, _, _, 'say') ;
+            sub_string(Input, _, _, _, 'listen') ; sub_string(Input, _, _, _, 'understand') ;
+            sub_string(Input, _, _, _, 'express') ; sub_string(Input, _, _, _, 'speak')
+        )
+    ->  Topic = communication
     ;   Topic = general
-    ).
+    ),
+    !.
 
 % --- topic_to_category/2 ---
 % Map topic to the internal question category.
@@ -744,7 +756,12 @@ modify_keyword_reversed(K, K).  % Fallback: keep original.
 select_cards(Sign, Category, Selection) :-
     element(Sign, Element),
     zodiac_traits(Sign, Traits),
-    context(Category, Sign, Element, Traits),
+    % NOTE: `context(Category, Sign, Element, Traits)` used to appear here as
+    % a bare goal. context/4 is never defined as a predicate anywhere in the
+    % knowledge base — it's only ever used as a data term, as in the
+    % findall/3 below and in card_priority/3. Calling it as a goal always
+    % threw existence_error(procedure, context/4), which meant this whole
+    % predicate — and select_eligible_cards, which wraps it — always failed.
     spread_positions(Spread, Positions),
     recommended_spread(Category, Spread),
     findall(Card, card_eligible(Card, context(Category, Sign, Element, Traits)), Eligible),
