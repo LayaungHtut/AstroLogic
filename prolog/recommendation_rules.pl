@@ -25,7 +25,7 @@ zodiac_card(taurus, the_hierophant).
 zodiac_card(taurus, temperance).
 zodiac_card(gemini, the_lovers).
 zodiac_card(gemini, the_magician).
-zodiac_card(gemini, the_wheel_of_fortune).
+zodiac_card(gemini, wheel_of_fortune).
 zodiac_card(cancer, the_chariot).
 zodiac_card(cancer, the_moon).
 zodiac_card(cancer, the_hermit).
@@ -37,19 +37,19 @@ zodiac_card(virgo, justice).
 zodiac_card(virgo, temperance).
 zodiac_card(libra, the_lovers).
 zodiac_card(libra, justice).
-zodiac_card(libra, the_wheel_of_fortune).
+zodiac_card(libra, wheel_of_fortune).
 zodiac_card(scorpio, death).
 zodiac_card(scorpio, the_hanged_man).
 zodiac_card(scorpio, the_magician).
 zodiac_card(sagittarius, temperance).
-zodiac_card(sagittarius, the_wheel_of_fortune).
+zodiac_card(sagittarius, wheel_of_fortune).
 zodiac_card(sagittarius, the_sun).
 zodiac_card(capricorn, the_devil).
 zodiac_card(capricorn, the_tower).
 zodiac_card(capricorn, the_world).
 zodiac_card(aquarius, the_star).
 zodiac_card(aquarius, the_hanged_man).
-zodiac_card(aquarius, the_wheel_of_fortune).
+zodiac_card(aquarius, wheel_of_fortune).
 zodiac_card(pisces, the_moon).
 zodiac_card(pisces, the_sun).
 zodiac_card(pisces, the_hierophant).
@@ -62,7 +62,7 @@ category_card_affinity(education, Card) :-
 category_card_affinity(relationship, Card) :-
     member(Card, [the_lovers, two_of_cups, ten_of_cups, the_empress, queen_of_cups]).
 category_card_affinity(decision, Card) :-
-    member(Card, [the_hermit, justice, the_wheel_of_fortune, two_of_swords, temperance]).
+    member(Card, [the_hermit, justice, wheel_of_fortune, two_of_swords, temperance]).
 category_card_affinity(self_reflection, Card) :-
     member(Card, [the_hermit, the_moon, the_high_priestess, four_of_swords, nine_of_cups]).
 category_card_affinity(friendship, Card) :-
@@ -80,7 +80,7 @@ mood_card(happy, Card) :-
 mood_card(calm, Card) :-
     member(Card, [temperance, four_of_swords, the_high_priestess, nine_of_cups]).
 mood_card(uncertain, Card) :-
-    member(Card, [the_hermit, two_of_swords, justice, the_wheel_of_fortune]).
+    member(Card, [the_hermit, two_of_swords, justice, wheel_of_fortune]).
 mood_card(stressed, Card) :-
     member(Card, [four_of_swords, the_star, temperance, eight_of_cups]).
 mood_card(excited, Card) :-
@@ -92,7 +92,7 @@ mood_card(curious, Card) :-
 mood_card(reflective, Card) :-
     member(Card, [the_hermit, the_moon, four_of_swords, the_high_priestess]).
 mood_card(neutral, Card) :-
-    member(Card, [the_wheel_of_fortune, justice, temperance, the_world]).
+    member(Card, [wheel_of_fortune, justice, temperance, the_world]).
 
 % --- Card Interpretation in Context ---
 interpret_card(Card, Sign, Category, Interpretation) :-
@@ -116,13 +116,16 @@ interpret_card(Card, Sign, Category, Interpretation) :-
     }.
 
 % --- Card Theme Extraction ---
+% NOTE: this used to call tarot_themes/2, which is only defined for the 22
+% major arcana in tarot.pl — every minor-arcana card silently contributed no
+% themes. card_theme/2 (card_selection.pl) covers all 78 cards and is what
+% reading_themes/2 (reading_analysis.pl) already correctly uses.
 extract_card_themes(Cards, Themes) :-
     findall(
         Theme,
         (
             member(Card, Cards),
-            tarot_themes(Card, CardThemes),
-            member(Theme, CardThemes)
+            card_theme(Card, Theme)
         ),
         AllThemes
     ),

@@ -12,12 +12,14 @@
 
 	function formatInline(value: string) {
 		return value
+			.replace(/\\([*_`])/g, '$1')
 			.replace(
 				/`([^`]+)`/g,
 				'<code class="rounded bg-surface-container-high px-1 py-0.5 font-mono-data text-xs">$1</code>'
 			)
 			.replace(/\*\*([^*]+)\*\*/g, '<strong class="font-semibold text-on-surface">$1</strong>')
-			.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>');
+			.replace(/(?<!\*)\*([^*]+)\*(?!\*)/g, '<em>$1</em>')
+			.replace(/[\*_`]+/g, '');
 	}
 
 	function renderMarkdown(value: string) {

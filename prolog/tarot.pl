@@ -288,7 +288,7 @@ tarot_reversed(two_of_wands, [fear_of_change, playing_it_safe, bad_planning]).
 tarot_reversed(three_of_wands, [obstacles, delays, frustration, setbacks]).
 tarot_reversed(four_of_wands, [personal_transition, unhappiness, lack_of_support]).
 tarot_reversed(five_of_wands, [inner_conflict, avoidance, tension, cooperation]).
-tarot_reversed(six_of_wands, [failure, ego, fall_from_grace, Lack_of_recognition]).
+tarot_reversed(six_of_wands, [failure, ego, fall_from_grace, lack_of_recognition]).
 tarot_reversed(seven_of_wands, [exhaustion, giving_up, overwhelmed]).
 tarot_reversed(eight_of_wands, [delays, frustration, waiting, slowing_down]).
 tarot_reversed(nine_of_wands, [defensiveness, stubbornness, fatigue]).

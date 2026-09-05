@@ -18,6 +18,21 @@ class TarotService:
         return name.lower().replace(" ", "_").replace("'", "")
 
     @staticmethod
+    def to_prolog_position_atom(position: str) -> str:
+        """Convert a spread position's display label (e.g. "Current Position",
+        "Path A", "What to Understand") into the snake_case atom
+        position_meaning_modifier/2 and position_theme_emphasis/2
+        (prolog/reading_analysis.pl) are keyed on. Spread position labels
+        come from spread_rules.pl's spread_positions/2, which is the
+        capitalized version that wins over card_selection.pl's own
+        (lowercase) definition of the same predicate — SWI keeps whichever
+        file's clauses were consulted last, see prolog_service.py's load
+        order. Passing the capitalized label straight into a Prolog query
+        never matches the lowercase atoms those two predicates expect.
+        """
+        return position.lower().replace(" ", "_")
+
+    @staticmethod
     async def draw_cards(count: int = 3, spread_type: str | None = None) -> list[dict]:
         cards = await TarotAPIClient.fetch_random_cards(count)
         result = []

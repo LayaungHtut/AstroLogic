@@ -122,6 +122,32 @@ spread_recommendation(Input, Sign, Recommendation) :-
         emphasis: Emphasis
     }.
 
+% --- spread_recommendation_for/4 ---
+% Like spread_recommendation/3, but for when the caller (the user, via the
+% UI's spread picker) has already chosen a specific spread type rather than
+% asking Prolog to pick one from the question text. Question classification
+% is still run (Category is used elsewhere for card relevance/advice), but
+% the spread itself is the one requested, not recommended_spread/2's guess.
+
+spread_recommendation_for(Input, Sign, SpreadType, Recommendation) :-
+    question_category(Input, Category),
+    element(Sign, Element),
+    modality(Sign, Modality),
+    element_position_emphasis(Element, Emphasis),
+    spread(SpreadType, Name, Description, CardCount),
+    spread_positions(SpreadType, Positions),
+    Recommendation = spread_recommendation{
+        category: Category,
+        spread_type: SpreadType,
+        name: Name,
+        description: Description,
+        card_count: CardCount,
+        positions: Positions,
+        element: Element,
+        modality: Modality,
+        emphasis: Emphasis
+    }.
+
 % --- Reasoning Trace for Spread ---
 generate_spread_trace(Input, Sign, Trace) :-
     question_category(Input, Category),

@@ -468,6 +468,30 @@ class PrologService:
         return None
 
     @staticmethod
+    def recommend_spread_for(question: str, sign: str, spread_type: str) -> dict | None:
+        """Like recommend_spread, but for an explicit user-chosen spread type
+        instead of letting Prolog pick one from the question text."""
+        safe_q = _quote_atom(question)
+        result = _first_result(
+            f"spread_recommendation_for({safe_q}, {_quote_atom(sign)}, "
+            f"{_quote_atom(spread_type)}, Rec)"
+        )
+        if result:
+            rec = result["Rec"]
+            return {
+                "category": str(rec["category"]),
+                "spread_type": str(rec["spread_type"]),
+                "name": str(rec["name"]),
+                "description": str(rec["description"]),
+                "card_count": int(rec["card_count"]),
+                "positions": [str(p) for p in rec["positions"]],
+                "element": str(rec["element"]),
+                "modality": str(rec["modality"]),
+                "emphasis": str(rec["emphasis"]),
+            }
+        return None
+
+    @staticmethod
     def get_available_spreads() -> list[dict]:
         results = _safe_query("available_spread(Spread)")
         spreads = []

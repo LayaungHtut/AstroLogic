@@ -83,14 +83,39 @@ position_theme_emphasis(advice, advisory).
 position_theme_emphasis(connection, relational).
 position_theme_emphasis(hidden_influence, hidden).
 position_theme_emphasis(what_to_understand, educational).
+% NOTE: these eight positions (used by the decision, self_reflection, career,
+% and relationship spreads — see spread_rules.pl) had no entry at all here,
+% so interpret_card_position/4 failed outright for them with no fallback,
+% silently dropping every card in those four spread types from
+% card_interpretations (and therefore from reading_direction/2 too).
+position_theme_emphasis(current_situation, current).
+position_theme_emphasis(path_a, neutral).
+position_theme_emphasis(path_b, neutral).
+position_theme_emphasis(current_self, current).
+position_theme_emphasis(you, neutral).
+position_theme_emphasis(other_person, relational).
+position_theme_emphasis(current_position, current).
+position_theme_emphasis(opportunity, positive).
+% Catch-all so an unrecognized position (e.g. a future spread type) still
+% resolves instead of making interpret_card_position/4 fail outright.
+position_theme_emphasis(_, neutral).
 
 % --- interpret_card_position/4 ---
 % Combine card analysis with position interpretation.
 
 interpret_card_position(Card, Position, Orientation, Interpretation) :-
     analyze_card(Card, Orientation, CardAnalysis),
-    position_meaning_modifier(Position, PositionContext),
-    position_theme_emphasis(Position, Emphasis),
+    % once/1 on both of these: position_meaning_modifier/2 has two separate
+    % facts each for 'challenge' (used by both the relationship and career
+    % spreads, worded differently for each) and 'advice' (decision vs.
+    % career spreads) — and position_theme_emphasis/2 ends in a catch-all
+    % fact (`_`), so a *known* position still has a second solution via the
+    % catch-all on backtracking. Without once/1 on both, the findall/3 in
+    % analyze_reading_oriented/4 would collect a duplicate
+    % card_position_interpretation per card for any position name reused
+    % across more than one spread type.
+    once(position_meaning_modifier(Position, PositionContext)),
+    once(position_theme_emphasis(Position, Emphasis)),
     % Adjust interpretation based on position
     (   Emphasis = challenging
     ->  InterpretationAspect = CardAnalysis.challenging_aspects
@@ -428,18 +453,45 @@ element_to_theme(water, depth).
 % --- reading_direction/2 ---
 % Determine the overall directional flow of a reading.
 
+% --- emphasis_bucket/2 ---
+% position_theme_emphasis/2 emits a fairly fine-grained vocabulary
+% (historical, current, emerging, advisory, relational, educational, ...)
+% for use elsewhere (interpret_card_position/4 uses 'positive'/'challenging'
+% specifically to pick which of a card's aspects to surface). reading_direction/2
+% only ever needs the coarser positive/challenging/hidden/neutral split, and
+% used to check membership in exactly those three atoms directly — meaning
+% every emphasis value the position facts can actually produce OTHER than
+% those three literals (historical, current, emerging, advisory, relational,
+% educational — i.e. every position in a three_card, decision, career, or
+% relationship spread) fell into none of the three buckets, so direction
+% degenerated to 'balanced' for nearly every real reading regardless of
+% the cards drawn.
+emphasis_bucket(positive, positive).
+emphasis_bucket(challenging, challenging).
+emphasis_bucket(hidden, hidden).
+emphasis_bucket(historical, neutral).
+emphasis_bucket(current, neutral).
+emphasis_bucket(emerging, neutral).
+emphasis_bucket(advisory, neutral).
+emphasis_bucket(relational, neutral).
+emphasis_bucket(educational, neutral).
+emphasis_bucket(reflective, neutral).
+emphasis_bucket(neutral, neutral).
+emphasis_bucket(_, neutral).
+
 reading_direction(Interpretations, Direction) :-
     findall(
-        Emphasis,
+        Bucket,
         (
             member(I, Interpretations),
-            I.emphasis = Emphasis
+            Emphasis = I.emphasis,
+            once(emphasis_bucket(Emphasis, Bucket))
         ),
-        Emphases
+        Buckets
     ),
-    include(=(positive), Emphases, Positives),
-    include(=(challenging), Emphases, Challengings),
-    include(=(hidden), Emphases, Hiddens),
+    include(=(positive), Buckets, Positives),
+    include(=(challenging), Buckets, Challengings),
+    include(=(hidden), Buckets, Hiddens),
     length(Positives, PosCount),
     length(Challengings, ChalCount),
     length(Hiddens, HiddenCount),
@@ -464,17 +516,18 @@ reading_summary(Cards, Summary) :-
     sort(AllThemes, Themes),
     dominant_theme(Cards, Dominant),
     reading_conflicts(Cards, Conflicts),
+    length(Conflicts, ConflictCount),
+    length(Cards, CardCount),
     (   Conflicts = []
     ->  ConflictNote = 'The reading shows harmonious energy with no significant symbolic tension.'
-    ;   length(Conflicts, ConflictCount),
-        format(atom(ConflictNote), 'The reading contains ~w symbolic tension(s) worth reflecting on.', [ConflictCount])
+    ;   format(atom(ConflictNote), 'The reading contains ~w symbolic tension(s) worth reflecting on.', [ConflictCount])
     ),
     Summary = reading_summary{
         themes: Themes,
         dominant_theme: Dominant,
-        conflict_count: length(Conflicts),
+        conflict_count: ConflictCount,
         conflict_note: ConflictNote,
-        card_count: length(Cards)
+        card_count: CardCount
     }.
 
 % ============================================================
@@ -649,17 +702,24 @@ reading_analysis_trace(Cards, Positions, Trace) :-
     suit_distribution(Cards, SuitDist),
     arcana_distribution(Cards, ArcanaDist),
     reading_summary(Cards, Summary),
+    % NOTE: length(Cards) etc. used to be passed directly as format/2 args
+    % without ever being evaluated via length(List, N) first — the dict
+    % field ended up holding the literal, un-rendered compound term
+    % "length([...])" instead of a card count.
+    length(Cards, CardCount),
+    length(UniqueThemes, ThemeCount),
+    length(Conflicts, ConflictCount),
     Trace = [
         reasoning_step{
             rule: format('analyze_cards(~w)', [Cards]),
             input: 'Card list',
-            result: format('~w cards analyzed', [length(Cards)]),
+            result: format('~w cards analyzed', [CardCount]),
             explanation: 'Each card is analyzed individually with its position and orientation'
         },
         reasoning_step{
             rule: format('reading_themes(~w)', [UniqueThemes]),
             input: 'All card themes',
-            result: format('~w themes detected: ~w', [length(UniqueThemes), UniqueThemes]),
+            result: format('~w themes detected: ~w', [ThemeCount, UniqueThemes]),
             explanation: 'Themes are extracted from all cards and deduplicated'
         },
         reasoning_step{
@@ -669,9 +729,9 @@ reading_analysis_trace(Cards, Positions, Trace) :-
             explanation: 'The most frequently occurring theme is identified'
         },
         reasoning_step{
-            rule: format('reading_conflicts(~w)', [length(Conflicts)]),
+            rule: format('reading_conflicts(~w)', [ConflictCount]),
             input: 'Theme pairs',
-            result: format('~w symbolic tension(s) detected', [length(Conflicts)]),
+            result: format('~w symbolic tension(s) detected', [ConflictCount]),
             explanation: 'Conflicting themes indicate areas requiring balance'
         },
         reasoning_step{

@@ -10,12 +10,22 @@ import json
 router = APIRouter(prefix="/api/reading", tags=["reading"])
 
 
-def _classify_and_recommend(question: str, sign: str) -> dict:
-    """Bundle of synchronous Prolog calls needed before cards are drawn."""
+def _classify_and_recommend(question: str, sign: str, requested_spread_type: str | None) -> dict:
+    """Bundle of synchronous Prolog calls needed before cards are drawn.
+
+    If the caller (the UI's spread picker) asked for a specific spread type,
+    honor it instead of letting Prolog auto-recommend one from the question
+    text — recommend_spread/2 always overrode any client-chosen spread_type
+    before this, so picking a spread in the UI silently did nothing.
+    """
     category = PrologService.classify_question(question)
     topic = PrologService.classify_topic(question)
     topic_info = PrologService.get_topic_info(topic)
-    spread_rec = PrologService.recommend_spread(question, sign)
+    spread_rec = None
+    if requested_spread_type:
+        spread_rec = PrologService.recommend_spread_for(question, sign, requested_spread_type)
+    if not spread_rec:
+        spread_rec = PrologService.recommend_spread(question, sign)
     return {
         "category": category,
         "topic": topic,
@@ -88,7 +98,7 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     # PrologService calls are synchronous, blocking pyswip queries — run each
     # bundle off the event loop so slow queries don't stall every other request.
     pre = await asyncio.to_thread(
-        _classify_and_recommend, request.question, request.zodiac_sign
+        _classify_and_recommend, request.question, request.zodiac_sign, request.spread_type
     )
     category = pre["category"]
     spread_rec = pre["spread_rec"]
@@ -112,12 +122,13 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     )
 
     prolog_cards = [c["prolog_card"] for c in cards]
+    prolog_positions = [TarotService.to_prolog_position_atom(p) for p in positions]
     orientations = ["reversed" if c["is_reversed"] else "upright" for c in cards]
 
     post = await asyncio.to_thread(
         _analyze_drawn_cards,
         request.question, request.zodiac_sign, category,
-        prolog_cards, positions, orientations,
+        prolog_cards, prolog_positions, orientations,
     )
     themes = post["themes"]
     facts = post["facts"]
@@ -179,11 +190,18 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
             cards, themes, category, request.zodiac_sign
         )
 
-    spread_rationale = (
-        f"Your question was classified as '{category}' (topic: '{pre['topic']}'), "
-        f"which is why the {spread_rec['name']} spread was recommended — it emphasizes "
-        f"{spread_rec.get('emphasis', 'this area of focus')}."
-    )
+    if request.spread_type:
+        spread_rationale = (
+            f"Your question was classified as '{category}' (topic: '{pre['topic']}'). "
+            f"You chose the {spread_rec['name']} spread, which emphasizes "
+            f"{spread_rec.get('emphasis', 'this area of focus')}."
+        )
+    else:
+        spread_rationale = (
+            f"Your question was classified as '{category}' (topic: '{pre['topic']}'), "
+            f"which is why the {spread_rec['name']} spread was recommended — it emphasizes "
+            f"{spread_rec.get('emphasis', 'this area of focus')}."
+        )
 
     return {
         "question": request.question,

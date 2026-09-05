@@ -116,6 +116,32 @@ class TestSynastryTraitPairs:
         assert pairs == []
 
 
+class TestExplicitSpreadTypeOverridesAutoRecommendation:
+    """The reading endpoint always called PrologService.recommend_spread,
+    which auto-classifies category from the question text and picks its own
+    spread type — any client-chosen spread_type was silently discarded, so
+    the UI's spread picker never actually changed anything server-side.
+    recommend_spread_for lets the caller pin the spread while still
+    classifying the question for category/topic purposes."""
+
+    def test_each_spread_type_is_honored_with_correct_card_count(self):
+        expected_counts = {
+            "one_card": 1, "three_card": 3, "decision": 4,
+            "self_reflection": 4, "relationship": 5, "career": 5,
+        }
+        for spread_type, count in expected_counts.items():
+            rec = PrologService.recommend_spread_for("What should I do?", "leo", spread_type)
+            assert rec is not None
+            assert rec["spread_type"] == spread_type
+            assert rec["card_count"] == count
+            assert len(rec["positions"]) == count
+
+    def test_still_classifies_the_question_category(self):
+        rec = PrologService.recommend_spread_for("Will I find love?", "leo", "one_card")
+        assert rec["category"] == "relationship"
+        assert rec["spread_type"] == "one_card"
+
+
 class TestSynastryScoreBreakdownNoLeakedFormat:
     def test_descriptions_are_rendered_not_raw_format_terms(self):
         breakdown = PrologService.get_compatibility_score_breakdown("aries", "cancer")

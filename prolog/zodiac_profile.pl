@@ -417,32 +417,28 @@ day_of_year(Month, Day, DOY) :-
 % We use birth hour to approximate the Ascendant sign.
 % Hour 0-1 = same as hour 2, etc.
 
+% NOTE: this used to special-case H < 2 by recursing into rising_from_hour(2, _),
+% which gave aries a 4-hour slot (0-3) while every other sign got 2 hours,
+% and the final catch-all (aquarius) silently absorbed hours 22-23 that
+% should belong to the 12th sign — pisces was never reachable for any hour.
+% Rewritten as 12 clean, non-overlapping 2-hour slots covering all of 0-23.
 rising_from_hour(Hour, Sign) :-
     H is Hour mod 24,
-    (   H < 2
-    ->  rising_from_hour(2, Sign)
-    ;   H =< 3
-    ->  Sign = aries
-    ;   H =< 5
-    ->  Sign = taurus
-    ;   H =< 7
-    ->  Sign = gemini
-    ;   H =< 9
-    ->  Sign = cancer
-    ;   H =< 11
-    ->  Sign = leo
-    ;   H =< 13
-    ->  Sign = virgo
-    ;   H =< 15
-    ->  Sign = libra
-    ;   H =< 17
-    ->  Sign = scorpio
-    ;   H =< 19
-    ->  Sign = sagittarius
-    ;   H =< 21
-    ->  Sign = capricorn
-    ;   Sign = aquarius
-    ).
+    Slot is H // 2,
+    rising_slot(Slot, Sign).
+
+rising_slot(0, aries).
+rising_slot(1, taurus).
+rising_slot(2, gemini).
+rising_slot(3, cancer).
+rising_slot(4, leo).
+rising_slot(5, virgo).
+rising_slot(6, libra).
+rising_slot(7, scorpio).
+rising_slot(8, sagittarius).
+rising_slot(9, capricorn).
+rising_slot(10, aquarius).
+rising_slot(11, pisces).
 
 % --- calculate_moon_sign/3 ---
 % Calculate Moon sign from birth month and day.

@@ -113,6 +113,14 @@ compatibility_analysis(Sign1, Sign2, Analysis) :-
     }.
 
 % --- Reasoning Trace Generation ---
+% NOTE: this used to build `findall(trace_step{rule: RuleStr, result: ResultStr}, (member(step, [step(...), ...])), Trace)`
+% — checking whether the bare atom `step` is a member of a list of `step(_,_)`
+% compound terms, which can never unify, and RuleStr/ResultStr were never
+% bound anywhere in the goal (SWI flagged both as singleton variables at load
+% time). The whole findall/3 therefore always returned []. Also note
+% zodiac_compatibility/3 (as defined in synastry.pl, which supersedes the
+% simpler version earlier in this file) returns a dict, not a bare level
+% atom — Level.level is the atom (high/moderate/low), Level.score the number.
 generate_compatibility_trace(Sign1, Sign2, Trace) :-
     Sign1 \= Sign2,
     element(Sign1, E1),
@@ -126,16 +134,19 @@ generate_compatibility_trace(Sign1, Sign2, Trace) :-
     findall(
         trace_step{rule: RuleStr, result: ResultStr},
         (
-            (   member(step, [
-                step(element_rule(Sign1, E1), 'element of Sign1'),
-                step(element_rule(Sign2, E2), 'element of Sign2'),
-                step(modality_rule(Sign1, M1), 'modality of Sign1'),
-                step(modality_rule(Sign2, M2), 'modality of Sign2'),
-                step(planet_rule(Sign1, P1), 'ruling planet of Sign1'),
-                step(planet_rule(Sign2, P2), 'ruling planet of Sign2'),
-                step(compatibility_result(Level), 'overall compatibility level')
-            ])
-            )
+            member(
+                step(Rule, ResultStr),
+                [
+                    step(element_rule(Sign1, E1), ElementDesc),
+                    step(element_rule(Sign2, E2), ElementDesc),
+                    step(modality_rule(Sign1, M1), 'modality of Sign1'),
+                    step(modality_rule(Sign2, M2), 'modality of Sign2'),
+                    step(planet_rule(Sign1, P1), 'ruling planet of Sign1'),
+                    step(planet_rule(Sign2, P2), 'ruling planet of Sign2'),
+                    step(compatibility_result(Level.level), Level.level)
+                ]
+            ),
+            format(atom(RuleStr), '~w', [Rule])
         ),
         Trace
     ).

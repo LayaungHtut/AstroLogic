@@ -217,6 +217,16 @@ body {
 	color: rgba(255, 255, 255, 0.3);
 }
 
+select.input-field {
+	color-scheme: dark;
+}
+
+select.input-field option {
+	background: #1c1b1f;
+	color: #e6e1e5;
+	padding: 0.5rem;
+}
+
 .page-container {
 	max-width: 80rem;
 	margin: 0 auto;

@@ -733,14 +733,19 @@ card_keywords_orientation(Card, reversed, Keywords) :-
         Keywords
     ).
 
-% Reverse modifiers for keywords.
-modify_keyword_reversed(K, blocked_K) :-
-    atom_concat(blocked_, K, Blocked), !, Blocked = blocked_K.
-modify_keyword_reversed(K, reversed_K) :-
-    atom_concat(reversed_, K, Reversed), !, Reversed = reversed_K.
-modify_keyword_reversed(K, need_K) :-
-    atom_concat(need_, K, Need), !, Need = need_K.
-modify_keyword_reversed(K, K).  % Fallback: keep original.
+% Reverse modifier for keywords.
+% NOTE: this used to be three clauses, each unifying its head's second
+% argument against a literal atom like `blocked_K` (with `K` as plain text,
+% not the bound variable) instead of the atom actually built by
+% atom_concat/3 in the body. Since atom_concat/3 with an unbound 3rd arg
+% always succeeds, every call reached the body, computed the real
+% concatenation into a fresh variable, then failed to unify it against the
+% unrelated literal atom `blocked_K`/`reversed_K`/`need_K` — and the `!`
+% before that failing unification blocked backtracking into the fallback
+% clause. Net effect: this predicate failed for every input, so every
+% reversed-card keyword list came back empty.
+modify_keyword_reversed(K, Modified) :-
+    atom_concat(reversed_, K, Modified).
 
 % ============================================================
 % SECTION 9: Card Selection for Reading
@@ -783,6 +788,7 @@ select_cards_reasoning(Sign, Category, Trace) :-
     zodiac_traits(Sign, Traits),
     recommended_spread(Category, Spread),
     spread_positions(Spread, Positions),
+    length(Positions, PositionCount),
     Trace = [
         reasoning_step{
             rule: format('element(~w, ~w)', [Sign, Element]),
@@ -799,7 +805,7 @@ select_cards_reasoning(Sign, Category, Trace) :-
         reasoning_step{
             rule: format('spread_positions(~w, ~w)', [Spread, Positions]),
             input: Spread,
-            result: format('~w positions in spread', [length(Positions)]),
+            result: format('~w positions in spread', [PositionCount]),
             explanation: 'Each position has a specific interpretive role'
         },
         reasoning_step{

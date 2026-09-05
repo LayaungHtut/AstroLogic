@@ -1,6 +1,7 @@
 import httpx
 import logging
 import base64
+import re
 from app.config import OPENROUTER_API_KEY, OPENROUTER_MODEL, OPENROUTER_BASE_URL, MODELS
 
 logger = logging.getLogger(__name__)
@@ -21,6 +22,12 @@ IMPORTANT RULES:
 - Use the Prolog-derived themes and facts provided to you
 - Keep responses concise but meaningful (2-4 paragraphs max)
 - If you don't know something, say so directly rather than deflecting"""
+
+
+def _clean_horoscope_section(value: str) -> str:
+    """Keep the structured horoscope fields free of Markdown delimiters."""
+    value = re.sub(r"\\([*_`])", r"\1", value)
+    return re.sub(r"[*_`]+", "", value).strip()
 
 TAROT_SCANNER_PROMPT = """You are a tarot card identification expert. The user will send an image of a tarot card.
 Your job is to:
@@ -251,12 +258,9 @@ Current mood: {mood}
 Mood-based theme: {mood_theme}
 Focus area: {focus}
 
-Please provide:
-1. Today's Theme (one sentence)
-2. Guidance (2-3 sentences of reflective advice)
-3. Reflection (a thought-provoking question or observation)
-4. Opportunity (something to look out for today)
-5. Caution (something to be mindful of)
+Return exactly five plain-text lines using these labels: Theme:, Guidance:, Reflection:, Opportunity:, and Caution:.
+Do not use Markdown, bullets, asterisks, or headings. Keep each section on one line.
+Guidance should be 2-3 sentences; the other sections should be concise.
 
 Remember: This is for entertainment and self-reflection. Do not make deterministic predictions. Provide your answer directly."""
 
@@ -276,21 +280,21 @@ Remember: This is for entertainment and self-reflection. Do not make determinist
             lower = line.lower().strip()
             if "theme" in lower and ":" in line:
                 current = "theme"
-                sections["theme"] = line.split(":", 1)[-1].strip()
+                sections["theme"] = _clean_horoscope_section(line.split(":", 1)[-1])
             elif "guidance" in lower and ":" in line:
                 current = "guidance"
-                sections["guidance"] = line.split(":", 1)[-1].strip()
+                sections["guidance"] = _clean_horoscope_section(line.split(":", 1)[-1])
             elif "reflection" in lower and ":" in line:
                 current = "reflection"
-                sections["reflection"] = line.split(":", 1)[-1].strip()
+                sections["reflection"] = _clean_horoscope_section(line.split(":", 1)[-1])
             elif "opportunity" in lower and ":" in line:
                 current = "opportunity"
-                sections["opportunity"] = line.split(":", 1)[-1].strip()
+                sections["opportunity"] = _clean_horoscope_section(line.split(":", 1)[-1])
             elif "caution" in lower and ":" in line:
                 current = "caution"
-                sections["caution"] = line.split(":", 1)[-1].strip()
+                sections["caution"] = _clean_horoscope_section(line.split(":", 1)[-1])
             elif current and line.strip():
-                sections[current] += " " + line.strip()
+                sections[current] += " " + _clean_horoscope_section(line)
         return sections
     return None
 
