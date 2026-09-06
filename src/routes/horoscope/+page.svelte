@@ -95,7 +95,7 @@
 						<span class="material-symbols-outlined text-[16px]">neurology</span>
 						Select Your Mood
 					</label>
-					<div id="mood" class="grid grid-cols-4 gap-3">
+					<div id="mood" class="grid grid-cols-2 gap-3 sm:grid-cols-4">
 						{#each moods as mood}
 							<button
 								class="rounded-lg border p-3 text-center transition-all
