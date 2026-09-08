@@ -2,7 +2,7 @@ from fastapi import APIRouter
 from app.services.prolog_service import PrologService
 from app.services.openrouter_service import generate_tarot_interpretation
 from app.services.tarot_service import TarotService
-from app.schemas.models import ReadingAnalyzeRequest
+from app.schemas.models import ReadingAnalyzeRequest, ReadingAnalyzeManualRequest
 from app.database import get_db
 import asyncio
 import json
@@ -10,19 +10,29 @@ import json
 router = APIRouter(prefix="/api/reading", tags=["reading"])
 
 
-def _classify_and_recommend(question: str, sign: str, requested_spread_type: str | None) -> dict:
+def _classify_and_recommend(
+    question: str, sign: str, requested_spread_type: str | None, card_count: int | None
+) -> dict:
     """Bundle of synchronous Prolog calls needed before cards are drawn.
 
     If the caller (the UI's spread picker) asked for a specific spread type,
     honor it instead of letting Prolog auto-recommend one from the question
     text — recommend_spread/2 always overrode any client-chosen spread_type
     before this, so picking a spread in the UI silently did nothing.
+
+    "custom" is not one of the fixed spread/4 layouts — it's an open draw of
+    however many cards (1-10) the seeker chose, so it's routed to its own
+    Prolog predicate that generates positions for that count instead of
+    looking up a fixed one.
     """
     category = PrologService.classify_question(question)
     topic = PrologService.classify_topic(question)
     topic_info = PrologService.get_topic_info(topic)
     spread_rec = None
-    if requested_spread_type:
+    if requested_spread_type == "custom":
+        count = card_count if card_count and 1 <= card_count <= 10 else 3
+        spread_rec = PrologService.recommend_custom_spread(question, sign, count)
+    elif requested_spread_type:
         spread_rec = PrologService.recommend_spread_for(question, sign, requested_spread_type)
     if not spread_rec:
         spread_rec = PrologService.recommend_spread(question, sign)
@@ -93,41 +103,29 @@ def _analyze_drawn_cards(
     }
 
 
-@router.post("/analyze")
-async def analyze_reading(request: ReadingAnalyzeRequest):
-    # PrologService calls are synchronous, blocking pyswip queries — run each
-    # bundle off the event loop so slow queries don't stall every other request.
-    pre = await asyncio.to_thread(
-        _classify_and_recommend, request.question, request.zodiac_sign, request.spread_type
-    )
-    category = pre["category"]
-    spread_rec = pre["spread_rec"]
-
-    if not spread_rec:
-        spread_rec = {
-            "category": category,
-            "spread_type": "three_card",
-            "name": "Three Card",
-            "description": "Past, Present, Future",
-            "card_count": 3,
-            "positions": ["Past", "Present", "Future"],
-            "element": "fire",
-            "modality": "cardinal",
-            "emphasis": "Action & Initiative",
-        }
-
+async def _finish_reading(
+    question: str,
+    zodiac_sign: str,
+    category: str,
+    topic: str,
+    topic_info: dict | None,
+    spread_rec: dict,
+    cards: list[dict],
+    spread_rationale: str,
+) -> dict:
+    """Everything from a drawn/selected set of cards to the finished reading
+    response: Prolog analysis, per-card affinity/ranking, conflict
+    resolution, and the AI interpretation. Shared by the random-draw and
+    manual-selection endpoints — they differ only in how `cards` and
+    `spread_rec` were produced, not in how a reading is built from them."""
     positions = spread_rec["positions"]
-    cards = await TarotService.draw_cards_with_positions(
-        positions, request.zodiac_sign, category
-    )
-
     prolog_cards = [c["prolog_card"] for c in cards]
     prolog_positions = [TarotService.to_prolog_position_atom(p) for p in positions]
     orientations = ["reversed" if c["is_reversed"] else "upright" for c in cards]
 
     post = await asyncio.to_thread(
         _analyze_drawn_cards,
-        request.question, request.zodiac_sign, category,
+        question, zodiac_sign, category,
         prolog_cards, prolog_positions, orientations,
     )
     themes = post["themes"]
@@ -168,8 +166,8 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     ]
 
     ai_interpretation = await generate_tarot_interpretation(
-        question=request.question,
-        zodiac_sign=request.zodiac_sign,
+        question=question,
+        zodiac_sign=zodiac_sign,
         element=facts["element"] if facts else "fire",
         spread_name=spread_rec["name"],
         cards=[
@@ -186,9 +184,56 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     )
 
     if not ai_interpretation:
-        ai_interpretation = _fallback_interpretation(
-            cards, themes, category, request.zodiac_sign
-        )
+        ai_interpretation = _fallback_interpretation(cards, themes, category, zodiac_sign)
+
+    return {
+        "question": question,
+        "category": category,
+        "topic": topic,
+        "topic_info": topic_info,
+        "spread_rationale": spread_rationale,
+        "zodiac_sign": zodiac_sign,
+        "spread_type": spread_rec["spread_type"],
+        "spread_name": spread_rec["name"],
+        "cards": cards,
+        "themes": themes,
+        "dominant_theme": post["dominant_theme"],
+        "direction": post["direction"],
+        "advice": post["advice"],
+        "conflicts": conflicts,
+        "reasoning": post["reasoning"],
+        "ai_interpretation": ai_interpretation,
+        "facts": facts,
+    }
+
+
+@router.post("/analyze")
+async def analyze_reading(request: ReadingAnalyzeRequest):
+    # PrologService calls are synchronous, blocking pyswip queries — run each
+    # bundle off the event loop so slow queries don't stall every other request.
+    pre = await asyncio.to_thread(
+        _classify_and_recommend,
+        request.question, request.zodiac_sign, request.spread_type, request.card_count,
+    )
+    category = pre["category"]
+    spread_rec = pre["spread_rec"]
+
+    if not spread_rec:
+        spread_rec = {
+            "category": category,
+            "spread_type": "three_card",
+            "name": "Three Card",
+            "description": "Past, Present, Future",
+            "card_count": 3,
+            "positions": ["Past", "Present", "Future"],
+            "element": "fire",
+            "modality": "cardinal",
+            "emphasis": "Action & Initiative",
+        }
+
+    cards = await TarotService.draw_cards_with_positions(
+        spread_rec["positions"], request.zodiac_sign, category
+    )
 
     if request.spread_type:
         spread_rationale = (
@@ -203,25 +248,55 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
             f"{spread_rec.get('emphasis', 'this area of focus')}."
         )
 
-    return {
-        "question": request.question,
-        "category": category,
-        "topic": pre["topic"],
-        "topic_info": pre["topic_info"],
-        "spread_rationale": spread_rationale,
-        "zodiac_sign": request.zodiac_sign,
-        "spread_type": spread_rec["spread_type"],
-        "spread_name": spread_rec["name"],
-        "cards": cards,
-        "themes": themes,
-        "dominant_theme": post["dominant_theme"],
-        "direction": post["direction"],
-        "advice": post["advice"],
-        "conflicts": conflicts,
-        "reasoning": post["reasoning"],
-        "ai_interpretation": ai_interpretation,
-        "facts": facts,
+    return await _finish_reading(
+        request.question, request.zodiac_sign, category, pre["topic"], pre["topic_info"],
+        spread_rec, cards, spread_rationale,
+    )
+
+
+@router.post("/analyze-selected")
+async def analyze_selected_reading(request: ReadingAnalyzeManualRequest):
+    """Like /analyze, but the seeker hand-picked the cards (and optionally
+    their orientation) from the deck instead of having them drawn at
+    random. The reading — themes, direction, advice, conflicts, the full
+    Prolog reasoning trace, and the AI interpretation — is generated from
+    exactly those cards, in the order they were picked."""
+    names = [c.name for c in request.cards]
+    if len(set(n.strip().lower() for n in names)) != len(names):
+        return {"error": "Each card can only be selected once per reading."}
+
+    category = await asyncio.to_thread(PrologService.classify_question, request.question)
+    topic = await asyncio.to_thread(PrologService.classify_topic, request.question)
+    topic_info = await asyncio.to_thread(PrologService.get_topic_info, topic)
+    spread_rec = await asyncio.to_thread(
+        PrologService.recommend_custom_spread, request.question, request.zodiac_sign, len(request.cards)
+    )
+    if not spread_rec:
+        return {"error": "Could not build a reading from the selected cards."}
+    # It's the seeker's own selection, not an open random draw — relabel the
+    # generic custom-spread name/description to say so.
+    spread_rec = {
+        **spread_rec,
+        "name": "Your Selection",
+        "description": "Cards you hand-picked from the deck, read in the order you chose them.",
     }
+
+    cards = await TarotService.build_cards_from_selection(
+        [(c.name, c.is_reversed) for c in request.cards], spread_rec["positions"]
+    )
+    if cards is None:
+        return {"error": "One or more selected cards weren't recognized."}
+
+    spread_rationale = (
+        f"Your question was classified as '{category}' (topic: '{topic}'). "
+        f"You hand-picked {len(cards)} card{'s' if len(cards) != 1 else ''} from the deck, "
+        f"read in the order you chose them."
+    )
+
+    return await _finish_reading(
+        request.question, request.zodiac_sign, category, topic, topic_info,
+        spread_rec, cards, spread_rationale,
+    )
 
 
 @router.post("/generate")

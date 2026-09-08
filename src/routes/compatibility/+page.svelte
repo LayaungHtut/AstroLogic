@@ -127,7 +127,7 @@
 						<path class="text-primary" d="M 10 30 Q 100 52 190 30" stroke="currentColor" stroke-width="1" />
 					</svg>
 				</div>
-				<div class="relative z-10 w-16 h-16 rounded-full bg-gradient-to-br from-primary-container via-surface-container-lowest to-secondary-container p-1 shadow-[0_0_25px_rgba(76,215,246,0.35)] flex items-center justify-center">
+				<div class="relative z-10 w-16 h-16 rounded-full bg-linear-to-br from-primary-container via-surface-container-lowest to-secondary-container p-1 shadow-[0_0_25px_rgba(76,215,246,0.35)] flex items-center justify-center">
 					<span class="material-symbols-outlined text-2xl text-on-surface">favorite</span>
 				</div>
 				<span class="relative z-10 mt-2 text-[10px] uppercase tracking-widest text-on-surface-variant">Synastry</span>
@@ -159,7 +159,7 @@
 
 		<div class="relative z-10 mt-6 flex flex-col items-center gap-4">
 			<button
-				class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-headline font-semibold shadow-[0_0_20px_rgba(124,58,237,0.4)] hover:shadow-[0_0_30px_rgba(76,215,246,0.6)] hover:scale-105 active:scale-95 transition-all disabled:opacity-60 disabled:pointer-events-none"
+				class="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-linear-to-r from-primary-container to-secondary-container text-on-primary font-headline font-semibold shadow-[0_0_20px_rgba(124,58,237,0.4)] hover:shadow-[0_0_30px_rgba(76,215,246,0.6)] hover:scale-105 active:scale-95 transition-all disabled:opacity-60 disabled:pointer-events-none"
 				onclick={analyze}
 				disabled={loading}
 			>
@@ -434,7 +434,7 @@
 										</div>
 										<div class="h-2 rounded-full bg-surface-container-lowest overflow-hidden mb-1.5">
 											<div
-												class="h-full rounded-full bg-gradient-to-r from-primary-container to-secondary-container"
+										class="h-full rounded-full bg-linear-to-r from-primary-container to-secondary-container"
 												style:width="{Math.min(100, Math.max(0, row.c.score))}%"
 											></div>
 										</div>

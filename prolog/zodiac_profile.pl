@@ -580,6 +580,44 @@ full_birth_chart_precise(SunSign, MoonSign, RisingSign, Chart) :-
         note: 'Sun, Moon, and Rising signs computed from real ecliptic positions via the Swiss Ephemeris (Moshier method).'
     }.
 
+% --- planet_symbol/2 ---
+% Unicode glyph for each of the ten classical/modern planets.
+
+planet_symbol(sun, '☉').
+planet_symbol(moon, '☽').
+planet_symbol(mercury, '☿').
+planet_symbol(venus, '♀').
+planet_symbol(mars, '♂').
+planet_symbol(jupiter, '♃').
+planet_symbol(saturn, '♄').
+planet_symbol(uranus, '♅').
+planet_symbol(neptune, '♆').
+planet_symbol(pluto, '♇').
+
+% --- planet_positions_profile/2 ---
+% Build the symbolic (element/modality/archetype) layer for a list of
+% Name-Sign pairs, e.g. [mercury-gemini, venus-taurus, ...]. Each pair's
+% sign comes from a real ecliptic longitude computed in Python via the
+% Swiss Ephemeris (see app.services.ephemeris_service); this predicate only
+% derives symbolic meaning from the already-computed sign, mirroring how
+% full_birth_chart_precise/4 handles Sun/Moon/Rising.
+
+planet_positions_profile([], []).
+planet_positions_profile([Name-Sign|Rest], [Profile|ProfileRest]) :-
+    element(Sign, Element),
+    modality(Sign, Modality),
+    planet_symbol(Name, Symbol),
+    planetary_influence(Name, Influence),
+    Profile = planet_position{
+        name: Name,
+        sign: Sign,
+        symbol: Symbol,
+        element: Element,
+        modality: Modality,
+        influence: Influence
+    },
+    planet_positions_profile(Rest, ProfileRest).
+
 % --- birth_chart_reasoning_trace_precise/7 ---
 % Reasoning trace for the ephemeris-backed chart above.
 

@@ -255,6 +255,29 @@ class PrologService:
         return None
 
     @staticmethod
+    def get_planet_positions_profile(planet_signs: dict[str, str]) -> list[dict]:
+        """Symbolic profile (element/modality/glyph/archetype) for the other
+        planets (Mercury..Pluto), given their signs from real ecliptic
+        positions already computed via the Swiss Ephemeris."""
+        pairs = ",".join(
+            f"{_quote_atom(name)}-{_quote_atom(sign)}" for name, sign in planet_signs.items()
+        )
+        result = _first_result(f"planet_positions_profile([{pairs}], Profiles)")
+        if not result:
+            return []
+        return [
+            {
+                "name": str(p["name"]),
+                "sign": str(p["sign"]),
+                "symbol": str(p["symbol"]),
+                "element": str(p["element"]),
+                "modality": str(p["modality"]),
+                "influence": str(p["influence"]),
+            }
+            for p in result["Profiles"]
+        ]
+
+    @staticmethod
     def get_birth_chart_reasoning_precise(
         sun_sign: str,
         moon_sign: str,
@@ -468,6 +491,29 @@ class PrologService:
         safe_q = _quote_atom(question)
         result = _first_result(
             f"spread_recommendation({safe_q}, {_quote_atom(sign)}, Rec)"
+        )
+        if result:
+            rec = result["Rec"]
+            return {
+                "category": str(rec["category"]),
+                "spread_type": str(rec["spread_type"]),
+                "name": str(rec["name"]),
+                "description": str(rec["description"]),
+                "card_count": int(rec["card_count"]),
+                "positions": [str(p) for p in rec["positions"]],
+                "element": str(rec["element"]),
+                "modality": str(rec["modality"]),
+                "emphasis": str(rec["emphasis"]),
+            }
+        return None
+
+    @staticmethod
+    def recommend_custom_spread(question: str, sign: str, count: int) -> dict | None:
+        """Like recommend_spread_for, but for an open draw of `count` cards
+        (1-10) rather than one of the fixed-layout spreads."""
+        safe_q = _quote_atom(question)
+        result = _first_result(
+            f"custom_spread_recommendation({safe_q}, {_quote_atom(sign)}, {int(count)}, Rec)"
         )
         if result:
             rec = result["Rec"]

@@ -37,11 +37,41 @@ export async function drawTarotCards(count: number, spreadType?: string) {
 	});
 }
 
-export async function analyzeReading(question: string, zodiacSign: string, spreadType?: string) {
+export async function analyzeReading(
+	question: string,
+	zodiacSign: string,
+	spreadType?: string,
+	cardCount?: number,
+) {
 	return apiFetch<import('$lib/types').ReadingResult>('/reading/analyze', {
 		method: 'POST',
-		body: JSON.stringify({ question, zodiac_sign: zodiacSign, spread_type: spreadType }),
+		body: JSON.stringify({
+			question,
+			zodiac_sign: zodiacSign,
+			spread_type: spreadType,
+			// Only meaningful when spreadType === 'custom'; the backend ignores
+			// it for fixed spreads, which use their own predetermined count.
+			card_count: cardCount,
+		}),
 	});
+}
+
+export async function analyzeSelectedReading(
+	question: string,
+	zodiacSign: string,
+	cards: { name: string; is_reversed: boolean }[],
+) {
+	// The backend reports a bad selection (duplicate or unrecognized card)
+	// as a 200 response with an `error` field rather than an HTTP error, so
+	// the caller checks `result.error` the same way the other read-only
+	// analysis endpoints in this app do.
+	return apiFetch<import('$lib/types').ReadingResult & { error?: string }>(
+		'/reading/analyze-selected',
+		{
+			method: 'POST',
+			body: JSON.stringify({ question, zodiac_sign: zodiacSign, cards }),
+		},
+	);
 }
 
 export async function saveReading(data: Record<string, unknown>) {

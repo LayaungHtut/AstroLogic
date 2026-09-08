@@ -25,6 +25,19 @@ ZODIAC_SIGNS = [
 
 _EPHE_FLAGS = swe.FLG_MOSEPH | swe.FLG_SPEED
 
+# The other classical + modern planets, beyond Sun/Moon, that make up the
+# rest of a standard natal chart.
+_OTHER_PLANETS = {
+    "mercury": swe.MERCURY,
+    "venus": swe.VENUS,
+    "mars": swe.MARS,
+    "jupiter": swe.JUPITER,
+    "saturn": swe.SATURN,
+    "uranus": swe.URANUS,
+    "neptune": swe.NEPTUNE,
+    "pluto": swe.PLUTO,
+}
+
 
 def sign_from_degree(degree: float) -> str:
     """Map an ecliptic longitude (0-360) to its zodiac sign (30 degrees each)."""
@@ -77,6 +90,18 @@ def compute_natal_positions(
         moon_pos, _ = swe.calc_ut(jd, swe.MOON, _EPHE_FLAGS)
         _, ascmc = swe.houses_ex(jd, latitude, longitude, hsys=b"P")
         ascendant_degree = ascmc[0]
+
+        planets = {}
+        for name, body in _OTHER_PLANETS.items():
+            pos, _ = swe.calc_ut(jd, body, _EPHE_FLAGS)
+            degree = pos[0]
+            planets[name] = {
+                "sign": sign_from_degree(degree),
+                "degree": round(degree, 4),
+                # Negative speed (pos[3]) means the planet appears to move
+                # backwards from Earth's vantage point.
+                "retrograde": pos[3] < 0,
+            }
     except Exception as e:
         logger.error(f"Swiss Ephemeris calculation failed: {e}")
         return None
@@ -91,6 +116,7 @@ def compute_natal_positions(
         "sun_degree": round(sun_degree, 4),
         "moon_degree": round(moon_degree, 4),
         "rising_degree": round(ascendant_degree, 4),
+        "planets": planets,
         "timezone": tz_name,
         "utc_datetime": utc_dt.isoformat(),
     }

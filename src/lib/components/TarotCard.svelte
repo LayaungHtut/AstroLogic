@@ -1,11 +1,12 @@
 <script lang="ts">
 	import type { DrawnCard } from '$lib/types';
+	import { cardImage } from '$lib/utils/image';
 
 	let { card, index = 0, revealed = true }: { card: DrawnCard; index?: number; revealed?: boolean } = $props();
 	let isFlipped = $state(false);
 	let imageFailed = $state(false);
 
-	const CARD_BACK_URL = 'https://sixseeds.github.io/tarot-api/cards/back.jpg';
+	const CARD_BACK_URL = cardImage('https://sixseeds.github.io/tarot-api/cards/back.jpg', 320);
 
 	$effect(() => {
 		isFlipped = !revealed;
@@ -43,19 +44,19 @@
 	aria-label={`${isFlipped ? 'Reveal' : 'Hide'} ${card.name}`}
 >
 	<div class:flipped={isFlipped} class="tarot-card__inner">
-		<div class="card-face card-back w-full aspect-[2/3] rounded-xl overflow-hidden border border-purple-500/30 shadow-lg shadow-purple-500/20">
+		<div class="card-face card-back w-full aspect-2/3 rounded-xl overflow-hidden border border-purple-500/30 shadow-lg shadow-purple-500/20">
 			<img src={CARD_BACK_URL} alt="Tarot card back" class="h-full w-full object-cover" loading="lazy" />
 		</div>
-		<div class="card-face card-front relative w-full aspect-[2/3] rounded-xl overflow-hidden border border-white/20 shadow-lg group-hover:shadow-xl {imageFailed || !card.image ? `bg-gradient-to-br ${suitColor}` : 'bg-black'}">
+		<div class="card-face card-front relative w-full aspect-2/3 rounded-xl overflow-hidden border border-white/20 shadow-lg group-hover:shadow-xl {imageFailed || !card.image ? `bg-linear-to-br ${suitColor}` : 'bg-black'}">
 			{#if card.image && !imageFailed}
 				<img
-					src={card.image}
+					src={cardImage(card.image, 400)}
 					alt={card.name}
 					class="absolute inset-0 h-full w-full object-cover {card.is_reversed ? 'rotate-180' : ''}"
 					loading="lazy"
 					onerror={() => (imageFailed = true)}
 				/>
-				<div class="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/80 to-transparent px-2 pb-1.5 pt-6">
+				<div class="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/80 to-transparent px-2 pb-1.5 pt-6">
 					<div class="flex flex-wrap gap-1 justify-center">
 						{#each card.keywords.slice(0, 3) as keyword}
 							<span class="text-[10px] bg-white/20 rounded px-1.5 py-0.5 backdrop-blur-sm text-white">{keyword}</span>

@@ -31,9 +31,13 @@ zodiac_compatibility(Sign1, Sign2, Result) :-
     trait_compatibility_score(Sign1, Sign2, TScore),
     planetary_compatibility_score(P1, P2, PScore),
     OverallScore is (EScore * 0.35) + (MScore * 0.20) + (TScore * 0.30) + (PScore * 0.15),
-    (   OverallScore >= 75
+    % Thresholds calibrated against the actual achievable range of this
+    % formula (roughly 20-90 across all sign pairs) so "high"/"low" are
+    % reserved for genuinely strong/weak symbolic matches instead of
+    % clustering everything into "moderate".
+    (   OverallScore >= 65
     ->  Level = high
-    ;   OverallScore >= 50
+    ;   OverallScore >= 45
     ->  Level = moderate
     ;   Level = low
     ),
@@ -60,28 +64,32 @@ element_compatibility_score(earth, earth, 85) :- !.
 element_compatibility_score(earth, water, 88) :- !.
 element_compatibility_score(water, earth, 88) :- !.
 element_compatibility_score(water, water, 82) :- !.
-element_compatibility_score(fire, earth, 55) :- !.
-element_compatibility_score(earth, fire, 55) :- !.
-element_compatibility_score(fire, water, 40) :- !.
-element_compatibility_score(water, fire, 40) :- !.
-element_compatibility_score(air, earth, 50) :- !.
-element_compatibility_score(earth, air, 50) :- !.
-element_compatibility_score(air, water, 55) :- !.
-element_compatibility_score(water, air, 55) :- !.
+element_compatibility_score(fire, earth, 42) :- !.
+element_compatibility_score(earth, fire, 42) :- !.
+element_compatibility_score(fire, water, 22) :- !.   % Classically the most friction-prone elemental pairing
+element_compatibility_score(water, fire, 22) :- !.
+element_compatibility_score(air, earth, 28) :- !.     % Concrete vs. conceptual - genuinely hard to bridge
+element_compatibility_score(earth, air, 28) :- !.
+element_compatibility_score(air, water, 40) :- !.
+element_compatibility_score(water, air, 40) :- !.
 
 % ============================================================
 % SECTION 3: Modality Compatibility Scoring
 % ============================================================
 
-modality_compatibility_score(cardinal, cardinal, 55) :- !.
+% Same modality = both want the same role in the relationship (both lead,
+% both dig in, or both drift) - that is real friction, not a bonus, so it
+% scores below the neutral midpoint. Complementary modalities (one initiates,
+% one sustains/adapts) score highest.
+modality_compatibility_score(cardinal, cardinal, 35) :- !.   % Both want to lead - competition
 modality_compatibility_score(cardinal, fixed, 80) :- !.
 modality_compatibility_score(cardinal, mutable, 75) :- !.
 modality_compatibility_score(fixed, cardinal, 80) :- !.
-modality_compatibility_score(fixed, fixed, 50) :- !.
+modality_compatibility_score(fixed, fixed, 30) :- !.         % Both dig in - stubborn standoffs
 modality_compatibility_score(fixed, mutable, 65) :- !.
 modality_compatibility_score(mutable, cardinal, 75) :- !.
 modality_compatibility_score(mutable, fixed, 65) :- !.
-modality_compatibility_score(mutable, mutable, 70) :- !.
+modality_compatibility_score(mutable, mutable, 55) :- !.     % Both adaptable - easygoing but can lack direction
 
 % ============================================================
 % SECTION 4: Trait Compatibility Scoring
@@ -95,8 +103,12 @@ trait_compatibility_score(Sign1, Sign2, Score) :-
     length(MatchingTraits, MatchCount),
     findall(1, (member(T, Traits1), trait_complementary(T, CT), member(CT, Traits2)), ComplementaryTraits),
     length(ComplementaryTraits, CompCount),
-    TotalFactors is MatchCount * 10 + CompCount * 5,
-    Score is min(100, 40 + TotalFactors).
+    % No artificial floor: two sign profiles that share nothing and
+    % complement nothing genuinely score low here. 25 is a neutral base
+    % (two strangers, no known synergy); each shared trait and each
+    % complementary pairing raises it from there.
+    TotalFactors is MatchCount * 14 + CompCount * 8,
+    Score is min(100, max(10, 25 + TotalFactors)).
 
 % --- trait_complementary/2 ---
 % Traits that complement each other.
@@ -143,7 +155,8 @@ planetary_compatibility_score(Uranus, Pluto, 70) :- !.     % Transformation ener
 planetary_compatibility_score(Pluto, Uranus, 70) :- !.
 planetary_compatibility_score(Neptune, Venus, 78) :- !.    % Spiritual love
 planetary_compatibility_score(Venus, Neptune, 78) :- !.
-planetary_compatibility_score(_, _, 55).  % Default for unlisted combinations
+planetary_compatibility_score(Planet, Planet, 60) :- !.     % Same ruler - instant recognition, some redundancy
+planetary_compatibility_score(_, _, 38).  % No named symbolic resonance - neutral-low default, not a bonus
 
 % ============================================================
 % SECTION 6: Element Compatibility Description

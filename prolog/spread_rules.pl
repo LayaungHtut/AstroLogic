@@ -148,6 +148,53 @@ spread_recommendation_for(Input, Sign, SpreadType, Recommendation) :-
         emphasis: Emphasis
     }.
 
+% ============================================================
+% SECTION: Custom Draw (user-chosen card count, 1-10)
+% ============================================================
+% Unlike the fixed spreads above, a custom draw has no predetermined layout
+% or number of positions - the seeker decides how many cards to pull. There
+% is therefore no single spread/4 fact for it (that predicate assumes a
+% fixed CardCount); instead the position list is generated for whatever
+% count was requested.
+
+% --- custom_spread_positions/2 ---
+% Generate N generic, order-based position labels: ['Card 1', ..., 'Card N'].
+
+custom_spread_positions(Count, Positions) :-
+    integer(Count),
+    Count >= 1,
+    numlist(1, Count, Indices),
+    findall(
+        Label,
+        (member(I, Indices), format(atom(Label), 'Card ~w', [I])),
+        Positions
+    ).
+
+% --- custom_spread_recommendation/4 ---
+% Like spread_recommendation_for/4, but for an open draw of Count cards
+% (1-10, enforced by the API layer) instead of one of the fixed spreads.
+% Still runs the same zodiac reasoning (element, modality, emphasis) so a
+% custom draw is read with the same symbolic grounding as any other spread -
+% only the layout/position semantics are generic rather than fixed.
+
+custom_spread_recommendation(Input, Sign, Count, Recommendation) :-
+    question_category(Input, Category),
+    element(Sign, Element),
+    modality(Sign, Modality),
+    element_position_emphasis(Element, Emphasis),
+    custom_spread_positions(Count, Positions),
+    Recommendation = spread_recommendation{
+        category: Category,
+        spread_type: custom,
+        name: 'Custom Draw',
+        description: 'An open draw sized entirely to your own intuition, read card by card in the order you pulled them.',
+        card_count: Count,
+        positions: Positions,
+        element: Element,
+        modality: Modality,
+        emphasis: Emphasis
+    }.
+
 % --- Reasoning Trace for Spread ---
 generate_spread_trace(Input, Sign, Trace) :-
     question_category(Input, Category),

@@ -48,6 +48,30 @@ class ReadingAnalyzeRequest(BaseModel):
     question: str = Field(max_length=500)
     zodiac_sign: str
     spread_type: Optional[str] = None
+    # Only used when spread_type == "custom": how many cards to draw in an
+    # open/free-form spread. Fixed spreads ignore this and use their own
+    # predetermined card_count instead.
+    card_count: Optional[int] = Field(default=None, ge=1, le=10)
+
+
+class SelectedCard(BaseModel):
+    # `name` must match a tarot card's display name exactly (e.g. "The Fool",
+    # "Ace of Wands") — the same `name` field GET /api/tarot returns for
+    # each card, so the frontend can send back whatever the user clicked
+    # in the deck grid without any extra lookup.
+    name: str
+    is_reversed: bool = False
+
+
+class ReadingAnalyzeManualRequest(BaseModel):
+    """Like ReadingAnalyzeRequest, but the seeker hand-picked specific cards
+    from the deck (and optionally their orientation) instead of the app
+    drawing them at random — the reading is generated from exactly those
+    cards, in the order they were picked."""
+
+    question: str = Field(max_length=500)
+    zodiac_sign: str
+    cards: list[SelectedCard] = Field(min_length=1, max_length=10)
 
 
 class ReadingGenerateRequest(BaseModel):

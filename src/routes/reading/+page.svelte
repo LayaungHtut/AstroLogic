@@ -1,15 +1,19 @@
 <script lang="ts">
 	import { profile } from '$lib/stores';
-	import { analyzeReading, saveReading } from '$lib/utils/api';
-	import { SPREAD_TYPES } from '$lib/types';
+	import { analyzeReading, analyzeSelectedReading, saveReading } from '$lib/utils/api';
+	import { SPREAD_TYPES, CUSTOM_DRAW_MIN, CUSTOM_DRAW_MAX } from '$lib/types';
 	import type { ReadingResult } from '$lib/types';
 	import TarotCard from '$lib/components/TarotCard.svelte';
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import MarkdownText from '$lib/components/MarkdownText.svelte';
+	import CardPicker from '$lib/components/CardPicker.svelte';
 
 	let question = $state('');
+	let drawMethod = $state<'random' | 'manual'>('random');
 	let selectedSpread = $state('three_card');
+	let customCardCount = $state(7);
+	let manualSelection = $state<{ name: string; is_reversed: boolean }[]>([]);
 	let selectedTopic = $state('general');
 	let reading = $state<ReadingResult | null>(null);
 	let loading = $state(false);
@@ -42,20 +46,32 @@
 		selectedSpread = topicSpreadMap[topicId] || 'three_card';
 	}
 
+	const canBeginReading = $derived(
+		Boolean(question.trim()) && (drawMethod === 'random' || manualSelection.length > 0)
+	);
+
 	async function startReading() {
-		if (!question.trim()) return;
+		if (!canBeginReading) return;
 
 		loading = true;
 		error = '';
 		reading = null;
 		showReasoning = false;
 
-		const steps = [
-			'Analyzing your question...',
-			'Consulting symbolic knowledge...',
-			'Drawing your cards...',
-			'Preparing your interpretation...'
-		];
+		const steps =
+			drawMethod === 'manual'
+				? [
+						'Analyzing your question...',
+						'Consulting symbolic knowledge...',
+						'Reading your chosen cards...',
+						'Preparing your interpretation...'
+					]
+				: [
+						'Analyzing your question...',
+						'Consulting symbolic knowledge...',
+						'Drawing your cards...',
+						'Preparing your interpretation...'
+					];
 
 		let step = 0;
 		const stepInterval = setInterval(() => {
@@ -64,7 +80,24 @@
 		}, 2000);
 
 		try {
-			reading = await analyzeReading(question, currentProfile.zodiac_sign, selectedSpread);
+			if (drawMethod === 'manual') {
+				const result = await analyzeSelectedReading(
+					question,
+					currentProfile.zodiac_sign,
+					manualSelection,
+				);
+				if (result.error) {
+					throw new Error(result.error);
+				}
+				reading = result;
+			} else {
+				reading = await analyzeReading(
+					question,
+					currentProfile.zodiac_sign,
+					selectedSpread,
+					selectedSpread === 'custom' ? customCardCount : undefined,
+				);
+			}
 
 			await saveReading({
 				question: reading.question,
@@ -91,6 +124,7 @@
 		question = '';
 		error = '';
 		showReasoning = true;
+		manualSelection = [];
 	}
 </script>
 
@@ -181,7 +215,7 @@
 								<textarea
 									id="cosmic-query"
 									bind:value={question}
-									class="min-h-[100px] w-full resize-none rounded-xl bg-surface-container-high/40 p-4 text-sm text-on-surface transition-all duration-300 placeholder:text-outline/60 focus:ring-2 focus:ring-secondary/40 focus:outline-none"
+									class="min-h-25 w-full resize-none rounded-xl bg-surface-container-high/40 p-4 text-sm text-on-surface transition-all duration-300 placeholder:text-outline/60 focus:ring-2 focus:ring-secondary/40 focus:outline-none"
 									maxlength="500"
 									placeholder="What celestial guidance do you seek from the arcana?"></textarea>
 								<div
@@ -222,61 +256,171 @@
 							</div>
 						</div>
 
-						<!-- STEP 3: Spread Type Selector -->
+						<!-- STEP 3: Draw Method -->
 						<div class="flex flex-col gap-3">
-							<div class="flex items-center justify-between">
+							<div class="flex items-center gap-2">
+								<span
+									class="font-mono-data flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[11px] font-semibold text-primary"
+									>3</span
+								>
+								<span class="font-headline text-base font-semibold text-on-surface">Draw Method</span
+								>
+							</div>
+							<div class="grid grid-cols-2 gap-2.5" role="radiogroup" aria-label="Card draw method">
+								<button
+									type="button"
+									class="flex flex-col items-start gap-1 rounded-xl p-3 text-left transition-all
+										{drawMethod === 'random'
+										? 'bg-primary-container/20 text-on-surface shadow-md'
+										: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
+									onclick={() => (drawMethod = 'random')}
+								>
+									<span class="flex items-center gap-1.5 text-sm font-semibold text-on-surface">
+										<span class="material-symbols-outlined text-base">cyclone</span>
+										Random Draw
+									</span>
+									<span class="text-xs {drawMethod === 'random' ? 'text-primary' : 'text-on-surface-variant'}"
+										>Let the array choose your spread</span
+									>
+								</button>
+								<button
+									type="button"
+									class="flex flex-col items-start gap-1 rounded-xl p-3 text-left transition-all
+										{drawMethod === 'manual'
+										? 'bg-primary-container/20 text-on-surface shadow-md'
+										: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
+									onclick={() => (drawMethod = 'manual')}
+								>
+									<span class="flex items-center gap-1.5 text-sm font-semibold text-on-surface">
+										<span class="material-symbols-outlined text-base">touch_app</span>
+										Pick Your Own
+									</span>
+									<span class="text-xs {drawMethod === 'manual' ? 'text-primary' : 'text-on-surface-variant'}"
+										>Choose cards straight from the deck</span
+									>
+								</button>
+							</div>
+						</div>
+
+						{#if drawMethod === 'random'}
+							<!-- STEP 4: Spread Type Selector -->
+							<div class="flex flex-col gap-3">
+								<div class="flex items-center justify-between">
+									<div class="flex items-center gap-2">
+										<span
+											class="font-mono-data flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[11px] font-semibold text-primary"
+											>4</span
+										>
+										<span class="font-headline text-base font-semibold text-on-surface"
+											>Geometric Array</span
+										>
+									</div>
+									<span class="font-mono-data text-[10px] tracking-wider text-secondary uppercase">
+										{#if selectedSpread === 'custom'}
+											{customCardCount} card{customCardCount === 1 ? '' : 's'}
+										{:else}
+											{SPREAD_TYPES.find((s) => s.id === selectedSpread)?.count ?? ''} card{(SPREAD_TYPES.find(
+												(s) => s.id === selectedSpread
+											)?.count ?? 0) === 1
+												? ''
+												: 's'}
+										{/if}
+									</span>
+								</div>
+								<div id="spread" class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
+									{#each SPREAD_TYPES as spread}
+										<button
+											type="button"
+											class="relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 text-left transition-all
+												{selectedSpread === spread.id
+												? 'bg-primary-container/20 text-on-surface shadow-md'
+												: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
+											onclick={() => (selectedSpread = spread.id)}
+										>
+											{#if selectedSpread === spread.id}
+												<div
+													class="pointer-events-none absolute -right-6 -bottom-6 h-16 w-16 rounded-full bg-primary/20 blur-xl"
+												></div>
+											{/if}
+											<div class="relative z-10 mb-1 flex items-start justify-between gap-2">
+												<div class="flex items-center gap-1.5">
+													{#if selectedSpread === spread.id}
+														<span class="h-2 w-2 shrink-0 rounded-full bg-secondary shadow-sm"></span>
+													{/if}
+													<span class="text-sm font-semibold text-on-surface">{spread.name}</span>
+												</div>
+												<span class="font-mono-data shrink-0 text-[10px] text-outline"
+													>{spread.id === 'custom' ? `1-${CUSTOM_DRAW_MAX}` : spread.count}</span
+												>
+											</div>
+											<span
+												class="relative z-10 text-xs {selectedSpread === spread.id
+													? 'text-primary'
+													: 'text-on-surface-variant'}">{spread.description}</span
+											>
+										</button>
+									{/each}
+								</div>
+
+								{#if selectedSpread === 'custom'}
+									<div class="flex flex-col gap-2 rounded-xl bg-surface-container-high/40 p-4">
+										<div class="flex items-center justify-between">
+											<span class="text-sm font-medium text-on-surface">Number of cards</span>
+											<span class="font-mono-data text-sm font-semibold text-primary"
+												>{customCardCount}</span
+											>
+										</div>
+										<div class="flex items-center gap-3">
+											<button
+												type="button"
+												class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container text-on-surface transition-colors hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40"
+												disabled={customCardCount <= CUSTOM_DRAW_MIN}
+												onclick={() => (customCardCount = Math.max(CUSTOM_DRAW_MIN, customCardCount - 1))}
+												aria-label="Fewer cards"
+											>
+												<span class="material-symbols-outlined text-base">remove</span>
+											</button>
+											<input
+												type="range"
+												min={CUSTOM_DRAW_MIN}
+												max={CUSTOM_DRAW_MAX}
+												step="1"
+												bind:value={customCardCount}
+												class="w-full accent-primary"
+												aria-label="Number of cards to draw"
+											/>
+											<button
+												type="button"
+												class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container text-on-surface transition-colors hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40"
+												disabled={customCardCount >= CUSTOM_DRAW_MAX}
+												onclick={() => (customCardCount = Math.min(CUSTOM_DRAW_MAX, customCardCount + 1))}
+												aria-label="More cards"
+											>
+												<span class="material-symbols-outlined text-base">add</span>
+											</button>
+										</div>
+										<p class="text-xs text-on-surface-variant">
+											Draw {CUSTOM_DRAW_MIN}-{CUSTOM_DRAW_MAX} cards for an open reading — each one is still
+											read individually by the Prolog engine, in the order you pulled them.
+										</p>
+									</div>
+								{/if}
+							</div>
+						{:else}
+							<!-- STEP 4: Manual Card Picker -->
+							<div class="flex flex-col gap-3">
 								<div class="flex items-center gap-2">
 									<span
 										class="font-mono-data flex h-5 w-5 items-center justify-center rounded-full bg-primary/20 text-[11px] font-semibold text-primary"
-										>3</span
+										>4</span
 									>
 									<span class="font-headline text-base font-semibold text-on-surface"
-										>Geometric Array</span
+										>Choose Your Cards</span
 									>
 								</div>
-								<span class="font-mono-data text-[10px] tracking-wider text-secondary uppercase">
-									{SPREAD_TYPES.find((s) => s.id === selectedSpread)?.count ?? ''} card{(SPREAD_TYPES.find(
-										(s) => s.id === selectedSpread
-									)?.count ?? 0) === 1
-										? ''
-										: 's'}
-								</span>
+								<CardPicker bind:selected={manualSelection} max={CUSTOM_DRAW_MAX} />
 							</div>
-							<div id="spread" class="grid grid-cols-1 gap-2.5 sm:grid-cols-2">
-								{#each SPREAD_TYPES as spread}
-									<button
-										type="button"
-										class="relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 text-left transition-all
-											{selectedSpread === spread.id
-											? 'bg-primary-container/20 text-on-surface shadow-md'
-											: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
-										onclick={() => (selectedSpread = spread.id)}
-									>
-										{#if selectedSpread === spread.id}
-											<div
-												class="pointer-events-none absolute -right-6 -bottom-6 h-16 w-16 rounded-full bg-primary/20 blur-xl"
-											></div>
-										{/if}
-										<div class="relative z-10 mb-1 flex items-start justify-between gap-2">
-											<div class="flex items-center gap-1.5">
-												{#if selectedSpread === spread.id}
-													<span class="h-2 w-2 shrink-0 rounded-full bg-secondary shadow-sm"></span>
-												{/if}
-												<span class="text-sm font-semibold text-on-surface">{spread.name}</span>
-											</div>
-											<span class="font-mono-data shrink-0 text-[10px] text-outline"
-												>{spread.count}</span
-											>
-										</div>
-										<span
-											class="relative z-10 text-xs {selectedSpread === spread.id
-												? 'text-primary'
-												: 'text-on-surface-variant'}">{spread.description}</span
-										>
-									</button>
-								{/each}
-							</div>
-						</div>
+						{/if}
 
 						{#if error}
 							<div class="rounded-xl border border-error/30 bg-error-container/10 p-4">
@@ -286,9 +430,9 @@
 
 						<button
 							type="button"
-							class="font-headline group flex w-full items-center justify-center gap-2 rounded-full bg-gradient-to-r from-primary-container via-tertiary-container to-secondary-container px-6 py-3.5 text-base font-semibold tracking-wide text-on-primary shadow-lg transition-all hover:shadow-primary-container/40 disabled:cursor-not-allowed disabled:opacity-50"
+							class="font-headline group flex w-full items-center justify-center gap-2 rounded-full bg-linear-to-r from-primary-container via-tertiary-container to-secondary-container px-6 py-3.5 text-base font-semibold tracking-wide text-on-primary shadow-lg transition-all hover:shadow-primary-container/40 disabled:cursor-not-allowed disabled:opacity-50"
 							onclick={startReading}
-							disabled={!question.trim() || loading}
+							disabled={!canBeginReading || loading}
 						>
 							<span
 								class="material-symbols-outlined transition-transform duration-500 group-hover:rotate-180"
@@ -308,7 +452,7 @@
 				<!-- RIGHT COLUMN: Idle / status panel -->
 				<div class="flex flex-col gap-6 xl:col-span-7">
 					<div
-						class="flex min-h-[380px] flex-col items-center justify-center gap-4 rounded-2xl bg-surface-container-lowest/80 p-8 text-center shadow-xl backdrop-blur-xl sm:p-10"
+						class="flex min-h-95 flex-col items-center justify-center gap-4 rounded-2xl bg-surface-container-lowest/80 p-8 text-center shadow-xl backdrop-blur-xl sm:p-10"
 					>
 						{#if loading}
 							<span class="h-2.5 w-2.5 animate-ping rounded-full bg-secondary"></span>
@@ -372,7 +516,7 @@
 							>{reading.cards.length} CARDS DRAWN</span
 						>
 					</div>
-					<div class="grid grid-cols-2 gap-4 [perspective:1000px] md:grid-cols-4">
+					<div class="grid grid-cols-2 gap-4 perspective-[1000px] md:grid-cols-4">
 						{#each reading.cards as card, i (card.card + i)}
 							<div class="flex flex-col gap-2">
 								<TarotCard {card} index={i} />
@@ -405,7 +549,7 @@
 					class="relative flex flex-col gap-6 overflow-hidden rounded-2xl bg-surface-container-low/95 p-6 shadow-xl backdrop-blur-xl sm:p-8"
 				>
 					<div
-						class="pointer-events-none absolute top-0 right-0 h-64 w-64 bg-gradient-to-bl from-primary/10 via-secondary/5 to-transparent"
+						class="pointer-events-none absolute top-0 right-0 h-64 w-64 bg-linear-to-bl from-primary/10 via-secondary/5 to-transparent"
 					></div>
 
 					<div

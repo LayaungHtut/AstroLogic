@@ -77,6 +77,19 @@ async def calculate_birth_chart(data: dict):
                 chart["timezone"] = positions["timezone"]
                 chart["precise"] = True
 
+                other_planets = positions.get("planets", {})
+                planet_signs = {name: info["sign"] for name, info in other_planets.items()}
+                planets_profile = await asyncio.to_thread(
+                    PrologService.get_planet_positions_profile, planet_signs
+                )
+                # Merge in the degree/retrograde data ephemeris computed but
+                # Prolog doesn't carry (it only reasons over the sign).
+                for p in planets_profile:
+                    info = other_planets.get(p["name"], {})
+                    p["degree"] = info.get("degree")
+                    p["retrograde"] = info.get("retrograde", False)
+                chart["planets"] = planets_profile
+
                 reasoning = await asyncio.to_thread(
                     PrologService.get_birth_chart_reasoning_precise,
                     positions["sun_sign"],

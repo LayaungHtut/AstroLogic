@@ -77,6 +77,39 @@ class TarotService:
         return result
 
     @staticmethod
+    async def build_cards_from_selection(
+        selections: list[tuple[str, bool]],
+        positions: list[str],
+    ) -> list[dict] | None:
+        """Build the same per-card dict shape draw_cards_with_positions
+        returns, but for specific cards the user picked (name, is_reversed)
+        rather than a random draw — order and orientation are exactly what
+        the caller passed in, nothing is randomized here.
+
+        Returns None if any name doesn't match a real tarot card, so the
+        caller can reject the request instead of silently reading fewer
+        cards than the user actually chose.
+        """
+        result = []
+        for i, (name, is_reversed) in enumerate(selections):
+            card = await TarotAPIClient.fetch_card_by_name(name)
+            if not card:
+                return None
+            real_name = card.get("name", name)
+            result.append({
+                "card": card.get("name_short", ""),
+                "name": real_name,
+                "prolog_card": TarotService.to_prolog_card_atom(real_name),
+                "position": positions[i] if i < len(positions) else f"Card {i + 1}",
+                "is_reversed": is_reversed,
+                "keywords": TarotAPIClient.extract_keywords(card),
+                "image": TarotAPIClient.get_card_image_url(real_name),
+                "meaning_upright": card.get("meaning_up", ""),
+                "meaning_reversed": card.get("meaning_rev", ""),
+            })
+        return result
+
+    @staticmethod
     async def get_card_info(card_id: str) -> dict | None:
         card = await TarotAPIClient.fetch_card_by_name(card_id)
         if card:

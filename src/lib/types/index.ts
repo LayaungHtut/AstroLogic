@@ -223,6 +223,23 @@ export const ZODIAC_SYMBOLS: Record<string, string> = {
 	sagittarius: '\u2650', capricorn: '\u2651', aquarius: '\u2652', pisces: '\u2653'
 };
 
+export interface PlanetPosition {
+	name: string;
+	sign: string;
+	symbol: string;
+	element: string;
+	modality: string;
+	influence: string;
+	degree?: number;
+	retrograde?: boolean;
+}
+
+export const PLANET_SYMBOLS: Record<string, string> = {
+	sun: '☉', moon: '☽', mercury: '☿', venus: '♀',
+	mars: '♂', jupiter: '♃', saturn: '♄',
+	uranus: '♅', neptune: '♆', pluto: '♇'
+};
+
 export const ELEMENT_COLORS: Record<string, string> = {
 	fire: '#FF6B35',
 	earth: '#8B7355',
@@ -243,5 +260,11 @@ export const SPREAD_TYPES = [
 	{ id: 'decision', name: 'Decision', description: 'Compare paths', count: 4 },
 	{ id: 'self_reflection', name: 'Self Reflection', description: 'Inner exploration', count: 4 },
 	{ id: 'relationship', name: 'Relationship', description: 'Connection analysis', count: 5 },
-	{ id: 'career', name: 'Career', description: 'Professional guidance', count: 5 }
+	{ id: 'career', name: 'Career', description: 'Professional guidance', count: 5 },
+	// count: 0 is a sentinel for "variable" — a custom draw's actual card
+	// count (1-10) is chosen separately in the UI and sent as card_count.
+	{ id: 'custom', name: 'Custom Draw', description: 'Pick your own card count', count: 0 }
 ] as const;
+
+export const CUSTOM_DRAW_MIN = 1;
+export const CUSTOM_DRAW_MAX = 10;

@@ -231,13 +231,13 @@
   <li><span class="num">1.</span><span class="toc-title">Introduction</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-introduction">1</span></li>
   <li><span class="num">2.</span><span class="toc-title">Objectives</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-objectives">3</span></li>
   <li><span class="num">3.</span><span class="toc-title">Requirements</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-requirements">4</span></li>
-  <li><span class="num">4.</span><span class="toc-title">Algorithms</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-algorithms">6</span></li>
-  <li><span class="num">5.</span><span class="toc-title">Prolog Codes</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-prolog-codes">8</span></li>
-  <li><span class="num">6.</span><span class="toc-title">Current Limitations</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-limitations">14</span></li>
-  <li><span class="num">7.</span><span class="toc-title">System Implementation (UI Design)</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-implementation">15</span></li>
-  <li><span class="num">8.</span><span class="toc-title">Conclusion</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-conclusion">17</span></li>
-  <li><span class="num">9.</span><span class="toc-title">Further Extension</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-extension">18</span></li>
-  <li><span class="num">10.</span><span class="toc-title">References</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-references">19</span></li>
+  <li><span class="num">4.</span><span class="toc-title">Algorithms</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-algorithms">7</span></li>
+  <li><span class="num">5.</span><span class="toc-title">Prolog Codes</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-prolog-codes">10</span></li>
+  <li><span class="num">6.</span><span class="toc-title">Current Limitations</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-limitations">16</span></li>
+  <li><span class="num">7.</span><span class="toc-title">System Implementation (UI Design)</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-implementation">17</span></li>
+  <li><span class="num">8.</span><span class="toc-title">Conclusion</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-conclusion">20</span></li>
+  <li><span class="num">9.</span><span class="toc-title">Further Extension</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-extension">21</span></li>
+  <li><span class="num">10.</span><span class="toc-title">References</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-references">22</span></li>
 </ul>
 </div>
 
@@ -354,6 +354,8 @@ claims about personality or the future.
   <tbody>
     <tr><td>FR-01</td><td>Zodiac profile lookup</td><td>User selects/enters a birth date; system returns sign, element, modality, ruling planet, traits, strengths and challenges.</td></tr>
     <tr><td>FR-02</td><td>Tarot card draw</td><td>System draws N cards for a chosen spread and returns card identity, orientation, and position-aware meaning.</td></tr>
+    <tr><td>FR-02a</td><td>Custom-count draw</td><td>User picks any card count from 1&ndash;10 for an open, non-fixed-layout spread instead of a predefined one.</td></tr>
+    <tr><td>FR-02b</td><td>Manual card selection</td><td>User hand-picks specific cards (and orientation) directly from the 78-card deck; the reading is generated from exactly that selection instead of a random draw.</td></tr>
     <tr><td>FR-03</td><td>Question classification</td><td>Free-text question is classified into a category to drive spread recommendation and card eligibility.</td></tr>
     <tr><td>FR-04</td><td>Reading analysis</td><td>System detects dominant themes, elements, arcana balance, and theme conflicts across a multi-card reading.</td></tr>
     <tr><td>FR-05</td><td>Horoscope generation</td><td>System generates a themed daily horoscope (theme, guidance, reflection, opportunity, caution) from zodiac + mood input.</td></tr>
@@ -457,12 +459,50 @@ than a static lookup table:
 <p>
 The four component scores are combined as
 <code>Overall = 0.35&middot;E + 0.20&middot;M + 0.30&middot;T + 0.15&middot;P</code>, then
-thresholded into <code>high</code> (&ge;75), <code>moderate</code> (&ge;50), or <code>low</code>
+thresholded into <code>high</code> (&ge;65), <code>moderate</code> (&ge;45), or <code>low</code>
 levels. Because every component is independently queryable, the system can also produce a
 full <strong>score breakdown</strong> and a natural-language <strong>explanation</strong> for
 transparency.</p>
+<p>
+An earlier version of this scoring gave every component an artificially high floor
+(e.g. a trait score of at least 40/100 even for two signs sharing <em>no</em> traits and
+<em>no</em> complementary traits, and a flat 55/100 default for any unlisted planetary
+pairing), which mathematically compressed every possible sign pair into a narrow
+44&ndash;90 band &ndash; in practice this meant almost every pairing was reported as
+&ldquo;moderate&rdquo;, with no pair ever reaching &ldquo;high&rdquo;. The component-score
+tables and the classification thresholds above were subsequently rebalanced so that a
+genuinely poor elemental/modality/trait match can score low and a genuinely strong one can
+score high, verified by exhaustively scoring all 66 distinct sign pairs and confirming the
+result spans the full range (roughly 35&ndash;90) with a realistic high/moderate/low split.</p>
 
-<h3>4.6 Fallback Algorithm</h3>
+<h3>4.6 Open &amp; Manual Tarot Draws</h3>
+<p>
+Beyond the six fixed-layout spreads (one card, three card, decision, self reflection,
+relationship, career), the system supports two additional draw modes that reuse the same
+Prolog analysis pipeline (<code>analyze_reading_oriented/4</code>, theme/conflict/direction
+detection) rather than duplicating it:
+</p>
+<ul>
+  <li><strong>Custom-count draw.</strong> <code>custom_spread_recommendation/4</code>
+  generates <code>N</code> generic, order-based positions (&ldquo;Card 1&rdquo; &hellip;
+  &ldquo;Card N&rdquo;) for any seeker-chosen count from 1&ndash;10, still grounding the
+  recommendation in the seeker's zodiac element/modality the way a fixed spread does.</li>
+  <li><strong>Manual card selection.</strong> The seeker picks specific cards (and their
+  orientation) directly from the 78-card deck instead of a random draw; the backend builds
+  the same per-card data structure a random draw would have produced, in the exact order and
+  orientation chosen, and feeds it through the identical reading pipeline &ndash; themes,
+  dominant theme, direction, advice, conflicts, and the full reasoning trace are all
+  generated from the seeker's own selection.</li>
+</ul>
+<p>
+Supporting either mode surfaced a latent bug in <code>position_meaning_modifier/2</code>:
+it had no catch-all clause, so a position label outside the five fixed-spread names (such as
+&ldquo;Card 6&rdquo; in an open ten-card draw) made <code>interpret_card_position/4</code>
+fail silently for that card &ndash; it still appeared in the UI, but received no per-card
+interpretation. A catch-all clause was added so every drawn or selected card, in any spread,
+is always individually interpreted.</p>
+
+<h3>4.7 Fallback Algorithm</h3>
 <p>
 Before any OpenRouter call, FastAPI starts a 30-second timeout. On timeout, network error,
 or malformed response, the orchestration layer substitutes a template-based generator that
@@ -597,8 +637,8 @@ zodiac_compatibility(Sign1, Sign2, Result) :-
     planetary_compatibility_score(P1, P2, PScore),
     OverallScore is (EScore * 0.35) + (MScore * 0.20)
                    + (TScore * 0.30) + (PScore * 0.15),
-    (   OverallScore >= 75 -> Level = high
-    ;   OverallScore >= 50 -> Level = moderate
+    (   OverallScore >= 65 -> Level = high
+    ;   OverallScore >= 45 -> Level = moderate
     ;   Level = low
     ),
     Result = compatibility_result{
@@ -612,8 +652,10 @@ element_compatibility_score(fire, fire, 90) :- !.
 element_compatibility_score(fire, air, 85)  :- !.
 element_compatibility_score(air, fire, 85)  :- !.
 element_compatibility_score(air, air, 80)   :- !.
-element_compatibility_score(earth, earth, 85) :- !.</pre>
-<p class="code-caption">Excerpt from <code>prolog/synastry.pl</code> &ndash; a genuinely weighted, multi-factor scoring rule with cut-guarded lookup clauses.</p>
+element_compatibility_score(earth, earth, 85) :- !.
+element_compatibility_score(fire, water, 22) :- !.  % most friction-prone pairing
+element_compatibility_score(water, fire, 22) :- !.</pre>
+<p class="code-caption">Excerpt from <code>prolog/synastry.pl</code> &ndash; a genuinely weighted, multi-factor scoring rule with cut-guarded lookup clauses. Thresholds and component scores shown are the rebalanced values (see &sect;4.5).</p>
 
 <h3>5.5 Entry Point and Module Loading</h3>
 <pre>:- use_module(zodiac).
@@ -702,7 +744,7 @@ zodiac_info(Sign, Info) :-
     <tr><td><code>/zodiac</code></td><td>Browse all 12 signs; view element, modality, ruling planet, traits, strengths and challenges.</td></tr>
     <tr><td><code>/birth-chart</code></td><td>Enter a birth date to resolve a Sun-sign profile.</td></tr>
     <tr><td><code>/tarot</code></td><td>Browse the 78-card deck; view keywords and upright/reversed meanings.</td></tr>
-    <tr><td><code>/reading</code></td><td>Ask a question, receive a recommended spread, draw cards, and view the AI-narrated interpretation.</td></tr>
+    <tr><td><code>/reading</code></td><td>Ask a question, then either let the app draw a recommended (or custom 1&ndash;10-card) spread at random, or hand-pick specific cards straight from the deck; view the AI-narrated interpretation either way.</td></tr>
     <tr><td><code>/horoscope</code></td><td>Generate a themed daily horoscope from sign and mood.</td></tr>
     <tr><td><code>/compatibility</code></td><td>Compare two zodiac signs and view the weighted score breakdown and explanation.</td></tr>
     <tr><td><code>/chat</code></td><td>Conversational AI assistant grounded in Prolog facts and reading context.</td></tr>
@@ -717,6 +759,7 @@ zodiac_info(Sign, Info) :-
 <h3>7.2 Key UI Components</h3>
 <ul>
   <li><code>TarotCard</code> &ndash; renders card art, name, orientation, and meaning.</li>
+  <li><code>CardPicker</code> &ndash; searchable/filterable deck browser for manual card selection, with a reorderable selection tray (up to 10 cards) supporting per-card orientation toggling.</li>
   <li><code>ZodiacBadge</code> / <code>ElementBadge</code> &ndash; compact visual tags for sign and element.</li>
   <li><code>ReasoningStep</code> &ndash; renders one entry of a Prolog reasoning trace (rule, input, result, explanation).</li>
   <li><code>LoadingSpinner</code>, <code>StarField</code>, <code>Navigation</code> &ndash; shared visual/interaction chrome.</li>
@@ -729,7 +772,8 @@ GET  /api/zodiac
 GET  /api/zodiac/{sign}
 GET  /api/tarot
 POST /api/tarot/draw          { count, spread_type }
-POST /api/reading/analyze     { question, zodiac_sign, spread_type }
+POST /api/reading/analyze     { question, zodiac_sign, spread_type, card_count }
+POST /api/reading/analyze-selected  { question, zodiac_sign, cards: [{name, is_reversed}] }
 POST /api/reading/generate
 POST /api/horoscope/generate  { zodiac_sign, mood }
 POST /api/compatibility/analyze  { sign1, sign2 }
@@ -755,6 +799,7 @@ modules (e.g. <code>get_zodiac_profile</code>, <code>select_eligible_cards</code
   <li>Dark, star-field themed interface (via the <code>StarField</code> component) consistent with the astrology/tarot subject matter.</li>
   <li>Reasoning is never hidden: every generated result links to a reasoning-trace view so users can see <em>why</em> the system produced that answer.</li>
   <li>Responsive layout built with Tailwind CSS utility classes; component styles kept local to each Svelte component.</li>
+  <li>Card art is served through an image-resizing proxy (wsrv.nl) rather than linked directly to the source tarot API: the source serves full-resolution scans (&sim;1150&times;1900px, &sim;1.1MB each) for every card, which on a slow, congested, or metered network can stall or fail before a thumbnail-sized image ever needs that much data &ndash; the proxy re-encodes each card as a right-sized WebP (e.g. a 300px-wide thumbnail drops from &sim;1.1MB to &sim;45KB) and edge-caches it, which also incidentally routes around networks that block the source host directly.</li>
 </ul>
 </div>
 

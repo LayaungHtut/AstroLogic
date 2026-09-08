@@ -3,7 +3,7 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import ElementBadge from '$lib/components/ElementBadge.svelte';
-	import type { ReasoningStep as ReasoningStepType } from '$lib/types';
+	import type { ReasoningStep as ReasoningStepType, PlanetPosition } from '$lib/types';
 
 	interface BirthChart {
 		sun_sign: string;
@@ -24,6 +24,7 @@
 		moon_degree?: number;
 		rising_degree?: number;
 		timezone?: string;
+		planets?: PlanetPosition[];
 	}
 
 	const currentYear = new Date().getFullYear();
@@ -148,8 +149,8 @@
 			Natal Ephemeris &amp; Signs
 		</h1>
 		<p class="text-on-surface-variant max-w-2xl">
-			Calculate your Sun, Moon, and Rising signs from your birth date and time using deterministic
-			symbolic reasoning.
+			Calculate your Sun, Moon, Rising, and full planetary lineup (Mercury through Pluto) from your
+			birth date, time, and location using deterministic symbolic reasoning.
 		</p>
 	</div>
 
@@ -287,9 +288,9 @@
 			<p class="relative flex items-center gap-2 text-xs text-on-surface-variant/70 mt-4">
 				<span class="material-symbols-outlined text-sm text-primary">info</span>
 				{#if latitude !== null && longitude !== null}
-					Sun, Moon &amp; Rising will be computed from real ecliptic positions (Swiss Ephemeris) using your birth date, time, and location.
+					Sun, Moon, Rising &amp; all eight planets (Mercury–Pluto) will be computed from real ecliptic positions (Swiss Ephemeris) using your birth date, time, and location.
 				{:else}
-					Add your birth year and coordinates above for a precise chart. Without them, Moon and Rising signs fall back to a rough approximation.
+					Add your birth year and coordinates above for a precise chart with the full planetary lineup. Without them, only Sun/Moon/Rising are calculated, with Moon and Rising falling back to a rough approximation.
 				{/if}
 			</p>
 
@@ -363,6 +364,19 @@
 							<text x={p.x} y={p.y + 3.5} text-anchor="middle" font-size="8" fill={color}>{getSignSymbol(point.sign)}</text>
 						{/each}
 
+						<!-- Mercury..Pluto, plotted at their real ecliptic degrees on an
+						     inner ring (precise mode only — no approximate fallback for these). -->
+						{#if chart.precise && chart.planets && chart.rising_degree !== undefined}
+							{#each chart.planets as planet}
+								{#if planet.degree !== undefined}
+									{@const p = wheelPoint(eclipticToWheelAngle(planet.degree, chart.rising_degree), 48)}
+									{@const color = getElementColor(planet.element)}
+									<circle cx={p.x} cy={p.y} r="5.5" fill={color} fill-opacity="0.15" stroke={color} stroke-width="1.5" />
+									<text x={p.x} y={p.y + 2.8} text-anchor="middle" font-size="6.5" fill={color}>{planet.symbol}</text>
+								{/if}
+							{/each}
+						{/if}
+
 						<circle cx="100" cy="100" r="3" fill="var(--color-secondary)" />
 					</svg>
 					<p class="font-mono-data text-[11px] text-on-surface-variant/70 text-center max-w-sm">
@@ -430,6 +444,33 @@
 					<p class="relative text-xs text-on-surface-variant mt-1">Ascendant mask</p>
 				</div>
 			</div>
+
+			<!-- Full Planetary Lineup -->
+			{#if chart.planets && chart.planets.length > 0}
+				<div class="flex items-center gap-4 mb-4">
+					<h2 class="font-headline text-xl text-on-surface">Full Planetary Lineup</h2>
+					<div class="h-px flex-1 bg-surface-container-highest"></div>
+					<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">Mercury – Pluto</span>
+				</div>
+				<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
+					{#each chart.planets as planet}
+						<div class="glass-card glass-card-hover relative p-4 flex flex-col overflow-hidden">
+							<div class="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-2xl pointer-events-none" style:background-color="{getElementColor(planet.element)}20"></div>
+							<div class="relative flex items-center justify-between gap-2 mb-2">
+								<span class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider capitalize">{planet.name}</span>
+								{#if planet.retrograde}
+									<span class="font-mono-data text-[9px] text-tertiary" title="Retrograde">℞</span>
+								{/if}
+							</div>
+							<div class="relative text-3xl mb-1" style:color="{getElementColor(planet.element)}">
+								{getSignSymbol(planet.sign)}
+							</div>
+							<h4 class="relative font-headline text-sm text-on-surface font-semibold capitalize">{planet.sign}</h4>
+							<p class="relative text-[11px] text-on-surface-variant/80 mt-1 capitalize">{planet.element} · {planet.modality}</p>
+						</div>
+					{/each}
+				</div>
+			{/if}
 
 			<!-- Profile Details -->
 			<div class="glass-card p-6 lg:p-8 mb-8">

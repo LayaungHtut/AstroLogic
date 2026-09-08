@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { onMount } from 'svelte';
 	import { fetchAllTarotCards } from '$lib/utils/api';
+	import { cardImage } from '$lib/utils/image';
 	import type { TarotCardInfo } from '$lib/types';
 	import TarotCard from '$lib/components/TarotCard.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
@@ -245,10 +246,10 @@
 							? 'bg-surface-container-high shadow-[0_12px_32px_rgba(124,58,237,0.3)]'
 							: 'bg-surface-container-lowest/80 hover:shadow-[0_12px_32px_rgba(124,58,237,0.2)]'}"
 				>
-					<div class="relative w-full aspect-[2/3] rounded-lg overflow-hidden mb-3 bg-gradient-to-br from-surface-container-high to-surface-container flex items-center justify-center">
+					<div class="relative w-full aspect-2/3 rounded-lg overflow-hidden mb-3 bg-linear-to-br from-surface-container-high to-surface-container flex items-center justify-center">
 						{#if card.image}
 							<img
-								src={card.image}
+								src={cardImage(card.image, 220)}
 								alt={card.name}
 								class="absolute inset-0 h-full w-full object-cover"
 								loading="lazy"
@@ -264,7 +265,7 @@
 							{el.label}
 						</span>
 					</div>
-					<div class="flex flex-col flex-grow justify-between">
+					<div class="flex flex-col grow justify-between">
 						<h4 class="font-headline text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1">
 							{card.name}
 						</h4>

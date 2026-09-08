@@ -69,6 +69,14 @@ position_meaning_modifier(strength, 'This card highlights your professional stre
 position_meaning_modifier(challenge, 'This card identifies the professional challenge.').
 position_meaning_modifier(opportunity, 'This card reveals an emerging opportunity.').
 position_meaning_modifier(advice, 'This card offers career guidance.').
+% Catch-all: without this, a position label that isn't one of the fixed
+% spreads above (e.g. "Card 1".."Card 10" from an open/custom draw) makes
+% once(position_meaning_modifier(...)) fail, which silently drops that card
+% out of card_interpretations in analyze_reading_oriented/4 via findall/3 -
+% the card is still drawn and shown in the UI, but gets no per-card
+% interpretation. Any custom/free-form spread depends on this fallback to
+% read every drawn card, not just the ones matching a known position name.
+position_meaning_modifier(_, 'This card speaks to its own place in the story you are drawing.').
 
 % --- position_theme_emphasis/3 ---
 % Each position emphasizes certain theme categories.
