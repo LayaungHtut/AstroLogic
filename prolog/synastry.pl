@@ -20,7 +20,6 @@
 % NOT a single hardcoded table - computed from multiple factors.
 
 zodiac_compatibility(Sign1, Sign2, Result) :-
-    Sign1 \= Sign2,
     element(Sign1, E1),
     element(Sign2, E2),
     modality(Sign1, M1),
@@ -175,7 +174,6 @@ element_relationship_description(water, air, 'Air and Water operate differently 
 % Full synastry analysis between two profiles.
 
 synastry(Sign1, Sign2, Analysis) :-
-    Sign1 \= Sign2,
     zodiac_profile(Sign1, Profile1),
     zodiac_profile(Sign2, Profile2),
     element(Sign1, E1),

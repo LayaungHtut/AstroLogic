@@ -339,9 +339,26 @@ async def chat_with_assistant(
     return result
 
 
-async def explain_tarot_card(card_name: str, orientation: str = "upright") -> str | None:
-    """Get a detailed explanation of a specific tarot card."""
-    user_msg = f"""Provide a detailed explanation of the tarot card "{card_name}" in the {orientation} position.
+async def explain_tarot_card(
+    card_name: str, orientation: str = "upright", card_data: dict | None = None
+) -> str | None:
+    """Get a detailed explanation of a specific tarot card.
+
+    When `card_data` (from PrologService.get_tarot_card_details) is available,
+    the model is grounded in the app's own authoritative keywords/meanings so
+    the explanation can't drift from what's shown elsewhere (scan results,
+    tarot draws, spreads) for the same card."""
+    grounding = ""
+    if card_data:
+        meanings = card_data["upright"] if orientation == "upright" else card_data["reversed"]
+        grounding = f"""
+
+Authoritative reference data for this card (from the app's own knowledge base — base your explanation on this, do not contradict it):
+- Keywords: {', '.join(card_data['keywords'])}
+- {orientation.capitalize()} meanings: {', '.join(meanings)}
+- Themes: {', '.join(card_data['themes'])}"""
+
+    user_msg = f"""Provide a detailed explanation of the tarot card "{card_name}" in the {orientation} position.{grounding}
 
 Include:
 1. Card meaning and symbolism

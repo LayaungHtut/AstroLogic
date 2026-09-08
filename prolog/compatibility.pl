@@ -46,7 +46,6 @@ element_relationship(air, earth, 'Earth and Air can be challenging - Earth value
 
 % --- Overall Compatibility Scoring ---
 zodiac_compatibility(Sign1, Sign2, high) :-
-    Sign1 \= Sign2,
     element(Sign1, E),
     element(Sign2, E),
     modality(Sign1, M1),
@@ -54,26 +53,22 @@ zodiac_compatibility(Sign1, Sign2, high) :-
     compatible_modality(M1, M2).
 
 zodiac_compatibility(Sign1, Sign2, high) :-
-    Sign1 \= Sign2,
     element(Sign1, E1),
     element(Sign2, E2),
     compatible_element(E1, E2),
     E1 \= E2.
 
 zodiac_compatibility(Sign1, Sign2, medium) :-
-    Sign1 \= Sign2,
     element(Sign1, E1),
     element(Sign2, E2),
     compatible_element(E1, E2).
 
 zodiac_compatibility(Sign1, Sign2, medium) :-
-    Sign1 \= Sign2,
     modality(Sign1, M1),
     modality(Sign2, M2),
     compatible_modality(M1, M2).
 
 zodiac_compatibility(Sign1, Sign2, low) :-
-    Sign1 \= Sign2,
     element(Sign1, E1),
     element(Sign2, E2),
     challenging_element(E1, E2).
@@ -90,7 +85,6 @@ planet_relationship(pluto, moon, deep).
 
 % --- Detailed Compatibility Analysis ---
 compatibility_analysis(Sign1, Sign2, Analysis) :-
-    Sign1 \= Sign2,
     element(Sign1, E1),
     element(Sign2, E2),
     modality(Sign1, M1),
@@ -122,7 +116,6 @@ compatibility_analysis(Sign1, Sign2, Analysis) :-
 % simpler version earlier in this file) returns a dict, not a bare level
 % atom — Level.level is the atom (high/moderate/low), Level.score the number.
 generate_compatibility_trace(Sign1, Sign2, Trace) :-
-    Sign1 \= Sign2,
     element(Sign1, E1),
     element(Sign2, E2),
     modality(Sign1, M1),

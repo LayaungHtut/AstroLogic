@@ -66,10 +66,6 @@
 	};
 
 	async function analyze() {
-		if (sign1 === sign2) {
-			error = 'Please select two different signs';
-			return;
-		}
 		loading = true;
 		error = '';
 		synastry = null;

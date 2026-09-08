@@ -581,6 +581,8 @@
 			<div class="flex w-full items-center gap-3 md:w-auto">
 				<input
 					type="text"
+					id="journal-note"
+					name="journal-note"
 					bind:value={journalNote}
 					placeholder="Record intuitive insight..."
 					class="w-full rounded-xl bg-surface-container-low px-4 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-secondary focus:outline-none md:w-80"

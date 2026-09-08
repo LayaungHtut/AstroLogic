@@ -10,12 +10,16 @@
 	let search = $state('');
 	let loading = $state(true);
 	let selectedCard = $state<TarotCardInfo | null>(null);
+	let loadError = $state('');
 
 	onMount(async () => {
 		try {
 			cards = await fetchAllTarotCards();
-		} catch {
-			// API may not be running
+		} catch (e) {
+			loadError =
+				e instanceof Error
+					? `Couldn't reach the tarot API: ${e.message}`
+					: "Couldn't reach the tarot API.";
 		} finally {
 			loading = false;
 		}
@@ -122,6 +126,8 @@
 			<div class="relative flex-1 lg:w-72">
 				<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg pointer-events-none">search</span>
 				<input
+					id="tarot-search"
+					name="tarot-search"
 					class="input-field w-full pl-9"
 					placeholder="Filter by card name..."
 					type="text"
@@ -148,6 +154,8 @@
 
 	{#if loading}
 		<LoadingSpinner text="Loading tarot deck..." />
+	{:else if loadError}
+		<div class="glass-card p-10 text-center text-error">{loadError}</div>
 	{:else if !filtered.length}
 		<div class="glass-card p-10 text-center text-on-surface-variant">No cards match this filter.</div>
 	{:else}

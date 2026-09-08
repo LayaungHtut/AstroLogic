@@ -140,6 +140,8 @@
 				<div class="flex items-end gap-2">
 					<input
 						type="text"
+						id="chat-message"
+						name="chat-message"
 						bind:value={input}
 						onkeydown={handleKeydown}
 						class="flex-1 bg-transparent text-on-surface placeholder:text-outline text-sm focus:outline-none px-2 py-2"

@@ -539,6 +539,38 @@ class PrologService:
         return [str(r["Theme"]) for r in results]
 
     @staticmethod
+    def find_card_id_by_name(display_name: str) -> str | None:
+        """Reverse-lookup a snake_case card id from its display name
+        (e.g. 'The Hermit' -> the_hermit) via card_name/2. Case-insensitive
+        so LLM-supplied names ('the hermit', 'THE HERMIT') still resolve."""
+        result = _first_result(
+            f"card_name(Id, Name), downcase_atom(Name, DName), "
+            f"downcase_atom({_quote_atom(display_name)}, DName)"
+        )
+        return str(result["Id"]) if result else None
+
+    @staticmethod
+    def get_tarot_card_details(card_id: str) -> dict | None:
+        """Authoritative card data straight from tarot.pl — used to ground
+        LLM output (scan identification, card explanations) so it can't
+        drift from the meanings shown elsewhere in the app."""
+        # NOTE: this query binds no named variables, so a successful match
+        # comes back as `{}` — falsy in Python but not a failure. Check for
+        # None explicitly rather than `not result`.
+        if _first_result(f"tarot_card({_quote_atom(card_id)}, _, _)") is None:
+            return None
+        name_result = _first_result(f"card_name({_quote_atom(card_id)}, Name)")
+        keywords_result = _first_result(f"tarot_keywords({_quote_atom(card_id)}, K)")
+        return {
+            "id": card_id,
+            "name": str(name_result["Name"]) if name_result else card_id,
+            "keywords": [str(k) for k in keywords_result["K"]] if keywords_result else [],
+            "upright": PrologService.get_card_orientation_meaning(card_id, "upright"),
+            "reversed": PrologService.get_card_orientation_meaning(card_id, "reversed"),
+            "themes": PrologService.get_card_themes(card_id),
+        }
+
+    @staticmethod
     def get_select_cards_reasoning(sign: str, category: str) -> list[dict]:
         result = _first_result(
             f"select_cards_reasoning({_quote_atom(sign)}, {_quote_atom(category)}, Trace)"
