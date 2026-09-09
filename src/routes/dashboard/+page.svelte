@@ -10,6 +10,7 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import ProfileSettingsModal from '$lib/components/ProfileSettingsModal.svelte';
 	import MarkdownText from '$lib/components/MarkdownText.svelte';
+	import { locale, t, getZodiacTranslation, formatElement } from '$lib/i18n';
 
 	let recentReadings = $state<HistoryItem[]>([]);
 	let loading = $state(true);
@@ -55,8 +56,16 @@
 					: 'water'
 	);
 
+	const zodiacTrans = $derived(getZodiacTranslation(currentProfile.zodiac_sign, $locale));
+	const localizedElement = $derived(formatElement(element, $locale));
+
 	const greeting = $derived(() => {
 		const hour = new Date().getHours();
+		if ($locale === 'my') {
+			if (hour < 12) return 'မင်္ဂလာနံနက်ခင်းပါ';
+			if (hour < 18) return 'မင်္ဂလာနေ့လယ်ခင်းပါ';
+			return 'မင်္ဂလာညနေခင်းပါ';
+		}
 		if (hour < 12) return 'Good morning';
 		if (hour < 18) return 'Good afternoon';
 		return 'Good evening';
@@ -101,57 +110,48 @@
 		}
 	};
 
-	const quickActions: Array<{
-		href: string;
-		icon: string;
-		label: string;
-		badge: string;
-		description: string;
-		cta: string;
-		ctaIcon: string;
-		tint: Tint;
-	}> = [
+	const quickActions = $derived([
 		{
 			href: '/reading',
 			icon: 'style',
-			label: 'Tarot Reading',
-			badge: 'Daily Draw',
-			description: "Shuffle the deck of symbolic archetypes to unveil today's currents.",
-			cta: 'Draw Cards',
+			label: $locale === 'my' ? 'တားရော့ဗေဒင်မေးမည်' : 'Tarot Reading',
+			badge: $locale === 'my' ? 'နေ့စဉ်ဟောကိန်း' : 'Daily Draw',
+			description: $locale === 'my' ? 'သင်္ကေတတားရော့ကတ်များကို မွှေနှောက်ဆွဲယူပြီး ယနေ့အတွက် လမ်းညွှန်ချက်ရယူပါ။' : "Shuffle the deck of symbolic archetypes to unveil today's currents.",
+			cta: $locale === 'my' ? 'ကတ်ဆွဲမည်' : 'Draw Cards',
 			ctaIcon: 'arrow_forward',
-			tint: 'primary'
+			tint: 'primary' as Tint
 		},
 		{
 			href: '/horoscope',
 			icon: 'explore',
-			label: 'Horoscope',
-			badge: 'Daily Guidance',
-			description: 'Personalized celestial guidance mapped to your sign, refreshed daily.',
-			cta: 'View Horoscope',
+			label: $locale === 'my' ? 'နေ့စဉ်ဟောစာတမ်း' : 'Horoscope',
+			badge: $locale === 'my' ? 'နေ့စဉ်လမ်းညွှန်' : 'Daily Guidance',
+			description: $locale === 'my' ? 'သင့်ရာသီခွင်အတွက် နေ့စဉ်အသစ်ထုတ်ပြန်ပေးသော နက္ခတ်ဟောစာတမ်း။' : 'Personalized celestial guidance mapped to your sign, refreshed daily.',
+			cta: $locale === 'my' ? 'ဟောစာတမ်းကြည့်မည်' : 'View Horoscope',
 			ctaIcon: 'north_east',
-			tint: 'secondary'
+			tint: 'secondary' as Tint
 		},
 		{
 			href: '/compatibility',
 			icon: 'all_inclusive',
-			label: 'Compatibility',
-			badge: 'Elemental Match',
-			description: 'Evaluate elemental harmony and compatibility between two signs.',
-			cta: 'Analyze Bond',
+			label: $locale === 'my' ? 'ရာသီခွင်လိုက်ဖက်ညီမှု' : 'Compatibility',
+			badge: $locale === 'my' ? 'ဓာတ်သဟဇာတ' : 'Elemental Match',
+			description: $locale === 'my' ? 'ရာသီခွင်နှစ်ခုအကြား ဓာတ်သဘောနှင့် သဟဇာတဖြစ်မှုကို လေ့လာဆန်းစစ်ပါ။' : 'Evaluate elemental harmony and compatibility between two signs.',
+			cta: $locale === 'my' ? 'လိုက်ဖက်မှုဆန်းစစ်မည်' : 'Analyze Bond',
 			ctaIcon: 'fingerprint',
-			tint: 'tertiary'
+			tint: 'tertiary' as Tint
 		},
 		{
 			href: '/chat',
 			icon: 'psychology',
-			label: 'AI Guide',
-			badge: 'Online',
-			description: 'Ask the Prolog-backed reasoning engine for deterministic insight.',
-			cta: 'Ask the Oracle',
+			label: $locale === 'my' ? 'AI နက္ခတ်လမ်းပြ' : 'AI Guide',
+			badge: $locale === 'my' ? 'အွန်လိုင်း' : 'Online',
+			description: $locale === 'my' ? 'Prolog ယုတ္တိဗေဒစနစ်ဖြင့် သက်သေပြအဖြေထုတ်ပေးသော AI ကို မေးမြန်းပါ။' : 'Ask the Prolog-backed reasoning engine for deterministic insight.',
+			cta: $locale === 'my' ? 'AI ကို မေးမည်' : 'Ask the Oracle',
 			ctaIcon: 'chat_bubble',
-			tint: 'secondary'
+			tint: 'secondary' as Tint
 		}
-	];
+	]);
 
 	const latestReading = $derived(recentReadings[0]);
 
@@ -178,7 +178,6 @@
 	let showReadingDetails = $state(false);
 	let showProfileSettings = $state(false);
 
-	// Local-only journal note widget -- not persisted to any backend/API.
 	let journalNote = $state('');
 	let journalSaved = $state(false);
 	function saveJournalNote() {
@@ -192,7 +191,7 @@
 </script>
 
 <svelte:head>
-	<title>Dashboard - AstroLogic</title>
+	<title>{$t('nav.dashboard')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="page-container relative">
@@ -214,13 +213,13 @@
 							class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold tracking-wider text-primary uppercase"
 						>
 							<span class="text-sm">{symbol}</span>
-							{currentProfile.zodiac_sign}
+							{zodiacTrans.name || currentProfile.zodiac_sign}
 						</span>
 						<span
 							class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold tracking-wider text-secondary uppercase"
 						>
 							<span class="h-1.5 w-1.5 rounded-full bg-secondary"></span>
-							{element} Dominant
+							{localizedElement}
 						</span>
 					{:else}
 						<button
@@ -228,28 +227,30 @@
 							onclick={() => (showProfileSettings = true)}
 							class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold tracking-wider text-primary uppercase transition-colors hover:bg-primary/20"
 						>
-							<span class="text-sm">✦</span> Set Your Zodiac Sign
+							<span class="text-sm">✦</span> {$t('dashboard.setSign')}
 						</button>
 					{/if}
 					{#if currentProfile.preferred_style}
 						<span
 							class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-surface-container-high px-3 py-1 text-[10px] font-semibold tracking-wider text-tertiary uppercase"
 						>
-							{currentProfile.preferred_style} Style
+							{currentProfile.preferred_style}
 						</span>
 					{/if}
 				</div>
 				<div class="flex flex-col">
 					<span
 						class="font-mono-data text-[11px] tracking-widest text-on-surface-variant/70 uppercase"
-						>Cosmic Dashboard &bull; Reflection Mode</span
+						>{$t('dashboard.telemetryActive')}</span
 					>
 					<h1
 						class="font-headline mt-1 text-3xl font-bold tracking-tight text-on-surface md:text-4xl"
 					>
-						{greeting()}, <span class="gradient-text">{currentProfile.nickname}</span>
+						{greeting()}, <span class="gradient-text">{currentProfile.nickname || 'Explorer'}</span>
 					</h1>
-					<p class="mt-1 text-on-surface-variant">Welcome to your cosmic dashboard.</p>
+					<p class="mt-1 text-on-surface-variant">
+						{$locale === 'my' ? 'သင်၏ နက္ခတ်ဗေဒင် ဒက်ရှ်ဘုတ်မှ ကြိုဆိုပါသည်။' : 'Welcome to your cosmic dashboard.'}
+					</p>
 				</div>
 			</div>
 
@@ -262,18 +263,18 @@
 					<div class="flex flex-col">
 						<span
 							class="font-mono-data text-[10px] tracking-wider text-on-surface-variant uppercase"
-							>Reading Archive</span
+							>{$locale === 'my' ? 'ဗေဒင်မှတ်တမ်း အရေအတွက်' : 'Reading Archive'}</span
 						>
 						<span class="font-mono-data text-sm font-semibold text-on-surface">
 							{recentReadings.length}
-							{recentReadings.length === 1 ? 'Reading' : 'Readings'} Logged
+							{$locale === 'my' ? 'ကြိမ် မေးမြန်းထားသည်' : (recentReadings.length === 1 ? 'Reading Logged' : 'Readings Logged')}
 						</span>
 					</div>
 				</div>
 				<button
 					type="button"
 					onclick={refresh}
-					title="Refresh reading history"
+					title={$t('dashboard.refresh')}
 					class="inline-flex items-center justify-center rounded-xl bg-surface-container p-2.5 text-on-surface-variant shadow-sm transition-all duration-300 hover:bg-surface-container-high hover:text-on-surface"
 				>
 					<span class="material-symbols-outlined text-xl {refreshing ? 'animate-spin' : ''}"
@@ -308,7 +309,7 @@
 									action.tint
 								].badge}"
 							>
-								{#if action.badge === 'Online'}
+								{#if action.badge === 'Online' || action.badge === 'အွန်လိုင်း'}
 									<span class="h-1.5 w-1.5 animate-ping rounded-full bg-secondary"></span>
 								{/if}
 								{action.badge}
@@ -351,14 +352,16 @@
 				>
 					<div class="flex items-center gap-2.5">
 						<span class="material-symbols-outlined text-xl text-secondary">satellite_alt</span>
-						<h2 class="font-headline text-lg font-semibold text-on-surface">Your Cosmic Profile</h2>
+						<h2 class="font-headline text-lg font-semibold text-on-surface">
+							{$locale === 'my' ? 'သင့်ရာသီခွင် ပရိုဖိုင်' : 'Your Cosmic Profile'}
+						</h2>
 						<button
 							type="button"
 							onclick={() => (showProfileSettings = true)}
 							class="ml-auto inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1 text-xs font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high"
 						>
 							<span class="material-symbols-outlined text-sm">edit</span>
-							Edit
+							{$locale === 'my' ? 'ပြင်ဆင်ရန်' : 'Edit'}
 						</button>
 					</div>
 
@@ -366,12 +369,14 @@
 						<ZodiacBadge sign={currentProfile.zodiac_sign} {element} size="lg" />
 						<div class="flex flex-col">
 							<span class="font-mono-data text-[10px] tracking-wider text-secondary uppercase"
-								>Sun Sign</span
+								>{$t('chart.sunSign')}</span
 							>
-							<h4 class="font-headline text-lg font-semibold text-on-surface capitalize">
-								{currentProfile.zodiac_sign}
+							<h4 class="font-headline text-lg font-semibold text-on-surface">
+								{zodiacTrans.name || currentProfile.zodiac_sign}
 							</h4>
-							<p class="text-sm text-on-surface-variant">Ruled by the element of {element}</p>
+							<p class="text-sm text-on-surface-variant">
+								{$locale === 'my' ? `${localizedElement} စိုးမိုးသော ရာသီခွင်` : `Ruled by the element of ${element}`}
+							</p>
 						</div>
 					</div>
 
@@ -387,9 +392,12 @@
 									{ELEMENT_ICONS[element]}
 								</div>
 								<div class="flex flex-col">
-									<span class="text-sm font-medium text-on-surface">Elemental Affinity</span>
-									<span class="text-xs text-on-surface-variant">Your dominant elemental energy</span
-									>
+									<span class="text-sm font-medium text-on-surface">
+										{$locale === 'my' ? 'ဓာတ်သဘာဝ' : 'Elemental Affinity'}
+									</span>
+									<span class="text-xs text-on-surface-variant">
+										{$locale === 'my' ? 'သင့်ပင်မဓာတ်စွမ်းအင်' : 'Your dominant elemental energy'}
+									</span>
 								</div>
 							</div>
 							<ElementBadge {element} size="sm" />
@@ -406,8 +414,12 @@
 										<span class="material-symbols-outlined text-lg">cake</span>
 									</div>
 									<div class="flex flex-col">
-										<span class="text-sm font-medium text-on-surface">Birth Date</span>
-										<span class="text-xs text-on-surface-variant">Used to determine your sign</span>
+										<span class="text-sm font-medium text-on-surface">
+											{$locale === 'my' ? 'မွေးနေ့ရက်စွဲ' : 'Birth Date'}
+										</span>
+										<span class="text-xs text-on-surface-variant">
+											{$locale === 'my' ? 'ရာသီခွင်သတ်မှတ်ချက်' : 'Used to determine your sign'}
+										</span>
 									</div>
 								</div>
 								<span class="font-mono-data text-xs text-on-surface-variant"
@@ -426,8 +438,12 @@
 									<span class="material-symbols-outlined text-lg">style</span>
 								</div>
 								<div class="flex flex-col">
-									<span class="text-sm font-medium text-on-surface">Preferred Style</span>
-									<span class="text-xs text-on-surface-variant">How your readings are phrased</span>
+									<span class="text-sm font-medium text-on-surface">
+										{$locale === 'my' ? 'ဟောကိန်းပုံစံ' : 'Preferred Style'}
+									</span>
+									<span class="text-xs text-on-surface-variant">
+										{$locale === 'my' ? 'အနက်ဖွင့်ဟောကြားမည့်ဟန်' : 'How your readings are phrased'}
+									</span>
 								</div>
 							</div>
 							<span class="font-mono-data text-xs text-tertiary capitalize"
@@ -436,7 +452,7 @@
 						</div>
 					</div>
 
-					<!-- Decorative ambient panel (illustrative only, no live data) -->
+					<!-- Decorative ambient panel -->
 					<div
 						class="relative flex h-28 w-full items-end overflow-hidden rounded-xl bg-gradient-to-br from-primary-container/30 via-surface-container-low to-secondary-container/20 shadow-inner"
 					>
@@ -445,7 +461,7 @@
 							class="font-mono-data relative z-10 flex items-center gap-2 p-3.5 text-[11px] text-primary"
 						>
 							<span class="material-symbols-outlined text-base">lens_blur</span>
-							Every reading unfolds within the greater celestial rhythm.
+							{$locale === 'my' ? 'ဗေဒင်မေးမြန်းမှုတိုင်းသည် ကောင်းကင်စကြဝဠာ၏ စည်းချက်အတိုင်း ဖြစ်ပေါ်ပါသည်' : 'Every reading unfolds within the greater celestial rhythm.'}
 						</span>
 					</div>
 				</div>
@@ -457,26 +473,26 @@
 					class="flex flex-col gap-6 rounded-2xl bg-surface-container-lowest/80 p-6 shadow-xl backdrop-blur-md sm:p-8"
 				>
 					{#if loading}
-						<LoadingSpinner text="Consulting the archive..." />
+						<LoadingSpinner text={$t('common.loading')} />
 					{:else if latestReading}
 						<div class="flex flex-wrap items-center justify-between gap-4">
 							<div class="flex flex-col">
 								<div class="flex items-center gap-2">
 									<span class="font-mono-data text-[10px] tracking-wider text-primary uppercase"
-										>Archival Spotlight</span
+										>{$locale === 'my' ? 'နောက်ဆုံးမေးထားသော ဗေဒင်' : 'Archival Spotlight'}</span
 									>
 									<span class="text-on-surface-variant">&bull;</span>
 									<span class="text-sm text-on-surface-variant">{latestReading.created_at}</span>
 								</div>
 								<h2 class="font-headline mt-1 text-xl font-semibold text-on-surface">
-									{latestReading.question || 'Tarot Reading'}
+									{latestReading.question || ($locale === 'my' ? 'တားရော့ဗေဒင်' : 'Tarot Reading')}
 								</h2>
 							</div>
 							<a
 								href="/history"
 								class="inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 text-sm text-on-surface transition-colors hover:bg-surface-container-high"
 							>
-								Full Spread
+								{$locale === 'my' ? 'မှတ်တမ်းအပြည့်အစုံ' : 'Full Spread'}
 								<span class="material-symbols-outlined text-base">open_in_new</span>
 							</a>
 						</div>
@@ -488,9 +504,6 @@
 										class="flex flex-col gap-2 rounded-xl bg-surface-container-low p-3 shadow-md"
 									>
 										<TarotCard {card} index={i} revealed={true} />
-										<span class="truncate text-center text-xs font-medium text-on-surface-variant"
-											>{card.position}</span
-										>
 									</div>
 								{/each}
 							</div>
@@ -512,7 +525,7 @@
 							<div class="flex items-center gap-2 text-secondary">
 								<span class="material-symbols-outlined text-lg">auto_awesome</span>
 								<span class="font-mono-data text-[11px] font-semibold tracking-wider uppercase"
-									>AI Interpretation</span
+									>{$t('reading.aiSynthesis')}</span
 								>
 							</div>
 							<MarkdownText content={latestReading.ai_interpretation} />
@@ -524,7 +537,7 @@
 									class="font-mono-data inline-flex w-fit items-center gap-2 rounded-full bg-surface-container-high px-3 py-1.5 text-[11px] text-secondary shadow-sm transition-all hover:bg-surface-bright"
 								>
 									<span class="h-2 w-2 rounded-full bg-secondary"></span>
-									Reading Details
+									{$locale === 'my' ? 'အသေးစိတ်အချက်များ' : 'Reading Details'}
 									<span class="material-symbols-outlined text-sm"
 										>{showReadingDetails ? 'unfold_less' : 'unfold_more'}</span
 									>
@@ -551,15 +564,15 @@
 							<span class="material-symbols-outlined text-4xl text-on-surface-variant/60"
 								>auto_stories</span
 							>
-							<p class="text-on-surface-variant">No readings yet. Start your first reading!</p>
-							<a href="/reading" class="btn-primary mt-2 inline-block">Begin Reading</a>
+							<p class="text-on-surface-variant">{$t('dashboard.noReadings')}</p>
+							<a href="/reading" class="btn-primary mt-2 inline-block">{$t('dashboard.newReading')}</a>
 						</div>
 					{/if}
 				</div>
 			</div>
 		</section>
 
-		<!-- Journal micro-widget (local only, not persisted) -->
+		<!-- Journal micro-widget -->
 		<section
 			class="flex flex-col items-start justify-between gap-4 rounded-2xl bg-surface-container-lowest/80 p-6 shadow-lg backdrop-blur-md md:flex-row md:items-center"
 		>
@@ -570,12 +583,12 @@
 					<span class="material-symbols-outlined text-xl">edit_note</span>
 				</div>
 				<div class="flex flex-col">
-					<span class="font-headline text-base font-semibold text-on-surface"
-						>Quick Reflection Journal</span
-					>
-					<span class="text-sm text-on-surface-variant"
-						>Jot down a thought before it drifts away.</span
-					>
+					<span class="font-headline text-base font-semibold text-on-surface">
+						{$locale === 'my' ? 'အတွေးအမြင် အမြန်မှတ်တမ်း' : 'Quick Reflection Journal'}
+					</span>
+					<span class="text-sm text-on-surface-variant">
+						{$locale === 'my' ? 'စိတ်ထဲပေါ်လာသော အတွေးစများကို ချက်ချင်းမှတ်သားထားပါ။' : 'Jot down a thought before it drifts away.'}
+					</span>
 				</div>
 			</div>
 			<div class="flex w-full items-center gap-3 md:w-auto">
@@ -584,7 +597,7 @@
 					id="journal-note"
 					name="journal-note"
 					bind:value={journalNote}
-					placeholder="Record intuitive insight..."
+					placeholder={$locale === 'my' ? 'စိတ်ကူးအသိကို မှတ်သားပါ...' : 'Record intuitive insight...'}
 					class="w-full rounded-xl bg-surface-container-low px-4 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-secondary focus:outline-none md:w-80"
 				/>
 				<button
@@ -594,7 +607,7 @@
 						? 'bg-primary text-on-primary'
 						: 'bg-secondary-container text-on-secondary hover:bg-secondary'}"
 				>
-					{journalSaved ? 'Saved ✓' : 'Save Note'}
+					{journalSaved ? ($locale === 'my' ? 'မှတ်သားပြီး ✓' : 'Saved ✓') : ($locale === 'my' ? 'မှတ်သားမည်' : 'Save Note')}
 				</button>
 			</div>
 		</section>

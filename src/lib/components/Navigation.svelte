@@ -1,34 +1,36 @@
 <script lang="ts">
 	import { page } from '$app/state';
 	import favicon from '$lib/assets/favicon.svg';
+	import { t } from '$lib/i18n';
+	import LanguageSwitcher from '$lib/components/LanguageSwitcher.svelte';
 
-	const navGroups = [
+	const navGroups = $derived([
 		{
-			items: [{ href: '/dashboard', label: 'Dashboard', icon: 'space_dashboard' }]
+			items: [{ href: '/dashboard', label: $t('nav.dashboard'), icon: 'space_dashboard' }]
 		},
 		{
 			items: [
-				{ href: '/reading', label: 'Reading', icon: 'style' },
-				{ href: '/tarot', label: 'Deck', icon: 'auto_stories' },
-				{ href: '/scan', label: 'Scan', icon: 'center_focus_weak' }
+				{ href: '/reading', label: $t('nav.reading'), icon: 'style' },
+				{ href: '/tarot', label: $t('nav.deck'), icon: 'auto_stories' },
+				{ href: '/scan', label: $t('nav.scan'), icon: 'center_focus_weak' }
 			]
 		},
 		{
 			items: [
-				{ href: '/birth-chart', label: 'Birth Chart', icon: 'orbit' },
-				{ href: '/zodiac', label: 'Zodiac', icon: 'token' },
-				{ href: '/horoscope', label: 'Horoscope', icon: 'nights_stay' },
-				{ href: '/compatibility', label: 'Synastry', icon: 'all_inclusive' }
+				{ href: '/birth-chart', label: $t('nav.birthChart'), icon: 'orbit' },
+				{ href: '/zodiac', label: $t('nav.zodiac'), icon: 'token' },
+				{ href: '/horoscope', label: $t('nav.horoscope'), icon: 'nights_stay' },
+				{ href: '/compatibility', label: $t('nav.synastry'), icon: 'all_inclusive' }
 			]
 		},
 		{
 			items: [
-				{ href: '/chat', label: 'AI Oracle', icon: 'psychology' },
-				{ href: '/history', label: 'History', icon: 'history' },
-				{ href: '/analytics', label: 'Analytics', icon: 'monitoring' }
+				{ href: '/chat', label: $t('nav.oracle'), icon: 'psychology' },
+				{ href: '/history', label: $t('nav.history'), icon: 'history' },
+				{ href: '/analytics', label: $t('nav.analytics'), icon: 'monitoring' }
 			]
 		}
-	];
+	]);
 
 	const isActive = (href: string) =>
 		page.url.pathname === href || page.url.pathname.startsWith(href + '/');
@@ -54,10 +56,10 @@
 			</div>
 			<div class="hidden sm:flex flex-col">
 				<span class="font-headline text-lg font-bold tracking-tight bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent">
-					AstroLogic
+					{$t('brand.name')}
 				</span>
 				<span class="font-mono-data text-[10px] uppercase tracking-widest text-on-surface-variant/70">
-					Stellar Harmonics &bull; Deterministic Divination
+					{$t('brand.subtitle')}
 				</span>
 			</div>
 		</a>
@@ -80,13 +82,16 @@
 			{/each}
 		</nav>
 
-		<div class="flex items-center gap-2.5 shrink-0">
+		<div class="flex items-center gap-2 sm:gap-3 shrink-0">
+			<!-- Language Toggle -->
+			<LanguageSwitcher />
+
 			<a
 				href="/reading"
 				class="hidden sm:inline-flex items-center gap-1.5 sm:gap-2 px-3 sm:px-4 py-1.5 sm:py-2 rounded-full bg-gradient-to-r from-primary-container via-purple-600 to-secondary-container text-white text-xs sm:text-sm font-semibold shadow-[0_0_20px_rgba(124,58,237,0.45)] hover:shadow-[0_0_28px_rgba(76,215,246,0.6)] border border-primary/30 hover:scale-[1.02] active:scale-[0.98] transition-all duration-300"
 			>
 				<span class="material-symbols-outlined text-sm sm:text-base text-secondary animate-pulse">auto_awesome</span>
-				<span>New Reading</span>
+				<span>{$t('nav.newReading')}</span>
 			</a>
 
 			<button
@@ -100,12 +105,17 @@
 	</div>
 
 	{#if mobileOpen}
-		<div class="xl:hidden border-t border-white/10 bg-surface-container-lowest/95 backdrop-blur-xl max-h-[calc(100vh-4rem)] overflow-y-auto">
+		<div class="xl:hidden border-t border-white/10 bg-surface-container-lowest/95 backdrop-blur-xl max-h-[calc(100vh-4rem)] overflow-y-auto p-2">
+			<div class="p-3 mb-2 flex items-center justify-between bg-surface-container-low/70 rounded-xl">
+				<span class="text-xs text-on-surface-variant font-medium">Language / ဘာသာစကား</span>
+				<LanguageSwitcher />
+			</div>
+
 			{#each navGroups as group}
 				{#each group.items as item}
 					<a
 						href={item.href}
-						class="flex items-center gap-3 px-4 py-3 text-sm transition-all {isActive(item.href)
+						class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {isActive(item.href)
 							? 'bg-primary-container/20 text-primary font-semibold'
 							: 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}"
 						onclick={() => (mobileOpen = false)}
@@ -117,14 +127,25 @@
 			{/each}
 			<a
 				href="/about"
-				class="flex items-center gap-3 px-4 py-3 text-sm transition-all {isActive('/about')
+				class="flex items-center gap-3 px-4 py-3 rounded-xl text-sm transition-all {isActive('/about')
 					? 'bg-primary-container/20 text-primary font-semibold'
 					: 'text-on-surface-variant hover:text-on-surface hover:bg-white/5'}"
 				onclick={() => (mobileOpen = false)}
 			>
 				<span class="material-symbols-outlined text-[18px]">info</span>
-				About
+				{$t('nav.about')}
 			</a>
+
+			<div class="mt-4 p-2">
+				<a
+					href="/reading"
+					class="w-full flex items-center justify-center gap-2 py-3 rounded-xl bg-gradient-to-r from-primary-container to-secondary-container text-white text-sm font-semibold shadow-lg"
+					onclick={() => (mobileOpen = false)}
+				>
+					<span class="material-symbols-outlined text-base">auto_awesome</span>
+					<span>{$t('nav.newReading')}</span>
+				</a>
+			</div>
 		</div>
 	{/if}
 </header>

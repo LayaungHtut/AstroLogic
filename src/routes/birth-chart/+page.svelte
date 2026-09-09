@@ -3,7 +3,10 @@
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import ElementBadge from '$lib/components/ElementBadge.svelte';
+	import NatalChartWheel from '$lib/components/NatalChartWheel.svelte';
+	import BirthChartExplanation from '$lib/components/BirthChartExplanation.svelte';
 	import type { ReasoningStep as ReasoningStepType, PlanetPosition } from '$lib/types';
+	import { locale, t, getZodiacTranslation, formatElement, formatModality, formatPlanet } from '$lib/i18n';
 
 	interface BirthChart {
 		sun_sign: string;
@@ -44,7 +47,7 @@
 
 	function useBrowserLocation() {
 		if (!navigator.geolocation) {
-			locationNote = 'Geolocation is not available in this browser.';
+			locationNote = $locale === 'my' ? 'ဤဘရောက်ဆာတွင် တည်နေရာရယူခြင်းကို အထောက်အပံ့မပေးပါ။' : 'Geolocation is not available in this browser.';
 			return;
 		}
 		locating = true;
@@ -54,36 +57,39 @@
 				latitude = Math.round(pos.coords.latitude * 10000) / 10000;
 				longitude = Math.round(pos.coords.longitude * 10000) / 10000;
 				locating = false;
-				locationNote = 'Using your current location. If you weren\'t born here, replace it with your birth coordinates.';
+				locationNote = $locale === 'my'
+					? 'သင့်လက်ရှိတည်နေရာကို အသုံးပြုထားပါသည်။ အကယ်၍ ဤနေရာတွင် မမွေးဖွားခဲ့ပါက သင့်မွေးရပ်မြေတည်နေရာကို ထည့်သွင်းပါ။'
+					: 'Using your current location. If you weren\'t born here, replace it with your birth coordinates.';
 			},
 			() => {
 				locating = false;
-				locationNote = 'Could not access location — enter coordinates manually.';
+				locationNote = $locale === 'my' ? 'တည်နေရာကို ရယူ၍မရပါ — တည်နေရာကို ကိုယ်တိုင်ထည့်သွင်းပေးပါ။' : 'Could not access location — enter coordinates manually.';
 			}
 		);
 	}
 
-	const months = [
-		{ value: 1, label: 'January' }, { value: 2, label: 'February' },
-		{ value: 3, label: 'March' }, { value: 4, label: 'April' },
-		{ value: 5, label: 'May' }, { value: 6, label: 'June' },
-		{ value: 7, label: 'July' }, { value: 8, label: 'August' },
-		{ value: 9, label: 'September' }, { value: 10, label: 'October' },
-		{ value: 11, label: 'November' }, { value: 12, label: 'December' },
-	];
+	const months = $derived([
+		{ value: 1, label: $locale === 'my' ? 'ဇန်နဝါရီ' : 'January' },
+		{ value: 2, label: $locale === 'my' ? 'ဖေဖော်ဝါရီ' : 'February' },
+		{ value: 3, label: $locale === 'my' ? 'မတ်' : 'March' },
+		{ value: 4, label: $locale === 'my' ? 'ဧပြီ' : 'April' },
+		{ value: 5, label: $locale === 'my' ? 'မေ' : 'May' },
+		{ value: 6, label: $locale === 'my' ? 'ဇွန်' : 'June' },
+		{ value: 7, label: $locale === 'my' ? 'ဇူလိုင်' : 'July' },
+		{ value: 8, label: $locale === 'my' ? 'ဩဂုတ်' : 'August' },
+		{ value: 9, label: $locale === 'my' ? 'စက်တင်ဘာ' : 'September' },
+		{ value: 10, label: $locale === 'my' ? 'အောက်တိုဘာ' : 'October' },
+		{ value: 11, label: $locale === 'my' ? 'နိုဝင်ဘာ' : 'November' },
+		{ value: 12, label: $locale === 'my' ? 'ဒီဇင်ဘာ' : 'December' },
+	]);
 
 	const hours = Array.from({ length: 24 }, (_, i) => ({
 		value: i,
 		label: `${i.toString().padStart(2, '0')}:00`
 	}));
 
-	// Fallback angles for the schematic wheel when no precise ecliptic degrees
-	// are available (approximate mode) — purely decorative in that case.
 	const WHEEL_ANGLES = { sun: -90, moon: 30, rising: 150 };
 
-	// Ecliptic longitude (0-360, 0 = Aries point) to SVG angle. The wheel's
-	// "up" (-90 deg in SVG terms) is aligned to the Ascendant so the rising
-	// sign always appears at the same on-screen position (as on a real chart).
 	function eclipticToWheelAngle(degree: number, risingDegree: number): number {
 		return degree - risingDegree - 90;
 	}
@@ -135,7 +141,7 @@
 </script>
 
 <svelte:head>
-	<title>Birth Chart - AstroLogic</title>
+	<title>{$t('chart.title')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="page-container">
@@ -143,14 +149,13 @@
 	<div class="flex flex-col gap-3 mb-10">
 		<div class="inline-flex items-center gap-2 self-start px-3 py-1 rounded-full bg-surface-container-high text-secondary font-mono-data text-[11px] uppercase tracking-widest">
 			<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
-			<span>Natal Chart Calculation</span>
+			<span>{$locale === 'my' ? 'ဇာတာခွင် တွက်ချက်မှု' : 'Natal Chart Calculation'}</span>
 		</div>
 		<h1 class="font-headline text-3xl md:text-4xl font-bold tracking-tight gradient-text">
-			Natal Ephemeris &amp; Signs
+			{$t('chart.title')}
 		</h1>
 		<p class="text-on-surface-variant max-w-2xl">
-			Calculate your Sun, Moon, Rising, and full planetary lineup (Mercury through Pluto) from your
-			birth date, time, and location using deterministic symbolic reasoning.
+			{$t('chart.subtitle')}
 		</p>
 	</div>
 
@@ -163,12 +168,16 @@
 				<div class="w-8 h-8 rounded-full bg-primary-container/30 text-primary flex items-center justify-center">
 					<span class="material-symbols-outlined text-base">tune</span>
 				</div>
-				<span class="font-headline text-lg text-on-surface">Precision Birth Inputs</span>
+				<span class="font-headline text-lg text-on-surface">
+					{$locale === 'my' ? 'မွေးဖွားချိန် အချက်အလက်များ' : 'Precision Birth Inputs'}
+				</span>
 			</div>
 
 			<div class="relative grid grid-cols-2 sm:grid-cols-4 gap-5">
 				<div class="flex flex-col gap-2">
-					<label for="month" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Month</label>
+					<label for="month" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$locale === 'my' ? 'မွေးဖွားသည့်လ' : 'Birth Month'}
+					</label>
 					<div class="relative">
 						<select
 							id="month"
@@ -184,7 +193,9 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label for="day" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Day</label>
+					<label for="day" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$locale === 'my' ? 'မွေးဖွားသည့်ရက်' : 'Birth Day'}
+					</label>
 					<input
 						id="day"
 						type="number"
@@ -196,7 +207,9 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label for="year" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Year</label>
+					<label for="year" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$locale === 'my' ? 'မွေးဖွားသည့်ခုနှစ်' : 'Birth Year'}
+					</label>
 					<input
 						id="year"
 						type="number"
@@ -208,7 +221,9 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label for="hour" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Hour</label>
+					<label for="hour" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$locale === 'my' ? 'မွေးဖွားသည့်နာရီ' : 'Birth Hour'}
+					</label>
 					<div class="relative">
 						<select
 							id="hour"
@@ -224,7 +239,9 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label for="minute" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Minute</label>
+					<label for="minute" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$locale === 'my' ? 'မွေးဖွားသည့်မိနစ်' : 'Birth Minute'}
+					</label>
 					<input
 						id="minute"
 						type="number"
@@ -236,12 +253,14 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label for="latitude" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Latitude</label>
+					<label for="latitude" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$t('chart.latitude')}
+					</label>
 					<input
 						id="latitude"
 						type="number"
 						step="0.0001"
-						placeholder="e.g. 40.7128"
+						placeholder="e.g. 16.8409"
 						value={latitude ?? ''}
 						oninput={(e) => (latitude = e.currentTarget.value === '' ? null : Number(e.currentTarget.value))}
 						min="-90"
@@ -251,12 +270,14 @@
 				</div>
 
 				<div class="flex flex-col gap-2">
-					<label for="longitude" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Birth Longitude</label>
+					<label for="longitude" class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+						{$t('chart.longitude')}
+					</label>
 					<input
 						id="longitude"
 						type="number"
 						step="0.0001"
-						placeholder="e.g. -74.0060"
+						placeholder="e.g. 96.1735"
 						value={longitude ?? ''}
 						oninput={(e) => (longitude = e.currentTarget.value === '' ? null : Number(e.currentTarget.value))}
 						min="-180"
@@ -273,7 +294,7 @@
 						class="w-full inline-flex items-center justify-center gap-2 bg-surface-container-highest hover:bg-surface-bright text-on-surface rounded-lg px-4 py-3 transition-colors disabled:opacity-60"
 					>
 						<span class="material-symbols-outlined text-lg {locating ? 'animate-spin' : ''}">{locating ? 'progress_activity' : 'my_location'}</span>
-						<span class="text-sm">Use my location</span>
+						<span class="text-sm">{$t('chart.useLocation')}</span>
 					</button>
 				</div>
 			</div>
@@ -285,24 +306,15 @@
 				</p>
 			{/if}
 
-			<p class="relative flex items-center gap-2 text-xs text-on-surface-variant/70 mt-4">
-				<span class="material-symbols-outlined text-sm text-primary">info</span>
-				{#if latitude !== null && longitude !== null}
-					Sun, Moon, Rising &amp; all eight planets (Mercury–Pluto) will be computed from real ecliptic positions (Swiss Ephemeris) using your birth date, time, and location.
-				{:else}
-					Add your birth year and coordinates above for a precise chart with the full planetary lineup. Without them, only Sun/Moon/Rising are calculated, with Moon and Rising falling back to a rough approximation.
-				{/if}
-			</p>
-
 			<button
-				class="relative mt-6 w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-primary-container via-inverse-primary to-secondary-container text-on-primary font-headline text-base font-semibold shadow-xl hover:shadow-[0_0_24px_rgba(76,215,246,0.45)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
+				class="relative mt-6 w-full inline-flex items-center justify-center gap-3 px-8 py-3.5 rounded-full bg-gradient-to-r from-primary-container via-purple-600 to-secondary-container text-white font-headline text-base font-semibold shadow-xl hover:shadow-[0_0_24px_rgba(76,215,246,0.45)] transition-all disabled:opacity-60 disabled:cursor-not-allowed"
 				onclick={calculateChart}
 				disabled={loading}
 			>
 				<span class="material-symbols-outlined text-xl {loading ? 'animate-spin' : ''}">
 					{loading ? 'progress_activity' : 'radar'}
 				</span>
-				<span>{loading ? 'Calculating...' : 'Calculate Birth Chart'}</span>
+				<span>{loading ? $t('common.loading') : $t('chart.calculate')}</span>
 			</button>
 		</div>
 
@@ -316,84 +328,33 @@
 		{/if}
 
 		{#if loading}
-			<LoadingSpinner text="Calculating your birth chart..." />
+			<LoadingSpinner text={$t('common.loading')} />
 		{/if}
 
 		{#if chart}
-			<!-- Schematic wheel -->
-			<div class="mb-10">
-				<div class="flex items-center gap-4 mb-4">
-					<h2 class="font-headline text-xl text-on-surface">Celestial Wheel</h2>
-					<div class="h-px flex-1 bg-surface-container-highest"></div>
-					<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">Schematic</span>
-				</div>
-				<div class="glass-card p-6 lg:p-8 flex flex-col items-center gap-4">
-					<svg viewBox="0 0 200 200" class="w-56 h-56 sm:w-64 sm:h-64">
-						<circle cx="100" cy="100" r="92" fill="none" stroke="var(--color-outline-variant)" stroke-width="1" opacity="0.4" />
-						<circle cx="100" cy="100" r="70" fill="none" stroke="var(--color-outline-variant)" stroke-width="1" opacity="0.3" />
-						{#each Array.from({ length: 12 }) as _, i}
-							{@const a = (i * 30 * Math.PI) / 180}
-							<line
-								x1={100 + 70 * Math.cos(a)} y1={100 + 70 * Math.sin(a)}
-								x2={100 + 92 * Math.cos(a)} y2={100 + 92 * Math.sin(a)}
-								stroke="var(--color-outline-variant)" stroke-width="1" opacity="0.4"
-							/>
-						{/each}
-
-						{#each [
-							{
-								key: 'sun', sign: chart.sun_sign, element: chart.element,
-								angle: chart.precise && chart.sun_degree !== undefined && chart.rising_degree !== undefined
-									? eclipticToWheelAngle(chart.sun_degree, chart.rising_degree)
-									: WHEEL_ANGLES.sun
-							},
-							{
-								key: 'moon', sign: chart.moon_sign, element: chart.moon_element,
-								angle: chart.precise && chart.moon_degree !== undefined && chart.rising_degree !== undefined
-									? eclipticToWheelAngle(chart.moon_degree, chart.rising_degree)
-									: WHEEL_ANGLES.moon
-							},
-							{
-								key: 'rising', sign: chart.rising_sign, element: chart.rising_element,
-								angle: chart.precise ? -90 : WHEEL_ANGLES.rising
-							}
-						] as point}
-							{@const p = wheelPoint(point.angle, 70)}
-							{@const color = getElementColor(point.element)}
-							<circle cx={p.x} cy={p.y} r="7" fill={color} fill-opacity="0.2" stroke={color} stroke-width="2" />
-							<text x={p.x} y={p.y + 3.5} text-anchor="middle" font-size="8" fill={color}>{getSignSymbol(point.sign)}</text>
-						{/each}
-
-						<!-- Mercury..Pluto, plotted at their real ecliptic degrees on an
-						     inner ring (precise mode only — no approximate fallback for these). -->
-						{#if chart.precise && chart.planets && chart.rising_degree !== undefined}
-							{#each chart.planets as planet}
-								{#if planet.degree !== undefined}
-									{@const p = wheelPoint(eclipticToWheelAngle(planet.degree, chart.rising_degree), 48)}
-									{@const color = getElementColor(planet.element)}
-									<circle cx={p.x} cy={p.y} r="5.5" fill={color} fill-opacity="0.15" stroke={color} stroke-width="1.5" />
-									<text x={p.x} y={p.y + 2.8} text-anchor="middle" font-size="6.5" fill={color}>{planet.symbol}</text>
-								{/if}
-							{/each}
-						{/if}
-
-						<circle cx="100" cy="100" r="3" fill="var(--color-secondary)" />
-					</svg>
-					<p class="font-mono-data text-[11px] text-on-surface-variant/70 text-center max-w-sm">
-						{#if chart.precise}
-							Plotted from your real Sun, Moon &amp; Ascendant ecliptic longitudes (Swiss Ephemeris).
-						{:else}
-							Schematic placement of your Sun, Moon &amp; Rising signs — a stylized representation, not exact ecliptic degrees.
-						{/if}
-					</p>
-				</div>
+			<!-- Astro-Seek Style Natal Celestial Wheel -->
+			<div class="mb-8">
+				<NatalChartWheel
+					{chart}
+					birthInfo={{ year, month, day, hour, minute, latitude, longitude }}
+				/>
 			</div>
+
+			<!-- Comprehensive Psychological & Astrological Explanation -->
+			<BirthChartExplanation
+				{chart}
+				birthInfo={{ year, month, day, hour, minute, latitude, longitude }}
+			/>
 
 			<!-- Natal Core Triad -->
 			<div class="flex items-center gap-4 mb-4">
-				<h2 class="font-headline text-xl text-on-surface">Natal Core Triad</h2>
+				<h2 class="font-headline text-xl text-on-surface">
+					{$locale === 'my' ? 'အဓိက အရေးပါသော ရာသီခွင် ၃ မျိုး' : 'Natal Core Triad'}
+				</h2>
 				<div class="h-px flex-1 bg-surface-container-highest"></div>
-				<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">Identity Pillars</span>
+				<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">
+					{$locale === 'my' ? 'ပင်မမဏ္ဍိုင်များ' : 'Identity Pillars'}
+				</span>
 			</div>
 			<div class="grid grid-cols-1 sm:grid-cols-3 gap-5 mb-10">
 				<div class="glass-card glass-card-hover relative p-6 flex flex-col overflow-hidden">
@@ -401,15 +362,17 @@
 					<div class="relative flex items-center justify-between gap-2 mb-4">
 						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
 							<span class="material-symbols-outlined text-sm text-primary">wb_sunny</span>
-							Sun Sign
+							{$t('chart.sunSign')}
 						</span>
 						<ElementBadge element={chart.element} size="sm" />
 					</div>
 					<div class="relative text-5xl mb-2" style:color="{getElementColor(chart.element)}">
 						{getSignSymbol(chart.sun_sign)}
 					</div>
-					<h3 class="relative font-headline text-xl text-on-surface font-semibold capitalize">{chart.sun_sign}</h3>
-					<p class="relative text-xs text-on-surface-variant mt-1">Core will &amp; identity</p>
+					<h3 class="relative font-headline text-xl text-on-surface font-semibold">{getZodiacTranslation(chart.sun_sign, $locale).name || chart.sun_sign}</h3>
+					<p class="relative text-xs text-on-surface-variant mt-1">
+						{$locale === 'my' ? 'ပင်ကိုစရိုက်နှင့် စိတ်စွမ်းအား' : 'Core will & identity'}
+					</p>
 				</div>
 
 				<div class="glass-card glass-card-hover relative p-6 flex flex-col overflow-hidden">
@@ -417,15 +380,17 @@
 					<div class="relative flex items-center justify-between gap-2 mb-4">
 						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
 							<span class="material-symbols-outlined text-sm text-secondary">bedtime</span>
-							Moon Sign
+							{$t('chart.moonSign')}
 						</span>
 						<ElementBadge element={chart.moon_element} size="sm" />
 					</div>
 					<div class="relative text-5xl mb-2" style:color="{getElementColor(chart.moon_element)}">
 						{getSignSymbol(chart.moon_sign)}
 					</div>
-					<h3 class="relative font-headline text-xl text-on-surface font-semibold capitalize">{chart.moon_sign}</h3>
-					<p class="relative text-xs text-on-surface-variant mt-1">Subconscious &amp; emotion</p>
+					<h3 class="relative font-headline text-xl text-on-surface font-semibold">{getZodiacTranslation(chart.moon_sign, $locale).name || chart.moon_sign}</h3>
+					<p class="relative text-xs text-on-surface-variant mt-1">
+						{$locale === 'my' ? 'မသိစိတ်နှင့် စိတ်ခံစားမှု' : 'Subconscious & emotion'}
+					</p>
 				</div>
 
 				<div class="glass-card glass-card-hover relative p-6 flex flex-col overflow-hidden">
@@ -433,31 +398,38 @@
 					<div class="relative flex items-center justify-between gap-2 mb-4">
 						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider flex items-center gap-1.5">
 							<span class="material-symbols-outlined text-sm text-tertiary">north_east</span>
-							Rising Sign
+							{$t('chart.risingSign')}
 						</span>
 						<ElementBadge element={chart.rising_element} size="sm" />
 					</div>
 					<div class="relative text-5xl mb-2" style:color="{getElementColor(chart.rising_element)}">
 						{getSignSymbol(chart.rising_sign)}
 					</div>
-					<h3 class="relative font-headline text-xl text-on-surface font-semibold capitalize">{chart.rising_sign}</h3>
-					<p class="relative text-xs text-on-surface-variant mt-1">Ascendant mask</p>
+					<h3 class="relative font-headline text-xl text-on-surface font-semibold">{getZodiacTranslation(chart.rising_sign, $locale).name || chart.rising_sign}</h3>
+					<p class="relative text-xs text-on-surface-variant mt-1">
+						{$locale === 'my' ? 'အပြင်ပန်းပုံရိပ်နှင့် မျက်နှာဖုံး' : 'Ascendant mask'}
+					</p>
 				</div>
 			</div>
 
 			<!-- Full Planetary Lineup -->
 			{#if chart.planets && chart.planets.length > 0}
 				<div class="flex items-center gap-4 mb-4">
-					<h2 class="font-headline text-xl text-on-surface">Full Planetary Lineup</h2>
+					<h2 class="font-headline text-xl text-on-surface">{$t('chart.placements')}</h2>
 					<div class="h-px flex-1 bg-surface-container-highest"></div>
-					<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">Mercury – Pluto</span>
+					<span class="font-mono-data text-[11px] text-on-surface-variant uppercase">
+						{$locale === 'my' ? 'ဂြိုဟ် ၁၀ လုံး အနေအထား' : 'Planetary Lineup'}
+					</span>
 				</div>
 				<div class="grid grid-cols-2 sm:grid-cols-4 gap-4 mb-10">
 					{#each chart.planets as planet}
+						{@const pSignTrans = getZodiacTranslation(planet.sign, $locale)}
 						<div class="glass-card glass-card-hover relative p-4 flex flex-col overflow-hidden">
 							<div class="absolute -top-10 -right-10 w-24 h-24 rounded-full blur-2xl pointer-events-none" style:background-color="{getElementColor(planet.element)}20"></div>
 							<div class="relative flex items-center justify-between gap-2 mb-2">
-								<span class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider capitalize">{planet.name}</span>
+								<span class="font-mono-data text-[10px] text-on-surface-variant uppercase tracking-wider font-semibold">
+									{formatPlanet(planet.name, $locale)}
+								</span>
 								{#if planet.retrograde}
 									<span class="font-mono-data text-[9px] text-tertiary" title="Retrograde">℞</span>
 								{/if}
@@ -465,8 +437,8 @@
 							<div class="relative text-3xl mb-1" style:color="{getElementColor(planet.element)}">
 								{getSignSymbol(planet.sign)}
 							</div>
-							<h4 class="relative font-headline text-sm text-on-surface font-semibold capitalize">{planet.sign}</h4>
-							<p class="relative text-[11px] text-on-surface-variant/80 mt-1 capitalize">{planet.element} · {planet.modality}</p>
+							<h4 class="relative font-headline text-sm text-on-surface font-semibold">{pSignTrans.name || planet.sign}</h4>
+							<p class="relative text-[11px] text-on-surface-variant/80 mt-1">{formatElement(planet.element, $locale)} · {formatModality(planet.modality, $locale)}</p>
 						</div>
 					{/each}
 				</div>
@@ -474,62 +446,52 @@
 
 			<!-- Profile Details -->
 			<div class="glass-card p-6 lg:p-8 mb-8">
-				<h3 class="font-headline text-lg text-on-surface mb-5">Your Profile</h3>
+				<h3 class="font-headline text-lg text-on-surface mb-5">
+					{$locale === 'my' ? 'သင့်ရာသီခွင် အသေးစိတ်အချက်အလက်များ' : 'Your Profile'}
+				</h3>
 
 				<div class="grid grid-cols-2 gap-3 mb-5 bg-surface-container-lowest/60 p-4 rounded-xl">
 					<div class="flex flex-col">
-						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Modality</span>
-						<span class="text-on-surface font-medium capitalize">{chart.modality}</span>
+						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+							{$t('zodiac.modality')}
+						</span>
+						<span class="text-on-surface font-medium capitalize">{formatModality(chart.modality, $locale)}</span>
 					</div>
 					<div class="flex flex-col">
-						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">Ruling Planet</span>
-						<span class="text-on-surface font-medium capitalize">{chart.ruling_planet}</span>
+						<span class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider">
+							{$t('zodiac.ruler')}
+						</span>
+						<span class="text-on-surface font-medium capitalize">{formatPlanet(chart.ruling_planet, $locale)}</span>
 					</div>
 				</div>
 
 				{#if chart.personality_style}
 					<div class="mb-4 border-b border-white/5 pb-4">
-						<div class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">Personality Style</div>
+						<div class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">
+							{$locale === 'my' ? 'ကိုယ်ရည်ကိုယ်သွေးဟန်' : 'Personality Style'}
+						</div>
 						<div class="text-sm text-on-surface/90">{chart.personality_style}</div>
 					</div>
 				{/if}
 
 				{#if chart.approach_to_life}
 					<div class="mb-4 border-b border-white/5 pb-4">
-						<div class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">Approach to Life</div>
+						<div class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">
+							{$locale === 'my' ? 'ဘဝကို ချဉ်းကပ်ပုံ' : 'Approach to Life'}
+						</div>
 						<div class="text-sm text-on-surface/90">{chart.approach_to_life}</div>
 					</div>
 				{/if}
 
 				{#if chart.planetary_influence}
 					<div>
-						<div class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">Planetary Influence</div>
+						<div class="font-mono-data text-[11px] text-on-surface-variant uppercase tracking-wider mb-1">
+							{$locale === 'my' ? 'ဂြိုဟ်လွှမ်းမိုးမှုစွမ်းအား' : 'Planetary Influence'}
+						</div>
 						<div class="text-sm text-on-surface/90">{chart.planetary_influence}</div>
 					</div>
 				{/if}
 			</div>
-
-			{#if chart.traits && chart.traits.length > 0}
-				<div class="glass-card p-6 lg:p-8 mb-8">
-					<h3 class="font-mono-data text-xs text-on-surface-variant uppercase tracking-wider mb-4">Symbolic Traits</h3>
-					<div class="flex flex-wrap gap-2">
-						{#each chart.traits as trait}
-							<span class="px-3 py-1 rounded-md bg-surface-container text-on-surface-variant font-mono-data text-xs capitalize">
-								{String(trait).replace(/_/g, ' ')}
-							</span>
-						{/each}
-					</div>
-				</div>
-			{/if}
-
-			{#if chart.note}
-				<div class="glass-card p-4 mb-8 border-tertiary/30 bg-tertiary-container/10">
-					<p class="text-tertiary text-xs flex items-start gap-2">
-						<span class="material-symbols-outlined text-base">warning</span>
-						{chart.note}
-					</p>
-				</div>
-			{/if}
 
 			{#if reasoning.length > 0}
 				<div class="bg-surface-container-lowest/80 rounded-2xl p-6 lg:p-8 shadow-xl">

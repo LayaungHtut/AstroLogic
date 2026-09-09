@@ -8,6 +8,17 @@
 	import ElementBadge from '$lib/components/ElementBadge.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
+	import {
+		locale,
+		t,
+		getZodiacTranslation,
+		formatElement,
+		formatModality,
+		formatPlanet,
+		formatPersonalityStyle,
+		formatApproachToLife,
+		formatPlanetaryInfluence
+	} from '$lib/i18n';
 
 	let signs = $state<ZodiacInfo[]>([]);
 	let selected = $state<string>('');
@@ -82,7 +93,7 @@
 </script>
 
 <svelte:head>
-	<title>Zodiac Explorer - AstroLogic</title>
+	<title>{$t('zodiac.title')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="page-container">
@@ -99,16 +110,15 @@
 				class="inline-flex items-center gap-2 px-3 py-1 mb-4 rounded-full bg-surface-container-high/80 text-secondary font-mono-data text-[10px] tracking-widest uppercase"
 			>
 				<span class="w-1.5 h-1.5 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6]"></span>
-				<span>Ecliptic Coordinate System • Ephemeris Matrix 360°</span>
+				<span>{$t('landing.statZodiacCovered')} • Ephemeris Matrix 360°</span>
 			</div>
 			<h1
 				class="font-headline text-3xl md:text-4xl font-bold tracking-tight bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent mb-3"
 			>
-				Celestial Zodiac Observatory
+				{$t('zodiac.title')}
 			</h1>
 			<p class="text-on-surface-variant max-w-2xl leading-relaxed">
-				Explore the twelve archetypal stations of the ecliptic, their planetary rulers and
-				elemental dynamics. Select a sign below to reveal its full profile.
+				{$t('zodiac.subtitle')}
 			</p>
 		</div>
 
@@ -120,7 +130,7 @@
 					: 'bg-surface-container-high/60 text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest'}"
 				onclick={() => (elementFilter = 'all')}
 			>
-				All ({signs.length})
+				{$t('common.all')} ({signs.length})
 			</button>
 			{#each ELEMENTS as el}
 				<button
@@ -130,17 +140,18 @@
 					onclick={() => (elementFilter = el)}
 				>
 					<span class="w-2 h-2 rounded-full" style:background-color={ELEMENT_COLORS[el]}></span>
-					{el} Signs ({elementCount(el)})
+					{formatElement(el, $locale)} ({elementCount(el)})
 				</button>
 			{/each}
 		</div>
 	</div>
 
 	{#if loading}
-		<LoadingSpinner text="Loading zodiac data..." />
+		<LoadingSpinner text={$t('common.loading')} />
 	{:else}
 		<!-- Selected Sign Focal Module -->
 		{#if selectedInfo}
+			{@const zData = getZodiacTranslation(selectedInfo.sign, $locale)}
 			{@const accent = ELEMENT_COLORS[selectedInfo.element] || '#9333ea'}
 			<section
 				class="relative w-full rounded-2xl overflow-hidden bg-surface-container-lowest/90 backdrop-blur-2xl shadow-2xl mb-12 group"
@@ -187,7 +198,7 @@
 						</div>
 						<div class="mt-4 flex items-center gap-2 font-mono-data text-xs text-secondary">
 							<span class="material-symbols-outlined text-[16px]">explore</span>
-							<span>{selectedInfo.date_range}</span>
+							<span>{zData.dateRange || selectedInfo.date_range}</span>
 						</div>
 					</div>
 
@@ -199,45 +210,45 @@
 								<span
 									class="px-3 py-1 rounded-full font-mono-data text-[10px] uppercase tracking-widest bg-surface-container-high text-tertiary capitalize"
 								>
-									{selectedInfo.modality} Modality
+									{formatModality(selectedInfo.modality, $locale)}
 								</span>
 							</div>
 							<div class="font-mono-data text-xs text-on-surface-variant flex items-center gap-1.5">
 								<span class="material-symbols-outlined text-[16px] text-secondary">calendar_today</span>
-								<span>{selectedInfo.date_range}</span>
+								<span>{zData.dateRange || selectedInfo.date_range}</span>
 							</div>
 						</div>
 
 						<div>
 							<div class="font-mono-data text-[10px] tracking-widest uppercase text-secondary mb-1">
-								Active Station
+								{$t('zodiac.activeStation')}
 							</div>
 							<h2 class="font-headline text-2xl md:text-3xl text-on-surface tracking-tight capitalize">
-								{selectedInfo.sign}
+								{zData.name}
 							</h2>
 						</div>
 
 						<!-- Metric Cards -->
 						<div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
 							<div class="p-4 rounded-xl bg-surface-container-high/60 backdrop-blur-md">
-								<div class="font-mono-data text-[11px] text-on-surface-variant">Ruling Planet</div>
+								<div class="font-mono-data text-[11px] text-on-surface-variant">{$t('zodiac.ruler')}</div>
 								<div class="text-lg font-headline text-primary mt-1 flex items-center gap-1.5 capitalize">
 									<span class="material-symbols-outlined text-[18px]">shield</span>
-									<span>{selectedInfo.ruling_planet}</span>
+									<span>{formatPlanet(selectedInfo.ruling_planet, $locale)}</span>
 								</div>
 							</div>
 							<div class="p-4 rounded-xl bg-surface-container-high/60 backdrop-blur-md">
-								<div class="font-mono-data text-[11px] text-on-surface-variant">Element</div>
+								<div class="font-mono-data text-[11px] text-on-surface-variant">{$t('zodiac.element')}</div>
 								<div class="text-lg font-headline text-secondary mt-1 flex items-center gap-1.5 capitalize">
 									<span>{ELEMENT_ICONS[selectedInfo.element]}</span>
-									<span>{selectedInfo.element}</span>
+									<span>{formatElement(selectedInfo.element, $locale)}</span>
 								</div>
 							</div>
 						</div>
 
 						<!-- Traits -->
 						<div class="flex flex-wrap items-center gap-2 pt-2">
-							{#each selectedInfo.traits as trait}
+							{#each (zData.traits.length > 0 ? zData.traits : selectedInfo.traits) as trait}
 								<span
 									class="px-3 py-1 rounded-full font-mono-data text-[10px] uppercase tracking-wider bg-surface-container text-on-surface"
 								>
@@ -247,20 +258,13 @@
 						</div>
 
 						<div class="pt-2 flex flex-wrap gap-3">
-							<a
-								href="/reading"
-								class="btn-primary inline-flex items-center gap-2.5"
-							>
-								<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
-								<span>Get a Reading for {selectedInfo.sign}</span>
-							</a>
 							<button
 								type="button"
-								class="inline-flex items-center gap-2.5 px-5 py-2.5 rounded-full font-mono-data text-xs uppercase tracking-wider bg-surface-container-high text-on-surface hover:bg-surface-container-highest transition-colors"
+								class="btn-primary inline-flex items-center gap-2.5"
 								onclick={() => (profileOpen && profileResult ? (profileOpen = false) : loadProfile(selectedInfo!.sign))}
 							>
 								<span class="material-symbols-outlined text-[18px]">psychology</span>
-								<span>{profileOpen && profileResult ? 'Hide Reasoning' : 'Why Am I Like This?'}</span>
+								<span>{profileOpen && profileResult ? $t('zodiac.hideReasoning') : $t('zodiac.whyAmILikeThis')}</span>
 							</button>
 						</div>
 					</div>
@@ -269,32 +273,32 @@
 				{#if profileOpen}
 					<div class="relative z-10 px-6 lg:px-10 pb-8 -mt-2">
 						{#if profileLoading}
-							<LoadingSpinner text="Tracing the reasoning chain..." />
+							<LoadingSpinner text={$locale === 'my' ? 'ကျိုးကြောင်းဆင်ခြင်မှု အဆင့်ဆင့်ကို တွက်ချက်နေသည်...' : 'Tracing the reasoning chain...'} />
 						{:else if profileError}
 							<div class="p-4 rounded-xl bg-error-container/10 text-error text-sm">{profileError}</div>
 						{:else if profileResult}
 							<div class="rounded-2xl bg-surface-container-lowest/80 backdrop-blur-md shadow-xl p-6 lg:p-8">
 								<h3 class="font-headline text-lg text-on-surface mb-4 flex items-center gap-2">
 									<span class="material-symbols-outlined text-primary">psychology</span>
-									Why You're {profileResult.profile.sign.charAt(0).toUpperCase() + profileResult.profile.sign.slice(1)}
+									{$locale === 'my' ? `${zData.name} ${$t('zodiac.whyYouAre')}` : `${$t('zodiac.whyYouAre')} ${zData.name}`}
 								</h3>
 								<div class="grid grid-cols-1 md:grid-cols-3 gap-4 mb-6">
 									<div class="p-4 rounded-xl bg-surface-container-high/60">
-										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">Personality Style</div>
-										<p class="text-sm text-on-surface/90">{profileResult.profile.personality_style}</p>
+										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">{$t('zodiac.personalityStyle')}</div>
+										<p class="text-sm text-on-surface/90">{formatPersonalityStyle(profileResult.profile.personality_style, selectedInfo.element, $locale)}</p>
 									</div>
 									<div class="p-4 rounded-xl bg-surface-container-high/60">
-										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">Approach to Life</div>
-										<p class="text-sm text-on-surface/90">{profileResult.profile.approach_to_life}</p>
+										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">{$t('zodiac.approachToLife')}</div>
+										<p class="text-sm text-on-surface/90">{formatApproachToLife(profileResult.profile.approach_to_life, selectedInfo.modality, $locale)}</p>
 									</div>
 									<div class="p-4 rounded-xl bg-surface-container-high/60">
-										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">Planetary Influence</div>
-										<p class="text-sm text-on-surface/90">{profileResult.profile.planetary_influence}</p>
+										<div class="font-mono-data text-[11px] text-secondary uppercase tracking-wider mb-1">{$t('zodiac.planetaryInfluence')}</div>
+										<p class="text-sm text-on-surface/90">{formatPlanetaryInfluence(profileResult.profile.planetary_influence, selectedInfo.ruling_planet, $locale)}</p>
 									</div>
 								</div>
 								<div class="flex items-center gap-2.5 pb-3 mb-3 border-b border-outline-variant/20">
 									<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6] animate-pulse"></span>
-									<span class="font-mono-data text-xs text-secondary tracking-widest uppercase">Prolog Reasoning Chain</span>
+									<span class="font-mono-data text-xs text-secondary tracking-widest uppercase">{$t('zodiac.prologChain')}</span>
 								</div>
 								<div class="space-y-2">
 									{#each profileResult.reasoning as step, i}
@@ -312,23 +316,24 @@
 		<div class="flex items-center justify-between mb-6">
 			<div>
 				<div class="font-mono-data text-[10px] uppercase text-secondary tracking-widest mb-1">
-					Geometric Ephemeris
+					{$t('landing.twelveModalities')}
 				</div>
 				<h2 class="font-headline text-xl md:text-2xl text-on-surface tracking-tight">
-					The Twelve Astrological Spheres
+					{$t('zodiac.spheres')}
 				</h2>
 			</div>
 			<div
 				class="hidden sm:flex items-center gap-2 font-mono-data text-xs text-on-surface-variant bg-surface-container-high px-3 py-1.5 rounded-full"
 			>
 				<span class="material-symbols-outlined text-[16px] text-secondary">tune</span>
-				<span>Showing {filteredSigns.length} of {signs.length} Archetypes</span>
+				<span>{$locale === 'my' ? `ရာသီခွင် ${signs.length} ခုအနက် ${filteredSigns.length} ခု ပြသနေသည်` : `${$t('zodiac.showing')} ${filteredSigns.length} ${$t('zodiac.of')} ${signs.length} ${$t('zodiac.archetypes')}`}</span>
 			</div>
 		</div>
 
 		<!-- Zodiac Grid -->
 		<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
 			{#each filteredSigns as sign, i}
+				{@const cardZData = getZodiacTranslation(sign.sign, $locale)}
 				{@const accent = ELEMENT_COLORS[sign.element] || '#9333ea'}
 				{@const isSelected = selected === sign.sign}
 				<button
@@ -358,12 +363,12 @@
 									style:background-color="{accent}20"
 									style:color={accent}
 								>
-									{sign.element}
+									{formatElement(sign.element, $locale)}
 								</span>
 								<span
 									class="px-2.5 py-0.5 rounded-full font-mono-data text-[10px] uppercase bg-surface-container-highest text-on-surface-variant capitalize"
 								>
-									{sign.modality}
+									{formatModality(sign.modality, $locale)}
 								</span>
 							</div>
 						</div>
@@ -373,15 +378,15 @@
 									? 'text-primary font-semibold'
 									: ''}"
 							>
-								{sign.sign}
+								{cardZData.name}
 							</h3>
-							<div class="font-mono-data text-xs text-secondary mt-1">{sign.date_range}</div>
+							<div class="font-mono-data text-xs text-secondary mt-1">{cardZData.dateRange || sign.date_range}</div>
 						</div>
 					</div>
 					<div class="pt-4 border-t border-outline-variant/20 flex flex-col gap-2 font-mono-data text-xs">
 						<div class="flex justify-between items-center text-on-surface-variant">
-							<span>Ruler</span>
-							<span class="text-on-surface font-medium capitalize">{sign.ruling_planet}</span>
+							<span>{$t('zodiac.rulerLabel')}</span>
+							<span class="text-on-surface font-medium capitalize">{formatPlanet(sign.ruling_planet, $locale)}</span>
 						</div>
 					</div>
 				</button>

@@ -7,6 +7,7 @@
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { getApproachTips, type ApproachTips } from '$lib/utils/compatibilityTips';
+	import { locale, t, getZodiacTranslation, formatElement, formatModality } from '$lib/i18n';
 
 	let sign1 = $state('aries');
 	let sign2 = $state('libra');
@@ -39,7 +40,7 @@
 		}
 	}
 
-	const tips = $derived(result ? getApproachTips(result.sign1, result.sign2) : null);
+	const tips = $derived(result ? getApproachTips(result.sign1, result.sign2, $locale) : null);
 
 	function elementOf(sign: string): string {
 		const map: Record<string, string> = {
@@ -58,12 +59,12 @@
 		low: 'text-error',
 	};
 
-	const levelDescriptions: Record<string, string> = {
-		high: 'Strong symbolic harmony',
-		moderate: 'Balanced potential',
-		medium: 'Moderate compatibility',
-		low: 'Challenging but growth-oriented',
-	};
+	const levelDescriptions = $derived<Record<string, string>>({
+		high: $locale === 'my' ? 'သင်္ကေတအရ အလွန်သဟဇာတဖြစ်သည်' : 'Strong symbolic harmony',
+		moderate: $locale === 'my' ? 'မျှတပြီး အလားအလာကောင်းသည်' : 'Balanced potential',
+		medium: $locale === 'my' ? 'သင့်တင့်သော လိုက်ဖက်ညီမှုရှိသည်' : 'Moderate compatibility',
+		low: $locale === 'my' ? 'စိန်ခေါ်မှုများရှိသော်လည်း သင်ယူတိုးတက်နိုင်သည်' : 'Challenging but growth-oriented',
+	});
 
 	async function analyze() {
 		loading = true;
@@ -72,6 +73,7 @@
 		synastryError = '';
 		try {
 			result = await analyzeCompatibility(sign1, sign2);
+			loadSynastry();
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Failed to analyze compatibility';
 		} finally {
@@ -81,7 +83,7 @@
 </script>
 
 <svelte:head>
-	<title>Compatibility - AstroLogic</title>
+	<title>{$t('synastry.title')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="page-container">
@@ -92,28 +94,28 @@
 		<div class="relative z-10 mb-6">
 			<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/90 text-secondary text-[10px] font-semibold uppercase tracking-widest mb-3">
 				<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
-				Symbolic Compatibility Engine
+				{$t('landing.prologEngine')}
 			</div>
 			<h1 class="font-headline text-2xl sm:text-3xl text-on-surface tracking-tight">
-				Zodiac <span class="gradient-text">Compatibility</span> Matrix
+				{$t('synastry.title')}
 			</h1>
 			<p class="text-on-surface-variant mt-2 max-w-2xl">
-				Evaluate symbolic harmony, elemental resonance, and modality dynamics between two zodiac signs.
+				{$t('synastry.subtitle')}
 			</p>
 		</div>
 
 		<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 items-center gap-6">
 			<div class="lg:col-span-5 bg-surface-container/60 hover:bg-surface-container/80 transition-all duration-300 rounded-2xl p-6 relative shadow-lg">
 				<div class="absolute top-4 right-4">
-					<span class="text-[10px] font-semibold uppercase px-2.5 py-1 rounded-full bg-surface-container-highest text-primary-fixed-dim">Person 1</span>
+					<span class="text-[10px] font-semibold uppercase px-2.5 py-1 rounded-full bg-surface-container-highest text-primary-fixed-dim">{$t('synastry.person1')}</span>
 				</div>
 				<div class="flex items-center gap-4 mb-4">
 					<ZodiacBadge sign={sign1} size="lg" />
 					<div class="min-w-0">
-						<label for="sign1" class="block text-xs text-on-surface-variant uppercase tracking-wide mb-1.5">Select Sign</label>
+						<label for="sign1" class="block text-xs text-on-surface-variant uppercase tracking-wide mb-1.5">{$t('synastry.selectSign')}</label>
 						<select id="sign1" bind:value={sign1} class="input-field capitalize">
 							{#each ZODIAC_SIGNS as sign}
-								<option value={sign}>{ZODIAC_SYMBOLS[sign]} {sign}</option>
+								<option value={sign}>{ZODIAC_SYMBOLS[sign]} {getZodiacTranslation(sign, $locale).name}</option>
 							{/each}
 						</select>
 					</div>
@@ -130,20 +132,20 @@
 				<div class="relative z-10 w-16 h-16 rounded-full bg-linear-to-br from-primary-container via-surface-container-lowest to-secondary-container p-1 shadow-[0_0_25px_rgba(76,215,246,0.35)] flex items-center justify-center">
 					<span class="material-symbols-outlined text-2xl text-on-surface">favorite</span>
 				</div>
-				<span class="relative z-10 mt-2 text-[10px] uppercase tracking-widest text-on-surface-variant">Synastry</span>
+				<span class="relative z-10 mt-2 text-[10px] uppercase tracking-widest text-on-surface-variant">{$t('nav.synastry')}</span>
 			</div>
 
 			<div class="lg:col-span-5 bg-surface-container/60 hover:bg-surface-container/80 transition-all duration-300 rounded-2xl p-6 relative shadow-lg">
 				<div class="absolute top-4 right-4">
-					<span class="text-[10px] font-semibold uppercase px-2.5 py-1 rounded-full bg-surface-container-highest text-secondary-fixed">Person 2</span>
+					<span class="text-[10px] font-semibold uppercase px-2.5 py-1 rounded-full bg-surface-container-highest text-secondary-fixed">{$t('synastry.person2')}</span>
 				</div>
 				<div class="flex items-center gap-4 mb-4">
 					<ZodiacBadge sign={sign2} size="lg" />
 					<div class="min-w-0">
-						<label for="sign2" class="block text-xs text-on-surface-variant uppercase tracking-wide mb-1.5">Select Sign</label>
+						<label for="sign2" class="block text-xs text-on-surface-variant uppercase tracking-wide mb-1.5">{$t('synastry.selectSign')}</label>
 						<select id="sign2" bind:value={sign2} class="input-field capitalize">
 							{#each ZODIAC_SIGNS as sign}
-								<option value={sign}>{ZODIAC_SYMBOLS[sign]} {sign}</option>
+								<option value={sign}>{ZODIAC_SYMBOLS[sign]} {getZodiacTranslation(sign, $locale).name}</option>
 							{/each}
 						</select>
 					</div>
@@ -164,11 +166,11 @@
 				disabled={loading}
 			>
 				<span class="material-symbols-outlined text-lg" class:animate-spin={loading}>autorenew</span>
-				<span>{loading ? 'Analyzing...' : 'Analyze Compatibility'}</span>
+				<span>{loading ? $t('synastry.analyzing') : $t('synastry.analyze')}</span>
 			</button>
 
 			{#if loading}
-				<LoadingSpinner text="Consulting symbolic connections..." />
+				<LoadingSpinner text={$t('synastry.consultingConnections')} />
 			{/if}
 		</div>
 	</div>
@@ -182,7 +184,7 @@
 						<span class="material-symbols-outlined text-xl">all_inclusive</span>
 					</div>
 					<div>
-						<p class="text-[10px] uppercase text-on-surface-variant tracking-wider">Classification Status</p>
+						<p class="text-[10px] uppercase text-on-surface-variant tracking-wider">{$t('synastry.classificationStatus')}</p>
 						<p class="font-headline text-lg {levelColors[result.level] || 'text-on-surface'}">
 							{(result.level || 'medium').toUpperCase()} &bull; {levelDescriptions[result.level] || ''}
 						</p>
@@ -201,12 +203,12 @@
 					<div class="rounded-2xl bg-surface-container/70 backdrop-blur-md p-6 shadow-xl">
 						<div class="flex items-center gap-2 mb-4">
 							<span class="material-symbols-outlined text-primary text-xl">water_drop</span>
-							<h3 class="font-headline text-lg text-on-surface">Element &amp; Modality Matrix</h3>
+							<h3 class="font-headline text-lg text-on-surface">{$t('synastry.elementModalityMatrix')}</h3>
 						</div>
 
 						<div class="grid grid-cols-2 gap-4 mb-6">
 							<div class="text-center p-4 rounded-xl bg-surface-container-lowest/60">
-								<div class="text-[10px] uppercase text-on-surface-variant mb-2 tracking-wider">Elements</div>
+								<div class="text-[10px] uppercase text-on-surface-variant mb-2 tracking-wider">{$t('synastry.elements')}</div>
 								<div class="flex items-center justify-center gap-2 flex-wrap">
 									<ElementBadge element={result.element1} size="sm" />
 									<span class="text-on-surface-variant text-xs">&amp;</span>
@@ -214,15 +216,15 @@
 								</div>
 							</div>
 							<div class="text-center p-4 rounded-xl bg-surface-container-lowest/60">
-								<div class="text-[10px] uppercase text-on-surface-variant mb-2 tracking-wider">Modalities</div>
+								<div class="text-[10px] uppercase text-on-surface-variant mb-2 tracking-wider">{$t('synastry.modalities')}</div>
 								<div class="font-medium capitalize text-on-surface font-mono-data text-sm">
-									{result.modality1} &amp; {result.modality2}
+									{formatModality(result.modality1, $locale)} &amp; {formatModality(result.modality2, $locale)}
 								</div>
 							</div>
 						</div>
 
 						<div class="p-4 rounded-xl bg-surface-container-lowest/60">
-							<h4 class="text-sm font-semibold text-primary mb-2">Element Relationship</h4>
+							<h4 class="text-sm font-semibold text-primary mb-2">{$t('synastry.elementRelationship')}</h4>
 							<p class="text-on-surface-variant text-sm leading-relaxed">{result.element_description}</p>
 						</div>
 					</div>
@@ -236,7 +238,7 @@
 								<div class="flex items-center gap-2">
 									<span class="w-2.5 h-2.5 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6] animate-pulse"></span>
 									<span class="font-mono-data text-xs text-secondary uppercase font-semibold tracking-wider">
-										Prolog Symbolic Inference
+										{$t('synastry.prologInference')}
 									</span>
 								</div>
 							</div>
@@ -247,14 +249,18 @@
 							</div>
 						</div>
 					{/if}
+				</div>
+			</div>
 
-					{#if tips}
-						<!-- Crush Tips Section -->
-						<div class="rounded-2xl bg-surface-container-lowest/90 backdrop-blur-md p-6 shadow-2xl">
+			<!-- Full-Width 2-Column Section: How to Win Their Heart & Synastry Deep Dive -->
+			<div class="grid grid-cols-1 lg:grid-cols-2 gap-6 items-start w-full">
+				{#if tips}
+					<!-- Crush Tips Section (Left Column) -->
+					<div class="rounded-2xl bg-surface-container-lowest/90 backdrop-blur-md p-6 shadow-2xl">
 							<div class="flex items-center gap-2 mb-4">
 								<span class="material-symbols-outlined text-primary text-xl">favorite</span>
 								<h3 class="font-headline text-lg text-on-surface">
-									How to Win Over <span class="capitalize">{result.sign2}</span>
+									{$locale === 'my' ? `${getZodiacTranslation(result.sign2, $locale).name}${$t('synastry.howToWinOver')}` : `${$t('synastry.howToWinOver')} ${getZodiacTranslation(result.sign2, $locale).name}`}
 								</h3>
 							</div>
 
@@ -267,7 +273,7 @@
 										{activeTipTab === 'approach' ? 'bg-primary-container text-primary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}"
 								>
 									<span class="material-symbols-outlined text-sm">explore</span>
-									Approach
+									{$t('synastry.tabApproach')}
 								</button>
 								<button
 									type="button"
@@ -276,7 +282,7 @@
 										{activeTipTab === 'say' ? 'bg-secondary-container text-secondary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}"
 								>
 									<span class="material-symbols-outlined text-sm">chat</span>
-									What to Say
+									{$t('synastry.tabSay')}
 								</button>
 								<button
 									type="button"
@@ -285,7 +291,7 @@
 										{activeTipTab === 'dates' ? 'bg-tertiary-container text-tertiary shadow-sm' : 'text-on-surface-variant hover:bg-surface-container-high'}"
 								>
 									<span class="material-symbols-outlined text-sm">event</span>
-									Date Ideas
+									{$t('synastry.tabDates')}
 								</button>
 							</div>
 
@@ -297,7 +303,7 @@
 											<span class="material-symbols-outlined text-lg">north_east</span>
 										</div>
 										<div>
-											<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">First Move</span>
+											<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">{$t('synastry.firstMove')}</span>
 											<p class="text-sm text-on-surface mt-0.5">{tips.approach.firstMove}</p>
 										</div>
 									</div>
@@ -306,7 +312,7 @@
 											<span class="material-symbols-outlined text-lg">location_on</span>
 										</div>
 										<div>
-											<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Best Setting</span>
+											<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">{$t('synastry.setting')}</span>
 											<p class="text-sm text-on-surface mt-0.5">{tips.approach.setting}</p>
 										</div>
 									</div>
@@ -315,7 +321,7 @@
 											<span class="material-symbols-outlined text-lg">spa</span>
 										</div>
 										<div>
-											<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Right Vibe</span>
+											<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">{$t('synastry.vibe')}</span>
 											<p class="text-sm text-on-surface mt-0.5">{tips.approach.vibe}</p>
 										</div>
 									</div>
@@ -324,13 +330,13 @@
 											<span class="material-symbols-outlined text-lg">block</span>
 										</div>
 										<div>
-											<span class="text-[10px] uppercase tracking-wider text-error">Avoid</span>
+											<span class="text-[10px] uppercase tracking-wider text-error">{$t('synastry.avoid')}</span>
 											<p class="text-sm text-on-surface mt-0.5">{tips.approach.avoid}</p>
 										</div>
 									</div>
 									{#if tips.intimacyTip}
 										<div class="mt-2 rounded-xl bg-primary-container/10 p-3.5 border border-primary/20">
-											<span class="text-[10px] uppercase tracking-wider text-primary font-semibold">Building Trust</span>
+											<span class="text-[10px] uppercase tracking-wider text-primary font-semibold">{$t('synastry.buildingTrust')}</span>
 											<p class="text-sm text-on-surface mt-1">{tips.intimacyTip}</p>
 										</div>
 									{/if}
@@ -338,7 +344,9 @@
 							{:else if activeTipTab === 'say'}
 								<div class="space-y-3">
 									<p class="text-sm text-on-surface-variant mb-3">
-										Here are some conversation starters that resonate with <span class="capitalize font-medium text-on-surface">{result.sign2}</span>:
+										{$locale === 'my'
+											? `${getZodiacTranslation(result.sign2, $locale).name} နှင့် စကားပြောဆိုရာတွင် စိတ်ဝင်စားစေမည့် အကြောင်းအရာများ -`
+											: `Here are some conversation starters that resonate with ${getZodiacTranslation(result.sign2, $locale).name}:`}
 									</p>
 									{#each tips.conversationStarters as starter, i}
 										<div class="flex items-start gap-3 rounded-xl bg-surface-container-high/60 p-3.5">
@@ -351,16 +359,24 @@
 										</div>
 									{/each}
 									<div class="mt-3 rounded-xl bg-surface-container-high/40 p-3.5">
-										<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">Pro tip</span>
+										<span class="text-[10px] uppercase tracking-wider text-on-surface-variant">{$t('synastry.proTip')}</span>
 										<p class="text-sm text-on-surface mt-1">
 											{#if elementOf(result.sign2) === 'fire'}
-												Ask about their goals and dreams — they light up when talking about their ambitions.
+												{$locale === 'my'
+													? 'သူတို့၏ ရည်မှန်းချက်များနှင့် အိပ်မက်များအကြောင်း မေးမြန်းပါ — သူတို့သည် မိမိ၏ ရည်မှန်းချက်များကို ပြောဆိုရခြင်းကို အလွန်နှစ်သက်ကြသည်။'
+													: 'Ask about their goals and dreams — they light up when talking about their ambitions.'}
 											{:else if elementOf(result.sign2) === 'earth'}
-												Show genuine interest in their daily life and routines — they love being appreciated for the little things.
+												{$locale === 'my'
+													? 'သူတို့၏ နေ့စဉ်ဘဝနှင့် လုပ်ရိုးလုပ်စဉ်များကို စိတ်ရင်းမှန်ဖြင့် စိတ်ဝင်စားမှုပြပါ — သေးငယ်သောအရာလေးများကို တန်ဖိုးထားတတ်သူကို သူတို့ချစ်ခင်ကြသည်။'
+													: 'Show genuine interest in their daily life and routines — they love being appreciated for the little things.'}
 											{:else if elementOf(result.sign2) === 'air'}
-												Challenge them intellectually — they fall for minds that keep up with theirs.
+												{$locale === 'my'
+													? 'ဉာဏ်ရည်ပြိုင် စကားပြောဆွေးနွေးပါ — သူတို့သည် မိမိနှင့်အတူ ဉာဏ်ရည်လိုက်ပါနိုင်သော လူများကို သဘောကျတတ်ကြသည်။'
+													: 'Challenge them intellectually — they fall for minds that keep up with theirs.'}
 											{:else}
-												Listen deeply and share something personal — emotional connection is everything to them.
+												{$locale === 'my'
+													? 'လေးလေးနက်နက် နားထောင်ပေးပြီး ကိုယ်ပိုင်ခံစားချက်လေးများကို မျှဝေပါ — စိတ်ချင်းဆက်နွယ်မှုသည် သူတို့အတွက် အရာရာဖြစ်ပါသည်။'
+													: 'Listen deeply and share something personal — emotional connection is everything to them.'}
 											{/if}
 										</p>
 									</div>
@@ -368,7 +384,9 @@
 							{:else}
 								<div class="space-y-3">
 									<p class="text-sm text-on-surface-variant mb-3">
-										Ideal date ideas for a connection between <span class="capitalize font-medium text-on-surface">{result.sign1}</span> & <span class="capitalize font-medium text-on-surface">{result.sign2}</span>:
+										{$locale === 'my'
+											? `${getZodiacTranslation(result.sign1, $locale).name} နှင့် ${getZodiacTranslation(result.sign2, $locale).name} တို့အတွက် သင့်တော်သော ဒိတ်အစီအစဉ်များ -`
+											: `Ideal date ideas for a connection between ${getZodiacTranslation(result.sign1, $locale).name} & ${getZodiacTranslation(result.sign2, $locale).name}:`}
 									</p>
 									{#each tips.dateIdeas as idea, i}
 										<div class="flex items-start gap-3 rounded-xl bg-surface-container-high/60 p-3.5">
@@ -381,12 +399,16 @@
 										</div>
 									{/each}
 									<div class="mt-2 rounded-xl bg-secondary-container/10 p-3.5 border border-secondary/20">
-										<span class="text-[10px] uppercase tracking-wider text-secondary font-semibold">Key Takeaway</span>
+										<span class="text-[10px] uppercase tracking-wider text-secondary font-semibold">{$t('synastry.keyTakeaway')}</span>
 										<p class="text-sm text-on-surface mt-1">
 											{#if elementOf(result.sign1) === elementOf(result.sign2)}
-												You share the same element — lean into that natural understanding. Your instincts about each other are likely right.
+												{$locale === 'my'
+													? 'သင်တို့နှစ်ဦးစလုံးသည် ဓာတ်တူကြပါသည် — ဤသဘာဝနားလည်မှုကို အပြည့်အဝအသုံးချပါ။ တစ်ဦးအပေါ်တစ်ဦး ထားရှိသော အလိုလိုသိစိတ်သည် များသောအားဖြင့် မှန်ကန်တတ်သည်။'
+													: 'You share the same element — lean into that natural understanding. Your instincts about each other are likely right.'}
 											{:else}
-												Different elements create dynamic tension. Embrace what makes you different — that's where the chemistry lives.
+												{$locale === 'my'
+													? 'ကွဲပြားခြားနားသော ဓာတ်သဘောများသည် တက်ကြွလှုပ်ရှားသော ဆွဲဆောင်မှုကို ဖြစ်ပေါ်စေပါသည်။ မတူကွဲပြားမှုများကို နွေးထွေးစွာ ကြိုဆိုပါ — ထိုနေရာတွင် ဆွဲဆောင်မှုအငွေ့အသက် အစပြုပါသည်။'
+													: "Different elements create dynamic tension. Embrace what makes you different — that's where the chemistry lives."}
 											{/if}
 										</p>
 									</div>
@@ -400,7 +422,7 @@
 						<div class="flex items-center justify-between mb-4 flex-wrap gap-3">
 							<div class="flex items-center gap-2">
 								<span class="material-symbols-outlined text-primary text-xl">insights</span>
-								<h3 class="font-headline text-lg text-on-surface">Synastry Deep Dive</h3>
+								<h3 class="font-headline text-lg text-on-surface">{$t('synastry.deepDive')}</h3>
 							</div>
 							{#if !synastry}
 								<button
@@ -409,7 +431,7 @@
 									disabled={synastryLoading}
 								>
 									<span class="material-symbols-outlined text-base" class:animate-spin={synastryLoading}>autorenew</span>
-									{synastryLoading ? 'Loading...' : 'Load Full Breakdown'}
+									{synastryLoading ? $t('common.loading') : $t('synastry.loadBreakdown')}
 								</button>
 							{/if}
 						</div>
@@ -420,16 +442,16 @@
 							<!-- Score bars -->
 							<div class="grid grid-cols-1 sm:grid-cols-2 gap-4 mb-6">
 								{#each [
-									{ key: 'element', label: 'Element', c: synastry.score_breakdown.element },
-									{ key: 'modality', label: 'Modality', c: synastry.score_breakdown.modality },
-									{ key: 'traits', label: 'Traits', c: synastry.score_breakdown.traits },
-									{ key: 'planetary', label: 'Planetary', c: synastry.score_breakdown.planetary },
+									{ key: 'element', label: $t('chart.element'), c: synastry.score_breakdown.element },
+									{ key: 'modality', label: $t('chart.modality'), c: synastry.score_breakdown.modality },
+									{ key: 'traits', label: $t('zodiac.traits'), c: synastry.score_breakdown.traits },
+									{ key: 'planetary', label: $t('chart.influence'), c: synastry.score_breakdown.planetary },
 								] as row}
 									<div class="p-4 rounded-xl bg-surface-container-high/60">
 										<div class="flex items-center justify-between mb-1.5">
 											<span class="text-xs font-semibold text-on-surface">{row.label}</span>
 											<span class="font-mono-data text-[10px] text-on-surface-variant">
-												weight {Math.round(row.c.weight * 100)}% &bull; {Math.round(row.c.score)}/100
+												{$locale === 'my' ? `အလေးချိန် ${Math.round(row.c.weight * 100)}% • ${Math.round(row.c.score)}/100` : `weight ${Math.round(row.c.weight * 100)}% • ${Math.round(row.c.score)}/100`}
 											</span>
 										</div>
 										<div class="h-2 rounded-full bg-surface-container-lowest overflow-hidden mb-1.5">
@@ -444,7 +466,7 @@
 							</div>
 
 							<div class="text-center mb-6">
-								<span class="font-mono-data text-[10px] uppercase text-on-surface-variant tracking-wider">Overall Synastry Score</span>
+								<span class="font-mono-data text-[10px] uppercase text-on-surface-variant tracking-wider">{$t('synastry.overallScore')}</span>
 								<div class="font-headline text-2xl text-primary">{Math.round(synastry.overall_score)} / 100</div>
 							</div>
 
@@ -452,14 +474,14 @@
 								<div class="p-4 rounded-xl bg-surface-container-high/60">
 									<h4 class="text-sm font-semibold text-secondary mb-1.5 flex items-center gap-1.5">
 										<span class="material-symbols-outlined text-base">forum</span>
-										Communication Style
+										{$t('synastry.communicationStyle')}
 									</h4>
 									<p class="text-sm text-on-surface-variant">{synastry.communication_theme}</p>
 								</div>
 								<div class="p-4 rounded-xl bg-surface-container-high/60">
 									<h4 class="text-sm font-semibold text-tertiary mb-1.5 flex items-center gap-1.5">
 										<span class="material-symbols-outlined text-base">balance</span>
-										Balance Theme
+										{$t('synastry.balanceTheme')}
 									</h4>
 									<p class="text-sm text-on-surface-variant">{synastry.balance_theme}</p>
 								</div>
@@ -469,7 +491,7 @@
 								<div class="p-4 rounded-xl bg-primary-container/10">
 									<h4 class="text-sm font-semibold text-primary mb-2 flex items-center gap-1.5">
 										<span class="material-symbols-outlined text-base">star</span>
-										Strengths
+										{$t('synastry.strengths')}
 									</h4>
 									<ul class="space-y-1.5">
 										{#each synastry.strengths as s}
@@ -483,7 +505,7 @@
 								<div class="p-4 rounded-xl bg-error-container/10">
 									<h4 class="text-sm font-semibold text-error mb-2 flex items-center gap-1.5">
 										<span class="material-symbols-outlined text-base">warning</span>
-										Growth Areas
+										{$t('synastry.growthAreas')}
 									</h4>
 									<ul class="space-y-1.5">
 										{#each synastry.challenges as c}
@@ -500,7 +522,7 @@
 								<div class="p-4 rounded-xl bg-surface-container-high/40">
 									<h4 class="text-sm font-semibold text-on-surface mb-2 flex items-center gap-1.5">
 										<span class="material-symbols-outlined text-base">join_inner</span>
-										Complementary Traits
+										{$t('synastry.complementaryTraits')}
 									</h4>
 									<div class="flex flex-wrap gap-2">
 										{#each synastry.complementary_traits as pair}
@@ -513,22 +535,19 @@
 							{/if}
 						{:else}
 							<p class="text-sm text-on-surface-variant">
-								Load the full synastry breakdown for numeric score components, communication style,
-								balance themes, and complementary trait pairing.
+								{$t('synastry.subtitle')}
 							</p>
 						{/if}
 					</div>
-
-					<div class="rounded-xl bg-surface-container/60 p-4 text-center">
-						<p class="text-xs text-on-surface-variant italic">
-							This compatibility analysis is for entertainment and self-reflection purposes only.
-							It does not scientifically predict relationship outcomes.
-						</p>
-					</div>
-
-					<button class="btn-secondary w-full" onclick={() => { result = null; synastry = null; }}>New Analysis</button>
 				</div>
+
+				<div class="rounded-xl bg-surface-container/60 p-4 text-center">
+					<p class="text-xs text-on-surface-variant italic">
+						{$t('synastry.disclaimer')}
+					</p>
+				</div>
+
+				<button class="btn-secondary w-full" onclick={() => { result = null; synastry = null; }}>{$t('synastry.newAnalysis')}</button>
 			</div>
-		</div>
 	{/if}
 </div>

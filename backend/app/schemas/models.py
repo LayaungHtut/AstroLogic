@@ -52,6 +52,7 @@ class ReadingAnalyzeRequest(BaseModel):
     # open/free-form spread. Fixed spreads ignore this and use their own
     # predetermined card_count instead.
     card_count: Optional[int] = Field(default=None, ge=1, le=10)
+    locale: Optional[str] = "en"
 
 
 class SelectedCard(BaseModel):
@@ -72,6 +73,7 @@ class ReadingAnalyzeManualRequest(BaseModel):
     question: str = Field(max_length=500)
     zodiac_sign: str
     cards: list[SelectedCard] = Field(min_length=1, max_length=10)
+    locale: Optional[str] = "en"
 
 
 class ReadingGenerateRequest(BaseModel):
@@ -100,6 +102,7 @@ class ReadingResult(BaseModel):
 class HoroscopeRequest(BaseModel):
     zodiac_sign: str
     mood: str = "neutral"
+    locale: Optional[str] = "en"
 
 
 class HoroscopeResult(BaseModel):
@@ -135,6 +138,7 @@ class ChatRequest(BaseModel):
     message: str = Field(max_length=500)
     zodiac_sign: Optional[str] = None
     current_reading: Optional[dict] = None
+    locale: Optional[str] = "en"
 
 
 class ChatResponse(BaseModel):

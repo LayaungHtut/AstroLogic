@@ -3,6 +3,8 @@
 	import { sendChatMessage } from '$lib/utils/api';
 	import type { ChatMessage } from '$lib/types';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
+	import MarkdownText from '$lib/components/MarkdownText.svelte';
+	import { locale, t } from '$lib/i18n';
 
 	let messages = $state<ChatMessage[]>([]);
 	let input = $state('');
@@ -10,11 +12,11 @@
 
 	const currentProfile = $derived($profile);
 
-	const suggestions = [
-		'What does The Hermit mean?',
-		'Tell me about Aries',
-		'How do tarot readings work?'
-	];
+	const suggestions = $derived([
+		$t('chat.suggestion1'),
+		$t('chat.suggestion2'),
+		$t('chat.suggestion3')
+	]);
 
 	async function sendMessage() {
 		if (!input.trim() || loading) return;
@@ -26,12 +28,14 @@
 		loading = true;
 
 		try {
-			const res = await sendChatMessage(question, currentProfile.zodiac_sign);
+			const res = await sendChatMessage(question, currentProfile.zodiac_sign, undefined, $locale);
 			messages = [...messages, { role: 'assistant', content: res.response }];
 		} catch {
 			messages = [...messages, {
 				role: 'assistant',
-				content: "I'm having trouble connecting to my mystical sources. Please try again."
+				content: $locale === 'my'
+					? 'နက္ခတ်ဗေဒင် အရင်းအမြစ်များနှင့် ချိတ်ဆက်ရာတွင် အခက်အခဲရှိနေပါသည်။ ကျေးဇူးပြု၍ နောက်တစ်ကြိမ် ထပ်မံကြိုးစားပါ။'
+					: "I'm having trouble connecting to my mystical sources. Please try again."
 			}];
 		} finally {
 			loading = false;
@@ -52,7 +56,7 @@
 </script>
 
 <svelte:head>
-	<title>AI Guide - AstroLogic</title>
+	<title>{$t('chat.title')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-6 flex flex-col h-[calc(100vh-4rem)]">
@@ -64,15 +68,15 @@
 			</div>
 			<div class="min-w-0">
 				<div class="flex items-center gap-2 flex-wrap">
-					<h1 class="font-headline text-lg font-semibold text-on-surface tracking-tight">Socratic AI Oracle</h1>
+					<h1 class="font-headline text-lg font-semibold text-on-surface tracking-tight">{$t('chat.title')}</h1>
 					<span class="px-2 py-0.5 rounded-full bg-secondary-container/20 text-secondary text-[10px] font-mono-data uppercase tracking-wider">v4.8</span>
 				</div>
-				<p class="text-sm text-on-surface-variant truncate">Chat with your tarot and astrology guide</p>
+				<p class="text-sm text-on-surface-variant truncate">{$t('chat.subtitle2')}</p>
 			</div>
 		</div>
 		<div class="flex items-center gap-2 px-3 py-1.5 rounded-full bg-surface-container-high/80 backdrop-blur-sm shrink-0">
 			<span class="w-2 h-2 rounded-full bg-secondary animate-pulse shadow-sm"></span>
-			<span class="font-mono-data text-xs text-on-surface">Logic Core Online</span>
+			<span class="font-mono-data text-xs text-on-surface">{$t('chat.logicOnline')}</span>
 		</div>
 	</div>
 
@@ -83,10 +87,9 @@
 					<div class="w-14 h-14 rounded-xl bg-gradient-to-tr from-primary-container to-secondary-container flex items-center justify-center text-on-primary shadow-lg mb-4">
 						<span class="material-symbols-outlined text-3xl">auto_awesome</span>
 					</div>
-					<h2 class="font-headline text-lg font-semibold text-on-surface mb-2">Welcome to your AI Guide</h2>
+					<h2 class="font-headline text-lg font-semibold text-on-surface mb-2">{$t('chat.welcome')}</h2>
 					<p class="text-sm text-on-surface-variant max-w-md mb-6">
-						Ask questions about tarot readings, zodiac signs, or request guidance.
-						I'll do my best to provide thoughtful, symbolic interpretations.
+						{$t('chat.welcomeDesc')}
 					</p>
 					<div class="flex flex-wrap gap-2 justify-center">
 						{#each suggestions as suggestion}
@@ -105,7 +108,7 @@
 						{#if msg.role === 'user'}
 							<div class="max-w-[85%] md:max-w-2xl bg-gradient-to-br from-primary-container to-surface-container-highest text-on-primary-container p-4 rounded-2xl rounded-tr-none shadow-xl">
 								<div class="flex items-center gap-2 mb-1.5">
-									<span class="w-5 h-5 rounded-full bg-surface-container-lowest/40 flex items-center justify-center text-[9px] font-mono-data text-primary-fixed">YOU</span>
+									<span class="w-5 h-5 rounded-full bg-surface-container-lowest/40 flex items-center justify-center text-[9px] font-mono-data text-primary-fixed">{$t('chat.you')}</span>
 								</div>
 								<p class="text-sm leading-relaxed whitespace-pre-wrap">{msg.content}</p>
 							</div>
@@ -116,9 +119,9 @@
 									<div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-primary-container to-secondary-container flex items-center justify-center text-on-primary shrink-0">
 										<span class="material-symbols-outlined text-sm">psychology</span>
 									</div>
-									<span class="text-xs font-mono-data text-secondary uppercase tracking-wider">AI Guide</span>
+									<span class="text-xs font-mono-data text-secondary uppercase tracking-wider">{$t('chat.aiGuide')}</span>
 								</div>
-								<p class="text-sm leading-relaxed whitespace-pre-wrap text-on-surface">{msg.content}</p>
+								<MarkdownText content={msg.content} class="text-sm leading-relaxed text-on-surface" />
 							</div>
 						{/if}
 					</div>
@@ -127,7 +130,7 @@
 				{#if loading}
 					<div class="flex justify-start">
 						<div class="bg-surface-container/80 backdrop-blur-2xl rounded-2xl rounded-tl-none px-6 shadow-2xl">
-							<LoadingSpinner text="The Oracle is consulting the stars..." />
+							<LoadingSpinner text={$t('chat.consulting')} />
 						</div>
 					</div>
 				{/if}
@@ -145,7 +148,7 @@
 						bind:value={input}
 						onkeydown={handleKeydown}
 						class="flex-1 bg-transparent text-on-surface placeholder:text-outline text-sm focus:outline-none px-2 py-2"
-						placeholder="Ask about your reading, zodiac, or anything mystical..."
+						placeholder={$t('chat.placeholder')}
 						disabled={loading}
 					/>
 					<button
@@ -153,7 +156,7 @@
 						onclick={sendMessage}
 						disabled={!input.trim() || loading}
 					>
-						<span>Send</span>
+						<span>{$t('chat.send')}</span>
 						<span class="material-symbols-outlined text-base">send</span>
 					</button>
 				</div>
@@ -161,9 +164,9 @@
 			<div class="flex items-center justify-between mt-2 px-2 text-outline">
 				<span class="text-[11px] font-mono-data flex items-center gap-1.5">
 					<span class="material-symbols-outlined text-xs text-secondary">verified_user</span>
-					Symbolic interpretations only, not professional advice
+					{$locale === 'my' ? 'သင်္ကေတအရ ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်သည်' : 'Symbolic interpretations only, not professional advice'}
 				</span>
-				<span class="text-[11px] font-mono-data hidden sm:inline">Shift + Enter for multi-line</span>
+				<span class="text-[11px] font-mono-data hidden sm:inline">{$locale === 'my' ? 'စာကြောင်းအသစ်အတွက် Shift + Enter နှိပ်ပါ' : 'Shift + Enter for multi-line'}</span>
 			</div>
 		</div>
 	</div>

@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { profile } from '$lib/stores';
 	import { ZODIAC_SIGNS, ZODIAC_SYMBOLS, ELEMENT_COLORS } from '$lib/types';
+	import { locale, t, getZodiacTranslation } from '$lib/i18n';
 
 	let { open = $bindable(false) }: { open: boolean } = $props();
 
@@ -11,8 +12,15 @@
 		sagittarius: 'fire', capricorn: 'earth', aquarius: 'air', pisces: 'water'
 	};
 
-	let selectedSign = $state(currentProfile.zodiac_sign);
-	let nickname = $state(currentProfile.nickname);
+	let selectedSign = $state('');
+	let nickname = $state('');
+
+	$effect(() => {
+		if (open) {
+			selectedSign = currentProfile.zodiac_sign;
+			nickname = currentProfile.nickname;
+		}
+	});
 
 	function save() {
 		profile.setProfile({ zodiac_sign: selectedSign, nickname });
@@ -36,7 +44,7 @@
 					<div class="flex h-10 w-10 items-center justify-center rounded-xl bg-primary-container text-primary">
 						<span class="material-symbols-outlined text-xl">person</span>
 					</div>
-					<h2 class="font-headline text-xl font-bold text-on-surface">Edit Profile</h2>
+					<h2 class="font-headline text-xl font-bold text-on-surface">{$t('profile.editTitle')}</h2>
 				</div>
 				<button type="button" onclick={() => open = false} class="flex h-8 w-8 items-center justify-center rounded-full text-on-surface-variant transition-colors hover:bg-surface-container-high">
 					<span class="material-symbols-outlined text-xl">close</span>
@@ -44,7 +52,7 @@
 			</div>
 
 			<div class="flex flex-col gap-2">
-				<label for="nickname" class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase">Nickname</label>
+				<label for="nickname" class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase">{$t('profile.nickname')}</label>
 				<input
 					id="nickname"
 					type="text"
@@ -55,18 +63,19 @@
 			</div>
 
 			<div class="flex flex-col gap-3">
-				<span class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase">Zodiac Sign</span>
+				<span class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase">{$t('profile.zodiacSign')}</span>
 				<div class="grid grid-cols-4 gap-2">
 					{#each ZODIAC_SIGNS as sign}
 						{@const elem = signElements[sign]}
 						{@const color = ELEMENT_COLORS[elem]}
+						{@const zInfo = getZodiacTranslation(sign, $locale)}
 						<button
 							type="button"
 							onclick={() => selectedSign = sign}
 							class="flex flex-col items-center gap-1.5 rounded-xl p-3 text-center transition-all {selectedSign === sign ? 'ring-2 ring-primary bg-primary-container/20 shadow-md' : 'bg-surface-container-high hover:bg-surface-container'}"
 						>
 							<span class="text-2xl" style:color={selectedSign === sign ? color : 'var(--color-on-surface-variant)'}>{ZODIAC_SYMBOLS[sign]}</span>
-							<span class="font-mono-data text-[10px] font-medium capitalize text-on-surface">{sign}</span>
+							<span class="font-mono-data text-[10px] font-medium text-on-surface truncate max-w-full">{zInfo.name}</span>
 						</button>
 					{/each}
 				</div>
@@ -74,7 +83,7 @@
 
 			<div class="flex justify-end gap-3 pt-2">
 				<button type="button" onclick={() => open = false} class="rounded-xl px-4 py-2 text-sm font-medium text-on-surface-variant transition-colors hover:bg-surface-container-high">
-					Cancel
+					{$t('common.cancel')}
 				</button>
 				<button
 					type="button"
@@ -82,7 +91,7 @@
 					disabled={!selectedSign}
 					class="rounded-xl bg-primary px-5 py-2 text-sm font-medium text-on-primary shadow-md transition-all hover:bg-primary/90 disabled:opacity-50 disabled:cursor-not-allowed"
 				>
-					Save Profile
+					{$t('profile.save')}
 				</button>
 			</div>
 		</div>

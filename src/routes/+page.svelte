@@ -1,124 +1,125 @@
 <script lang="ts">
 	import { ZODIAC_SYMBOLS } from '$lib/types';
+	import { locale, t, getZodiacTranslation, formatElement, formatModality } from '$lib/i18n';
 
-	const features = [
+	const features = $derived([
 		{
 			icon: 'auto_awesome',
-			eyebrow: 'Neural Synthesis',
-			title: 'AI-Powered Readings',
-			desc: 'Deep narrative synthesis powered by AI, conditioned on tarot symbolism and classical astrological texts.',
-			meta: 'Spread Depth: Variable',
-			cta: 'Launch',
+			eyebrow: $locale === 'my' ? 'ဉာဏ်ရည်တု ပေါင်းစပ်မှု' : 'Neural Synthesis',
+			title: $t('feat.readings.title'),
+			desc: $t('feat.readings.desc'),
+			meta: $t('feat.readings.meta'),
+			cta: $t('feat.readings.cta'),
 			href: '/reading',
 			accent: 'text-primary bg-primary-container/20'
 		},
 		{
 			icon: 'account_tree',
-			eyebrow: 'Formal Verification',
-			title: 'Symbolic Reasoning',
-			desc: 'A Prolog deductive engine checks decan alignments, elemental dignities, and card relationships without hallucination.',
-			meta: 'Engine: Prolog Core',
-			cta: 'Inspect',
+			eyebrow: $locale === 'my' ? 'ယုတ္တိဗေဒ သက်သေပြချက်' : 'Formal Verification',
+			title: $t('feat.prolog.title'),
+			desc: $t('feat.prolog.desc'),
+			meta: $t('feat.prolog.meta'),
+			cta: $t('feat.prolog.cta'),
 			href: '/chat',
 			accent: 'text-secondary bg-secondary-container/20'
 		},
 		{
 			icon: 'public',
-			eyebrow: 'Ephemeris Precision',
-			title: 'Birth Chart Analysis',
-			desc: 'Planetary computations for Sun, Moon, Rising, and house placements mapped against your exact birth data.',
-			meta: 'Precision: Arcminute',
-			cta: 'Calculate',
+			eyebrow: $locale === 'my' ? 'နက္ခတ်တွက်ချက်မှု တိကျခြင်း' : 'Ephemeris Precision',
+			title: $t('feat.chart.title'),
+			desc: $t('feat.chart.desc'),
+			meta: $t('feat.chart.meta'),
+			cta: $t('feat.chart.cta'),
 			href: '/birth-chart',
 			accent: 'text-tertiary bg-tertiary-container/20'
 		},
 		{
 			icon: 'join_inner',
-			eyebrow: 'Synastry Modeling',
-			title: 'Zodiac Compatibility',
-			desc: 'Explore elemental and planetary resonance between two signs across emotional, intellectual, and physical wavelengths.',
-			meta: 'Matrix: Dual Sign',
-			cta: 'Compare',
+			eyebrow: $locale === 'my' ? 'ရာသီခွင် ပေါင်းစပ်မှု' : 'Synastry Modeling',
+			title: $t('feat.synastry.title'),
+			desc: $t('feat.synastry.desc'),
+			meta: $t('feat.synastry.meta'),
+			cta: $t('feat.synastry.cta'),
 			href: '/compatibility',
 			accent: 'text-secondary bg-surface-container-high'
 		},
 		{
 			icon: 'document_scanner',
-			eyebrow: 'Vision Telemetry',
-			title: 'Card Scanner',
-			desc: 'Snap a photo of a physical tarot draw and let computer vision identify the card for an instant reading.',
-			meta: 'Input: Camera / Upload',
-			cta: 'Scan Deck',
+			eyebrow: $locale === 'my' ? 'ကင်မရာပုံရိပ် ခွဲခြမ်းမှု' : 'Vision Telemetry',
+			title: $t('feat.scan.title'),
+			desc: $t('feat.scan.desc'),
+			meta: $t('feat.scan.meta'),
+			cta: $t('feat.scan.cta'),
 			href: '/scan',
 			accent: 'text-primary bg-surface-container-high'
 		},
 		{
 			icon: 'psychology_alt',
-			eyebrow: 'Socratic Tutor',
-			title: 'AI Mystic Guide',
-			desc: 'Chat with a tarot and astrology-themed AI assistant that clarifies archetypal lessons behind your readings.',
-			meta: 'Mode: Continuous Dialogue',
-			cta: 'Consult',
+			eyebrow: $locale === 'my' ? 'ဆိုကရေးတီးဆန်သော AI လမ်းပြ' : 'Socratic Tutor',
+			title: $t('feat.guide.title'),
+			desc: $t('feat.guide.desc'),
+			meta: $t('feat.guide.meta'),
+			cta: $t('feat.guide.cta'),
 			href: '/chat',
 			accent: 'text-tertiary bg-primary-container/20'
 		}
-	];
+	]);
 
-	const steps = [
+	const steps = $derived([
 		{
 			num: 1,
 			icon: 'psychology',
-			eyebrow: 'Phase Alpha',
-			title: 'Ask Your Question',
-			desc: 'Pose a question or pick a focus area. We translate it into the symbolic inputs the reasoning engine understands.',
-			tag: 'Intent Captured'
+			eyebrow: $locale === 'my' ? 'ပထမအဆင့်' : 'Phase Alpha',
+			title: $t('landing.step1Title'),
+			desc: $t('landing.step1Desc'),
+			tag: $t('landing.step1Tag')
 		},
 		{
 			num: 2,
 			icon: 'memory',
-			eyebrow: 'Phase Beta',
-			title: 'Prolog Reasons Symbolically',
-			desc: 'The Prolog inference engine checks planetary dignities, elemental relationships, and card meanings against its rule base.',
-			tag: 'Logic Confirmed'
+			eyebrow: $locale === 'my' ? 'ဒုတိယအဆင့်' : 'Phase Beta',
+			title: $t('landing.step2Title'),
+			desc: $t('landing.step2Desc'),
+			tag: $t('landing.step2Tag')
 		},
 		{
 			num: 3,
 			icon: 'auto_stories',
-			eyebrow: 'Phase Gamma',
-			title: 'Cards Are Drawn',
-			desc: 'A spread is drawn (or scanned) and paired with the verified symbolic groundwork from the reasoning core.',
-			tag: 'Spread Formed'
+			eyebrow: $locale === 'my' ? 'တတိယအဆင့်' : 'Phase Gamma',
+			title: $t('landing.step3Title'),
+			desc: $t('landing.step3Desc'),
+			tag: $t('landing.step3Tag')
 		},
 		{
 			num: 4,
 			icon: 'checklist_rtl',
-			eyebrow: 'Phase Delta',
-			title: 'AI Interprets Meaningfully',
-			desc: 'An AI model weaves the deterministic symbolic proof into a nuanced, personalized reading you can revisit anytime.',
-			tag: 'Saved to History'
+			eyebrow: $locale === 'my' ? 'စတုတ္ထအဆင့်' : 'Phase Delta',
+			title: $t('landing.step4Title'),
+			desc: $t('landing.step4Desc'),
+			tag: $t('landing.step4Tag')
 		}
-	];
+	]);
 
-	const elementInfo: Record<string, { color: string; label: string; modality: string; ruler: string; degrees: string }> = {
-		aries: { color: 'text-fire', label: 'Fire', modality: 'Cardinal', ruler: 'Mars', degrees: '0°-30°' },
-		taurus: { color: 'text-earth', label: 'Earth', modality: 'Fixed', ruler: 'Venus', degrees: '30°-60°' },
-		gemini: { color: 'text-air', label: 'Air', modality: 'Mutable', ruler: 'Mercury', degrees: '60°-90°' },
-		cancer: { color: 'text-water', label: 'Water', modality: 'Cardinal', ruler: 'Moon', degrees: '90°-120°' },
-		leo: { color: 'text-fire', label: 'Fire', modality: 'Fixed', ruler: 'Sun', degrees: '120°-150°' },
-		virgo: { color: 'text-earth', label: 'Earth', modality: 'Mutable', ruler: 'Mercury', degrees: '150°-180°' },
-		libra: { color: 'text-air', label: 'Air', modality: 'Cardinal', ruler: 'Venus', degrees: '180°-210°' },
-		scorpio: { color: 'text-water', label: 'Water', modality: 'Fixed', ruler: 'Pluto / Mars', degrees: '210°-240°' },
-		sagittarius: { color: 'text-fire', label: 'Fire', modality: 'Mutable', ruler: 'Jupiter', degrees: '240°-270°' },
-		capricorn: { color: 'text-earth', label: 'Earth', modality: 'Cardinal', ruler: 'Saturn', degrees: '270°-300°' },
-		aquarius: { color: 'text-air', label: 'Air', modality: 'Fixed', ruler: 'Uranus', degrees: '300°-330°' },
-		pisces: { color: 'text-water', label: 'Water', modality: 'Mutable', ruler: 'Neptune', degrees: '330°-360°' }
+	const elementInfo: Record<string, { color: string; degrees: string }> = {
+		aries: { color: 'text-fire', degrees: '0°-30°' },
+		taurus: { color: 'text-earth', degrees: '30°-60°' },
+		gemini: { color: 'text-air', degrees: '60°-90°' },
+		cancer: { color: 'text-water', degrees: '90°-120°' },
+		leo: { color: 'text-fire', degrees: '120°-150°' },
+		virgo: { color: 'text-earth', degrees: '150°-180°' },
+		libra: { color: 'text-air', degrees: '180°-210°' },
+		scorpio: { color: 'text-water', degrees: '210°-240°' },
+		sagittarius: { color: 'text-fire', degrees: '240°-270°' },
+		capricorn: { color: 'text-earth', degrees: '270°-300°' },
+		aquarius: { color: 'text-air', degrees: '300°-330°' },
+		pisces: { color: 'text-water', degrees: '330°-360°' }
 	};
 
 	const signs = Object.entries(ZODIAC_SYMBOLS);
 </script>
 
 <svelte:head>
-	<title>AstroLogic - AI Zodiac & Tarot Reasoning</title>
+	<title>{$t('brand.name')} - {$t('brand.tagline')}</title>
 </svelte:head>
 
 <div class="w-full pt-24 pb-20">
@@ -133,20 +134,20 @@
 				<div class="inline-flex items-center gap-3 px-4 py-1.5 rounded-full bg-surface-container-high/90 shadow-md mb-8">
 					<span class="inline-flex items-center gap-1.5 text-secondary font-mono-data text-[10px] font-semibold tracking-wider uppercase">
 						<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-						Reasoning Engine Online
+						{$t('landing.engineOnline')}
 					</span>
 					<span class="w-1 h-1 rounded-full bg-outline-variant"></span>
-					<span class="text-on-surface-variant font-mono-data text-xs">Prolog Logic Core Synchronized</span>
+					<span class="text-on-surface-variant font-mono-data text-xs">{$t('landing.logicCoreSync')}</span>
 				</div>
 
-				<h1 class="font-headline text-4xl md:text-6xl lg:text-[64px] lg:leading-[72px] font-semibold tracking-tight bg-gradient-to-b from-white via-primary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(210,187,255,0.4)] mb-6">
-					Where Ancient Celestial Wisdom Meets Symbolic AI
+				<h1 class="font-headline text-3xl md:text-5xl lg:text-[56px] lg:leading-[68px] font-semibold tracking-tight bg-gradient-to-b from-white via-primary to-secondary bg-clip-text text-transparent drop-shadow-[0_0_35px_rgba(210,187,255,0.4)] mb-6">
+					{$t('landing.heroTitle')}
 				</h1>
 				<p class="text-base md:text-lg text-on-surface-variant max-w-2xl mx-auto mb-4 leading-relaxed">
-					AstroLogic combines symbolic Prolog reasoning with AI interpretation to produce meaningful tarot readings, horoscopes, and birth chart insights.
+					{$t('landing.heroSubtitle')}
 				</p>
 				<p class="text-sm text-on-surface-variant/70 max-w-xl mx-auto mb-10">
-					For entertainment and self-reflection.
+					{$t('landing.entertainmentNotice')}
 				</p>
 
 				<div class="flex flex-wrap items-center justify-center gap-4 mb-12">
@@ -155,14 +156,14 @@
 						class="group inline-flex items-center gap-3 px-8 py-4 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-headline text-base font-semibold shadow-[0_0_28px_rgba(124,58,237,0.4)] hover:shadow-[0_0_40px_rgba(76,215,246,0.6)] hover:scale-105 transition-all duration-300"
 					>
 						<span class="material-symbols-outlined text-xl transition-transform group-hover:rotate-45">auto_awesome</span>
-						<span>Start a Reading</span>
+						<span>{$t('landing.startReading')}</span>
 					</a>
 					<a
 						href="/dashboard"
 						class="inline-flex items-center gap-3 px-8 py-4 rounded-full bg-surface-container-high/60 hover:bg-surface-container-high text-on-surface font-headline text-base font-semibold backdrop-blur-md shadow-lg hover:shadow-xl hover:scale-105 transition-all duration-300"
 					>
 						<span class="material-symbols-outlined text-xl text-secondary">orbit</span>
-						<span>Explore Dashboard</span>
+						<span>{$t('landing.exploreDashboard')}</span>
 					</a>
 				</div>
 
@@ -172,18 +173,18 @@
 							<span>78</span>
 							<span class="text-secondary text-xs">/ 78</span>
 						</div>
-						<span class="text-on-surface-variant font-mono-data text-[11px] uppercase tracking-wider">Arcana Mapped</span>
+						<span class="text-on-surface-variant font-mono-data text-[11px] uppercase tracking-wider">{$t('landing.statArcanaMapped')}</span>
 					</div>
 					<div class="flex flex-col items-center justify-center py-2 px-4">
 						<div class="text-secondary font-headline text-xl font-medium">12 Signs</div>
-						<span class="text-on-surface-variant font-mono-data text-[11px] uppercase tracking-wider">Zodiac Wheel Covered</span>
+						<span class="text-on-surface-variant font-mono-data text-[11px] uppercase tracking-wider">{$t('landing.statZodiacCovered')}</span>
 					</div>
 					<div class="flex flex-col items-center justify-center py-2 px-4">
 						<div class="flex items-center gap-2 text-tertiary font-headline text-xl font-medium">
 							<span class="w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6]"></span>
-							<span>Deterministic</span>
+							<span>{$t('landing.statDeterministic')}</span>
 						</div>
-						<span class="text-on-surface-variant font-mono-data text-[11px] uppercase tracking-wider">Symbolic Prolog Engine</span>
+						<span class="text-on-surface-variant font-mono-data text-[11px] uppercase tracking-wider">{$t('landing.statPrologEngine')}</span>
 					</div>
 				</div>
 			</div>
@@ -194,24 +195,24 @@
 			<div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-10">
 				<div class="inline-flex items-center gap-2 text-primary font-mono-data text-[10px] font-semibold uppercase tracking-widest mb-2">
 					<span class="material-symbols-outlined text-sm">cyclone</span>
-					The Celestial Wheel
+					{$t('landing.celestialWheel')}
 				</div>
-				<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">Twelve Archetypal Modalities</h2>
+				<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">{$t('landing.twelveModalities')}</h2>
 				<p class="text-on-surface-variant text-sm md:text-base">
-					Explore all 12 signs. Each is mapped to its element, ruling planet, and degree range on the zodiac wheel.
+					{$t('landing.wheelDesc')}
 				</p>
 				<div class="flex flex-wrap items-center justify-center gap-3 mt-6">
 					<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-fire font-mono-data text-[10px] font-semibold uppercase tracking-wider shadow-sm">
-						<span class="w-2 h-2 rounded-full bg-fire"></span> Fire
+						<span class="w-2 h-2 rounded-full bg-fire"></span> {formatElement('fire', $locale)}
 					</div>
 					<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-earth font-mono-data text-[10px] font-semibold uppercase tracking-wider shadow-sm">
-						<span class="w-2 h-2 rounded-full bg-earth"></span> Earth
+						<span class="w-2 h-2 rounded-full bg-earth"></span> {formatElement('earth', $locale)}
 					</div>
 					<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-air font-mono-data text-[10px] font-semibold uppercase tracking-wider shadow-sm">
-						<span class="w-2 h-2 rounded-full bg-air"></span> Air
+						<span class="w-2 h-2 rounded-full bg-air"></span> {formatElement('air', $locale)}
 					</div>
 					<div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-surface-container-high text-water font-mono-data text-[10px] font-semibold uppercase tracking-wider shadow-sm">
-						<span class="w-2 h-2 rounded-full bg-water"></span> Water
+						<span class="w-2 h-2 rounded-full bg-water"></span> {formatElement('water', $locale)}
 					</div>
 				</div>
 			</div>
@@ -219,6 +220,7 @@
 			<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-4">
 				{#each signs as [sign, symbol]}
 					{@const info = elementInfo[sign]}
+					{@const zData = getZodiacTranslation(sign, $locale)}
 					<a
 						href="/zodiac?sign={sign}"
 						class="group relative rounded-2xl bg-surface-container/70 backdrop-blur-md p-5 flex flex-col items-center text-center shadow-lg hover:-translate-y-1 transition-all duration-300"
@@ -226,9 +228,9 @@
 						<div class="w-14 h-14 rounded-full bg-surface-container-high flex items-center justify-center mb-3 shadow-inner group-hover:scale-110 transition-transform">
 							<span class="text-2xl {info.color}">{symbol}</span>
 						</div>
-						<span class="font-headline text-sm font-semibold text-on-surface mb-1 capitalize">{sign}</span>
-						<span class="{info.color} font-mono-data text-[10px] font-semibold uppercase tracking-wider">{info.label} • {info.modality}</span>
-						<span class="text-on-surface-variant font-mono-data text-[11px] mt-2">{info.ruler} • {info.degrees}</span>
+						<span class="font-headline text-sm font-semibold text-on-surface mb-1 truncate max-w-full">{zData.name}</span>
+						<span class="{info.color} font-mono-data text-[10px] font-semibold uppercase tracking-wider">{zData.element} • {zData.modality}</span>
+						<span class="text-on-surface-variant font-mono-data text-[11px] mt-2">{zData.ruler} • {info.degrees}</span>
 					</a>
 				{/each}
 			</div>
@@ -239,11 +241,11 @@
 			<div class="flex flex-col items-start max-w-2xl mb-12">
 				<div class="inline-flex items-center gap-2 text-secondary font-mono-data text-[10px] font-semibold uppercase tracking-widest mb-2">
 					<span class="material-symbols-outlined text-sm">science</span>
-					Core Capabilities
+					{$t('landing.coreCapabilities')}
 				</div>
-				<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">High-Order Celestial Instruments</h2>
+				<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">{$t('landing.highOrderInstruments')}</h2>
 				<p class="text-on-surface-variant text-sm md:text-base">
-					Built for seekers and the symbolically curious alike. Deterministic reasoning meets AI-crafted narrative.
+					{$t('landing.capabilitiesDesc')}
 				</p>
 			</div>
 
@@ -260,7 +262,7 @@
 						</div>
 						<div class="mt-6 pt-4 flex items-center justify-between text-on-surface-variant font-mono-data text-[11px]">
 							<span>{feature.meta}</span>
-							<a href={feature.href} class="text-secondary hover:text-white flex items-center gap-1 transition-colors">
+							<a href={feature.href} class="text-secondary hover:text-white flex items-center gap-1 transition-colors font-medium">
 								{feature.cta} <span class="material-symbols-outlined text-sm">arrow_forward</span>
 							</a>
 						</div>
@@ -274,11 +276,11 @@
 			<div class="flex flex-col items-center text-center max-w-2xl mx-auto mb-14">
 				<div class="inline-flex items-center gap-2 text-primary font-mono-data text-[10px] font-semibold uppercase tracking-widest mb-2">
 					<span class="material-symbols-outlined text-sm">route</span>
-					The Divination Protocol
+					{$t('landing.divinationProtocol')}
 				</div>
-				<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">How AstroLogic Works</h2>
+				<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">{$t('landing.howItWorks')}</h2>
 				<p class="text-on-surface-variant text-sm md:text-base">
-					From your question to a verified symbolic proof to a personalized, AI-written reading.
+					{$t('landing.howItWorksDesc')}
 				</p>
 			</div>
 
@@ -311,11 +313,11 @@
 			<div class="relative z-10 flex flex-col lg:flex-row items-center justify-between gap-8">
 				<div class="max-w-xl text-center lg:text-left">
 					<span class="px-3 py-1 rounded-full bg-surface-container-highest text-secondary font-mono-data text-[10px] font-semibold uppercase tracking-wider mb-4 inline-block">
-						Open Observatory Access
+						{$t('landing.ctaTag')}
 					</span>
-					<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">Begin Your First Reading</h2>
+					<h2 class="font-headline text-2xl md:text-3xl font-medium text-on-surface mb-3">{$t('landing.ctaTitle')}</h2>
 					<p class="text-on-surface-variant text-sm md:text-base leading-relaxed">
-						Draw a tarot spread or compute your birth chart, backed by the Prolog reasoning core, in seconds.
+						{$t('landing.ctaDesc')}
 					</p>
 				</div>
 				<div class="flex flex-col sm:flex-row items-center gap-4 shrink-0">
@@ -323,13 +325,13 @@
 						href="/reading"
 						class="w-full sm:w-auto px-8 py-4 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-white font-headline text-base font-semibold text-center shadow-[0_0_24px_rgba(124,58,237,0.4)] hover:shadow-[0_0_35px_rgba(76,215,246,0.6)] hover:scale-105 transition-all duration-300"
 					>
-						Draw Cards Now
+						{$t('landing.ctaDraw')}
 					</a>
 					<a
 						href="/birth-chart"
 						class="w-full sm:w-auto px-8 py-4 rounded-full bg-surface-container text-on-surface hover:bg-surface-container-high font-headline text-base font-semibold text-center backdrop-blur-md shadow-md hover:scale-105 transition-all duration-300"
 					>
-						Compute Birth Chart
+						{$t('landing.ctaChart')}
 					</a>
 				</div>
 			</div>

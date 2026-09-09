@@ -1,5 +1,6 @@
 <script lang="ts">
 	import type { ReasoningStep } from '$lib/types';
+	import { locale, formatTraceResult } from '$lib/i18n';
 
 	let { step, index = 0 }: { step: ReasoningStep; index?: number } = $props();
 </script>
@@ -10,6 +11,6 @@
 	</div>
 	<div class="flex-1 min-w-0">
 		<div class="text-xs text-secondary font-mono-data truncate">{step.rule}</div>
-		<div class="text-sm text-on-surface/90 mt-0.5">{step.result}</div>
+		<div class="text-sm text-on-surface/90 mt-0.5">{formatTraceResult(step.result, $locale)}</div>
 	</div>
 </div>

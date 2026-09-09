@@ -210,6 +210,7 @@ async def generate_tarot_interpretation(
     themes: list[str],
     category: str,
     topic: str = "general",
+    locale: str = "en",
 ) -> str | None:
     cards_text = "\n".join(
         [
@@ -218,9 +219,46 @@ async def generate_tarot_interpretation(
         ]
     )
 
-    user_msg = f"""Please interpret this tarot reading:
+    is_myanmar = (locale == "my") or bool(re.search(r"[\u1000-\u109F]", question))
 
-Question: {question}
+    system_prompt = """You are an expert, intuitive, and highly empathetic Tarot Reader. Your goal is to provide deeply contextual, dynamic, and meaningful Tarot readings based on the user's specific questions.
+
+Core Guidelines for Tarot Interpretation:
+1. No Fixed/Static Meanings: NEVER rely on rigid, dictionary-like definitions of Tarot cards. The meaning of a card is fluid and must actively adapt to the context of the user's question, the spread position, and the overall narrative.
+2. Question-Centric Contextualization:
+   - If the question is about Love/Relationships, interpret the card's symbols and energy through emotional dynamics, communication, and feelings.
+   - If the question is about Career/Finance, focus on action steps, material outcomes, strategy, and work environment.
+   - If the question is a Yes/No or Decision-making query, analyze the underlying energy, warnings, or potential outcomes rather than giving a rigid one-word answer.
+   - If the question is about Education/Exams, focus on study discipline, mental focus, confidence, and exam strategy.
+3. Natural & Flexible Tone: Deliver the reading in a natural, insightful, and empathetic tone. Avoid formulaic templates. Make the interpretation feel tailor-made for the user's exact situation.
+4. Balanced Perspective: Highlight both the empowering aspects (light) and potential challenges/advice (shadow) of each card as it pertains directly to their question.
+5. Language Requirement: Always respond in clear, fluent, warm, and authentic Burmese language (မြန်မာဘာသာ) with zero raw English or snake_case leakage."""
+
+    if is_myanmar:
+        user_msg = f"""တားရော့ဗေဒင်မေးမြန်းမှုအတွက် မေးခွန်းနှင့် အံဝင်ခွင်ကျဖြစ်သော စိတ်နှလုံးနွေးထွေးစေမည့် အနက်ဖွင့်ဟောကိန်းကို မြန်မာဘာသာစကားဖြင့် အသေးစိတ် ရေးသားပေးပါ။
+
+မေးမြန်းသူ၏ မေးခွန်း: "{question}"
+မေးမြန်းသူ၏ ရာသီခွင်: {zodiac_sign} ({element} ဓာတ်)
+မေးမြန်းသည့် ကဏ္ဍ: {topic} (Category: {category})
+ခင်းကျင်းပုံ စနစ်: {spread_name}
+
+ကျရောက်ခဲ့သော ကတ်များ:
+{cards_text}
+
+Prolog သင်္ကေတ အဓိကသဘောတရားများ: {', '.join(themes)}
+
+အရေးကြီးသော လမ်းညွှန်ချက်များ:
+၁။ တရားသေ အနက်ဖွင့်ဆိုချက်များကို မသုံးပါနှင့်။ မေးခွန်း "{question}"၊ ကတ်၏ တည်နေရာနှင့် မေးမြန်းသူ၏ ရာသီခွင် {zodiac_sign} ({element} ဓာတ်) ပင်ကိုစွမ်းအင်တို့နှင့် ပေါင်းစပ်ပြီး ကတ်များ၏ သင်္ကေတများကို သဘာဝကျကျ အနက်ဖွင့်ပါ။
+၂။ ကတ်တစ်ခုချင်းစီ၏ အားသာချက် (အလင်းဘက်ခြမ်း) နှင့် သတိပြုဖွယ်/စိန်ခေါ်မှု (အရိပ်ဘက်ခြမ်း) နှစ်ဖက်စလုံးကို ဟန်ချက်ညီညီ ရှင်းပြပါ။
+၃။ အဖြေကို အောက်ပါ အပိုင်း ၃ ပိုင်းဖြင့် စနစ်တကျ ရေးသားပေးပါ -
+   - **၁။ မေးခွန်းနှင့် ပတ်သက်သော တိုက်ရိုက်ဆန်းစစ်ချက်** (Direct, Empathetic Answer to the Question)
+   - **၂။ ကျရောက်သော ကတ်တစ်ခုချင်းစီ၏ လမ်းညွှန်ချက်** (Card-by-Card Guidance with Light & Shadow)
+   - **၃။ လက်တွေ့ကျင့်သုံးရန် လမ်းညွှန်ချက်နှင့် အကြံပြုချက်** (Actionable Advice for {zodiac_sign})
+၄။ အင်္ဂလိပ်စာလုံး သို့မဟုတ် snake_case စကားလုံးများ လုံးဝမပါရှိစေဘဲ ယဉ်ကျေးသိမ်မွေ့ နွေးထွေးသော မြန်မာဘာသာစကားစစ်စစ်ဖြင့်သာ ရေးသားပါ။ မေးမြန်းသူထံသို့ နောက်ဆက်တွဲ မေးခွန်းများ ပြန်မမေးပါနှင့်။"""
+    else:
+        user_msg = f"""Please interpret this tarot reading directly answering the user's question with intuitive empathy:
+
+Question: "{question}"
 Zodiac: {zodiac_sign} ({element} element)
 Topic: {topic}
 Spread: {spread_name}
@@ -231,13 +269,16 @@ Cards drawn:
 
 Prolog-derived themes: {', '.join(themes)}
 
-Please provide a thoughtful, reflective interpretation that connects these cards to the user's question.
-Focus on the {topic} dimension of this reading.
-Use the themes and card meanings to guide your interpretation.
-Remember this is for entertainment and self-reflection only.
-Provide your answer directly - do not ask follow-up questions."""
+Please provide a deeply contextual, dynamic interpretation following the core guidelines:
+1. Directly address their specific question "{question}".
+2. Provide fluid, card-by-card guidance adapting each card to its spread position and highlighting both light and shadow aspects.
+3. Offer actionable, empowering advice tailored to their zodiac energy.
+Provide your reading directly - do not ask follow-up questions."""
 
-    messages = [{"role": "user", "content": user_msg}]
+    messages = [
+        {"role": "system", "content": system_prompt},
+        {"role": "user", "content": user_msg}
+    ]
     result = await call_openrouter(messages, model=MODELS.get("creative"))
     return result
 
@@ -250,13 +291,22 @@ async def generate_horoscope(
     mood: str,
     mood_theme: str,
     focus: str,
+    locale: str = "en",
 ) -> dict | None:
+    lang_instruction = ""
+    if locale == "my":
+        lang_instruction = """
+LANGUAGE REQUIREMENT:
+You MUST write all section contents in fluent, elegant, authentic Myanmar (Burmese) language!
+Keep the label prefix in English (Theme:, Guidance:, Reflection:, Opportunity:, Caution:) so our parser can recognize each section, but the text after each colon MUST be entirely in pure Myanmar language. Do not use English words or untranslated tokens in the content."""
+
     user_msg = f"""Generate a personalized horoscope for {zodiac_sign} ({element} element, {modality} modality).
 
 Today's theme: {theme}
 Current mood: {mood}
 Mood-based theme: {mood_theme}
 Focus area: {focus}
+{lang_instruction}
 
 Return exactly five plain-text lines using these labels: Theme:, Guidance:, Reflection:, Opportunity:, and Caution:.
 Do not use Markdown, bullets, asterisks, or headings. Keep each section on one line.

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ELEMENT_COLORS, ELEMENT_ICONS } from '$lib/types';
+	import { locale, formatElement } from '$lib/i18n';
 
 	let { element, size = 'md' }: { element: string; size?: 'sm' | 'md' | 'lg' } = $props();
 
@@ -10,6 +11,7 @@
 		size === 'lg' ? 'text-base px-4 py-2' :
 		'text-sm px-3 py-1'
 	);
+	const localizedElement = $derived(formatElement(element, $locale));
 </script>
 
 <span
@@ -19,5 +21,5 @@
 	style:color="{color}"
 >
 	<span>{icon}</span>
-	<span>{element}</span>
+	<span>{localizedElement}</span>
 </span>

@@ -3,6 +3,15 @@
 	import { onMount } from 'svelte';
 	import { fetchReading } from '$lib/utils/api';
 	import type { ReadingResult } from '$lib/types';
+	import {
+		locale,
+		t,
+		getCardTranslation,
+		translatePosition,
+		getZodiacTranslation,
+		translateSpreadType,
+		translateTopic
+	} from '$lib/i18n';
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import MarkdownText from '$lib/components/MarkdownText.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
@@ -27,25 +36,25 @@
 </script>
 
 <svelte:head>
-	<title>Reasoning - AstroLogic</title>
+	<title>{$t('reasoning.title')} - AstroLogic</title>
 </svelte:head>
 
 <div class="page-container">
 	<div class="page-header flex flex-col gap-2">
 		<span class="font-mono-data text-xs tracking-widest text-on-surface-variant/80 uppercase"
-			>Inspection Focus • Symbolic Trace Viewer</span
+			>{$t('reasoning.inspectionFocus')}</span
 		>
 		<div class="flex items-center gap-3">
 			<span class="material-symbols-outlined text-3xl text-secondary">psychology</span>
 			<h1 class="font-headline text-3xl font-bold text-on-surface">
-				Prolog <span class="gradient-text">Reasoning</span>
+				Prolog <span class="gradient-text">{$t('reasoning.title')}</span>
 			</h1>
 		</div>
-		<p class="text-on-surface-variant">How did AstroLogic reach this result?</p>
+		<p class="text-on-surface-variant">{$t('reasoning.subtitle')}</p>
 	</div>
 
 	{#if loading}
-		<LoadingSpinner text="Loading reasoning..." />
+		<LoadingSpinner text={$t('reasoning.loading')} />
 	{:else if !reading}
 		<div
 			class="rounded-2xl bg-surface-container-lowest/80 p-12 text-center shadow-xl backdrop-blur-md"
@@ -53,30 +62,30 @@
 			<span class="material-symbols-outlined mb-4 text-5xl text-on-surface-variant/60"
 				>psychology_alt</span
 			>
-			<h2 class="font-headline mb-2 text-lg font-bold text-on-surface">No Reading Found</h2>
-			<p class="mb-4 text-on-surface-variant">Complete a reading to see its reasoning process.</p>
-			<a href="/reading" class="btn-primary inline-block">Start a Reading</a>
+			<h2 class="font-headline mb-2 text-lg font-bold text-on-surface">{$t('reasoning.notFound')}</h2>
+			<p class="mb-4 text-on-surface-variant">{$t('reasoning.notFoundDesc')}</p>
+			<a href="/reading" class="btn-primary inline-block">{$t('history.startReading')}</a>
 		</div>
 	{:else}
 		<div class="mx-auto flex max-w-3xl flex-col gap-6">
 			<div class="rounded-2xl bg-surface-container-lowest/80 p-6 shadow-xl backdrop-blur-md">
 				<h2 class="font-headline mb-2 flex items-center gap-2 text-lg font-bold text-on-surface">
 					<span class="material-symbols-outlined text-xl text-primary">summarize</span>
-					Reading Summary
+					{$t('reasoning.summary')}
 				</h2>
 				<div class="mb-3 text-sm text-on-surface-variant italic">"{reading.question}"</div>
 				<div class="flex flex-wrap gap-2">
 					<span
 						class="font-mono-data inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] tracking-wider text-primary uppercase"
-						>{reading.zodiac_sign}</span
+						>{getZodiacTranslation(reading.zodiac_sign, $locale).name}</span
 					>
 					<span
 						class="font-mono-data inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] tracking-wider text-secondary uppercase"
-						>{reading.spread_type}</span
+						>{translateSpreadType(reading.spread_type, $locale)}</span
 					>
 					<span
 						class="font-mono-data inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] tracking-wider text-tertiary uppercase"
-						>{reading.category}</span
+						>{translateTopic(reading.category, $locale)}</span
 					>
 				</div>
 			</div>
@@ -87,17 +96,17 @@
 						class="font-mono-data mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-on-surface-variant uppercase"
 					>
 						<span class="material-symbols-outlined text-base text-primary">style</span>
-						Cards Drawn
+						{$t('reasoning.cardsDrawn')}
 					</h3>
 					<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
 						{#each reading.cards as card}
 							<div class="rounded-xl bg-surface-container-high/60 p-3 text-center">
-								<div class="text-sm font-bold text-on-surface">{card.name}</div>
-								<div class="mt-0.5 text-xs text-secondary">{card.position}</div>
+								<div class="text-sm font-bold text-on-surface">{getCardTranslation(card.name, $locale).name}</div>
+								<div class="mt-0.5 text-xs text-secondary">{translatePosition(card.position, $locale)}</div>
 								<div
 									class="font-mono-data mt-1 text-[11px] tracking-wide text-on-surface-variant/70 uppercase"
 								>
-									{card.is_reversed ? 'Reversed' : 'Upright'}
+									{card.is_reversed ? $t('common.reversed') : $t('common.upright')}
 								</div>
 							</div>
 						{/each}
@@ -111,7 +120,7 @@
 						class="font-mono-data mb-3 flex items-center gap-2 text-xs font-semibold tracking-wider text-on-surface-variant uppercase"
 					>
 						<span class="material-symbols-outlined text-base text-tertiary">token</span>
-						Extracted Themes
+						{$t('reasoning.extractedThemes')}
 					</h3>
 					<div class="flex flex-wrap gap-2">
 						{#each reading.themes as theme}
@@ -130,7 +139,7 @@
 					<div class="flex items-center gap-2 text-secondary">
 						<span class="material-symbols-outlined text-lg">auto_awesome</span>
 						<span class="font-mono-data text-xs font-semibold tracking-wider uppercase"
-							>AI Socratic Synthesis</span
+							>{$t('reasoning.aiSynthesis')}</span
 						>
 					</div>
 					<MarkdownText content={reading.ai_interpretation} class="text-sm" />
@@ -143,7 +152,7 @@
 						class="font-mono-data mb-4 flex items-center gap-2 text-xs font-semibold tracking-wider text-on-surface-variant uppercase"
 					>
 						<span class="material-symbols-outlined text-base text-secondary">account_tree</span>
-						Reasoning Trace
+						{$t('reasoning.trace')}
 					</h3>
 					<div class="relative">
 						<div

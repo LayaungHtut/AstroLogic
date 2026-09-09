@@ -406,6 +406,22 @@ class PrologService:
 
     @staticmethod
     def classify_question(question: str) -> str:
+        q_lower = (question or "").lower()
+        multilingual_categories = [
+            ("education", ["စာမေးပွဲ", "အောင်", "ကျောင်း", "တက္ကသိုလ်", "ပညာရေး", "ဘွဲ့", "သင်တန်း", "စာသင်", "exam", "test", "study", "education", "degree", "school", "college", "pass", "fail", "grade", "major"]),
+            ("career", ["အလုပ်", "ရာထူး", "စီးပွားရေး", "အလုပ်အကိုင်", "အင်တာဗျူး", "job", "career", "work", "promotion", "boss", "interview", "business"]),
+            ("relationship", ["အချစ်", "ချစ်သူ", "ရည်းစား", "အိမ်ထောင်", "မင်္ဂလာဆောင်", "ကြိုက်", "တွဲ", "သဘောကျ", "love", "romantic", "partner", "relationship", "crush", "dating", "marriage", "soulmate"]),
+            ("finance", ["ငွေ", "ပိုက်ဆံ", "ကြွေး", "ချမ်းသာ", "လစာ", "ရင်းနှီးမြှုပ်နှံ", "money", "finance", "financ", "salary", "wealth", "invest", "budget"]),
+            ("decision", ["ရွေးချယ်", "ဆုံးဖြတ်", "ဘယ်ဟာ", "လမ်းခွဲ", "decision", "choose", "choice", "which"]),
+            ("friendship", ["သူငယ်ချင်း", "မိတ်ဆွေ", "friend", "friendship"]),
+            ("creativity", ["အနုပညာ", "တီထွင်", "creative", "art", "write", "music"]),
+            ("future_planning", ["အနာဂတ်", "အစီအစဉ်", "ရှေ့ရေး", "future", "plan", "destiny"]),
+            ("self_reflection", ["ကိုယ့်ကိုယ်ကို", "စိတ်", "အဓိပ္ပာယ်", "myself", "understand", "meaning"]),
+        ]
+        for cat, keywords in multilingual_categories:
+            if any(k in q_lower for k in keywords):
+                return cat
+
         safe_q = _quote_atom(question)
         result = _first_result(f"question_category({safe_q}, Category)")
         if result:
@@ -415,6 +431,19 @@ class PrologService:
     @staticmethod
     def classify_topic(question: str) -> str:
         """Classify a question into a tarot topic."""
+        q_lower = (question or "").lower()
+        multilingual_topics = [
+            ("education", ["စာမေးပွဲ", "အောင်", "ကျောင်း", "တက္ကသိုလ်", "ပညာရေး", "ဘွဲ့", "သင်တန်း", "စာသင်", "exam", "test", "study", "education", "degree", "school", "college", "pass", "fail", "grade", "major", "academic"]),
+            ("love", ["အချစ်", "ချစ်သူ", "ရည်းစား", "အိမ်ထောင်", "မင်္ဂလာဆောင်", "ကြိုက်", "တွဲ", "သဘောကျ", "love", "romantic", "partner", "relationship", "crush", "dating", "marriage", "soulmate", "heart"]),
+            ("career", ["အလုပ်", "ရာထူး", "စီးပွားရေး", "အလုပ်အကိုင်", "အင်တာဗျူး", "job", "career", "work", "promotion", "boss", "interview", "business"]),
+            ("finance", ["ငွေ", "ပိုက်ဆံ", "ကြွေး", "ချမ်းသာ", "လစာ", "ရင်းနှီးမြှုပ်နှံ", "money", "finance", "financ", "salary", "wealth", "invest", "budget"]),
+            ("personal_growth", ["ကိုယ့်ကိုယ်ကို", "စိတ်ဓာတ်", "အတွင်းစိတ်", "grow", "improve", "heal", "transform", "purpose", "meaning", "develop", "myself"]),
+            ("communication", ["စကားပြော", "နားလည်", "communicat", "explain", "tell", "say", "listen", "understand", "express", "speak"]),
+        ]
+        for top, keywords in multilingual_topics:
+            if any(k in q_lower for k in keywords):
+                return top
+
         safe_q = _quote_atom(question)
         result = _first_result(f"classify_topic({safe_q}, Topic)")
         if result:
@@ -488,6 +517,7 @@ class PrologService:
 
     @staticmethod
     def recommend_spread(question: str, sign: str) -> dict | None:
+        sign = (sign or "cancer").lower().strip()
         safe_q = _quote_atom(question)
         result = _first_result(
             f"spread_recommendation({safe_q}, {_quote_atom(sign)}, Rec)"
@@ -511,6 +541,7 @@ class PrologService:
     def recommend_custom_spread(question: str, sign: str, count: int) -> dict | None:
         """Like recommend_spread_for, but for an open draw of `count` cards
         (1-10) rather than one of the fixed-layout spreads."""
+        sign = (sign or "cancer").lower().strip()
         safe_q = _quote_atom(question)
         result = _first_result(
             f"custom_spread_recommendation({safe_q}, {_quote_atom(sign)}, {int(count)}, Rec)"
@@ -534,6 +565,8 @@ class PrologService:
     def recommend_spread_for(question: str, sign: str, spread_type: str) -> dict | None:
         """Like recommend_spread, but for an explicit user-chosen spread type
         instead of letting Prolog pick one from the question text."""
+        sign = (sign or "cancer").lower().strip()
+        spread_type = (spread_type or "three_card").lower().strip()
         safe_q = _quote_atom(question)
         result = _first_result(
             f"spread_recommendation_for({safe_q}, {_quote_atom(sign)}, "

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { ZODIAC_SYMBOLS, ELEMENT_COLORS } from '$lib/types';
+	import { locale, getZodiacTranslation } from '$lib/i18n';
 
 	let { sign, element, size = 'md' }: { sign: string; element?: string; size?: 'sm' | 'md' | 'lg' } = $props();
 
@@ -10,6 +11,7 @@
 		size === 'lg' ? 'w-16 h-16 text-3xl' :
 		'w-12 h-12 text-xl'
 	);
+	const signTrans = $derived(getZodiacTranslation(sign, $locale));
 </script>
 
 <div
@@ -18,6 +20,8 @@
 	style:border-color="{elemColor}60"
 	style:color="{elemColor}"
 	style:text-shadow="0 0 10px {elemColor}"
+	title={signTrans.name || sign}
+	aria-label={signTrans.name || sign}
 >
 	{symbol}
 </div>

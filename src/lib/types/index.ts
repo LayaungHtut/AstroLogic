@@ -12,6 +12,7 @@ export interface TarotCardInfo {
 	card: string;
 	name: string;
 	arcana?: string;
+	suit?: string;
 	keywords: string[];
 	upright?: string[];
 	reversed?: string[];
@@ -22,10 +23,12 @@ export interface TarotCardInfo {
 
 export interface ZodiacAffinity {
 	zodiac: string;
+	sign?: string;
 	element: string;
 	element_theme: string;
 	card: string;
 	card_theme: string;
+	theme?: string;
 	combined: string;
 }
 
@@ -96,7 +99,6 @@ export interface ReadingResult {
 	conflicts?: ThemeConflict[];
 	reasoning: ReasoningStep[];
 	ai_interpretation: string;
-	summary?: string;
 	facts?: Record<string, unknown>;
 	created_at?: string;
 }
@@ -269,3 +271,69 @@ export const SPREAD_TYPES = [
 
 export const CUSTOM_DRAW_MIN = 1;
 export const CUSTOM_DRAW_MAX = 10;
+
+export interface BirthChartAspect {
+	body1: string;
+	body2: string;
+	body1_name: string;
+	body2_name: string;
+	body1_name_my: string;
+	body2_name_my: string;
+	aspect: string;
+	aspect_my: string;
+	angle: number;
+	orb: number;
+	type: string;
+	description: string;
+}
+
+export interface BirthChartExplanationData {
+	archetype_title: string;
+	core_identity: {
+		title: string;
+		sun: {
+			sign: string;
+			name: string;
+			symbol: string;
+			sign_display: string;
+			essence: string;
+			strengths: string[];
+			growth_lesson: string;
+		};
+		moon: {
+			sign: string;
+			name: string;
+			symbol: string;
+			sign_display: string;
+			essence: string;
+			need: string;
+		};
+		rising: {
+			sign: string;
+			name: string;
+			symbol: string;
+			sign_display: string;
+			essence: string;
+			vibe: string;
+		};
+		triad_synthesis: string;
+	};
+	aspects: BirthChartAspect[];
+	planetary_breakdown: {
+		name: string;
+		display_name: string;
+		symbol: string;
+		sign: string;
+		sign_display: string;
+		degree?: number;
+		retrograde?: boolean;
+		domain: string;
+		interpretation: string;
+	}[];
+	elemental_constitution: {
+		dominant: string;
+		percentages: Record<string, number>;
+		analysis: string;
+	};
+	guidance: string;
+}
