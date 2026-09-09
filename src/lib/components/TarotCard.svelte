@@ -8,14 +8,10 @@
 		index = 0,
 		revealed = true
 	}: { card: DrawnCard; index?: number; revealed?: boolean } = $props();
-	let isFlipped = $state(false);
+	let isFlipped = $derived(!revealed);
 	let imageFailed = $state(false);
 
 	const CARD_BACK_URL = cardImage('https://sixseeds.github.io/tarot-api/cards/back.jpg', 320);
-
-	$effect(() => {
-		isFlipped = !revealed;
-	});
 
 	function toggleFlip() {
 		isFlipped = !isFlipped;

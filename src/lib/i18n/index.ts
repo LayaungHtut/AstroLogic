@@ -1,23 +1,6 @@
 import { writable, derived } from 'svelte/store';
 import type { SupportedLocale } from './types';
 import { TRANSLATIONS_EN, TRANSLATIONS_MY } from './translations';
-import {
-	getCardTranslation,
-	translatePosition,
-	translateKeyword,
-	SPREAD_POSITIONS_DATA,
-	SPREAD_TYPES_DATA,
-	TOPICS_DATA,
-	SUITS_DATA
-} from './tarotData';
-import {
-	getZodiacTranslation,
-	formatElement,
-	formatModality,
-	formatPlanet,
-	ZODIAC_SIGNS_DATA,
-	ELEMENTS_DATA
-} from './zodiacData';
 
 const STORAGE_KEY = 'astrologic_locale';
 

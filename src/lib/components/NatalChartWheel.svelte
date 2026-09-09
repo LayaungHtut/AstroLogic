@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { locale, t, getZodiacTranslation, formatPlanet, formatElement } from '$lib/i18n';
+	import { locale, formatPlanet } from '$lib/i18n';
 	import type { PlanetPosition } from '$lib/types';
 
 	interface BirthChartData {
@@ -10,7 +10,6 @@
 		moon_degree?: number;
 		rising_degree?: number;
 		planets?: PlanetPosition[];
-		precise?: boolean;
 		timezone?: string;
 	}
 
@@ -152,7 +151,7 @@
 			modality: 'mutable',
 			color: '#3b82f6'
 		}
-	];
+	] as const;
 
 	interface ChartBody {
 		id: string;
@@ -165,6 +164,10 @@
 		retrograde: boolean;
 		element: 'fire' | 'earth' | 'air' | 'water';
 		modality: 'cardinal' | 'fixed' | 'mutable';
+	}
+
+	function range(length: number): number[] {
+		return Array.from({ length }, (_, i) => i);
 	}
 
 	function signIndex(signName: string): number {
@@ -190,8 +193,8 @@
 			signDeg: Math.floor(sunSignDeg),
 			signMin: Math.floor((sunSignDeg % 1) * 60),
 			retrograde: false,
-			element: sunSignInfo.element as any,
-			modality: sunSignInfo.modality as any
+			element: sunSignInfo.element,
+			modality: sunSignInfo.modality
 		});
 
 		// 2. Moon
@@ -209,8 +212,8 @@
 			signDeg: Math.floor(moonSignDeg),
 			signMin: Math.floor((moonSignDeg % 1) * 60),
 			retrograde: false,
-			element: moonSignInfo.element as any,
-			modality: moonSignInfo.modality as any
+			element: moonSignInfo.element,
+			modality: moonSignInfo.modality
 		});
 
 		// 3. Other planets & celestial points
@@ -246,8 +249,8 @@
 					signDeg: Math.floor(pSignDeg),
 					signMin: Math.floor((pSignDeg % 1) * 60),
 					retrograde: Boolean(p.retrograde),
-					element: sInfo.element as any,
-					modality: sInfo.modality as any
+					element: sInfo.element,
+					modality: sInfo.modality
 				});
 			}
 		}
@@ -279,13 +282,6 @@
 		};
 	}
 
-	function describeArc(x: number, y: number, radius: number, startAngle: number, endAngle: number) {
-		const start = polarToCartesian(x, y, radius, endAngle);
-		const end = polarToCartesian(x, y, radius, startAngle);
-		const largeArcFlag = endAngle - startAngle <= 180 ? '0' : '1';
-		return ['M', start.x, start.y, 'A', radius, radius, 0, largeArcFlag, 0, end.x, end.y].join(' ');
-	}
-
 	// ASPECTS COMPUTATION
 	interface Aspect {
 		body1: ChartBody;
@@ -315,7 +311,6 @@
 				let symbol = '';
 				let color = '';
 				let targetAngle = 0;
-				let maxOrb = 8;
 				let isHarmonious = true;
 
 				if (diff <= 8) {
@@ -323,32 +318,27 @@
 					symbol = '☌';
 					color = '#eab308'; // Amber
 					targetAngle = 0;
-					maxOrb = 8;
 				} else if (Math.abs(diff - 60) <= 6) {
 					aspType = 'sextile';
 					symbol = '✱';
 					color = '#3b82f6'; // Blue
 					targetAngle = 60;
-					maxOrb = 6;
 				} else if (Math.abs(diff - 90) <= 8) {
 					aspType = 'square';
 					symbol = '□';
 					color = '#ef4444'; // Red
 					targetAngle = 90;
-					maxOrb = 8;
 					isHarmonious = false;
 				} else if (Math.abs(diff - 120) <= 8) {
 					aspType = 'trine';
 					symbol = '△';
 					color = '#2563eb'; // Deep Blue
 					targetAngle = 120;
-					maxOrb = 8;
 				} else if (Math.abs(diff - 180) <= 8) {
 					aspType = 'opposition';
 					symbol = '☍';
 					color = '#dc2626'; // Deep Red
 					targetAngle = 180;
-					maxOrb = 8;
 					isHarmonious = false;
 				}
 
@@ -516,9 +506,8 @@
 			/>
 
 			<!-- 12 ZODIAC SECTORS & DEGREE TICK MARKS -->
-			{#each ZODIAC_SIGNS as sign, i}
+			{#each ZODIAC_SIGNS as sign (sign.id)}
 				{@const signStartAngle = eclipticToAngle(sign.startDeg)}
-				{@const signEndAngle = eclipticToAngle(sign.startDeg + 30)}
 				{@const signMidAngle = eclipticToAngle(sign.startDeg + 15)}
 				{@const glyphPos = polarToCartesian(CX, CY, (R_OUTER + R_ZODIAC_INNER) / 2, signMidAngle)}
 
@@ -535,7 +524,7 @@
 				/>
 
 				<!-- 30 Degree Ticks inside this sign -->
-				{#each Array.from({ length: 30 }) as _, deg}
+				{#each range(30) as deg (deg)}
 					{@const tickEcliptic = sign.startDeg + deg}
 					{@const tickAngle = eclipticToAngle(tickEcliptic)}
 					{@const isMajor = deg % 5 === 0}
@@ -567,7 +556,7 @@
 			{/each}
 
 			<!-- CENTRAL ASPECT WEB: Connecting Lines -->
-			{#each aspects as asp}
+			{#each aspects as asp (asp.body1.id + asp.body2.id + asp.type)}
 				{@const a1 = eclipticToAngle(asp.body1.eclipticDeg)}
 				{@const a2 = eclipticToAngle(asp.body2.eclipticDeg)}
 				{@const p1 = polarToCartesian(CX, CY, R_INNER_WEB, a1)}
@@ -656,7 +645,7 @@
 			</text>
 
 			<!-- PLANETARY GLYPHS & DEGREES IN THE PLANETARY TRACK -->
-			{#each allBodies as body}
+			{#each allBodies as body (body.id)}
 				{@const angle = eclipticToAngle(body.eclipticDeg)}
 				{@const posGlyph = polarToCartesian(CX, CY, R_PLANETS, angle)}
 				{@const tickRim = polarToCartesian(CX, CY, R_ZODIAC_INNER, angle)}
@@ -758,7 +747,7 @@
 			>
 				<table class="font-mono-data w-full border-collapse text-xs">
 					<tbody>
-						{#each allBodies as body, rowIdx}
+						{#each allBodies as body, rowIdx (body.id)}
 							{@const sIdx = signIndex(body.sign)}
 							{@const sInfo = ZODIAC_SIGNS[sIdx]}
 							<tr class="border-b border-white/5 transition-colors hover:bg-white/5">
@@ -786,7 +775,7 @@
 								</td>
 
 								<!-- Triangular Aspect Grid Cells (Cols 0 to rowIdx - 1) -->
-								{#each Array.from({ length: rowIdx }) as _, colIdx}
+								{#each range(rowIdx) as colIdx (colIdx)}
 									{@const cellAspect = aspects.find(
 										(a) =>
 											(a.index1 === colIdx && a.index2 === rowIdx) ||
@@ -975,7 +964,7 @@
 			<div class="absolute right-4 bottom-2 left-4 h-0.5 bg-slate-600"></div>
 
 			<!-- Major Tick marks 0, 5, 10, 15, 20, 25, 30 -->
-			{#each [0, 5, 10, 15, 20, 25, 30] as deg}
+			{#each [0, 5, 10, 15, 20, 25, 30] as deg (deg)}
 				{@const pct = (deg / 30) * 100}
 				<div
 					class="absolute bottom-0 flex flex-col items-center"
@@ -987,7 +976,7 @@
 			{/each}
 
 			<!-- Plotted Bodies on the Ruler -->
-			{#each allBodies as body}
+			{#each allBodies as body (body.id)}
 				{@const pct = ((body.signDeg + body.signMin / 60) / 30) * 100}
 				<div
 					class="group absolute bottom-5 flex -translate-x-1/2 cursor-pointer flex-col items-center transition-transform hover:z-20 hover:scale-125"

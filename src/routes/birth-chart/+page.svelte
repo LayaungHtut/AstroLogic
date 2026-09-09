@@ -102,12 +102,6 @@
 		label: `${i.toString().padStart(2, '0')}:00`
 	}));
 
-	const WHEEL_ANGLES = { sun: -90, moon: 30, rising: 150 };
-
-	function eclipticToWheelAngle(degree: number, risingDegree: number): number {
-		return degree - risingDegree - 90;
-	}
-
 	async function calculateChart() {
 		loading = true;
 		error = '';
@@ -148,10 +142,6 @@
 		return ELEMENT_COLORS[element] || '#9333ea';
 	}
 
-	function wheelPoint(angleDeg: number, radius: number) {
-		const rad = (angleDeg * Math.PI) / 180;
-		return { x: 100 + radius * Math.cos(rad), y: 100 + radius * Math.sin(rad) };
-	}
 </script>
 
 <svelte:head>

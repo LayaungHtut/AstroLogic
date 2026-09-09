@@ -1,5 +1,5 @@
 import { writable } from 'svelte/store';
-import type { ZodiacInfo, ReadingResult, UserProfile, ChatMessage } from '$lib/types';
+import type { ReadingResult, UserProfile, ChatMessage } from '$lib/types';
 
 function createProfileStore() {
 	const STORAGE_KEY = 'astrologic_profile';
@@ -66,13 +66,15 @@ function createChatStore() {
 }
 
 function createLoadingStore() {
-	const { subscribe, set, update } = writable<Record<string, boolean>>({});
+	const { subscribe, update } = writable<Record<string, boolean>>({});
+	let current: Record<string, boolean> = {};
+	subscribe((s) => (current = s));
 
 	return {
 		subscribe,
 		setLoading: (key: string, value: boolean) =>
 			update((s: Record<string, boolean>) => ({ ...s, [key]: value })),
-		isLoading: (key: string) => false
+		isLoading: (key: string) => !!current[key]
 	};
 }
 

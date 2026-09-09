@@ -1,11 +1,10 @@
 <script lang="ts">
-	import type { BirthChartExplanationData, BirthChartAspect } from '$lib/types';
-	import { locale, t, formatElement, formatModality, formatPlanet } from '$lib/i18n';
+	import type { BirthChartExplanationData } from '$lib/types';
+	import { locale, formatElement } from '$lib/i18n';
 	import { ELEMENT_COLORS, ZODIAC_SYMBOLS } from '$lib/types';
-	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 
 	interface Props {
-		chart: any;
+		chart: unknown;
 		birthInfo?: {
 			year?: number;
 			month?: number;
@@ -57,7 +56,7 @@
 
 	// Re-fetch explanation automatically if user changes language while explanation is visible
 	$effect(() => {
-		const currentLocale = $locale;
+		void $locale;
 		if (isOpen && chart && explanation) {
 			fetchExplanation();
 		}
@@ -293,7 +292,7 @@
 										{$locale === 'my' ? 'အဓိက အားသာချက်များ' : 'Key Strengths'}
 									</div>
 									<div class="flex flex-wrap gap-1.5">
-										{#each explanation.core_identity.sun.strengths as strength}
+										{#each explanation.core_identity.sun.strengths as strength (strength)}
 											<span
 												class="rounded-md border border-primary/20 bg-primary/10 px-2 py-0.5 text-[11px] text-primary"
 											>
@@ -411,7 +410,7 @@
 					</p>
 
 					<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3">
-						{#each explanation.planetary_breakdown as p}
+						{#each explanation.planetary_breakdown as p (p.display_name)}
 							<div
 								class="glass-card flex flex-col justify-between rounded-xl border border-white/5 p-4 transition-all hover:border-primary/30"
 							>
@@ -471,7 +470,7 @@
 
 					{#if explanation.aspects && explanation.aspects.length > 0}
 						<div class="space-y-3">
-							{#each explanation.aspects as asp}
+							{#each explanation.aspects as asp (asp.body1_name + asp.body2_name + asp.type)}
 								<div
 									class="flex flex-col justify-between gap-4 rounded-xl border border-white/5 bg-surface-container-high/40 p-4 transition-all hover:border-primary/20 sm:flex-row sm:items-center"
 								>
@@ -530,7 +529,7 @@
 						</h4>
 
 						<div class="mb-6 grid grid-cols-1 gap-4 sm:grid-cols-4">
-							{#each ['fire', 'earth', 'air', 'water'] as elem}
+							{#each ['fire', 'earth', 'air', 'water'] as elem (elem)}
 								{@const pct = explanation.elemental_constitution.percentages[elem] || 0}
 								<div
 									class="flex flex-col gap-1.5 rounded-lg border border-white/5 bg-surface-container-highest/40 p-3"

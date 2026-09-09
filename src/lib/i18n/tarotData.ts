@@ -2064,9 +2064,6 @@ export function formatReadingSynthesis(
 		.map((t) => translateTheme(t, 'my'))
 		.filter(Boolean)
 		.join('၊ ');
-	const zodiacMy = reading.zodiac_sign
-		? getZodiacTranslation(reading.zodiac_sign, 'my').name || reading.zodiac_sign
-		: '';
 	const categoryMy = translateTopic(reading.category || reading.topic, 'my') || 'အထွေထွေဘဝကဏ္ဍ';
 
 	const qLower = question.toLowerCase();
@@ -2115,7 +2112,7 @@ export function formatReadingSynthesis(
 		reading.topic === 'decision';
 
 	// SECTION 1: QUESTION-SPECIFIC DIRECT ANSWER
-	let section1 = '';
+	let section1: string;
 	if (isLoveTiming) {
 		section1 =
 			`**၁။ မေးခွန်းနှင့် ပတ်သက်သော တိုက်ရိုက်ဆန်းစစ်ချက် (အချစ်သစ် ပေါ်ပေါက်လာနိုင်မှုနှင့် အချိန်ကာလ)**\n` +
@@ -2169,9 +2166,9 @@ export function formatReadingSynthesis(
 				const orient = c.is_reversed ? ' (ပြောင်းပြန် - Reversed)' : ' (မူမှန် - Upright)';
 				const pos = translatePosition(c.position, 'my') || c.position || `ကတ် ${i + 1}`;
 
-				let dynamicInsight = '';
-				let lightAspect = '';
-				let shadowAspect = '';
+				let dynamicInsight: string;
+				let lightAspect: string;
+				let shadowAspect: string;
 
 				if (isLoveTiming || isLoveGeneral) {
 					if (c.name.includes('Cups')) {

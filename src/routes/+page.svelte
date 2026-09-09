@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { ZODIAC_SYMBOLS } from '$lib/types';
-	import { locale, t, getZodiacTranslation, formatElement, formatModality } from '$lib/i18n';
+	import { locale, t, getZodiacTranslation, formatElement } from '$lib/i18n';
 
 	const features = $derived([
 		{

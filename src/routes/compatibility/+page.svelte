@@ -7,7 +7,7 @@
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import { getApproachTips, type ApproachTips } from '$lib/utils/compatibilityTips';
-	import { locale, t, getZodiacTranslation, formatElement, formatModality } from '$lib/i18n';
+	import { locale, t, getZodiacTranslation, formatModality } from '$lib/i18n';
 
 	let sign1 = $state('aries');
 	let sign2 = $state('libra');

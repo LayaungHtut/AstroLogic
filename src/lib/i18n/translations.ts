@@ -1,4 +1,4 @@
-import type { TranslationDictionary, SupportedLocale } from './types';
+import type { TranslationDictionary } from './types';
 
 export const TRANSLATIONS_EN: TranslationDictionary = {
 	// Brand & Meta

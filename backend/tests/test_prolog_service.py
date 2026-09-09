@@ -42,7 +42,11 @@ class TestQueryInjectionRegression:
     injected goal succeeded."""
 
     def test_classify_question_survives_quote_breakout_attempt(self):
-        result = PrologService.classify_question("test' , true, fail('X")
+        # Deliberately avoids embedding a real classification keyword (e.g.
+        # "test") so this exercises the quote/goal-breakout defense itself
+        # rather than incidentally matching the multilingual keyword
+        # pre-check that now runs before the Prolog query is built.
+        result = PrologService.classify_question("qqz' , true, call('X")
         assert result == "general"
 
     def test_get_zodiac_info_rejects_paren_breakout_attempt(self):

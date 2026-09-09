@@ -9,3 +9,4 @@ python-multipart==0.0.12
 pyswisseph==2.10.3.2
 timezonefinder==8.3.0
 tzdata==2026.3
+skyfield==1.55
