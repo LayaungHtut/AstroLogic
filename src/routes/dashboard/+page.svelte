@@ -116,7 +116,10 @@
 			icon: 'style',
 			label: $locale === 'my' ? 'တားရော့ဗေဒင်မေးမည်' : 'Tarot Reading',
 			badge: $locale === 'my' ? 'နေ့စဉ်ဟောကိန်း' : 'Daily Draw',
-			description: $locale === 'my' ? 'သင်္ကေတတားရော့ကတ်များကို မွှေနှောက်ဆွဲယူပြီး ယနေ့အတွက် လမ်းညွှန်ချက်ရယူပါ။' : "Shuffle the deck of symbolic archetypes to unveil today's currents.",
+			description:
+				$locale === 'my'
+					? 'သင်္ကေတတားရော့ကတ်များကို မွှေနှောက်ဆွဲယူပြီး ယနေ့အတွက် လမ်းညွှန်ချက်ရယူပါ။'
+					: "Shuffle the deck of symbolic archetypes to unveil today's currents.",
 			cta: $locale === 'my' ? 'ကတ်ဆွဲမည်' : 'Draw Cards',
 			ctaIcon: 'arrow_forward',
 			tint: 'primary' as Tint
@@ -126,7 +129,10 @@
 			icon: 'explore',
 			label: $locale === 'my' ? 'နေ့စဉ်ဟောစာတမ်း' : 'Horoscope',
 			badge: $locale === 'my' ? 'နေ့စဉ်လမ်းညွှန်' : 'Daily Guidance',
-			description: $locale === 'my' ? 'သင့်ရာသီခွင်အတွက် နေ့စဉ်အသစ်ထုတ်ပြန်ပေးသော နက္ခတ်ဟောစာတမ်း။' : 'Personalized celestial guidance mapped to your sign, refreshed daily.',
+			description:
+				$locale === 'my'
+					? 'သင့်ရာသီခွင်အတွက် နေ့စဉ်အသစ်ထုတ်ပြန်ပေးသော နက္ခတ်ဟောစာတမ်း။'
+					: 'Personalized celestial guidance mapped to your sign, refreshed daily.',
 			cta: $locale === 'my' ? 'ဟောစာတမ်းကြည့်မည်' : 'View Horoscope',
 			ctaIcon: 'north_east',
 			tint: 'secondary' as Tint
@@ -136,7 +142,10 @@
 			icon: 'all_inclusive',
 			label: $locale === 'my' ? 'ရာသီခွင်လိုက်ဖက်ညီမှု' : 'Compatibility',
 			badge: $locale === 'my' ? 'ဓာတ်သဟဇာတ' : 'Elemental Match',
-			description: $locale === 'my' ? 'ရာသီခွင်နှစ်ခုအကြား ဓာတ်သဘောနှင့် သဟဇာတဖြစ်မှုကို လေ့လာဆန်းစစ်ပါ။' : 'Evaluate elemental harmony and compatibility between two signs.',
+			description:
+				$locale === 'my'
+					? 'ရာသီခွင်နှစ်ခုအကြား ဓာတ်သဘောနှင့် သဟဇာတဖြစ်မှုကို လေ့လာဆန်းစစ်ပါ။'
+					: 'Evaluate elemental harmony and compatibility between two signs.',
 			cta: $locale === 'my' ? 'လိုက်ဖက်မှုဆန်းစစ်မည်' : 'Analyze Bond',
 			ctaIcon: 'fingerprint',
 			tint: 'tertiary' as Tint
@@ -146,7 +155,10 @@
 			icon: 'psychology',
 			label: $locale === 'my' ? 'AI နက္ခတ်လမ်းပြ' : 'AI Guide',
 			badge: $locale === 'my' ? 'အွန်လိုင်း' : 'Online',
-			description: $locale === 'my' ? 'Prolog ယုတ္တိဗေဒစနစ်ဖြင့် သက်သေပြအဖြေထုတ်ပေးသော AI ကို မေးမြန်းပါ။' : 'Ask the Prolog-backed reasoning engine for deterministic insight.',
+			description:
+				$locale === 'my'
+					? 'Prolog ယုတ္တိဗေဒစနစ်ဖြင့် သက်သေပြအဖြေထုတ်ပေးသော AI ကို မေးမြန်းပါ။'
+					: 'Ask the Prolog-backed reasoning engine for deterministic insight.',
 			cta: $locale === 'my' ? 'AI ကို မေးမည်' : 'Ask the Oracle',
 			ctaIcon: 'chat_bubble',
 			tint: 'secondary' as Tint
@@ -227,7 +239,8 @@
 							onclick={() => (showProfileSettings = true)}
 							class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-primary/10 px-3 py-1 text-[10px] font-semibold tracking-wider text-primary uppercase transition-colors hover:bg-primary/20"
 						>
-							<span class="text-sm">✦</span> {$t('dashboard.setSign')}
+							<span class="text-sm">✦</span>
+							{$t('dashboard.setSign')}
 						</button>
 					{/if}
 					{#if currentProfile.preferred_style}
@@ -249,7 +262,9 @@
 						{greeting()}, <span class="gradient-text">{currentProfile.nickname || 'Explorer'}</span>
 					</h1>
 					<p class="mt-1 text-on-surface-variant">
-						{$locale === 'my' ? 'သင်၏ နက္ခတ်ဗေဒင် ဒက်ရှ်ဘုတ်မှ ကြိုဆိုပါသည်။' : 'Welcome to your cosmic dashboard.'}
+						{$locale === 'my'
+							? 'သင်၏ နက္ခတ်ဗေဒင် ဒက်ရှ်ဘုတ်မှ ကြိုဆိုပါသည်။'
+							: 'Welcome to your cosmic dashboard.'}
 					</p>
 				</div>
 			</div>
@@ -267,7 +282,11 @@
 						>
 						<span class="font-mono-data text-sm font-semibold text-on-surface">
 							{recentReadings.length}
-							{$locale === 'my' ? 'ကြိမ် မေးမြန်းထားသည်' : (recentReadings.length === 1 ? 'Reading Logged' : 'Readings Logged')}
+							{$locale === 'my'
+								? 'ကြိမ် မေးမြန်းထားသည်'
+								: recentReadings.length === 1
+									? 'Reading Logged'
+									: 'Readings Logged'}
 						</span>
 					</div>
 				</div>
@@ -375,7 +394,9 @@
 								{zodiacTrans.name || currentProfile.zodiac_sign}
 							</h4>
 							<p class="text-sm text-on-surface-variant">
-								{$locale === 'my' ? `${localizedElement} စိုးမိုးသော ရာသီခွင်` : `Ruled by the element of ${element}`}
+								{$locale === 'my'
+									? `${localizedElement} စိုးမိုးသော ရာသီခွင်`
+									: `Ruled by the element of ${element}`}
 							</p>
 						</div>
 					</div>
@@ -461,7 +482,9 @@
 							class="font-mono-data relative z-10 flex items-center gap-2 p-3.5 text-[11px] text-primary"
 						>
 							<span class="material-symbols-outlined text-base">lens_blur</span>
-							{$locale === 'my' ? 'ဗေဒင်မေးမြန်းမှုတိုင်းသည် ကောင်းကင်စကြဝဠာ၏ စည်းချက်အတိုင်း ဖြစ်ပေါ်ပါသည်' : 'Every reading unfolds within the greater celestial rhythm.'}
+							{$locale === 'my'
+								? 'ဗေဒင်မေးမြန်းမှုတိုင်းသည် ကောင်းကင်စကြဝဠာ၏ စည်းချက်အတိုင်း ဖြစ်ပေါ်ပါသည်'
+								: 'Every reading unfolds within the greater celestial rhythm.'}
 						</span>
 					</div>
 				</div>
@@ -565,7 +588,9 @@
 								>auto_stories</span
 							>
 							<p class="text-on-surface-variant">{$t('dashboard.noReadings')}</p>
-							<a href="/reading" class="btn-primary mt-2 inline-block">{$t('dashboard.newReading')}</a>
+							<a href="/reading" class="btn-primary mt-2 inline-block"
+								>{$t('dashboard.newReading')}</a
+							>
 						</div>
 					{/if}
 				</div>
@@ -587,7 +612,9 @@
 						{$locale === 'my' ? 'အတွေးအမြင် အမြန်မှတ်တမ်း' : 'Quick Reflection Journal'}
 					</span>
 					<span class="text-sm text-on-surface-variant">
-						{$locale === 'my' ? 'စိတ်ထဲပေါ်လာသော အတွေးစများကို ချက်ချင်းမှတ်သားထားပါ။' : 'Jot down a thought before it drifts away.'}
+						{$locale === 'my'
+							? 'စိတ်ထဲပေါ်လာသော အတွေးစများကို ချက်ချင်းမှတ်သားထားပါ။'
+							: 'Jot down a thought before it drifts away.'}
 					</span>
 				</div>
 			</div>
@@ -597,7 +624,9 @@
 					id="journal-note"
 					name="journal-note"
 					bind:value={journalNote}
-					placeholder={$locale === 'my' ? 'စိတ်ကူးအသိကို မှတ်သားပါ...' : 'Record intuitive insight...'}
+					placeholder={$locale === 'my'
+						? 'စိတ်ကူးအသိကို မှတ်သားပါ...'
+						: 'Record intuitive insight...'}
 					class="w-full rounded-xl bg-surface-container-low px-4 py-2 text-sm text-on-surface placeholder:text-on-surface-variant/50 focus:ring-1 focus:ring-secondary focus:outline-none md:w-80"
 				/>
 				<button
@@ -607,7 +636,13 @@
 						? 'bg-primary text-on-primary'
 						: 'bg-secondary-container text-on-secondary hover:bg-secondary'}"
 				>
-					{journalSaved ? ($locale === 'my' ? 'မှတ်သားပြီး ✓' : 'Saved ✓') : ($locale === 'my' ? 'မှတ်သားမည်' : 'Save Note')}
+					{journalSaved
+						? $locale === 'my'
+							? 'မှတ်သားပြီး ✓'
+							: 'Saved ✓'
+						: $locale === 'my'
+							? 'မှတ်သားမည်'
+							: 'Save Note'}
 				</button>
 			</div>
 		</section>

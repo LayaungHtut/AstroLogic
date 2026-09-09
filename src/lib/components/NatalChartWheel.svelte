@@ -32,18 +32,126 @@
 
 	// ZODIAC SIGNS REFERENCE (0° to 360°)
 	const ZODIAC_SIGNS = [
-		{ id: 'aries', symbol: '♈', nameEn: 'Aries', nameMy: 'မိဿ', startDeg: 0, element: 'fire', modality: 'cardinal', color: '#ef4444' },
-		{ id: 'taurus', symbol: '♉', nameEn: 'Taurus', nameMy: 'ပြိဿ', startDeg: 30, element: 'earth', modality: 'fixed', color: '#10b981' },
-		{ id: 'gemini', symbol: '♊', nameEn: 'Gemini', nameMy: 'မေထုန်', startDeg: 60, element: 'air', modality: 'mutable', color: '#f59e0b' },
-		{ id: 'cancer', symbol: '♋', nameEn: 'Cancer', nameMy: 'ကရကဋ်', startDeg: 90, element: 'water', modality: 'cardinal', color: '#3b82f6' },
-		{ id: 'leo', symbol: '♌', nameEn: 'Leo', nameMy: 'သိဟ်', startDeg: 120, element: 'fire', modality: 'fixed', color: '#ef4444' },
-		{ id: 'virgo', symbol: '♍', nameEn: 'Virgo', nameMy: 'ကန်', startDeg: 150, element: 'earth', modality: 'mutable', color: '#10b981' },
-		{ id: 'libra', symbol: '♎', nameEn: 'Libra', nameMy: 'တူ', startDeg: 180, element: 'air', modality: 'cardinal', color: '#f59e0b' },
-		{ id: 'scorpio', symbol: '♏', nameEn: 'Scorpio', nameMy: 'ဗြိစ္ဆာ', startDeg: 210, element: 'water', modality: 'fixed', color: '#3b82f6' },
-		{ id: 'sagittarius', symbol: '♐', nameEn: 'Sagittarius', nameMy: 'ဓနု', startDeg: 240, element: 'fire', modality: 'mutable', color: '#ef4444' },
-		{ id: 'capricorn', symbol: '♑', nameEn: 'Capricorn', nameMy: 'မကာရ', startDeg: 270, element: 'earth', modality: 'cardinal', color: '#10b981' },
-		{ id: 'aquarius', symbol: '♒', nameEn: 'Aquarius', nameMy: 'ကုမ်', startDeg: 300, element: 'air', modality: 'fixed', color: '#f59e0b' },
-		{ id: 'pisces', symbol: '♓', nameEn: 'Pisces', nameMy: 'မိန်', startDeg: 330, element: 'water', modality: 'mutable', color: '#3b82f6' }
+		{
+			id: 'aries',
+			symbol: '♈',
+			nameEn: 'Aries',
+			nameMy: 'မိဿ',
+			startDeg: 0,
+			element: 'fire',
+			modality: 'cardinal',
+			color: '#ef4444'
+		},
+		{
+			id: 'taurus',
+			symbol: '♉',
+			nameEn: 'Taurus',
+			nameMy: 'ပြိဿ',
+			startDeg: 30,
+			element: 'earth',
+			modality: 'fixed',
+			color: '#10b981'
+		},
+		{
+			id: 'gemini',
+			symbol: '♊',
+			nameEn: 'Gemini',
+			nameMy: 'မေထုန်',
+			startDeg: 60,
+			element: 'air',
+			modality: 'mutable',
+			color: '#f59e0b'
+		},
+		{
+			id: 'cancer',
+			symbol: '♋',
+			nameEn: 'Cancer',
+			nameMy: 'ကရကဋ်',
+			startDeg: 90,
+			element: 'water',
+			modality: 'cardinal',
+			color: '#3b82f6'
+		},
+		{
+			id: 'leo',
+			symbol: '♌',
+			nameEn: 'Leo',
+			nameMy: 'သိဟ်',
+			startDeg: 120,
+			element: 'fire',
+			modality: 'fixed',
+			color: '#ef4444'
+		},
+		{
+			id: 'virgo',
+			symbol: '♍',
+			nameEn: 'Virgo',
+			nameMy: 'ကန်',
+			startDeg: 150,
+			element: 'earth',
+			modality: 'mutable',
+			color: '#10b981'
+		},
+		{
+			id: 'libra',
+			symbol: '♎',
+			nameEn: 'Libra',
+			nameMy: 'တူ',
+			startDeg: 180,
+			element: 'air',
+			modality: 'cardinal',
+			color: '#f59e0b'
+		},
+		{
+			id: 'scorpio',
+			symbol: '♏',
+			nameEn: 'Scorpio',
+			nameMy: 'ဗြိစ္ဆာ',
+			startDeg: 210,
+			element: 'water',
+			modality: 'fixed',
+			color: '#3b82f6'
+		},
+		{
+			id: 'sagittarius',
+			symbol: '♐',
+			nameEn: 'Sagittarius',
+			nameMy: 'ဓနု',
+			startDeg: 240,
+			element: 'fire',
+			modality: 'mutable',
+			color: '#ef4444'
+		},
+		{
+			id: 'capricorn',
+			symbol: '♑',
+			nameEn: 'Capricorn',
+			nameMy: 'မကာရ',
+			startDeg: 270,
+			element: 'earth',
+			modality: 'cardinal',
+			color: '#10b981'
+		},
+		{
+			id: 'aquarius',
+			symbol: '♒',
+			nameEn: 'Aquarius',
+			nameMy: 'ကုမ်',
+			startDeg: 300,
+			element: 'air',
+			modality: 'fixed',
+			color: '#f59e0b'
+		},
+		{
+			id: 'pisces',
+			symbol: '♓',
+			nameEn: 'Pisces',
+			nameMy: 'မိန်',
+			startDeg: 330,
+			element: 'water',
+			modality: 'mutable',
+			color: '#3b82f6'
+		}
 	];
 
 	interface ChartBody {
@@ -88,7 +196,8 @@
 
 		// 2. Moon
 		const moonSignIdx = signIndex(chart.moon_sign);
-		const moonEcliptic = chart.moon_degree !== undefined ? chart.moon_degree : moonSignIdx * 30 + 12;
+		const moonEcliptic =
+			chart.moon_degree !== undefined ? chart.moon_degree : moonSignIdx * 30 + 12;
 		const moonSignDeg = moonEcliptic % 30;
 		const moonSignInfo = ZODIAC_SIGNS[moonSignIdx];
 		list.push({
@@ -147,7 +256,7 @@
 	});
 
 	// Wheel Rotation Base: Ascendant (or 0 if not provided)
-	const ascendantDegree = $derived(chart.rising_degree ?? (signIndex(chart.rising_sign) * 30 + 15));
+	const ascendantDegree = $derived(chart.rising_degree ?? signIndex(chart.rising_sign) * 30 + 15);
 
 	// Convert Ecliptic Degree (0-360) to Canvas Angle (in degrees)
 	// In Astro-Seek: Ascendant is on the left horizontal axis (180°), signs run counter-clockwise
@@ -157,7 +266,12 @@
 		return (180 - relative + 360) % 360;
 	}
 
-	function polarToCartesian(centerX: number, centerY: number, radius: number, angleInDegrees: number) {
+	function polarToCartesian(
+		centerX: number,
+		centerY: number,
+		radius: number,
+		angleInDegrees: number
+	) {
 		const rad = (angleInDegrees * Math.PI) / 180;
 		return {
 			x: centerX + radius * Math.cos(rad),
@@ -264,7 +378,10 @@
 
 	// ELEMENT X MODALITY TOTALS
 	const elementModalityMatrix = $derived.by(() => {
-		const matrix: Record<'fire' | 'earth' | 'air' | 'water', Record<'cardinal' | 'fixed' | 'mutable', ChartBody[]>> = {
+		const matrix: Record<
+			'fire' | 'earth' | 'air' | 'water',
+			Record<'cardinal' | 'fixed' | 'mutable', ChartBody[]>
+		> = {
 			fire: { cardinal: [], fixed: [], mutable: [] },
 			earth: { cardinal: [], fixed: [], mutable: [] },
 			air: { cardinal: [], fixed: [], mutable: [] },
@@ -285,9 +402,21 @@
 		};
 
 		const colTotals = {
-			cardinal: matrix.fire.cardinal.length + matrix.earth.cardinal.length + matrix.air.cardinal.length + matrix.water.cardinal.length,
-			fixed: matrix.fire.fixed.length + matrix.earth.fixed.length + matrix.air.fixed.length + matrix.water.fixed.length,
-			mutable: matrix.fire.mutable.length + matrix.earth.mutable.length + matrix.air.mutable.length + matrix.water.mutable.length
+			cardinal:
+				matrix.fire.cardinal.length +
+				matrix.earth.cardinal.length +
+				matrix.air.cardinal.length +
+				matrix.water.cardinal.length,
+			fixed:
+				matrix.fire.fixed.length +
+				matrix.earth.fixed.length +
+				matrix.air.fixed.length +
+				matrix.water.fixed.length,
+			mutable:
+				matrix.fire.mutable.length +
+				matrix.earth.mutable.length +
+				matrix.air.mutable.length +
+				matrix.water.mutable.length
 		};
 
 		return { matrix, rowTotals, colTotals };
@@ -307,19 +436,27 @@
 	const icBottom = $derived(polarToCartesian(CX, CY, R_OUTER, 270));
 </script>
 
-<div class="flex flex-col gap-8 rounded-3xl bg-surface-container-lowest/90 p-4 sm:p-8 shadow-2xl border border-white/10 backdrop-blur-xl">
+<div
+	class="flex flex-col gap-8 rounded-3xl border border-white/10 bg-surface-container-lowest/90 p-4 shadow-2xl backdrop-blur-xl sm:p-8"
+>
 	<!-- HEADER: Telemetry & Chart Title -->
 	<div class="flex flex-wrap items-center justify-between gap-4 border-b border-white/10 pb-4">
 		<div>
 			<div class="flex items-center gap-2">
-				<span class="inline-block h-2.5 w-2.5 rounded-full bg-primary animate-pulse"></span>
-				<h3 class="font-headline text-lg sm:text-xl font-bold tracking-tight text-on-surface">
-					{$locale === 'my' ? 'နက္ခတ်ကြယ်တာရာ မွေးဖွားမှုစက်ဝန်း (Astro-Seek Wheel)' : 'Natal Birth Chart Wheel'}
+				<span class="inline-block h-2.5 w-2.5 animate-pulse rounded-full bg-primary"></span>
+				<h3 class="font-headline text-lg font-bold tracking-tight text-on-surface sm:text-xl">
+					{$locale === 'my'
+						? 'နက္ခတ်ကြယ်တာရာ မွေးဖွားမှုစက်ဝန်း (Astro-Seek Wheel)'
+						: 'Natal Birth Chart Wheel'}
 				</h3>
 			</div>
-			<p class="font-mono-data text-xs text-on-surface-variant mt-0.5">
+			<p class="font-mono-data mt-0.5 text-xs text-on-surface-variant">
 				{#if birthInfo}
-					{birthInfo.day} {birthInfo.month}/{birthInfo.year} &middot; {String(birthInfo.hour).padStart(2, '0')}:{String(birthInfo.minute).padStart(2, '0')}
+					{birthInfo.day}
+					{birthInfo.month}/{birthInfo.year} &middot; {String(birthInfo.hour).padStart(
+						2,
+						'0'
+					)}:{String(birthInfo.minute).padStart(2, '0')}
 					{#if chart.timezone}&middot; {chart.timezone}{/if}
 				{:else}
 					360° Geocentric Ecliptic Longitudes
@@ -327,7 +464,7 @@
 			</p>
 		</div>
 
-		<div class="flex items-center gap-2 text-xs font-mono-data">
+		<div class="font-mono-data flex items-center gap-2 text-xs">
 			<span class="rounded-full bg-surface-container px-3 py-1 text-on-surface-variant">
 				{$locale === 'my' ? 'လတ္တီတွဒ်/လောင်ဂျီတွဒ် တွက်ချက်ပြီး' : 'Planetary Ephemeris Active'}
 			</span>
@@ -335,10 +472,10 @@
 	</div>
 
 	<!-- MAIN CHART SVG WHEEL -->
-	<div class="flex justify-center items-center py-2">
+	<div class="flex items-center justify-center py-2">
 		<svg
 			viewBox="0 0 540 540"
-			class="w-full max-w-[540px] aspect-square select-none filter drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)]"
+			class="aspect-square w-full max-w-[540px] drop-shadow-[0_8px_30px_rgba(0,0,0,0.5)] filter select-none"
 		>
 			<defs>
 				<!-- Subtle central gradient -->
@@ -353,9 +490,30 @@
 			</defs>
 
 			<!-- Background Circles -->
-			<circle cx={CX} cy={CY} r={R_OUTER} fill="url(#ringGradient)" stroke="#475569" stroke-width="1.5" />
-			<circle cx={CX} cy={CY} r={R_ZODIAC_INNER} fill="#090d16" stroke="#475569" stroke-width="1.2" />
-			<circle cx={CX} cy={CY} r={R_INNER_WEB} fill="url(#centerGradient)" stroke="#334155" stroke-width="1.2" />
+			<circle
+				cx={CX}
+				cy={CY}
+				r={R_OUTER}
+				fill="url(#ringGradient)"
+				stroke="#475569"
+				stroke-width="1.5"
+			/>
+			<circle
+				cx={CX}
+				cy={CY}
+				r={R_ZODIAC_INNER}
+				fill="#090d16"
+				stroke="#475569"
+				stroke-width="1.2"
+			/>
+			<circle
+				cx={CX}
+				cy={CY}
+				r={R_INNER_WEB}
+				fill="url(#centerGradient)"
+				stroke="#334155"
+				stroke-width="1.2"
+			/>
 
 			<!-- 12 ZODIAC SECTORS & DEGREE TICK MARKS -->
 			{#each ZODIAC_SIGNS as sign, i}
@@ -367,7 +525,14 @@
 				<!-- Sector separator radial line -->
 				{@const radStart = polarToCartesian(CX, CY, R_ZODIAC_INNER, signStartAngle)}
 				{@const radEnd = polarToCartesian(CX, CY, R_OUTER, signStartAngle)}
-				<line x1={radStart.x} y1={radStart.y} x2={radEnd.x} y2={radEnd.y} stroke="#475569" stroke-width="1.5" />
+				<line
+					x1={radStart.x}
+					y1={radStart.y}
+					x2={radEnd.x}
+					y2={radEnd.y}
+					stroke="#475569"
+					stroke-width="1.5"
+				/>
 
 				<!-- 30 Degree Ticks inside this sign -->
 				{#each Array.from({ length: 30 }) as _, deg}
@@ -413,32 +578,80 @@
 					x2={p2.x}
 					y2={p2.y}
 					stroke={asp.color}
-					stroke-width={asp.type === 'conjunction' || asp.type === 'opposition' || asp.type === 'trine' ? 1.4 : 1}
+					stroke-width={asp.type === 'conjunction' ||
+					asp.type === 'opposition' ||
+					asp.type === 'trine'
+						? 1.4
+						: 1}
 					stroke-opacity={0.8}
 					stroke-dasharray={asp.type === 'sextile' ? '3,2' : undefined}
 				/>
 			{/each}
 
 			<!-- ASCENDANT / DESCENDANT & IC / MC AXES -->
-			<line x1={ascLeft.x} y1={ascLeft.y} x2={dscRight.x} y2={dscRight.y} stroke="#f43f5e" stroke-width="1.8" />
+			<line
+				x1={ascLeft.x}
+				y1={ascLeft.y}
+				x2={dscRight.x}
+				y2={dscRight.y}
+				stroke="#f43f5e"
+				stroke-width="1.8"
+			/>
 			<!-- Ascendant Arrow -->
 			<polygon
-				points="{ascLeft.x},{ascLeft.y} {ascLeft.x + 10},{ascLeft.y - 4} {ascLeft.x + 10},{ascLeft.y + 4}"
+				points="{ascLeft.x},{ascLeft.y} {ascLeft.x + 10},{ascLeft.y - 4} {ascLeft.x +
+					10},{ascLeft.y + 4}"
 				fill="#f43f5e"
 			/>
-			<text x={ascLeft.x + 16} y={ascLeft.y - 6} font-size="10" font-weight="bold" fill="#f43f5e" class="font-mono-data">
+			<text
+				x={ascLeft.x + 16}
+				y={ascLeft.y - 6}
+				font-size="10"
+				font-weight="bold"
+				fill="#f43f5e"
+				class="font-mono-data"
+			>
 				AC
 			</text>
-			<text x={dscRight.x - 22} y={dscRight.y - 6} font-size="10" font-weight="bold" fill="#f43f5e" class="font-mono-data">
+			<text
+				x={dscRight.x - 22}
+				y={dscRight.y - 6}
+				font-size="10"
+				font-weight="bold"
+				fill="#f43f5e"
+				class="font-mono-data"
+			>
 				DC
 			</text>
 
 			<!-- MC / IC Axis (Vertical) -->
-			<line x1={mcTop.x} y1={mcTop.y} x2={icBottom.x} y2={icBottom.y} stroke="#38bdf8" stroke-width="1.4" stroke-dasharray="4,2" />
-			<text x={mcTop.x + 4} y={mcTop.y + 14} font-size="10" font-weight="bold" fill="#38bdf8" class="font-mono-data">
+			<line
+				x1={mcTop.x}
+				y1={mcTop.y}
+				x2={icBottom.x}
+				y2={icBottom.y}
+				stroke="#38bdf8"
+				stroke-width="1.4"
+				stroke-dasharray="4,2"
+			/>
+			<text
+				x={mcTop.x + 4}
+				y={mcTop.y + 14}
+				font-size="10"
+				font-weight="bold"
+				fill="#38bdf8"
+				class="font-mono-data"
+			>
 				MC
 			</text>
-			<text x={icBottom.x + 4} y={icBottom.y - 8} font-size="10" font-weight="bold" fill="#38bdf8" class="font-mono-data">
+			<text
+				x={icBottom.x + 4}
+				y={icBottom.y - 8}
+				font-size="10"
+				font-weight="bold"
+				fill="#38bdf8"
+				class="font-mono-data"
+			>
 				IC
 			</text>
 
@@ -528,43 +741,47 @@
 	</div>
 
 	<!-- LOWER SECTION: 2 COLUMNS (ASPECT MATRIX & ELEMENT X MODALITY) -->
-	<div class="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+	<div class="grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
 		<!-- LEFT: PLANETARY POSITION TABLE & TRIANGULAR ASPECT MATRIX -->
-		<div class="lg:col-span-8 flex flex-col gap-3 overflow-x-auto">
+		<div class="flex flex-col gap-3 overflow-x-auto lg:col-span-8">
 			<div class="flex items-center gap-2">
-				<span class="material-symbols-outlined text-primary text-sm">grid_view</span>
+				<span class="material-symbols-outlined text-sm text-primary">grid_view</span>
 				<h4 class="font-headline text-sm font-semibold text-on-surface">
-					{$locale === 'my' ? 'ဂြိုဟ်များတည်နေရာနှင့် ထောင့်ချိတ်ဆက်မှုဇယား' : 'Planets & Triangular Aspect Grid'}
+					{$locale === 'my'
+						? 'ဂြိုဟ်များတည်နေရာနှင့် ထောင့်ချိတ်ဆက်မှုဇယား'
+						: 'Planets & Triangular Aspect Grid'}
 				</h4>
 			</div>
 
-			<div class="rounded-2xl border border-white/10 bg-surface-container-high/30 p-3 overflow-x-auto">
-				<table class="border-collapse text-xs font-mono-data w-full">
+			<div
+				class="overflow-x-auto rounded-2xl border border-white/10 bg-surface-container-high/30 p-3"
+			>
+				<table class="font-mono-data w-full border-collapse text-xs">
 					<tbody>
 						{#each allBodies as body, rowIdx}
 							{@const sIdx = signIndex(body.sign)}
 							{@const sInfo = ZODIAC_SIGNS[sIdx]}
-							<tr class="border-b border-white/5 hover:bg-white/5 transition-colors">
+							<tr class="border-b border-white/5 transition-colors hover:bg-white/5">
 								<!-- Planet Glyph -->
-								<td class="p-1.5 font-bold text-center text-sm w-7 text-white">
+								<td class="w-7 p-1.5 text-center text-sm font-bold text-white">
 									{body.symbol}
 								</td>
 								<!-- Planet Name -->
-								<td class="p-1.5 text-on-surface font-medium whitespace-nowrap pr-2">
-									{$locale === 'my' ? (formatPlanet(body.id, 'my') || body.name) : body.name}
+								<td class="p-1.5 pr-2 font-medium whitespace-nowrap text-on-surface">
+									{$locale === 'my' ? formatPlanet(body.id, 'my') || body.name : body.name}
 								</td>
 								<!-- Degrees & Minutes in Sign -->
-								<td class="p-1.5 whitespace-nowrap text-on-surface-variant font-mono">
+								<td class="p-1.5 font-mono whitespace-nowrap text-on-surface-variant">
 									{String(body.signDeg).padStart(2, '0')}°
-									<span style:color={sInfo.color} class="font-bold px-0.5">{sInfo.symbol}</span>
+									<span style:color={sInfo.color} class="px-0.5 font-bold">{sInfo.symbol}</span>
 									{String(body.signMin).padStart(2, '0')}'
 								</td>
 								<!-- Retrograde Flag -->
-								<td class="p-1 text-center w-5">
+								<td class="w-5 p-1 text-center">
 									{#if body.retrograde}
-										<span class="text-error font-bold text-[10px]">R</span>
+										<span class="text-[10px] font-bold text-error">R</span>
 									{:else}
-										<span class="text-outline text-[10px]">-</span>
+										<span class="text-[10px] text-outline">-</span>
 									{/if}
 								</td>
 
@@ -576,7 +793,7 @@
 											(a.index1 === rowIdx && a.index2 === colIdx)
 									)}
 									<td
-										class="p-1 text-center border border-white/10 w-8 h-8 select-none"
+										class="h-8 w-8 border border-white/10 p-1 text-center select-none"
 										style:background-color={cellAspect ? `${cellAspect.color}15` : 'transparent'}
 									>
 										{#if cellAspect}
@@ -584,7 +801,10 @@
 												<span class="text-xs font-bold" style:color={cellAspect.color}>
 													{cellAspect.symbol}
 												</span>
-												<span class="text-[8px] opacity-75 font-mono" style:color={cellAspect.color}>
+												<span
+													class="font-mono text-[8px] opacity-75"
+													style:color={cellAspect.color}
+												>
 													{cellAspect.orbStr}
 												</span>
 											</div>
@@ -592,8 +812,8 @@
 									</td>
 								{/each}
 								<!-- Self Diagonal Cell -->
-								<td class="p-1 text-center border border-white/15 bg-white/5 w-8 h-8">
-									<span class="text-xs text-white font-bold">{body.symbol}</span>
+								<td class="h-8 w-8 border border-white/15 bg-white/5 p-1 text-center">
+									<span class="text-xs font-bold text-white">{body.symbol}</span>
 								</td>
 							</tr>
 						{/each}
@@ -603,27 +823,33 @@
 		</div>
 
 		<!-- RIGHT: ELEMENT X MODALITY GRID (CAR, FIX, MUT X FIR, EAR, AIR, WAT) -->
-		<div class="lg:col-span-4 flex flex-col gap-3">
+		<div class="flex flex-col gap-3 lg:col-span-4">
 			<div class="flex items-center gap-2">
-				<span class="material-symbols-outlined text-secondary text-sm">category</span>
+				<span class="material-symbols-outlined text-sm text-secondary">category</span>
 				<h4 class="font-headline text-sm font-semibold text-on-surface">
 					{$locale === 'my' ? 'ဓာတ်သဘောနှင့် စရိုက်လက္ခဏာခွဲခြမ်းမှု' : 'Elements & Modalities'}
 				</h4>
 			</div>
 
 			<div class="rounded-2xl border border-white/10 bg-surface-container-high/30 p-4">
-				<table class="w-full border-collapse text-xs font-mono-data">
+				<table class="font-mono-data w-full border-collapse text-xs">
 					<thead>
-						<tr class="border-b border-white/10 text-on-surface-variant text-[11px]">
+						<tr class="border-b border-white/10 text-[11px] text-on-surface-variant">
 							<th class="p-2 text-left"></th>
 							<th class="p-2 text-center">
-								CAR <span class="text-primary font-bold">({elementModalityMatrix.colTotals.cardinal})</span>
+								CAR <span class="font-bold text-primary"
+									>({elementModalityMatrix.colTotals.cardinal})</span
+								>
 							</th>
 							<th class="p-2 text-center">
-								FIX <span class="text-primary font-bold">({elementModalityMatrix.colTotals.fixed})</span>
+								FIX <span class="font-bold text-primary"
+									>({elementModalityMatrix.colTotals.fixed})</span
+								>
 							</th>
 							<th class="p-2 text-center">
-								MUT <span class="text-primary font-bold">({elementModalityMatrix.colTotals.mutable})</span>
+								MUT <span class="font-bold text-primary"
+									>({elementModalityMatrix.colTotals.mutable})</span
+								>
 							</th>
 						</tr>
 					</thead>
@@ -631,60 +857,68 @@
 						<!-- FIRE -->
 						<tr class="border-b border-white/5">
 							<td class="p-2 font-bold text-red-400">
-								FIR <span class="text-[10px] text-on-surface-variant font-normal">({elementModalityMatrix.rowTotals.fire})</span>
+								FIR <span class="text-[10px] font-normal text-on-surface-variant"
+									>({elementModalityMatrix.rowTotals.fire})</span
+								>
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.fire.cardinal.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.fire.fixed.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.fire.mutable.map((b) => b.symbol).join(' ')}
 							</td>
 						</tr>
 						<!-- EARTH -->
 						<tr class="border-b border-white/5">
 							<td class="p-2 font-bold text-emerald-400">
-								EAR <span class="text-[10px] text-on-surface-variant font-normal">({elementModalityMatrix.rowTotals.earth})</span>
+								EAR <span class="text-[10px] font-normal text-on-surface-variant"
+									>({elementModalityMatrix.rowTotals.earth})</span
+								>
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.earth.cardinal.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.earth.fixed.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.earth.mutable.map((b) => b.symbol).join(' ')}
 							</td>
 						</tr>
 						<!-- AIR -->
 						<tr class="border-b border-white/5">
 							<td class="p-2 font-bold text-amber-400">
-								AIR <span class="text-[10px] text-on-surface-variant font-normal">({elementModalityMatrix.rowTotals.air})</span>
+								AIR <span class="text-[10px] font-normal text-on-surface-variant"
+									>({elementModalityMatrix.rowTotals.air})</span
+								>
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.air.cardinal.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.air.fixed.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.air.mutable.map((b) => b.symbol).join(' ')}
 							</td>
 						</tr>
 						<!-- WATER -->
 						<tr>
 							<td class="p-2 font-bold text-blue-400">
-								WAT <span class="text-[10px] text-on-surface-variant font-normal">({elementModalityMatrix.rowTotals.water})</span>
+								WAT <span class="text-[10px] font-normal text-on-surface-variant"
+									>({elementModalityMatrix.rowTotals.water})</span
+								>
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.water.cardinal.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.water.fixed.map((b) => b.symbol).join(' ')}
 							</td>
-							<td class="p-2 text-center border-l border-white/5 text-sm">
+							<td class="border-l border-white/5 p-2 text-center text-sm">
 								{elementModalityMatrix.matrix.water.mutable.map((b) => b.symbol).join(' ')}
 							</td>
 						</tr>
@@ -693,29 +927,31 @@
 			</div>
 
 			<!-- LEGEND OF ASPECTS -->
-			<div class="rounded-2xl border border-white/10 bg-surface-container-high/20 p-3 text-[11px] font-mono-data flex flex-col gap-1.5">
-				<span class="text-on-surface-variant font-semibold">
+			<div
+				class="font-mono-data flex flex-col gap-1.5 rounded-2xl border border-white/10 bg-surface-container-high/20 p-3 text-[11px]"
+			>
+				<span class="font-semibold text-on-surface-variant">
 					{$locale === 'my' ? 'ထောင့်ချိတ်ဆက်မှုသင်္ကေတများ (Aspects)' : 'Major Aspects Legend'}
 				</span>
 				<div class="grid grid-cols-2 gap-1.5 text-[10px]">
 					<div class="flex items-center gap-1.5 text-blue-400">
-						<span class="font-bold text-sm">△</span>
+						<span class="text-sm font-bold">△</span>
 						<span>Trine (120°)</span>
 					</div>
 					<div class="flex items-center gap-1.5 text-red-400">
-						<span class="font-bold text-sm">□</span>
+						<span class="text-sm font-bold">□</span>
 						<span>Square (90°)</span>
 					</div>
 					<div class="flex items-center gap-1.5 text-sky-400">
-						<span class="font-bold text-sm">✱</span>
+						<span class="text-sm font-bold">✱</span>
 						<span>Sextile (60°)</span>
 					</div>
 					<div class="flex items-center gap-1.5 text-rose-500">
-						<span class="font-bold text-sm">☍</span>
+						<span class="text-sm font-bold">☍</span>
 						<span>Opposition (180°)</span>
 					</div>
-					<div class="flex items-center gap-1.5 text-amber-400 col-span-2">
-						<span class="font-bold text-sm">☌</span>
+					<div class="col-span-2 flex items-center gap-1.5 text-amber-400">
+						<span class="text-sm font-bold">☌</span>
 						<span>Conjunction (0°)</span>
 					</div>
 				</div>
@@ -725,35 +961,44 @@
 
 	<!-- 0° TO 30° IN-SIGN DEGREE DISTRIBUTION RULER (BOTTOM OF PHOTO 5) -->
 	<div class="flex flex-col gap-2 border-t border-white/10 pt-4">
-		<div class="flex items-center justify-between text-xs font-mono-data text-on-surface-variant">
-			<span>{$locale === 'my' ? 'ရာသီခွင်အတွင်း ဒီဂရီပြန့်ကျဲမှု (0° - 30° Ruler)' : 'In-Sign Planetary Degree Distribution (0° - 30°)'}</span>
+		<div class="font-mono-data flex items-center justify-between text-xs text-on-surface-variant">
+			<span
+				>{$locale === 'my'
+					? 'ရာသီခွင်အတွင်း ဒီဂရီပြန့်ကျဲမှု (0° - 30° Ruler)'
+					: 'In-Sign Planetary Degree Distribution (0° - 30°)'}</span
+			>
 			<span>0° &rarr; 30°</span>
 		</div>
 
 		<div class="relative h-20 w-full px-4 select-none">
 			<!-- Horizontal Axis line -->
-			<div class="absolute bottom-2 left-4 right-4 h-0.5 bg-slate-600"></div>
+			<div class="absolute right-4 bottom-2 left-4 h-0.5 bg-slate-600"></div>
 
 			<!-- Major Tick marks 0, 5, 10, 15, 20, 25, 30 -->
 			{#each [0, 5, 10, 15, 20, 25, 30] as deg}
 				{@const pct = (deg / 30) * 100}
-				<div class="absolute bottom-0 flex flex-col items-center" style:left="calc(1rem + {pct}% * 0.88)">
+				<div
+					class="absolute bottom-0 flex flex-col items-center"
+					style:left="calc(1rem + {pct}% * 0.88)"
+				>
 					<div class="h-3 w-0.5 bg-slate-400"></div>
-					<span class="text-[9px] font-mono-data text-slate-400 mt-0.5">{deg}°</span>
+					<span class="font-mono-data mt-0.5 text-[9px] text-slate-400">{deg}°</span>
 				</div>
 			{/each}
 
 			<!-- Plotted Bodies on the Ruler -->
 			{#each allBodies as body}
-				{@const pct = (body.signDeg + body.signMin / 60) / 30 * 100}
+				{@const pct = ((body.signDeg + body.signMin / 60) / 30) * 100}
 				<div
-					class="group absolute bottom-5 flex flex-col items-center -translate-x-1/2 cursor-pointer transition-transform hover:scale-125 hover:z-20"
+					class="group absolute bottom-5 flex -translate-x-1/2 cursor-pointer flex-col items-center transition-transform hover:z-20 hover:scale-125"
 					style:left="calc(1rem + {pct}% * 0.88)"
 					title="{body.name}: {body.signDeg}°{body.signMin}' ({body.sign})"
 				>
-					<span class="text-[9px] font-mono-data text-slate-300 font-semibold mb-0.5">{body.signDeg}°</span>
+					<span class="font-mono-data mb-0.5 text-[9px] font-semibold text-slate-300"
+						>{body.signDeg}°</span
+					>
 					<span class="text-sm font-bold text-white drop-shadow">{body.symbol}</span>
-					<div class="h-2 w-px border-l border-dashed border-slate-500 mt-0.5"></div>
+					<div class="mt-0.5 h-2 w-px border-l border-dashed border-slate-500"></div>
 				</div>
 			{/each}
 		</div>

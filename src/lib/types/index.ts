@@ -216,14 +216,33 @@ export interface UserProfile {
 }
 
 export const ZODIAC_SIGNS = [
-	'aries', 'taurus', 'gemini', 'cancer', 'leo', 'virgo',
-	'libra', 'scorpio', 'sagittarius', 'capricorn', 'aquarius', 'pisces'
+	'aries',
+	'taurus',
+	'gemini',
+	'cancer',
+	'leo',
+	'virgo',
+	'libra',
+	'scorpio',
+	'sagittarius',
+	'capricorn',
+	'aquarius',
+	'pisces'
 ] as const;
 
 export const ZODIAC_SYMBOLS: Record<string, string> = {
-	aries: '\u2648', taurus: '\u2649', gemini: '\u264A', cancer: '\u264B',
-	leo: '\u264C', virgo: '\u264D', libra: '\u264E', scorpio: '\u264F',
-	sagittarius: '\u2650', capricorn: '\u2651', aquarius: '\u2652', pisces: '\u2653'
+	aries: '\u2648',
+	taurus: '\u2649',
+	gemini: '\u264A',
+	cancer: '\u264B',
+	leo: '\u264C',
+	virgo: '\u264D',
+	libra: '\u264E',
+	scorpio: '\u264F',
+	sagittarius: '\u2650',
+	capricorn: '\u2651',
+	aquarius: '\u2652',
+	pisces: '\u2653'
 };
 
 export interface PlanetPosition {
@@ -238,9 +257,16 @@ export interface PlanetPosition {
 }
 
 export const PLANET_SYMBOLS: Record<string, string> = {
-	sun: '☉', moon: '☽', mercury: '☿', venus: '♀',
-	mars: '♂', jupiter: '♃', saturn: '♄',
-	uranus: '♅', neptune: '♆', pluto: '♇'
+	sun: '☉',
+	moon: '☽',
+	mercury: '☿',
+	venus: '♀',
+	mars: '♂',
+	jupiter: '♃',
+	saturn: '♄',
+	uranus: '♅',
+	neptune: '♆',
+	pluto: '♇'
 };
 
 export const ELEMENT_COLORS: Record<string, string> = {

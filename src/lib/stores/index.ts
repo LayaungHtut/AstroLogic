@@ -29,11 +29,12 @@ function createProfileStore() {
 
 	return {
 		subscribe,
-		setProfile: (partial: Partial<UserProfile>) => update(p => {
-			const next = { ...p, ...partial };
-			save(next);
-			return next;
-		}),
+		setProfile: (partial: Partial<UserProfile>) =>
+			update((p) => {
+				const next = { ...p, ...partial };
+				save(next);
+				return next;
+			}),
 		reset: () => {
 			set({ ...defaults });
 			if (typeof window !== 'undefined') localStorage.removeItem(STORAGE_KEY);
@@ -48,7 +49,8 @@ function createReadingStore() {
 		subscribe,
 		setReading: (reading: ReadingResult) => set(reading),
 		clearReading: () => set(null),
-		updateReading: (partial: Partial<ReadingResult>) => update(r => r ? { ...r, ...partial } : null)
+		updateReading: (partial: Partial<ReadingResult>) =>
+			update((r) => (r ? { ...r, ...partial } : null))
 	};
 }
 
@@ -57,7 +59,7 @@ function createChatStore() {
 
 	return {
 		subscribe,
-		addMessage: (msg: ChatMessage) => update(msgs => [...msgs, msg]),
+		addMessage: (msg: ChatMessage) => update((msgs) => [...msgs, msg]),
 		setMessages: (msgs: ChatMessage[]) => set(msgs),
 		clearMessages: () => set([])
 	};
@@ -68,7 +70,8 @@ function createLoadingStore() {
 
 	return {
 		subscribe,
-		setLoading: (key: string, value: boolean) => update((s: Record<string, boolean>) => ({ ...s, [key]: value })),
+		setLoading: (key: string, value: boolean) =>
+			update((s: Record<string, boolean>) => ({ ...s, [key]: value })),
 		isLoading: (key: string) => false
 	};
 }

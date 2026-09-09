@@ -44,13 +44,15 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 	'footer.oracleDocs': 'Oracle Docs',
 	'footer.about': 'About',
 	'footer.copyright': '© 2026 AstroLogic Celestial Labs.',
-	'footer.disclaimer': 'Synthesizing deep-space telemetry with deterministic symbolic divination. For entertainment & self-reflection purposes only.',
+	'footer.disclaimer':
+		'Synthesizing deep-space telemetry with deterministic symbolic divination. For entertainment & self-reflection purposes only.',
 
 	// Landing Page (+page.svelte)
 	'landing.engineOnline': 'Reasoning Engine Online',
 	'landing.logicCoreSync': 'Prolog Logic Core Synchronized',
 	'landing.heroTitle': 'Where Ancient Celestial Wisdom Meets Symbolic AI',
-	'landing.heroSubtitle': 'AstroLogic combines symbolic Prolog reasoning with AI interpretation to produce meaningful tarot readings, horoscopes, and birth chart insights.',
+	'landing.heroSubtitle':
+		'AstroLogic combines symbolic Prolog reasoning with AI interpretation to produce meaningful tarot readings, horoscopes, and birth chart insights.',
 	'landing.entertainmentNotice': 'For entertainment and self-reflection.',
 	'landing.startReading': 'Start a Reading',
 	'landing.exploreDashboard': 'Explore Dashboard',
@@ -60,54 +62,68 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 	'landing.statDeterministic': 'Deterministic',
 	'landing.celestialWheel': 'The Celestial Wheel',
 	'landing.twelveModalities': 'Twelve Archetypal Modalities',
-	'landing.wheelDesc': 'Explore all 12 signs. Each is mapped to its element, ruling planet, and degree range on the zodiac wheel.',
+	'landing.wheelDesc':
+		'Explore all 12 signs. Each is mapped to its element, ruling planet, and degree range on the zodiac wheel.',
 	'landing.coreCapabilities': 'Core Capabilities',
 	'landing.highOrderInstruments': 'High-Order Celestial Instruments',
-	'landing.capabilitiesDesc': 'Built for seekers and the symbolically curious alike. Deterministic reasoning meets AI-crafted narrative.',
+	'landing.capabilitiesDesc':
+		'Built for seekers and the symbolically curious alike. Deterministic reasoning meets AI-crafted narrative.',
 	'landing.howItWorks': 'How AstroLogic Works',
 	'landing.divinationProtocol': 'The Divination Protocol',
-	'landing.howItWorksDesc': 'From your question to a verified symbolic proof to a personalized, AI-written reading.',
+	'landing.howItWorksDesc':
+		'From your question to a verified symbolic proof to a personalized, AI-written reading.',
 	'landing.step1Title': 'Ask Your Question',
-	'landing.step1Desc': 'Pose a question or pick a focus area. We translate it into the symbolic inputs the reasoning engine understands.',
+	'landing.step1Desc':
+		'Pose a question or pick a focus area. We translate it into the symbolic inputs the reasoning engine understands.',
 	'landing.step1Tag': 'Intent Captured',
 	'landing.step2Title': 'Prolog Reasons Symbolically',
-	'landing.step2Desc': 'The Prolog inference engine checks planetary dignities, elemental relationships, and card meanings against its rule base.',
+	'landing.step2Desc':
+		'The Prolog inference engine checks planetary dignities, elemental relationships, and card meanings against its rule base.',
 	'landing.step2Tag': 'Logic Confirmed',
 	'landing.step3Title': 'Cards Are Drawn',
-	'landing.step3Desc': 'A spread is drawn (or scanned) and paired with the verified symbolic groundwork from the reasoning core.',
+	'landing.step3Desc':
+		'A spread is drawn (or scanned) and paired with the verified symbolic groundwork from the reasoning core.',
 	'landing.step3Tag': 'Spread Formed',
 	'landing.step4Title': 'AI Interprets Meaningfully',
-	'landing.step4Desc': 'An AI model weaves the deterministic symbolic proof into a nuanced, personalized reading you can revisit anytime.',
+	'landing.step4Desc':
+		'An AI model weaves the deterministic symbolic proof into a nuanced, personalized reading you can revisit anytime.',
 	'landing.step4Tag': 'Saved to History',
 	'landing.ctaTag': 'Open Observatory Access',
 	'landing.ctaTitle': 'Begin Your First Reading',
-	'landing.ctaDesc': 'Draw a tarot spread or compute your birth chart, backed by the Prolog reasoning core, in seconds.',
+	'landing.ctaDesc':
+		'Draw a tarot spread or compute your birth chart, backed by the Prolog reasoning core, in seconds.',
 	'landing.ctaDraw': 'Draw Cards Now',
 	'landing.ctaChart': 'Compute Birth Chart',
 
 	// Features on Landing
 	'feat.readings.title': 'AI-Powered Readings',
-	'feat.readings.desc': 'Deep narrative synthesis powered by AI, conditioned on tarot symbolism and classical astrological texts.',
+	'feat.readings.desc':
+		'Deep narrative synthesis powered by AI, conditioned on tarot symbolism and classical astrological texts.',
 	'feat.readings.meta': 'Spread Depth: Variable',
 	'feat.readings.cta': 'Launch',
 	'feat.prolog.title': 'Symbolic Reasoning',
-	'feat.prolog.desc': 'A Prolog deductive engine checks decan alignments, elemental dignities, and card relationships without hallucination.',
+	'feat.prolog.desc':
+		'A Prolog deductive engine checks decan alignments, elemental dignities, and card relationships without hallucination.',
 	'feat.prolog.meta': 'Engine: Prolog Core',
 	'feat.prolog.cta': 'Inspect',
 	'feat.chart.title': 'Birth Chart Analysis',
-	'feat.chart.desc': 'Planetary computations for Sun, Moon, Rising, and house placements mapped against your exact birth data.',
+	'feat.chart.desc':
+		'Planetary computations for Sun, Moon, Rising, and house placements mapped against your exact birth data.',
 	'feat.chart.meta': 'Precision: Arcminute',
 	'feat.chart.cta': 'Calculate',
 	'feat.synastry.title': 'Zodiac Compatibility',
-	'feat.synastry.desc': 'Explore elemental and planetary resonance between two signs across emotional, intellectual, and physical wavelengths.',
+	'feat.synastry.desc':
+		'Explore elemental and planetary resonance between two signs across emotional, intellectual, and physical wavelengths.',
 	'feat.synastry.meta': 'Matrix: Dual Sign',
 	'feat.synastry.cta': 'Compare',
 	'feat.scan.title': 'Card Scanner',
-	'feat.scan.desc': 'Snap a photo of a physical tarot draw and let computer vision identify the card for an instant reading.',
+	'feat.scan.desc':
+		'Snap a photo of a physical tarot draw and let computer vision identify the card for an instant reading.',
 	'feat.scan.meta': 'Input: Camera / Upload',
 	'feat.scan.cta': 'Scan Deck',
 	'feat.guide.title': 'AI Mystic Guide',
-	'feat.guide.desc': 'Chat with a tarot and astrology-themed AI assistant that clarifies archetypal lessons behind your readings.',
+	'feat.guide.desc':
+		'Chat with a tarot and astrology-themed AI assistant that clarifies archetypal lessons behind your readings.',
 	'feat.guide.meta': 'Mode: Continuous Dialogue',
 	'feat.guide.cta': 'Consult',
 
@@ -129,7 +145,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 	'dashboard.yourSign': 'Your Sign',
 	'dashboard.editProfile': 'Edit Profile',
 	'dashboard.setSign': 'Set Your Zodiac Sign',
-	'dashboard.setSignPrompt': 'Set your sign in profile settings to unlock personalized astrological telemetry.',
+	'dashboard.setSignPrompt':
+		'Set your sign in profile settings to unlock personalized astrological telemetry.',
 	'dashboard.todaysWeather': 'Celestial Weather',
 	'dashboard.refresh': 'Refresh',
 
@@ -161,7 +178,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Tarot Deck Browser
 	'deck.title': 'Arcana Deck Browser',
-	'deck.subtitle': 'Explore all 78 classical Tarot archetypes, elemental dignities, and upright/reversed meanings.',
+	'deck.subtitle':
+		'Explore all 78 classical Tarot archetypes, elemental dignities, and upright/reversed meanings.',
 	'deck.searchPlaceholder': 'Search by card name, keyword, or suit...',
 	'deck.totalCards': 'Cards Displayed',
 	'deck.uprightKeywords': 'Upright Keywords',
@@ -174,7 +192,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Scanner
 	'scan.title': 'Vision Card Scanner',
-	'scan.subtitle': 'Capture or upload a physical tarot card photo for computer vision recognition and insight.',
+	'scan.subtitle':
+		'Capture or upload a physical tarot card photo for computer vision recognition and insight.',
 	'scan.dropzoneTitle': 'Drag and drop an image or click to select',
 	'scan.dropzoneHint': 'Supports JPG, PNG, WEBP from mobile cameras or saved photos.',
 	'scan.scanButton': 'Scan Card',
@@ -187,7 +206,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Birth Chart
 	'chart.title': 'Natal Ephemeris',
-	'chart.subtitle': 'Calculate precision planetary placements, houses, and the Big 3 based on your birth data.',
+	'chart.subtitle':
+		'Calculate precision planetary placements, houses, and the Big 3 based on your birth data.',
 	'chart.month': 'Month',
 	'chart.day': 'Day',
 	'chart.year': 'Year',
@@ -210,7 +230,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Zodiac Explorer
 	'zodiac.title': 'Zodiac Wheel Explorer',
-	'zodiac.subtitle': 'Deep astrological breakdown of the 12 celestial archetypes and their psychological resonance.',
+	'zodiac.subtitle':
+		'Deep astrological breakdown of the 12 celestial archetypes and their psychological resonance.',
 	'zodiac.filterAll': 'All Elements',
 	'zodiac.traits': 'Core Personality Traits',
 	'zodiac.ruler': 'Ruling Planet',
@@ -235,7 +256,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Horoscope
 	'horoscope.title': 'Daily Celestial Telemetry',
-	'horoscope.subtitle': 'A reflective astrological forecast tailored to your current sign and emotional state.',
+	'horoscope.subtitle':
+		'A reflective astrological forecast tailored to your current sign and emotional state.',
 	'horoscope.selectMood': 'Select Your Current Emotional Vibe',
 	'horoscope.generate': 'Synthesize Daily Forecast',
 	'horoscope.theme': 'Prevailing Theme',
@@ -259,7 +281,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Compatibility / Synastry
 	'synastry.title': 'Zodiac Synastry Matrix',
-	'synastry.subtitle': 'Evaluate the elemental harmony, communication dynamics, and interpersonal resonance between two signs.',
+	'synastry.subtitle':
+		'Evaluate the elemental harmony, communication dynamics, and interpersonal resonance between two signs.',
 	'synastry.sign1': 'Sign 1 (You)',
 	'synastry.sign2': 'Sign 2 (Partner)',
 	'synastry.analyze': 'Analyze Resonance',
@@ -300,13 +323,16 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 	'synastry.growthAreas': 'Growth Areas',
 	'synastry.complementaryTraits': 'Complementary Traits',
 	'synastry.newAnalysis': 'New Analysis',
-	'synastry.disclaimer': 'This compatibility analysis is for entertainment and self-reflection purposes only. It does not scientifically predict relationship outcomes.',
+	'synastry.disclaimer':
+		'This compatibility analysis is for entertainment and self-reflection purposes only. It does not scientifically predict relationship outcomes.',
 
 	// AI Oracle Chat
 	'chat.title': 'Socratic AI Oracle',
-	'chat.subtitle': 'Discuss tarot archetypes, astrological symbolism, and personal reflection with your celestial guide.',
+	'chat.subtitle':
+		'Discuss tarot archetypes, astrological symbolism, and personal reflection with your celestial guide.',
 	'chat.welcome': 'Welcome to your AI Mystic Guide',
-	'chat.welcomeDesc': 'Ask questions about tarot readings, zodiac signs, or request guidance. I provide thoughtful, symbolic reflections.',
+	'chat.welcomeDesc':
+		'Ask questions about tarot readings, zodiac signs, or request guidance. I provide thoughtful, symbolic reflections.',
 	'chat.placeholder': 'Ask about a card, a transit, or request reflection...',
 	'chat.send': 'Send',
 	'chat.logicOnline': 'Logic Core Online',
@@ -332,7 +358,8 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// Analytics
 	'analytics.title': 'Reading Telemetry & Analytics',
-	'analytics.subtitle': 'Empirical patterns, suit distribution, and recurring themes across your readings.',
+	'analytics.subtitle':
+		'Empirical patterns, suit distribution, and recurring themes across your readings.',
 	'analytics.totalReadings': 'Total Readings',
 	'analytics.commonSuit': 'Most Frequent Suit',
 	'analytics.arcanaRatio': 'Major vs Minor Arcana',
@@ -351,16 +378,20 @@ export const TRANSLATIONS_EN: TranslationDictionary = {
 
 	// About
 	'about.title': 'About AstroLogic',
-	'about.subtitle': 'An exploration of symbolic AI reasoning (SWI-Prolog) paired with modern generative intelligence.',
+	'about.subtitle':
+		'An exploration of symbolic AI reasoning (SWI-Prolog) paired with modern generative intelligence.',
 	'about.overview': 'Project Overview',
 	'about.techStack': 'Technology Stack',
 	'about.architecture': '5-Layer Architectural Blueprint',
 	'about.prologRole': 'The Role of Prolog in Divination',
 	'about.disclaimer': 'Disclaimer',
 	'about.doc': 'Observatory Documentation',
-	'about.overviewDesc': 'AstroLogic is an entertainment and self-reflection application that demonstrates the integration of symbolic AI reasoning (Prolog) with natural language AI (LLM) in a modern web application. It provides tarot readings, horoscope generation, zodiac compatibility analysis, and an AI conversational assistant.',
-	'about.disclaimerText': 'This application is for entertainment purposes only. Astrology and tarot do not scientifically predict the future, diagnose personality traits, or provide medical, health, or relationship advice. All readings should be considered symbolic and reflective in nature.',
-	'about.roleDesc': 'SWI-Prolog is used as the symbolic reasoning engine. It maintains a knowledge base of zodiac signs, tarot cards, elements, modalities, and ruling planets. Prolog inference rules determine:',
+	'about.overviewDesc':
+		'AstroLogic is an entertainment and self-reflection application that demonstrates the integration of symbolic AI reasoning (Prolog) with natural language AI (LLM) in a modern web application. It provides tarot readings, horoscope generation, zodiac compatibility analysis, and an AI conversational assistant.',
+	'about.disclaimerText':
+		'This application is for entertainment purposes only. Astrology and tarot do not scientifically predict the future, diagnose personality traits, or provide medical, health, or relationship advice. All readings should be considered symbolic and reflective in nature.',
+	'about.roleDesc':
+		'SWI-Prolog is used as the symbolic reasoning engine. It maintains a knowledge base of zodiac signs, tarot cards, elements, modalities, and ruling planets. Prolog inference rules determine:',
 	'about.role1': 'Question classification and category matching',
 	'about.role2': 'Tarot spread recommendation based on question type',
 	'about.role3': 'Zodiac compatibility evaluation',
@@ -455,13 +486,15 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 	'footer.oracleDocs': 'AI လမ်းညွှန်ချက်များ',
 	'footer.about': 'အကြောင်းအရာ',
 	'footer.copyright': '© ၂၀၂၆ AstroLogic Celestial Labs.',
-	'footer.disclaimer': 'အာကာသနက္ခတ်အချက်အလက်များနှင့် ယုတ္တိဗေဒင်ပညာ ပေါင်းစပ်မှု။ စိတ်အပန်းဖြေခြင်းနှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်ပါသည်။',
+	'footer.disclaimer':
+		'အာကာသနက္ခတ်အချက်အလက်များနှင့် ယုတ္တိဗေဒင်ပညာ ပေါင်းစပ်မှု။ စိတ်အပန်းဖြေခြင်းနှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်ပါသည်။',
 
 	// Landing Page (+page.svelte)
 	'landing.engineOnline': 'ကျိုးကြောင်းဆင်ခြင်မှု အင်ဂျင်အသင့်ရှိသည်',
 	'landing.logicCoreSync': 'Prolog ယုတ္တိဗေဒစနစ် ချိတ်ဆက်ထားသည်',
 	'landing.heroTitle': 'ရှေးဟောင်းကြယ်တာရာပညာနှင့် ခေတ်မီဉာဏ်ရည်တု တွေ့ဆုံရာ',
-	'landing.heroSubtitle': 'AstroLogic သည် Prolog သင်္ကေတယုတ္တိဗေဒနှင့် AI အနက်ဖွင့်စွမ်းရည်တို့ကို ပေါင်းစပ်ထားပြီး တိကျလေးနက်သော တားရော့ဟောကိန်းများ၊ နေ့စဉ်ဟောစာတမ်းများနှင့် ဇာတာခွင်အချက်အလက်များကို ဖော်ထုတ်ပေးပါသည်။',
+	'landing.heroSubtitle':
+		'AstroLogic သည် Prolog သင်္ကေတယုတ္တိဗေဒနှင့် AI အနက်ဖွင့်စွမ်းရည်တို့ကို ပေါင်းစပ်ထားပြီး တိကျလေးနက်သော တားရော့ဟောကိန်းများ၊ နေ့စဉ်ဟောစာတမ်းများနှင့် ဇာတာခွင်အချက်အလက်များကို ဖော်ထုတ်ပေးပါသည်။',
 	'landing.entertainmentNotice': 'စိတ်အပန်းဖြေခြင်းနှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ။',
 	'landing.startReading': 'တားရော့ဗေဒင် မေးမည်',
 	'landing.exploreDashboard': 'ပင်မဒက်ရှ်ဘုတ် ကြည့်မည်',
@@ -471,54 +504,68 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 	'landing.statDeterministic': 'အမှားအယွင်းကင်းသော သက်သေပြချက်',
 	'landing.celestialWheel': 'ကောင်းကင်ရာသီစက်ဝန်း',
 	'landing.twelveModalities': 'ရာသီခွင် ၁၂ မျိုး၏ စရိုက်လက္ခဏာများ',
-	'landing.wheelDesc': 'ရာသီခွင် ၁၂ ခုလုံးကို လေ့လာစူးစမ်းပါ။ တစ်ခုချင်းစီအတွက် ဓာတ်၊ စိုးမိုးဂြိုဟ်နှင့် ရာသီစက်ဝန်းဒီဂရီများကို စနစ်တကျ ပြသထားပါသည်။',
+	'landing.wheelDesc':
+		'ရာသီခွင် ၁၂ ခုလုံးကို လေ့လာစူးစမ်းပါ။ တစ်ခုချင်းစီအတွက် ဓာတ်၊ စိုးမိုးဂြိုဟ်နှင့် ရာသီစက်ဝန်းဒီဂရီများကို စနစ်တကျ ပြသထားပါသည်။',
 	'landing.coreCapabilities': 'အဓိကစွမ်းဆောင်ရည်များ',
 	'landing.highOrderInstruments': 'အဆင့်မြင့်နက္ခတ်ဗေဒင်သုံး ကိရိယာများ',
-	'landing.capabilitiesDesc': 'ဘဝလမ်းညွှန်ရှာဖွေသူများနှင့် နက္ခတ်ပညာချစ်မြတ်နိုးသူများအတွက် ယုတ္တိဗေဒနှင့် AI နည်းပညာ ပေါင်းစပ်ဖန်တီးထားပါသည်။',
+	'landing.capabilitiesDesc':
+		'ဘဝလမ်းညွှန်ရှာဖွေသူများနှင့် နက္ခတ်ပညာချစ်မြတ်နိုးသူများအတွက် ယုတ္တိဗေဒနှင့် AI နည်းပညာ ပေါင်းစပ်ဖန်တီးထားပါသည်။',
 	'landing.howItWorks': 'AstroLogic မည်သို့ အလုပ်လုပ်သနည်း',
 	'landing.divinationProtocol': 'ဗေဒင်တွက်ချက်မှု လုပ်ငန်းစဉ်',
-	'landing.howItWorksDesc': 'သင်၏မေးခွန်းမှသည် စစ်ဆေးပြီးသော ယုတ္တိဗေဒသက်သေပြချက်နှင့် သင့်အတွက်သီးသန့် AI အနက်ဖွင့်ဟောကိန်းအထိ။',
+	'landing.howItWorksDesc':
+		'သင်၏မေးခွန်းမှသည် စစ်ဆေးပြီးသော ယုတ္တိဗေဒသက်သေပြချက်နှင့် သင့်အတွက်သီးသန့် AI အနက်ဖွင့်ဟောကိန်းအထိ။',
 	'landing.step1Title': 'သင်၏မေးခွန်းကို မေးပါ',
-	'landing.step1Desc': 'သိလိုသောမေးခွန်း သို့မဟုတ် အာရုံစိုက်လိုသော ဘဝကဏ္ဍကို ရွေးချယ်ပါ။ စနစ်က ၎င်းကို ယုတ္တိဗေဒင်သုံး သင်္ကေတများအဖြစ် ပြောင်းလဲပေးပါမည်။',
+	'landing.step1Desc':
+		'သိလိုသောမေးခွန်း သို့မဟုတ် အာရုံစိုက်လိုသော ဘဝကဏ္ဍကို ရွေးချယ်ပါ။ စနစ်က ၎င်းကို ယုတ္တိဗေဒင်သုံး သင်္ကေတများအဖြစ် ပြောင်းလဲပေးပါမည်။',
 	'landing.step1Tag': 'မေးခွန်းရယူပြီး',
 	'landing.step2Title': 'Prolog က ကျိုးကြောင်းဆင်ခြင်သည်',
-	'landing.step2Desc': 'Prolog စနစ်က ဂြိုဟ်အနေအထားများ၊ ဓာတ်သဘောများနှင့် တားရော့ကတ်အဓိပ္ပာယ်များကို ၎င်း၏ စည်းမျဉ်းများဖြင့် တိကျစွာ စစ်ဆေးတွက်ချက်သည်။',
+	'landing.step2Desc':
+		'Prolog စနစ်က ဂြိုဟ်အနေအထားများ၊ ဓာတ်သဘောများနှင့် တားရော့ကတ်အဓိပ္ပာယ်များကို ၎င်း၏ စည်းမျဉ်းများဖြင့် တိကျစွာ စစ်ဆေးတွက်ချက်သည်။',
 	'landing.step2Tag': 'ယုတ္တိအတည်ပြုပြီး',
 	'landing.step3Title': 'ကတ်များကို ဆွဲယူသည်',
-	'landing.step3Desc': 'တားရော့ကတ်အစီအစဉ်ကို ဆွဲယူပြီး ယုတ္တိဗေဒအင်ဂျင်မှ စစ်ဆေးအတည်ပြုထားသော အခြေခံအချက်များနှင့် ပေါင်းစပ်သည်။',
+	'landing.step3Desc':
+		'တားရော့ကတ်အစီအစဉ်ကို ဆွဲယူပြီး ယုတ္တိဗေဒအင်ဂျင်မှ စစ်ဆေးအတည်ပြုထားသော အခြေခံအချက်များနှင့် ပေါင်းစပ်သည်။',
 	'landing.step3Tag': 'ကတ်များခင်းကျင်းပြီး',
 	'landing.step4Title': 'AI က အနက်ဖွင့်ဟောကြားသည်',
-	'landing.step4Desc': 'AI မော်ဒယ်က သက်သေပြပြီးသော ယုတ္တိဗေဒရလဒ်များကို နက်နဲသိမ်မွေ့ပြီး အဓိပ္ပာယ်ပြည့်စုံသော တစ်ဦးချင်းသီးသန့် ဟောကိန်းအဖြစ် ရေးဖွဲ့ပေးသည်။',
+	'landing.step4Desc':
+		'AI မော်ဒယ်က သက်သေပြပြီးသော ယုတ္တိဗေဒရလဒ်များကို နက်နဲသိမ်မွေ့ပြီး အဓိပ္ပာယ်ပြည့်စုံသော တစ်ဦးချင်းသီးသန့် ဟောကိန်းအဖြစ် ရေးဖွဲ့ပေးသည်။',
 	'landing.step4Tag': 'မှတ်တမ်းတွင်သိမ်းဆည်းပြီး',
 	'landing.ctaTag': 'အခမဲ့စတင်အသုံးပြုနိုင်သည်',
 	'landing.ctaTitle': 'သင်၏ ပထမဆုံး ဗေဒင်ကို စတင်ပါ',
-	'landing.ctaDesc': 'Prolog ယုတ္တိဗေဒအင်ဂျင်၏ အထောက်အပံ့ဖြင့် တားရော့ကတ်ဆွဲယူခြင်း သို့မဟုတ် ဇာတာခွင်တွက်ချက်ခြင်းကို စက္ကန့်ပိုင်းအတွင်း ပြုလုပ်လိုက်ပါ။',
+	'landing.ctaDesc':
+		'Prolog ယုတ္တိဗေဒအင်ဂျင်၏ အထောက်အပံ့ဖြင့် တားရော့ကတ်ဆွဲယူခြင်း သို့မဟုတ် ဇာတာခွင်တွက်ချက်ခြင်းကို စက္ကန့်ပိုင်းအတွင်း ပြုလုပ်လိုက်ပါ။',
 	'landing.ctaDraw': 'တားရော့ကတ်ဆွဲမည်',
 	'landing.ctaChart': 'ဇာတာခွင်တွက်ချက်မည်',
 
 	// Features on Landing
 	'feat.readings.title': 'AI တားရော့ဗေဒင်',
-	'feat.readings.desc': 'တားရော့သင်္ကေတများနှင့် ဂန္ထဝင်နက္ခတ်ကျမ်းများကို အခြေခံထားသော AI အနက်ဖွင့်ဟောကိန်းများ။',
+	'feat.readings.desc':
+		'တားရော့သင်္ကေတများနှင့် ဂန္ထဝင်နက္ခတ်ကျမ်းများကို အခြေခံထားသော AI အနက်ဖွင့်ဟောကိန်းများ။',
 	'feat.readings.meta': 'ကတ်အစီအစဉ်: အမျိုးမျိုးရွေးနိုင်သည်',
 	'feat.readings.cta': 'စတင်မည်',
 	'feat.prolog.title': 'သင်္ကေတယုတ္တိဗေဒဆင်ခြင်မှု',
-	'feat.prolog.desc': 'Prolog အင်ဂျင်သည် အချက်အလက်အမှားမပါဘဲ ရာသီခွင်ဂြိုဟ်အင်အားနှင့် ကတ်ဆက်နွယ်မှုများကို သက်သေပြစစ်ဆေးသည်။',
+	'feat.prolog.desc':
+		'Prolog အင်ဂျင်သည် အချက်အလက်အမှားမပါဘဲ ရာသီခွင်ဂြိုဟ်အင်အားနှင့် ကတ်ဆက်နွယ်မှုများကို သက်သေပြစစ်ဆေးသည်။',
 	'feat.prolog.meta': 'အင်ဂျင်: Prolog စနစ်',
 	'feat.prolog.cta': 'စစ်ဆေးမည်',
 	'feat.chart.title': 'မွေးဖွားဇာတာခွင်ဆန်းစစ်မှု',
-	'feat.chart.desc': 'သင်၏ မွေးဖွားချိန်အချက်အလက်ပေါ်အခြေခံ၍ နေ၊ လ၊ တနင်္ဂနွေ/တနင်္လာအစရှိသော ဂြိုဟ်များနှင့် ဘဝဇာတာခွင်များကို တွက်ချက်သည်။',
+	'feat.chart.desc':
+		'သင်၏ မွေးဖွားချိန်အချက်အလက်ပေါ်အခြေခံ၍ နေ၊ လ၊ တနင်္ဂနွေ/တနင်္လာအစရှိသော ဂြိုဟ်များနှင့် ဘဝဇာတာခွင်များကို တွက်ချက်သည်။',
 	'feat.chart.meta': 'တိကျမှု: အာ့ခ်မိနစ်အဆင့်',
 	'feat.chart.cta': 'တွက်ချက်မည်',
 	'feat.synastry.title': 'ရာသီခွင်လိုက်ဖက်ညီမှု',
-	'feat.synastry.desc': 'ရာသီခွင်နှစ်ခုအကြား စိတ်ခံစားမှု၊ အတွေးအခေါ်နှင့် သဟဇာတဖြစ်မှုတို့ကို လေ့လာဆန်းစစ်ပါ။',
+	'feat.synastry.desc':
+		'ရာသီခွင်နှစ်ခုအကြား စိတ်ခံစားမှု၊ အတွေးအခေါ်နှင့် သဟဇာတဖြစ်မှုတို့ကို လေ့လာဆန်းစစ်ပါ။',
 	'feat.synastry.meta': 'စနစ်: ရာသီနှစ်ခုနှိုင်းယှဉ်ချက်',
 	'feat.synastry.cta': 'နှိုင်းယှဉ်မည်',
 	'feat.scan.title': 'တားရော့ကတ်စကန်နာ',
-	'feat.scan.desc': 'အပြင်မှာဆွဲထားသော တားရော့ကတ်ကို ဓာတ်ပုံရိုက်ပြီး ချက်ချင်းအဖြေရှာဖွေဖတ်ရှုနိုင်ပါသည်။',
+	'feat.scan.desc':
+		'အပြင်မှာဆွဲထားသော တားရော့ကတ်ကို ဓာတ်ပုံရိုက်ပြီး ချက်ချင်းအဖြေရှာဖွေဖတ်ရှုနိုင်ပါသည်။',
 	'feat.scan.meta': 'ထည့်သွင်းမှု: ကင်မရာ / ဓာတ်ပုံ',
 	'feat.scan.cta': 'စကန်ဖတ်မည်',
 	'feat.guide.title': 'AI နက္ခတ်လမ်းပြဆရာ',
-	'feat.guide.desc': 'တားရော့နှင့် နက္ခတ်ဗေဒင်ဆိုင်ရာ သိလိုသမျှကို သင်၏ AI မိတ်ဆွေနှင့် တိုက်ရိုက်မေးမြန်းဆွေးနွေးပါ။',
+	'feat.guide.desc':
+		'တားရော့နှင့် နက္ခတ်ဗေဒင်ဆိုင်ရာ သိလိုသမျှကို သင်၏ AI မိတ်ဆွေနှင့် တိုက်ရိုက်မေးမြန်းဆွေးနွေးပါ။',
 	'feat.guide.meta': 'စနစ်: အပြန်အလှန်စကားပြောဆိုမှု',
 	'feat.guide.cta': 'မေးမြန်းမည်',
 
@@ -540,13 +587,15 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 	'dashboard.yourSign': 'သင့်ရာသီခွင်',
 	'dashboard.editProfile': 'ပရိုဖိုင်ပြင်ဆင်ရန်',
 	'dashboard.setSign': 'ရာသီခွင်ရွေးချယ်ပါ',
-	'dashboard.setSignPrompt': 'သင့်အတွက် သီးသန့်နက္ခတ်ဗေဒင်အချက်အလက်များ ရရှိနိုင်ရန် ပရိုဖိုင်တွင် သင့်ရာသီခွင်ကို ရွေးချယ်ပါ။',
+	'dashboard.setSignPrompt':
+		'သင့်အတွက် သီးသန့်နက္ခတ်ဗေဒင်အချက်အလက်များ ရရှိနိုင်ရန် ပရိုဖိုင်တွင် သင့်ရာသီခွင်ကို ရွေးချယ်ပါ။',
 	'dashboard.todaysWeather': 'ယနေ့ နက္ခတ်အခြေအနေ',
 	'dashboard.refresh': 'ပြန်လည်ရယူမည်',
 
 	// Reading Page
 	'reading.title': 'တားရော့ဗေဒင် ဟောကိန်း',
-	'reading.subtitle': 'ကတ်များကို ဆွဲယူပြီး ယုတ္တိဗေဒစနစ်နှင့် AI အနက်ဖွင့်ဟောကြားမှုကို ရယူလိုက်ပါ။',
+	'reading.subtitle':
+		'ကတ်များကို ဆွဲယူပြီး ယုတ္တိဗေဒစနစ်နှင့် AI အနက်ဖွင့်ဟောကြားမှုကို ရယူလိုက်ပါ။',
 	'reading.selectTopic': 'မေးမြန်းလိုသော ကဏ္ဍကို ရွေးချယ်ပါ',
 	'reading.selectSpread': 'ကတ်ခင်းကျင်းမည့် စနစ်ကို ရွေးချယ်ပါ',
 	'reading.drawMethod': 'ကတ်ဆွဲယူမည့် နည်းလမ်း',
@@ -572,7 +621,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Tarot Deck Browser
 	'deck.title': 'တားရော့ကတ်စုံ လေ့လာရန်',
-	'deck.subtitle': 'တားရော့ကတ် ၇၈ ကတ်လုံး၏ နက်နဲသောအဓိပ္ပာယ်များ၊ ဓာတ်သဘောများနှင့် ပုံမှန်/ဇောက်ထိုး အကျိုးတရားများကို လေ့လာပါ။',
+	'deck.subtitle':
+		'တားရော့ကတ် ၇၈ ကတ်လုံး၏ နက်နဲသောအဓိပ္ပာယ်များ၊ ဓာတ်သဘောများနှင့် ပုံမှန်/ဇောက်ထိုး အကျိုးတရားများကို လေ့လာပါ။',
 	'deck.searchPlaceholder': 'ကတ်အမည်၊ သဘောတရား သို့မဟုတ် အုပ်စုအလိုက် ရှာဖွေပါ...',
 	'deck.totalCards': 'ပြသထားသော ကတ်အရေအတွက်',
 	'deck.uprightKeywords': 'ပုံမှန်အနေအထား သော့ချက်စကားလုံးများ',
@@ -585,7 +635,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Scanner
 	'scan.title': 'ကင်မရာ တားရော့ကတ်စကန်နာ',
-	'scan.subtitle': 'လက်တွေ့ဆွဲထားသော တားရော့ကတ်ကို ဓာတ်ပုံရိုက်၍ AI အမြင်အာရုံဖြင့် ခွဲခြားအဓိပ္ပာယ်ဖော်ထုတ်ပါ။',
+	'scan.subtitle':
+		'လက်တွေ့ဆွဲထားသော တားရော့ကတ်ကို ဓာတ်ပုံရိုက်၍ AI အမြင်အာရုံဖြင့် ခွဲခြားအဓိပ္ပာယ်ဖော်ထုတ်ပါ။',
 	'scan.dropzoneTitle': 'ဓာတ်ပုံကို ဖိဆွဲထည့်ပါ သို့မဟုတ် ဖုန်းထဲမှ ရွေးချယ်ပါ',
 	'scan.dropzoneHint': 'JPG, PNG, WEBP ဖိုင်များကို လက်ခံပါသည်။',
 	'scan.scanButton': 'ကတ်ကို စကန်ဖတ်မည်',
@@ -598,7 +649,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Birth Chart
 	'chart.title': 'မွေးဖွားဇာတာခွင် တွက်ချက်ခြင်း',
-	'chart.subtitle': 'မွေးဖွားချိန်နှင့် တည်နေရာအလိုက် တိကျသော ဂြိုဟ်အိမ်များ၊ ရာသီခွင်များနှင့် အဓိကဂြိုဟ် ၃ လုံးကို တွက်ချက်ပါ။',
+	'chart.subtitle':
+		'မွေးဖွားချိန်နှင့် တည်နေရာအလိုက် တိကျသော ဂြိုဟ်အိမ်များ၊ ရာသီခွင်များနှင့် အဓိကဂြိုဟ် ၃ လုံးကို တွက်ချက်ပါ။',
 	'chart.month': 'လ',
 	'chart.day': 'ရက်',
 	'chart.year': 'ခုနှစ်',
@@ -621,7 +673,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Zodiac Explorer
 	'zodiac.title': 'ရာသီခွင် ၁၂ မျိုး လေ့လာစူးစမ်းရန်',
-	'zodiac.subtitle': 'ရာသီခွင်တစ်ခုချင်းစီ၏ အတွင်းစိတ်သဘာဝ၊ စရိုက်လက္ခဏာများနှင့် ဘဝအမြင်များကို လေ့လာပါ။',
+	'zodiac.subtitle':
+		'ရာသီခွင်တစ်ခုချင်းစီ၏ အတွင်းစိတ်သဘာဝ၊ စရိုက်လက္ခဏာများနှင့် ဘဝအမြင်များကို လေ့လာပါ။',
 	'zodiac.filterAll': 'ဓာတ်အားလုံး',
 	'zodiac.traits': 'အဓိက စရိုက်လက္ခဏာများ',
 	'zodiac.ruler': 'စိုးမိုးသောဂြိုဟ်',
@@ -646,7 +699,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Horoscope
 	'horoscope.title': 'နေ့စဉ် နက္ခတ်ဟောစာတမ်း',
-	'horoscope.subtitle': 'သင့်ရာသီခွင်နှင့် ယနေ့စိတ်ခံစားချက်အပေါ် မူတည်၍ တွက်ချက်ထားသော လမ်းညွှန်ဟောစာတမ်း။',
+	'horoscope.subtitle':
+		'သင့်ရာသီခွင်နှင့် ယနေ့စိတ်ခံစားချက်အပေါ် မူတည်၍ တွက်ချက်ထားသော လမ်းညွှန်ဟောစာတမ်း။',
 	'horoscope.selectMood': 'ယနေ့ သင့်စိတ်ခံစားချက်ကို ရွေးချယ်ပါ',
 	'horoscope.generate': 'ယနေ့အတွက် ဟောစာတမ်းထုတ်ယူမည်',
 	'horoscope.theme': 'ယနေ့ အဓိကသဘောတရား',
@@ -670,7 +724,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Compatibility / Synastry
 	'synastry.title': 'ရာသီခွင် လိုက်ဖက်ညီမှု မက်ထရစ်',
-	'synastry.subtitle': 'ရာသီခွင်နှစ်ခုအကြား ဓာတ်သဟဇာတဖြစ်မှု၊ ဆက်ဆံရေးနှင့် သဘောထားကိုက်ညီမှုများကို ဆန်းစစ်ပါ။',
+	'synastry.subtitle':
+		'ရာသီခွင်နှစ်ခုအကြား ဓာတ်သဟဇာတဖြစ်မှု၊ ဆက်ဆံရေးနှင့် သဘောထားကိုက်ညီမှုများကို ဆန်းစစ်ပါ။',
 	'synastry.sign1': 'ရာသီခွင် ၁ (သင့်ရာသီ)',
 	'synastry.sign2': 'ရာသီခွင် ၂ (လက်တွဲဖော်)',
 	'synastry.analyze': 'လိုက်ဖက်ညီမှုကို ဆန်းစစ်မည်',
@@ -711,13 +766,16 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 	'synastry.growthAreas': 'တိုးတက်ဖွံ့ဖြိုးရမည့် အချက်များ',
 	'synastry.complementaryTraits': 'အပြန်အလှန် ဖြည့်ဆည်းပေးနိုင်သော စရိုက်များ',
 	'synastry.newAnalysis': 'ဆန်းစစ်မှု အသစ်ပြုလုပ်မည်',
-	'synastry.disclaimer': 'ဤလိုက်ဖက်ညီမှု ဆန်းစစ်ချက်သည် စိတ်အပန်းဖြေရန်နှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်ပါသည်။ ဆက်ဆံရေး၏ အနာဂတ်ရလဒ်များကို သိပ္ပံနည်းကျ အာမခံဟောကိန်းထုတ်ခြင်း မဟုတ်ပါ။',
+	'synastry.disclaimer':
+		'ဤလိုက်ဖက်ညီမှု ဆန်းစစ်ချက်သည် စိတ်အပန်းဖြေရန်နှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်ပါသည်။ ဆက်ဆံရေး၏ အနာဂတ်ရလဒ်များကို သိပ္ပံနည်းကျ အာမခံဟောကိန်းထုတ်ခြင်း မဟုတ်ပါ။',
 
 	// AI Oracle Chat
 	'chat.title': 'Socratic AI နက္ခတ်လမ်းပြ',
-	'chat.subtitle': 'တားရော့သင်္ကေတများ၊ ရာသီခွင်များနှင့် ဘဝမေးခွန်းများကို သင်၏ AI လမ်းပြဆရာနှင့် မေးမြန်းဆွေးနွေးပါ။',
+	'chat.subtitle':
+		'တားရော့သင်္ကေတများ၊ ရာသီခွင်များနှင့် ဘဝမေးခွန်းများကို သင်၏ AI လမ်းပြဆရာနှင့် မေးမြန်းဆွေးနွေးပါ။',
 	'chat.welcome': 'AI နက္ခတ်လမ်းပြဆရာထံမှ ကြိုဆိုပါသည်',
-	'chat.welcomeDesc': 'တားရော့ကတ်များ၊ ရာသီခွင်များနှင့် ပတ်သက်၍ သိလိုသည်များကို မေးမြန်းနိုင်ပါသည်။ နက်နဲလေးနက်သော လမ်းညွှန်ချက်များကို ပေးအပ်ပါမည်။',
+	'chat.welcomeDesc':
+		'တားရော့ကတ်များ၊ ရာသီခွင်များနှင့် ပတ်သက်၍ သိလိုသည်များကို မေးမြန်းနိုင်ပါသည်။ နက်နဲလေးနက်သော လမ်းညွှန်ချက်များကို ပေးအပ်ပါမည်။',
 	'chat.placeholder': 'ကတ်တစ်ခုခုအကြောင်း၊ ရာသီခွင်အကြောင်း သို့မဟုတ် သိလိုသမျှ မေးမြန်းပါ...',
 	'chat.send': 'မေးမည်',
 	'chat.logicOnline': 'ယုတ္တိဗေဒစနစ် အဆင်သင့်ရှိသည်',
@@ -731,9 +789,11 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// History
 	'history.title': 'ဗေဒင်မေးမြန်းမှု မှတ်တမ်းဟောင်းများ',
-	'history.subtitle': 'အတိတ်က မေးမြန်းခဲ့သော တားရော့ဗေဒင်များနှင့် ရရှိခဲ့သော လမ်းညွှန်ချက်များကို ပြန်လည်ကြည့်ရှုပါ။',
+	'history.subtitle':
+		'အတိတ်က မေးမြန်းခဲ့သော တားရော့ဗေဒင်များနှင့် ရရှိခဲ့သော လမ်းညွှန်ချက်များကို ပြန်လည်ကြည့်ရှုပါ။',
 	'history.empty': 'ဗေဒင်မှတ်တမ်း မရှိသေးပါ',
-	'history.emptyDesc': 'တားရော့ဗေဒင်မေးမြန်းပြီး သိမ်းဆည်းလိုက်ပါက ဤနေရာတွင် သိမ်းဆည်းထားမည်ဖြစ်ပါသည်။',
+	'history.emptyDesc':
+		'တားရော့ဗေဒင်မေးမြန်းပြီး သိမ်းဆည်းလိုက်ပါက ဤနေရာတွင် သိမ်းဆည်းထားမည်ဖြစ်ပါသည်။',
 	'history.delete': 'ဖျက်မည်',
 	'history.viewDetails': 'အသေးစိတ်ကြည့်မည်',
 	'history.chronological': 'ဗေဒင်မှတ်တမ်းဟောင်းများ • ရက်စွဲအလိုက်',
@@ -743,7 +803,8 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// Analytics
 	'analytics.title': 'ဗေဒင်စာရင်းဇယားနှင့် ဆန်းစစ်ချက်များ',
-	'analytics.subtitle': 'သင်မေးမြန်းခဲ့သော ဗေဒင်များမှ ထွက်ပေါ်လာသည့် ကတ်အမျိုးအစားများ၊ ဓာတ်များနှင့် အဓိကသဘောတရားများ။',
+	'analytics.subtitle':
+		'သင်မေးမြန်းခဲ့သော ဗေဒင်များမှ ထွက်ပေါ်လာသည့် ကတ်အမျိုးအစားများ၊ ဓာတ်များနှင့် အဓိကသဘောတရားများ။',
 	'analytics.totalReadings': 'စုစုပေါင်း မေးမြန်းမှုအကြိမ်ရေ',
 	'analytics.commonSuit': 'အကျများဆုံး ကတ်အုပ်စု',
 	'analytics.arcanaRatio': 'အဓိကကတ်နှင့် သာမန်ကတ် အချိုး',
@@ -762,16 +823,20 @@ export const TRANSLATIONS_MY: TranslationDictionary = {
 
 	// About
 	'about.title': 'AstroLogic အကြောင်း',
-	'about.subtitle': 'Prolog သင်္ကေတယုတ္တိဗေဒနှင့် ခေတ်မီ ဉာဏ်ရည်တု (AI) တို့ ပေါင်းစပ်ဖန်တီးထားသော စနစ်ဖြစ်ပါသည်။',
+	'about.subtitle':
+		'Prolog သင်္ကေတယုတ္တိဗေဒနှင့် ခေတ်မီ ဉာဏ်ရည်တု (AI) တို့ ပေါင်းစပ်ဖန်တီးထားသော စနစ်ဖြစ်ပါသည်။',
 	'about.overview': 'ပရောဂျက် ခြုံငုံသုံးသပ်ချက်',
 	'about.techStack': 'အသုံးပြုထားသော နည်းပညာများ',
 	'about.architecture': '၅ ဆင့်ပါ ဗိသုကာပုံစံ',
 	'about.prologRole': 'ဗေဒင်တွက်ချက်မှုတွင် Prolog ၏ အခန်းကဏ္ဍ',
 	'about.disclaimer': 'သတိပြုရန် ရှင်းလင်းချက်',
 	'about.doc': 'လေ့လာရေး မှတ်တမ်းအချက်အလက်',
-	'about.overviewDesc': 'AstroLogic သည် Prolog သင်္ကေတ ယုတ္တိဗေဒနှင့် ခေတ်မီ AI ဘာသာစကားမော်ဒယ်တို့ကို ပေါင်းစပ်ဖန်တီးထားသော စနစ်တစ်ခုဖြစ်ပြီး တားရော့ဗေဒင်၊ နေ့စဉ်ဟောစာတမ်း၊ ရာသီခွင်လိုက်ဖက်ညီမှုနှင့် အပြန်အလှန် ဆွေးနွေးနိုင်သော AI လမ်းပြစနစ်များကို ပေးစွမ်းပါသည်။',
-	'about.disclaimerText': 'ဤစနစ်သည် စိတ်အပန်းဖြေရန်နှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်ပါသည်။ နက္ခတ်ဗေဒင်နှင့် တားရော့သည် သိပ္ပံနည်းကျ အနာဂတ်ကို ကြိုတင်ဟောကိန်းထုတ်ခြင်း၊ ကိုယ်ရည်ကိုယ်သွေး ခွဲခြားခြင်း သို့မဟုတ် ဆေးဘက်ဆိုင်ရာ၊ ကျန်းမာရေးနှင့် အချစ်ရေး အကြံဉာဏ်ပေးခြင်း မဟုတ်ပါ။ အဟောအားလုံးကို သင်္ကေတသဘောနှင့် စဉ်းစားဆင်ခြင်စရာအဖြစ်သာ မှတ်ယူသင့်ပါသည်။',
-	'about.roleDesc': 'SWI-Prolog ကို သင်္ကေတယုတ္တိဗေဒ အင်ဂျင်အဖြစ် အသုံးပြုထားပြီး ရာသီခွင်များ၊ တားရော့ကတ်များ၊ ဓာတ်များနှင့် ဂြိုဟ်များ၏ ဆက်နွယ်မှုဆိုင်ရာ အချက်အလက်များကို ထိန်းသိမ်းတွက်ချက်ပေးပါသည်။ Prolog စနစ်သည် အောက်ပါတို့ကို ဆုံးဖြတ်ပေးပါသည် -',
+	'about.overviewDesc':
+		'AstroLogic သည် Prolog သင်္ကေတ ယုတ္တိဗေဒနှင့် ခေတ်မီ AI ဘာသာစကားမော်ဒယ်တို့ကို ပေါင်းစပ်ဖန်တီးထားသော စနစ်တစ်ခုဖြစ်ပြီး တားရော့ဗေဒင်၊ နေ့စဉ်ဟောစာတမ်း၊ ရာသီခွင်လိုက်ဖက်ညီမှုနှင့် အပြန်အလှန် ဆွေးနွေးနိုင်သော AI လမ်းပြစနစ်များကို ပေးစွမ်းပါသည်။',
+	'about.disclaimerText':
+		'ဤစနစ်သည် စိတ်အပန်းဖြေရန်နှင့် မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက်သာ ဖြစ်ပါသည်။ နက္ခတ်ဗေဒင်နှင့် တားရော့သည် သိပ္ပံနည်းကျ အနာဂတ်ကို ကြိုတင်ဟောကိန်းထုတ်ခြင်း၊ ကိုယ်ရည်ကိုယ်သွေး ခွဲခြားခြင်း သို့မဟုတ် ဆေးဘက်ဆိုင်ရာ၊ ကျန်းမာရေးနှင့် အချစ်ရေး အကြံဉာဏ်ပေးခြင်း မဟုတ်ပါ။ အဟောအားလုံးကို သင်္ကေတသဘောနှင့် စဉ်းစားဆင်ခြင်စရာအဖြစ်သာ မှတ်ယူသင့်ပါသည်။',
+	'about.roleDesc':
+		'SWI-Prolog ကို သင်္ကေတယုတ္တိဗေဒ အင်ဂျင်အဖြစ် အသုံးပြုထားပြီး ရာသီခွင်များ၊ တားရော့ကတ်များ၊ ဓာတ်များနှင့် ဂြိုဟ်များ၏ ဆက်နွယ်မှုဆိုင်ရာ အချက်အလက်များကို ထိန်းသိမ်းတွက်ချက်ပေးပါသည်။ Prolog စနစ်သည် အောက်ပါတို့ကို ဆုံးဖြတ်ပေးပါသည် -',
 	'about.role1': 'မေးခွန်း အမျိုးအစား ခွဲခြားသတ်မှတ်ခြင်း',
 	'about.role2': 'မေးခွန်းအမျိုးအစားအလိုက် သင့်လျော်သော တားရော့ခင်းကျင်းပုံကို အကြံပြုခြင်း',
 	'about.role3': 'ရာသီခွင်အချင်းချင်း လိုက်ဖက်ညီမှုကို တွက်ချက်ဆန်းစစ်ခြင်း',

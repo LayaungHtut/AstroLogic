@@ -108,7 +108,10 @@ export const HOROSCOPE_FOCUS_MY: Record<string, string> = {
 	spiritual_practice: 'စိတ်ဝိညာဉ် တည်ငြိမ်အေးချမ်းစေမည့် အလေ့အကျင့်များ ပြုလုပ်ခြင်း'
 };
 
-export function translateHoroscopeTheme(theme: string | undefined | null, locale: SupportedLocale): string {
+export function translateHoroscopeTheme(
+	theme: string | undefined | null,
+	locale: SupportedLocale
+): string {
 	if (!theme) return '';
 	if (locale !== 'my') {
 		return theme.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase());
@@ -124,7 +127,10 @@ export function translateHoroscopeTheme(theme: string | undefined | null, locale
 	return theme.replace(/_/g, ' ');
 }
 
-export function translateHoroscopeFocus(focus: string | undefined | null, locale: SupportedLocale): string {
+export function translateHoroscopeFocus(
+	focus: string | undefined | null,
+	locale: SupportedLocale
+): string {
 	if (!focus) return '';
 	if (locale !== 'my') return focus.replace(/_/g, ' ');
 	const clean = focus.toLowerCase().trim().replace(/ /g, '_');
@@ -205,16 +211,21 @@ export const PROLOG_TRACE_RESULTS_MY: Record<string, string> = {
 	'Element association determined': 'ရာသီခွင်နှင့် သက်ဆိုင်သော ဓာတ်သဘော စွမ်းအင်ကို အတည်ပြုပြီးသည်',
 	'Modality determined': 'ရာသီခွင်၏ လှုပ်ရှားသဘာဝ (Modality) ကို ဖော်ထုတ်ပြီးသည်',
 	'Daily theme selected': 'ယနေ့အတွက် အဓိက စွမ်းအင်ဆောင်ပုဒ်ကို ရွေးချယ်ပြီးသည်',
-	'Mood-based theme determined': 'လက်ရှိစိတ်ခံစားချက်အပေါ် မူတည်သော ဆက်စပ်သဘောတရားကို သတ်မှတ်ပြီးသည်',
+	'Mood-based theme determined':
+		'လက်ရှိစိတ်ခံစားချက်အပေါ် မူတည်သော ဆက်စပ်သဘောတရားကို သတ်မှတ်ပြီးသည်',
 	'Focus area identified': 'ယနေ့ အထူးဂရုပြုဆောင်ရွက်ရမည့် နယ်ပယ်ကို သတ်မှတ်ပြီးသည်',
 	'Question category matched': 'မေးခွန်း၏ ကဏ္ဍနှင့် သဘောသဘာဝကို ဆန်းစစ်အတည်ပြုပြီးသည်',
 	'Recommended spread determined': 'အသင့်တော်ဆုံး တားရော့ကတ်ခင်းကျင်းပုံကို ရွေးချယ်ပြီးသည်',
-	'Dominant theme identified': 'ကတ်များအနက် အဓိကလွှမ်းမိုးနေသော စွမ်းအင်သဘောတရားကို ဖော်ထုတ်ပြီးသည်',
+	'Dominant theme identified':
+		'ကတ်များအနက် အဓိကလွှမ်းမိုးနေသော စွမ်းအင်သဘောတရားကို ဖော်ထုတ်ပြီးသည်',
 	'Advice generated': 'ရာသီခွင်နှင့် ကတ်များအပေါ် အခြေပြု၍ အကြံပြုချက် ရေးဆွဲပြီးသည်',
 	'Compatibility score calculated': 'ရာသီခွင်နှစ်ခုအကြား လိုက်ဖက်ညီမှု ရမှတ်ကို တွက်ချက်ပြီးသည်'
 };
 
-export function formatTraceResult(result: string | undefined | null, locale: SupportedLocale): string {
+export function formatTraceResult(
+	result: string | undefined | null,
+	locale: SupportedLocale
+): string {
 	if (!result) return '';
 	if (locale !== 'my') return result;
 	return PROLOG_TRACE_RESULTS_MY[result] || result;

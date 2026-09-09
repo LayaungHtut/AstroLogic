@@ -267,9 +267,7 @@ describe('Tarot reading question-focused synthesis & theme localization', () => 
 			category: 'decision',
 			topic: 'decision',
 			zodiac_sign: 'libra',
-			cards: [
-				{ name: 'Justice', position: 'Situation', is_reversed: false }
-			]
+			cards: [{ name: 'Justice', position: 'Situation', is_reversed: false }]
 		};
 		const synthesisLibra = formatReadingSynthesis('', mockReadingDecision, 'my');
 		expect(synthesisLibra).toContain('တူရာသီဖွား (လေဓာတ်) အနေဖြင့်');

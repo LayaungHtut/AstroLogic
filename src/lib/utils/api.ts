@@ -6,8 +6,8 @@ async function apiFetch<T>(path: string, options?: RequestInit): Promise<T> {
 		...options,
 		headers: {
 			'Content-Type': 'application/json',
-			...options?.headers,
-		},
+			...options?.headers
+		}
 	});
 
 	if (!response.ok) {
@@ -33,7 +33,7 @@ export async function fetchAllTarotCards() {
 export async function drawTarotCards(count: number, spreadType?: string) {
 	return apiFetch<import('$lib/types').DrawResponse>('/tarot/draw', {
 		method: 'POST',
-		body: JSON.stringify({ count, spread_type: spreadType }),
+		body: JSON.stringify({ count, spread_type: spreadType })
 	});
 }
 
@@ -42,7 +42,7 @@ export async function analyzeReading(
 	zodiacSign: string,
 	spreadType?: string,
 	cardCount?: number,
-	locale: string = 'en',
+	locale: string = 'en'
 ) {
 	return apiFetch<import('$lib/types').ReadingResult>('/reading/analyze', {
 		method: 'POST',
@@ -53,8 +53,8 @@ export async function analyzeReading(
 			// Only meaningful when spreadType === 'custom'; the backend ignores
 			// it for fixed spreads, which use their own predetermined count.
 			card_count: cardCount,
-			locale,
-		}),
+			locale
+		})
 	});
 }
 
@@ -62,7 +62,7 @@ export async function analyzeSelectedReading(
 	question: string,
 	zodiacSign: string,
 	cards: { name: string; is_reversed: boolean }[],
-	locale: string = 'en',
+	locale: string = 'en'
 ) {
 	// The backend reports a bad selection (duplicate or unrecognized card)
 	// as a 200 response with an `error` field rather than an HTTP error, so
@@ -72,36 +72,36 @@ export async function analyzeSelectedReading(
 		'/reading/analyze-selected',
 		{
 			method: 'POST',
-			body: JSON.stringify({ question, zodiac_sign: zodiacSign, cards, locale }),
-		},
+			body: JSON.stringify({ question, zodiac_sign: zodiacSign, cards, locale })
+		}
 	);
 }
 
 export async function saveReading(data: Record<string, unknown>) {
 	return apiFetch<{ id: number; status: string }>('/reading/generate', {
 		method: 'POST',
-		body: JSON.stringify(data),
+		body: JSON.stringify(data)
 	});
 }
 
 export async function generateHoroscope(zodiacSign: string, mood: string, locale: string = 'en') {
 	return apiFetch<import('$lib/types').HoroscopeResult>('/horoscope/generate', {
 		method: 'POST',
-		body: JSON.stringify({ zodiac_sign: zodiacSign, mood, locale }),
+		body: JSON.stringify({ zodiac_sign: zodiacSign, mood, locale })
 	});
 }
 
 export async function analyzeCompatibility(sign1: string, sign2: string) {
 	return apiFetch<import('$lib/types').CompatibilityResult>('/compatibility/analyze', {
 		method: 'POST',
-		body: JSON.stringify({ sign1, sign2 }),
+		body: JSON.stringify({ sign1, sign2 })
 	});
 }
 
 export async function fetchSynastry(sign1: string, sign2: string) {
 	return apiFetch<import('$lib/types').SynastryResult>('/compatibility/synastry', {
 		method: 'POST',
-		body: JSON.stringify({ sign1, sign2 }),
+		body: JSON.stringify({ sign1, sign2 })
 	});
 }
 
@@ -121,8 +121,8 @@ export async function sendChatMessage(
 			message,
 			zodiac_sign: zodiacSign,
 			current_reading: currentReading,
-			locale,
-		}),
+			locale
+		})
 	});
 }
 

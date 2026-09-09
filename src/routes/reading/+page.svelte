@@ -36,13 +36,69 @@
 	const currentProfile = $derived($profile);
 
 	const topics = $derived([
-		{ id: 'love', label: TOPICS_DATA.love ? ($locale === 'my' ? TOPICS_DATA.love.labelMy : TOPICS_DATA.love.labelEn) : 'Love', icon: '❤️' },
-		{ id: 'career', label: TOPICS_DATA.career ? ($locale === 'my' ? TOPICS_DATA.career.labelMy : TOPICS_DATA.career.labelEn) : 'Career', icon: '💼' },
-		{ id: 'education', label: TOPICS_DATA.education ? ($locale === 'my' ? TOPICS_DATA.education.labelMy : TOPICS_DATA.education.labelEn) : 'Education', icon: '🎓' },
-		{ id: 'finance', label: TOPICS_DATA.finance ? ($locale === 'my' ? TOPICS_DATA.finance.labelMy : TOPICS_DATA.finance.labelEn) : 'Finance', icon: '💰' },
-		{ id: 'personal_growth', label: TOPICS_DATA.personal_growth ? ($locale === 'my' ? TOPICS_DATA.personal_growth.labelMy : TOPICS_DATA.personal_growth.labelEn) : 'Growth', icon: '🌱' },
-		{ id: 'communication', label: TOPICS_DATA.communication ? ($locale === 'my' ? TOPICS_DATA.communication.labelMy : TOPICS_DATA.communication.labelEn) : 'Communication', icon: '🗣️' },
-		{ id: 'general', label: TOPICS_DATA.general ? ($locale === 'my' ? TOPICS_DATA.general.labelMy : TOPICS_DATA.general.labelEn) : 'General', icon: '✨' }
+		{
+			id: 'love',
+			label: TOPICS_DATA.love
+				? $locale === 'my'
+					? TOPICS_DATA.love.labelMy
+					: TOPICS_DATA.love.labelEn
+				: 'Love',
+			icon: '❤️'
+		},
+		{
+			id: 'career',
+			label: TOPICS_DATA.career
+				? $locale === 'my'
+					? TOPICS_DATA.career.labelMy
+					: TOPICS_DATA.career.labelEn
+				: 'Career',
+			icon: '💼'
+		},
+		{
+			id: 'education',
+			label: TOPICS_DATA.education
+				? $locale === 'my'
+					? TOPICS_DATA.education.labelMy
+					: TOPICS_DATA.education.labelEn
+				: 'Education',
+			icon: '🎓'
+		},
+		{
+			id: 'finance',
+			label: TOPICS_DATA.finance
+				? $locale === 'my'
+					? TOPICS_DATA.finance.labelMy
+					: TOPICS_DATA.finance.labelEn
+				: 'Finance',
+			icon: '💰'
+		},
+		{
+			id: 'personal_growth',
+			label: TOPICS_DATA.personal_growth
+				? $locale === 'my'
+					? TOPICS_DATA.personal_growth.labelMy
+					: TOPICS_DATA.personal_growth.labelEn
+				: 'Growth',
+			icon: '🌱'
+		},
+		{
+			id: 'communication',
+			label: TOPICS_DATA.communication
+				? $locale === 'my'
+					? TOPICS_DATA.communication.labelMy
+					: TOPICS_DATA.communication.labelEn
+				: 'Communication',
+			icon: '🗣️'
+		},
+		{
+			id: 'general',
+			label: TOPICS_DATA.general
+				? $locale === 'my'
+					? TOPICS_DATA.general.labelMy
+					: TOPICS_DATA.general.labelEn
+				: 'General',
+			icon: '✨'
+		}
 	]);
 
 	const topicSpreadMap: Record<string, string> = {
@@ -216,7 +272,8 @@
 									</label>
 								</div>
 								<span
-									class="font-mono-data text-[11px] font-medium tracking-tight {question.length >= 480
+									class="font-mono-data text-[11px] font-medium tracking-tight {question.length >=
+									480
 										? 'text-error'
 										: 'text-primary'}">{question.length}/500</span
 								>
@@ -227,8 +284,7 @@
 									bind:value={question}
 									class="min-h-25 w-full resize-none rounded-xl bg-surface-container-high/40 p-4 text-sm text-on-surface transition-all duration-300 placeholder:text-outline/60 focus:ring-2 focus:ring-secondary/40 focus:outline-none"
 									maxlength="500"
-									placeholder={$t('reading.questionPlaceholder')}
-								></textarea>
+									placeholder={$t('reading.questionPlaceholder')}></textarea>
 								<div
 									class="pointer-events-none absolute right-3 bottom-3 flex items-center gap-1 opacity-50"
 								>
@@ -256,7 +312,7 @@
 										type="button"
 										class="font-mono-data flex items-center gap-1.5 rounded-full px-3 py-1.5 text-[11px] font-medium transition-all
 											{selectedTopic === topic.id
-											? 'bg-primary-container text-on-primary-container shadow-sm font-semibold'
+											? 'bg-primary-container font-semibold text-on-primary-container shadow-sm'
 											: 'bg-surface-container text-on-surface-variant hover:bg-surface-bright hover:text-on-surface'}"
 										onclick={() => selectTopic(topic.id)}
 									>
@@ -283,7 +339,7 @@
 									type="button"
 									class="flex flex-col items-start gap-1 rounded-xl p-3 text-left transition-all
 										{drawMethod === 'random'
-										? 'bg-primary-container/20 text-on-surface shadow-md border border-primary/40'
+										? 'border border-primary/40 bg-primary-container/20 text-on-surface shadow-md'
 										: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
 									onclick={() => (drawMethod = 'random')}
 								>
@@ -291,15 +347,21 @@
 										<span class="material-symbols-outlined text-base">cyclone</span>
 										{$t('reading.drawRandom')}
 									</span>
-									<span class="text-xs {drawMethod === 'random' ? 'text-primary' : 'text-on-surface-variant'}">
-										{$locale === 'my' ? 'စနစ်က ကတ်များကို မွှေနှောက်ဆွဲယူမည်' : 'Let the array choose your spread'}
+									<span
+										class="text-xs {drawMethod === 'random'
+											? 'text-primary'
+											: 'text-on-surface-variant'}"
+									>
+										{$locale === 'my'
+											? 'စနစ်က ကတ်များကို မွှေနှောက်ဆွဲယူမည်'
+											: 'Let the array choose your spread'}
 									</span>
 								</button>
 								<button
 									type="button"
 									class="flex flex-col items-start gap-1 rounded-xl p-3 text-left transition-all
 										{drawMethod === 'manual'
-										? 'bg-primary-container/20 text-on-surface shadow-md border border-primary/40'
+										? 'border border-primary/40 bg-primary-container/20 text-on-surface shadow-md'
 										: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
 									onclick={() => (drawMethod = 'manual')}
 								>
@@ -307,8 +369,14 @@
 										<span class="material-symbols-outlined text-base">touch_app</span>
 										{$t('reading.drawManual')}
 									</span>
-									<span class="text-xs {drawMethod === 'manual' ? 'text-primary' : 'text-on-surface-variant'}">
-										{$locale === 'my' ? 'ကတ် ၇၈ ကတ်ထဲမှ စိတ်ကြိုက်ရွေးမည်' : 'Choose cards straight from the deck'}
+									<span
+										class="text-xs {drawMethod === 'manual'
+											? 'text-primary'
+											: 'text-on-surface-variant'}"
+									>
+										{$locale === 'my'
+											? 'ကတ် ၇၈ ကတ်ထဲမှ စိတ်ကြိုက်ရွေးမည်'
+											: 'Choose cards straight from the deck'}
 									</span>
 								</button>
 							</div>
@@ -329,9 +397,11 @@
 									</div>
 									<span class="font-mono-data text-[10px] tracking-wider text-secondary uppercase">
 										{#if selectedSpread === 'custom'}
-											{customCardCount} {$locale === 'my' ? 'ကတ်' : `card${customCardCount === 1 ? '' : 's'}`}
+											{customCardCount}
+											{$locale === 'my' ? 'ကတ်' : `card${customCardCount === 1 ? '' : 's'}`}
 										{:else}
-											{SPREAD_TYPES.find((s) => s.id === selectedSpread)?.count ?? ''} {$locale === 'my' ? 'ကတ်' : 'cards'}
+											{SPREAD_TYPES.find((s) => s.id === selectedSpread)?.count ?? ''}
+											{$locale === 'my' ? 'ကတ်' : 'cards'}
 										{/if}
 									</span>
 								</div>
@@ -342,7 +412,7 @@
 											type="button"
 											class="relative flex cursor-pointer flex-col justify-between overflow-hidden rounded-xl p-3 text-left transition-all
 												{selectedSpread === spread.id
-												? 'bg-primary-container/20 text-on-surface shadow-md border border-primary/40'
+												? 'border border-primary/40 bg-primary-container/20 text-on-surface shadow-md'
 												: 'bg-surface-container/60 text-on-surface-variant hover:bg-surface-container-high'}"
 											onclick={() => {
 												selectedSpread = spread.id;
@@ -357,7 +427,8 @@
 											<div class="relative z-10 mb-1 flex items-start justify-between gap-2">
 												<div class="flex items-center gap-1.5">
 													{#if selectedSpread === spread.id}
-														<span class="h-2 w-2 shrink-0 rounded-full bg-secondary shadow-sm"></span>
+														<span class="h-2 w-2 shrink-0 rounded-full bg-secondary shadow-sm"
+														></span>
 													{/if}
 													<span class="text-sm font-semibold text-on-surface">{meta.name}</span>
 												</div>
@@ -377,7 +448,9 @@
 								{#if selectedSpread === 'custom'}
 									<div class="flex flex-col gap-2 rounded-xl bg-surface-container-high/40 p-4">
 										<div class="flex items-center justify-between">
-											<span class="text-sm font-medium text-on-surface">{$t('reading.customCardCount')}</span>
+											<span class="text-sm font-medium text-on-surface"
+												>{$t('reading.customCardCount')}</span
+											>
 											<span class="font-mono-data text-sm font-semibold text-primary"
 												>{customCardCount}</span
 											>
@@ -387,7 +460,8 @@
 												type="button"
 												class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container text-on-surface transition-colors hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40"
 												disabled={customCardCount <= CUSTOM_DRAW_MIN}
-												onclick={() => (customCardCount = Math.max(CUSTOM_DRAW_MIN, customCardCount - 1))}
+												onclick={() =>
+													(customCardCount = Math.max(CUSTOM_DRAW_MIN, customCardCount - 1))}
 												aria-label="Fewer cards"
 											>
 												<span class="material-symbols-outlined text-base">remove</span>
@@ -405,7 +479,8 @@
 												type="button"
 												class="flex h-8 w-8 shrink-0 items-center justify-center rounded-full bg-surface-container text-on-surface transition-colors hover:bg-surface-container-highest disabled:cursor-not-allowed disabled:opacity-40"
 												disabled={customCardCount >= CUSTOM_DRAW_MAX}
-												onclick={() => (customCardCount = Math.min(CUSTOM_DRAW_MAX, customCardCount + 1))}
+												onclick={() =>
+													(customCardCount = Math.min(CUSTOM_DRAW_MAX, customCardCount + 1))}
 												aria-label="More cards"
 											>
 												<span class="material-symbols-outlined text-base">add</span>
@@ -446,7 +521,9 @@
 								class="material-symbols-outlined transition-transform duration-500 group-hover:rotate-180"
 								>cyclone</span
 							>
-							<span>{loading ? loadingText || $t('common.loading') : $t('reading.beginButton')}</span>
+							<span
+								>{loading ? loadingText || $t('common.loading') : $t('reading.beginButton')}</span
+							>
 						</button>
 					</div>
 
@@ -468,7 +545,9 @@
 								{loadingText || $t('reading.analyzing')}
 							</p>
 							<p class="max-w-sm text-sm text-on-surface-variant">
-								{$locale === 'my' ? 'Prolog ယုတ္တိဗေဒစနစ်သည် သင်၏မေးခွန်းအတွက် ဓာတ်သဘောနှင့် သင်္ကေတများကို တွက်ချက်စစ်ဆေးနေပါသည်။' : 'The Prolog inference engine is evaluating elemental dignities and archetypal harmonics for your query.'}
+								{$locale === 'my'
+									? 'Prolog ယုတ္တိဗေဒစနစ်သည် သင်၏မေးခွန်းအတွက် ဓာတ်သဘောနှင့် သင်္ကေတများကို တွက်ချက်စစ်ဆေးနေပါသည်။'
+									: 'The Prolog inference engine is evaluating elemental dignities and archetypal harmonics for your query.'}
 							</p>
 						{:else}
 							<span class="material-symbols-outlined text-5xl text-outline">auto_awesome</span>
@@ -476,7 +555,9 @@
 								{$locale === 'my' ? 'လမ်းညွှန်ချက်ရယူရန် အသင့်ရှိသည်' : 'Awaiting Transmission'}
 							</p>
 							<p class="max-w-sm text-sm text-on-surface-variant">
-								{$locale === 'my' ? 'မေးခွန်းကို ရေးသားပြီး ကဏ္ဍနှင့် ကတ်ခင်းကျင်းမှုစနစ်ကို ရွေးချယ်ကာ ဗေဒင်စတင်မေးမြန်းနိုင်ပါပြီ။' : 'Compose your query, choose a topic and a spread configuration, then begin your reading to reveal the drawn cards here.'}
+								{$locale === 'my'
+									? 'မေးခွန်းကို ရေးသားပြီး ကဏ္ဍနှင့် ကတ်ခင်းကျင်းမှုစနစ်ကို ရွေးချယ်ကာ ဗေဒင်စတင်မေးမြန်းနိုင်ပါပြီ။'
+									: 'Compose your query, choose a topic and a spread configuration, then begin your reading to reveal the drawn cards here.'}
 							</p>
 						{/if}
 					</div>
@@ -494,8 +575,16 @@
 								{$locale === 'my' ? 'သင်၏ တားရော့ဗေဒင် ရလဒ်' : 'Your Reading'}
 							</h2>
 							<p class="text-sm text-on-surface-variant">
-								{(SPREAD_TYPES_DATA[reading.spread_type] ? ($locale === 'my' ? SPREAD_TYPES_DATA[reading.spread_type].nameMy : SPREAD_TYPES_DATA[reading.spread_type].nameEn) : getSpreadMeta(reading.spread_type).name)} &middot; {translateTopic(reading.category, $locale) || reading.category}
-								{#if reading.topic}&middot; {translateTopic(reading.topic, $locale) || reading.topic}{/if}
+								{SPREAD_TYPES_DATA[reading.spread_type]
+									? $locale === 'my'
+										? SPREAD_TYPES_DATA[reading.spread_type].nameMy
+										: SPREAD_TYPES_DATA[reading.spread_type].nameEn
+									: getSpreadMeta(reading.spread_type).name} &middot; {translateTopic(
+									reading.category,
+									$locale
+								) || reading.category}
+								{#if reading.topic}&middot; {translateTopic(reading.topic, $locale) ||
+										reading.topic}{/if}
 							</p>
 						</div>
 						<button type="button" class="btn-secondary text-sm" onclick={resetReading}>
@@ -509,7 +598,9 @@
 					</div>
 					{#if reading.spread_rationale}
 						<div class="flex items-start gap-2 rounded-xl bg-surface-container-high/30 p-3">
-							<span class="material-symbols-outlined text-base text-secondary mt-0.5">lightbulb</span>
+							<span class="material-symbols-outlined mt-0.5 text-base text-secondary"
+								>lightbulb</span
+							>
 							<p class="text-xs text-on-surface-variant">{reading.spread_rationale}</p>
 						</div>
 					{/if}
@@ -538,8 +629,17 @@
 									</div>
 								</div>
 								{#if card.zodiac_affinity}
-									<p class="text-center text-[11px] leading-snug text-on-surface-variant italic px-1">
-										{$locale === 'my' ? formatResonanceNote(card.zodiac_affinity.zodiac || currentProfile.zodiac_sign, card.zodiac_affinity.element || '', card.zodiac_affinity.card_theme || '', $locale) : card.zodiac_affinity.combined}
+									<p
+										class="px-1 text-center text-[11px] leading-snug text-on-surface-variant italic"
+									>
+										{$locale === 'my'
+											? formatResonanceNote(
+													card.zodiac_affinity.zodiac || currentProfile.zodiac_sign,
+													card.zodiac_affinity.element || '',
+													card.zodiac_affinity.card_theme || '',
+													$locale
+												)
+											: card.zodiac_affinity.combined}
 									</p>
 								{/if}
 							</div>
@@ -569,7 +669,9 @@
 									{$t('reading.aiSynthesis')}
 								</h3>
 								<span class="font-mono-data text-[11px] text-on-surface-variant"
-									>{$locale === 'my' ? 'သင်္ကေတသဟဇာတဖြစ်မှု ဆန်းစစ်ချက်' : 'Harmonic Convergence Analysis'}</span
+									>{$locale === 'my'
+										? 'သင်္ကေတသဟဇာတဖြစ်မှု ဆန်းစစ်ချက်'
+										: 'Harmonic Convergence Analysis'}</span
 								>
 							</div>
 						</div>
@@ -587,7 +689,9 @@
 					</div>
 
 					<div class="relative z-10 rounded-xl bg-surface-container-lowest/60 p-5">
-						<MarkdownText content={formatReadingSynthesis(reading.ai_interpretation, reading, $locale)} />
+						<MarkdownText
+							content={formatReadingSynthesis(reading.ai_interpretation, reading, $locale)}
+						/>
 					</div>
 
 					<!-- READING DIRECTION & ADVICE -->
@@ -595,34 +699,66 @@
 						<div class="relative z-10 grid grid-cols-1 gap-4 sm:grid-cols-2">
 							{#if reading.direction}
 								{@const directionMeta = {
-									optimistic: { icon: 'trending_up', color: 'text-primary', label: $locale === 'my' ? 'အကောင်းမြင်ဖွယ် အလားအလာ' : 'Optimistic' },
-									challenging: { icon: 'warning', color: 'text-error', label: $locale === 'my' ? 'စိန်ခေါ်မှုများသော အခြေအနေ' : 'Challenging' },
-									reflective: { icon: 'nights_stay', color: 'text-secondary', label: $locale === 'my' ? 'ဆင်ခြင်သုံးသပ်ရမည့် အခြေအနေ' : 'Reflective' },
-									balanced: { icon: 'balance', color: 'text-tertiary', label: $locale === 'my' ? 'မျှတသော အခြေအနေ' : 'Balanced' },
-								}[reading.direction] ?? { icon: 'auto_awesome', color: 'text-secondary', label: reading.direction }}
-								<div class="rounded-xl bg-surface-container-lowest/60 p-5 flex flex-col gap-1.5">
+									optimistic: {
+										icon: 'trending_up',
+										color: 'text-primary',
+										label: $locale === 'my' ? 'အကောင်းမြင်ဖွယ် အလားအလာ' : 'Optimistic'
+									},
+									challenging: {
+										icon: 'warning',
+										color: 'text-error',
+										label: $locale === 'my' ? 'စိန်ခေါ်မှုများသော အခြေအနေ' : 'Challenging'
+									},
+									reflective: {
+										icon: 'nights_stay',
+										color: 'text-secondary',
+										label: $locale === 'my' ? 'ဆင်ခြင်သုံးသပ်ရမည့် အခြေအနေ' : 'Reflective'
+									},
+									balanced: {
+										icon: 'balance',
+										color: 'text-tertiary',
+										label: $locale === 'my' ? 'မျှတသော အခြေအနေ' : 'Balanced'
+									}
+								}[reading.direction] ?? {
+									icon: 'auto_awesome',
+									color: 'text-secondary',
+									label: reading.direction
+								}}
+								<div class="flex flex-col gap-1.5 rounded-xl bg-surface-container-lowest/60 p-5">
 									<div class="flex items-center gap-2">
-										<span class="material-symbols-outlined {directionMeta.color}">{directionMeta.icon}</span>
-										<span class="font-mono-data text-[11px] uppercase tracking-wider text-on-surface-variant">
+										<span class="material-symbols-outlined {directionMeta.color}"
+											>{directionMeta.icon}</span
+										>
+										<span
+											class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase"
+										>
 											{$locale === 'my' ? 'ကံကြမ္မာဦးတည်ချက်' : 'Reading Direction'}
 										</span>
 									</div>
-									<span class="font-headline text-lg {directionMeta.color}">{directionMeta.label}</span>
+									<span class="font-headline text-lg {directionMeta.color}"
+										>{directionMeta.label}</span
+									>
 								</div>
 							{/if}
 							{#if reading.advice}
-								<div class="rounded-xl bg-surface-container-lowest/60 p-5 flex flex-col gap-2">
+								<div class="flex flex-col gap-2 rounded-xl bg-surface-container-lowest/60 p-5">
 									<div class="flex items-center gap-2">
 										<span class="material-symbols-outlined text-primary">tips_and_updates</span>
-										<span class="font-mono-data text-[11px] uppercase tracking-wider text-on-surface-variant">
+										<span
+											class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase"
+										>
 											{$t('reading.advice')}
 										</span>
 									</div>
 									{#if reading.advice.category_advice}
-										<p class="text-sm text-on-surface">{formatAdviceText(reading.advice.category_advice, $locale)}</p>
+										<p class="text-sm text-on-surface">
+											{formatAdviceText(reading.advice.category_advice, $locale)}
+										</p>
 									{/if}
 									{#if reading.advice.theme_advice}
-										<p class="text-sm text-on-surface-variant italic">{formatAdviceText(reading.advice.theme_advice, $locale)}</p>
+										<p class="text-sm text-on-surface-variant italic">
+											{formatAdviceText(reading.advice.theme_advice, $locale)}
+										</p>
 									{/if}
 								</div>
 							{/if}
@@ -631,22 +767,32 @@
 
 					<!-- THEME CONFLICT DETECTOR -->
 					{#if reading.conflicts && reading.conflicts.length > 0}
-						<div class="relative z-10 rounded-xl bg-surface-container-lowest/60 p-5 flex flex-col gap-3">
+						<div
+							class="relative z-10 flex flex-col gap-3 rounded-xl bg-surface-container-lowest/60 p-5"
+						>
 							<div class="flex items-center gap-2">
 								<span class="material-symbols-outlined text-tertiary">compare_arrows</span>
-								<span class="font-mono-data text-[11px] uppercase tracking-wider text-on-surface-variant">
+								<span
+									class="font-mono-data text-[11px] tracking-wider text-on-surface-variant uppercase"
+								>
 									{$t('reading.conflicts')}
 								</span>
 							</div>
 							{#each reading.conflicts as conflict}
 								<div class="rounded-lg bg-surface-container-high/40 p-3.5">
-									<p class="text-sm font-semibold text-on-surface mb-1">{conflict.title}</p>
-									<p class="text-xs text-on-surface-variant mb-2">
-										<span class="text-primary font-medium">{conflict.card1_name}</span>
-										{#if conflict.card1_position}({translatePosition(conflict.card1_position, $locale)}){/if}
+									<p class="mb-1 text-sm font-semibold text-on-surface">{conflict.title}</p>
+									<p class="mb-2 text-xs text-on-surface-variant">
+										<span class="font-medium text-primary">{conflict.card1_name}</span>
+										{#if conflict.card1_position}({translatePosition(
+												conflict.card1_position,
+												$locale
+											)}){/if}
 										&harr;
-										<span class="text-secondary font-medium">{conflict.card2_name}</span>
-										{#if conflict.card2_position}({translatePosition(conflict.card2_position, $locale)}){/if}
+										<span class="font-medium text-secondary">{conflict.card2_name}</span>
+										{#if conflict.card2_position}({translatePosition(
+												conflict.card2_position,
+												$locale
+											)}){/if}
 									</p>
 									<p class="text-xs text-on-surface-variant">{conflict.description}</p>
 								</div>

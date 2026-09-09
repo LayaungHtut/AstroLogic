@@ -25,41 +25,41 @@ const footerTemplate = `
 const emptyTemplate = `<div></div>`;
 
 async function renderBodyOnly(browser, outPath) {
-  const page = await browser.newPage();
-  await page.goto(fileUrl, { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.body.classList.add('print-body-only'));
-  // In this isolated pass, "Introduction" becomes the literal first page of
-  // the PDF, so the report's `@page :first { margin: 0 }` rule (meant only
-  // for the real cover page) would otherwise wrongly zero out its margins.
-  await page.addStyleTag({
-    content: '@page :first { margin: 25mm 22mm 22mm 22mm !important; }',
-  });
-  await page.pdf({
-    path: outPath,
-    format: 'A4',
-    printBackground: true,
-    preferCSSPageSize: true,
-    displayHeaderFooter: true,
-    headerTemplate: emptyTemplate,
-    footerTemplate,
-    margin: { top: '25mm', bottom: '22mm', left: '22mm', right: '22mm' },
-  });
-  await page.close();
+	const page = await browser.newPage();
+	await page.goto(fileUrl, { waitUntil: 'networkidle' });
+	await page.evaluate(() => document.body.classList.add('print-body-only'));
+	// In this isolated pass, "Introduction" becomes the literal first page of
+	// the PDF, so the report's `@page :first { margin: 0 }` rule (meant only
+	// for the real cover page) would otherwise wrongly zero out its margins.
+	await page.addStyleTag({
+		content: '@page :first { margin: 25mm 22mm 22mm 22mm !important; }'
+	});
+	await page.pdf({
+		path: outPath,
+		format: 'A4',
+		printBackground: true,
+		preferCSSPageSize: true,
+		displayHeaderFooter: true,
+		headerTemplate: emptyTemplate,
+		footerTemplate,
+		margin: { top: '25mm', bottom: '22mm', left: '22mm', right: '22mm' }
+	});
+	await page.close();
 }
 
 async function renderFrontOnly(browser, outPath) {
-  const page = await browser.newPage();
-  await page.goto(fileUrl, { waitUntil: 'networkidle' });
-  await page.evaluate(() => document.body.classList.add('print-front-only'));
-  await page.pdf({
-    path: outPath,
-    format: 'A4',
-    printBackground: true,
-    preferCSSPageSize: true,
-    displayHeaderFooter: false,
-    margin: { top: '0mm', bottom: '0mm', left: '0mm', right: '0mm' },
-  });
-  await page.close();
+	const page = await browser.newPage();
+	await page.goto(fileUrl, { waitUntil: 'networkidle' });
+	await page.evaluate(() => document.body.classList.add('print-front-only'));
+	await page.pdf({
+		path: outPath,
+		format: 'A4',
+		printBackground: true,
+		preferCSSPageSize: true,
+		displayHeaderFooter: false,
+		margin: { top: '0mm', bottom: '0mm', left: '0mm', right: '0mm' }
+	});
+	await page.close();
 }
 
 const mode = process.argv[2];
@@ -67,12 +67,12 @@ const outPath = process.argv[3];
 
 const browser = await chromium.launch();
 if (mode === 'body') {
-  await renderBodyOnly(browser, outPath);
+	await renderBodyOnly(browser, outPath);
 } else if (mode === 'front') {
-  await renderFrontOnly(browser, outPath);
+	await renderFrontOnly(browser, outPath);
 } else {
-  console.error('usage: node build_pdf.mjs <body|front> <outPath>');
-  process.exit(1);
+	console.error('usage: node build_pdf.mjs <body|front> <outPath>');
+	process.exit(1);
 }
 await browser.close();
 console.log('wrote', outPath);

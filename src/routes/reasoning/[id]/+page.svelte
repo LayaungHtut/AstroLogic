@@ -62,7 +62,9 @@
 			<span class="material-symbols-outlined mb-4 text-5xl text-on-surface-variant/60"
 				>psychology_alt</span
 			>
-			<h2 class="font-headline mb-2 text-lg font-bold text-on-surface">{$t('reasoning.notFound')}</h2>
+			<h2 class="font-headline mb-2 text-lg font-bold text-on-surface">
+				{$t('reasoning.notFound')}
+			</h2>
 			<p class="mb-4 text-on-surface-variant">{$t('reasoning.notFoundDesc')}</p>
 			<a href="/reading" class="btn-primary inline-block">{$t('history.startReading')}</a>
 		</div>
@@ -101,8 +103,12 @@
 					<div class="grid grid-cols-2 gap-3 md:grid-cols-4">
 						{#each reading.cards as card}
 							<div class="rounded-xl bg-surface-container-high/60 p-3 text-center">
-								<div class="text-sm font-bold text-on-surface">{getCardTranslation(card.name, $locale).name}</div>
-								<div class="mt-0.5 text-xs text-secondary">{translatePosition(card.position, $locale)}</div>
+								<div class="text-sm font-bold text-on-surface">
+									{getCardTranslation(card.name, $locale).name}
+								</div>
+								<div class="mt-0.5 text-xs text-secondary">
+									{translatePosition(card.position, $locale)}
+								</div>
 								<div
 									class="font-mono-data mt-1 text-[11px] tracking-wide text-on-surface-variant/70 uppercase"
 								>

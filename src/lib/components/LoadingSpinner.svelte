@@ -3,10 +3,15 @@
 </script>
 
 <div class="loading-spinner flex flex-col items-center justify-center gap-3 py-8">
-	<div class="relative w-12 h-12">
+	<div class="relative h-12 w-12">
 		<div class="absolute inset-0 rounded-full border-2 border-primary-container/20"></div>
-		<div class="absolute inset-0 rounded-full border-2 border-transparent border-t-primary animate-spin"></div>
-		<div class="absolute inset-1 rounded-full border border-transparent border-t-secondary animate-spin" style:animation-duration="1.5s"></div>
+		<div
+			class="absolute inset-0 animate-spin rounded-full border-2 border-transparent border-t-primary"
+		></div>
+		<div
+			class="absolute inset-1 animate-spin rounded-full border border-transparent border-t-secondary"
+			style:animation-duration="1.5s"
+		></div>
 	</div>
-	<p class="text-sm text-on-surface-variant animate-pulse font-mono-data">{text}</p>
+	<p class="font-mono-data animate-pulse text-sm text-on-surface-variant">{text}</p>
 </div>

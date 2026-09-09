@@ -48,10 +48,7 @@
 	}
 
 	const filtered = $derived(
-		(filter === 'all'
-			? cards
-			: cards.filter((c) => cardSuit(c) === filter)
-		).filter((c) => {
+		(filter === 'all' ? cards : cards.filter((c) => cardSuit(c) === filter)).filter((c) => {
 			if (!search) return true;
 			const q = search.toLowerCase();
 			const trans = getCardTranslation(c.name, $locale);
@@ -81,7 +78,7 @@
 		{ id: 'wands', label: $locale === 'my' ? 'တုတ်ချောင်း (မီးဓာတ်)' : 'Wands (Fire)' },
 		{ id: 'cups', label: $locale === 'my' ? 'ခွက် (ရေဓာတ်)' : 'Cups (Water)' },
 		{ id: 'swords', label: $locale === 'my' ? 'ဓား (လေဓာတ်)' : 'Swords (Air)' },
-		{ id: 'pentacles', label: $locale === 'my' ? 'ဒင်္ဂါး (မြေဓာတ်)' : 'Pentacles (Earth)' },
+		{ id: 'pentacles', label: $locale === 'my' ? 'ဒင်္ဂါး (မြေဓာတ်)' : 'Pentacles (Earth)' }
 	]);
 
 	function capitalize(s: string) {
@@ -103,7 +100,7 @@
 		cups: { label: 'Water', icon: 'water_drop', text: 'text-water', bg: 'bg-water/15' },
 		swords: { label: 'Air', icon: 'air', text: 'text-air', bg: 'bg-air/15' },
 		pentacles: { label: 'Earth', icon: 'public', text: 'text-earth', bg: 'bg-earth/15' },
-		major: { label: 'Spirit', icon: 'auto_awesome', text: 'text-secondary', bg: 'bg-secondary/15' },
+		major: { label: 'Spirit', icon: 'auto_awesome', text: 'text-secondary', bg: 'bg-secondary/15' }
 	};
 
 	function elementOf(card: TarotCardInfo) {
@@ -120,25 +117,32 @@
 </svelte:head>
 
 <div class="page-container pt-24">
-	<div class="flex flex-col lg:flex-row items-start lg:items-end justify-between gap-6 mb-8">
-		<div class="flex flex-col gap-2 max-w-2xl">
+	<div class="mb-8 flex flex-col items-start justify-between gap-6 lg:flex-row lg:items-end">
+		<div class="flex max-w-2xl flex-col gap-2">
 			<div class="flex items-center gap-2">
-				<span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full bg-surface-container-high text-secondary text-[10px] font-mono-data tracking-wider uppercase">
-					<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse"></span>
+				<span
+					class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-surface-container-high px-3 py-0.5 text-[10px] tracking-wider text-secondary uppercase"
+				>
+					<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary"></span>
 					{$locale === 'my' ? 'တားရော့ကတ် ၇၈ ကတ် စာကြည့်တိုက်' : '78-Card Archive'}
 				</span>
-				<span class="font-mono-data text-xs text-outline">{cards.length || 78} {$locale === 'my' ? 'ကတ် ပါဝင်သည်' : 'cards indexed'}</span>
+				<span class="font-mono-data text-xs text-outline"
+					>{cards.length || 78} {$locale === 'my' ? 'ကတ် ပါဝင်သည်' : 'cards indexed'}</span
+				>
 			</div>
-			<h1 class="font-headline text-3xl md:text-4xl font-semibold text-on-surface tracking-tight">
+			<h1 class="font-headline text-3xl font-semibold tracking-tight text-on-surface md:text-4xl">
 				{$t('deck.title')}
 			</h1>
 			<p class="text-on-surface-variant">
 				{$t('deck.subtitle')}
 			</p>
 		</div>
-		<div class="flex items-center gap-3 w-full lg:w-auto">
+		<div class="flex w-full items-center gap-3 lg:w-auto">
 			<div class="relative flex-1 lg:w-72">
-				<span class="material-symbols-outlined absolute left-3 top-2.5 text-outline text-lg pointer-events-none">search</span>
+				<span
+					class="material-symbols-outlined pointer-events-none absolute top-2.5 left-3 text-lg text-outline"
+					>search</span
+				>
 				<input
 					id="tarot-search"
 					name="tarot-search"
@@ -151,14 +155,14 @@
 		</div>
 	</div>
 
-	<div class="flex items-center gap-2 overflow-x-auto pb-2 mb-8">
+	<div class="mb-8 flex items-center gap-2 overflow-x-auto pb-2">
 		{#each suits as suit}
 			<button
 				type="button"
-				class="px-4 py-2 rounded-full text-sm font-mono-data whitespace-nowrap transition-all
+				class="font-mono-data rounded-full px-4 py-2 text-sm whitespace-nowrap transition-all
 					{filter === suit.id
-						? 'bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.4)] font-semibold'
-						: 'bg-surface-container-high text-on-surface-variant hover:text-on-surface hover:bg-surface-container-highest'}"
+					? 'bg-primary-container font-semibold text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.4)]'
+					: 'bg-surface-container-high text-on-surface-variant hover:bg-surface-container-highest hover:text-on-surface'}"
 				onclick={() => (filter = suit.id)}
 			>
 				{suit.label}
@@ -178,60 +182,90 @@
 		{#if selectedCard}
 			{@const el = elementOf(selectedCard)}
 			{@const selTrans = getCardTranslation(selectedCard.name, $locale)}
-			<div class="grid grid-cols-1 xl:grid-cols-12 gap-6 mb-12 items-stretch">
-				<div class="xl:col-span-4 flex flex-col items-center justify-center p-8 rounded-xl bg-surface-container-lowest/70 relative overflow-hidden shadow-2xl">
-					<div class="absolute -top-16 -left-16 w-56 h-56 rounded-full bg-primary-container/20 blur-3xl pointer-events-none"></div>
-					<div class="absolute -bottom-16 -right-16 w-56 h-56 rounded-full bg-secondary/20 blur-3xl pointer-events-none"></div>
+			<div class="mb-12 grid grid-cols-1 items-stretch gap-6 xl:grid-cols-12">
+				<div
+					class="relative flex flex-col items-center justify-center overflow-hidden rounded-xl bg-surface-container-lowest/70 p-8 shadow-2xl xl:col-span-4"
+				>
+					<div
+						class="pointer-events-none absolute -top-16 -left-16 h-56 w-56 rounded-full bg-primary-container/20 blur-3xl"
+					></div>
+					<div
+						class="pointer-events-none absolute -right-16 -bottom-16 h-56 w-56 rounded-full bg-secondary/20 blur-3xl"
+					></div>
 					<div class="relative w-56">
 						<TarotCard card={{ ...selectedCard, position: '' }} revealed={true} />
 					</div>
 				</div>
 
-				<div class="xl:col-span-8 flex flex-col justify-between gap-6 p-8 rounded-xl bg-surface-container-low/70 shadow-xl">
+				<div
+					class="flex flex-col justify-between gap-6 rounded-xl bg-surface-container-low/70 p-8 shadow-xl xl:col-span-8"
+				>
 					<div class="flex flex-col gap-6">
 						<div class="flex flex-wrap items-center justify-between gap-4">
-							<span class="font-mono-data text-xs text-secondary tracking-widest uppercase">{cardBadge(selectedCard)}</span>
-							<span class="inline-flex items-center gap-1.5 px-3 py-0.5 rounded-full {el.bg} {el.text} text-[10px] font-mono-data uppercase">
+							<span class="font-mono-data text-xs tracking-widest text-secondary uppercase"
+								>{cardBadge(selectedCard)}</span
+							>
+							<span
+								class="inline-flex items-center gap-1.5 rounded-full px-3 py-0.5 {el.bg} {el.text} font-mono-data text-[10px] uppercase"
+							>
 								<span class="material-symbols-outlined text-xs">{el.icon}</span>
 								{el.localizedLabel}
 							</span>
 						</div>
 						<div class="flex flex-col gap-2">
-							<h2 class="font-headline text-2xl md:text-3xl text-on-surface">
+							<h2 class="font-headline text-2xl text-on-surface md:text-3xl">
 								{selTrans.name || selectedCard.name}
 							</h2>
 							{#if $locale === 'my' && selTrans.name !== selectedCard.name}
-								<p class="font-mono-data text-xs text-on-surface-variant/80 italic">{selectedCard.name}</p>
+								<p class="font-mono-data text-xs text-on-surface-variant/80 italic">
+									{selectedCard.name}
+								</p>
 							{/if}
 						</div>
 
-						<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-							<div class="p-4 rounded-lg bg-surface-container-lowest/60 flex flex-col gap-3">
-								<div class="flex items-center gap-2 text-secondary text-xs font-mono-data uppercase tracking-wider font-semibold">
-									<span class="material-symbols-outlined text-sm">north</span> {$t('deck.uprightKeywords')}
+						<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+							<div class="flex flex-col gap-3 rounded-lg bg-surface-container-lowest/60 p-4">
+								<div
+									class="font-mono-data flex items-center gap-2 text-xs font-semibold tracking-wider text-secondary uppercase"
+								>
+									<span class="material-symbols-outlined text-sm">north</span>
+									{$t('deck.uprightKeywords')}
 								</div>
 								<div class="flex flex-wrap gap-1.5">
-									{#each (selTrans.keywords.length ? selTrans.keywords : (selectedCard.upright?.length ? selectedCard.upright : selectedCard.keywords)) as kw}
-										<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface text-xs">{translateKeyword(kw, $locale)}</span>
+									{#each selTrans.keywords.length ? selTrans.keywords : selectedCard.upright?.length ? selectedCard.upright : selectedCard.keywords as kw}
+										<span
+											class="rounded-full bg-surface-container px-2.5 py-1 text-xs text-on-surface"
+											>{translateKeyword(kw, $locale)}</span
+										>
 									{/each}
 								</div>
 								{#if selTrans.meaningUpright}
-									<p class="text-xs text-on-surface-variant/90 leading-relaxed border-t border-white/5 pt-2">
+									<p
+										class="border-t border-white/5 pt-2 text-xs leading-relaxed text-on-surface-variant/90"
+									>
 										{selTrans.meaningUpright}
 									</p>
 								{/if}
 							</div>
-							<div class="p-4 rounded-lg bg-surface-container-lowest/60 flex flex-col gap-3">
-								<div class="flex items-center gap-2 text-error text-xs font-mono-data uppercase tracking-wider font-semibold">
-									<span class="material-symbols-outlined text-sm">south</span> {$t('deck.reversedKeywords')}
+							<div class="flex flex-col gap-3 rounded-lg bg-surface-container-lowest/60 p-4">
+								<div
+									class="font-mono-data flex items-center gap-2 text-xs font-semibold tracking-wider text-error uppercase"
+								>
+									<span class="material-symbols-outlined text-sm">south</span>
+									{$t('deck.reversedKeywords')}
 								</div>
 								<div class="flex flex-wrap gap-1.5">
-									{#each (selectedCard.reversed?.length ? selectedCard.reversed : (selTrans.keywords.length ? selTrans.keywords : selectedCard.keywords)) as kw}
-										<span class="px-2.5 py-1 rounded-full bg-surface-container text-on-surface text-xs">{translateKeyword(kw, $locale)}</span>
+									{#each selectedCard.reversed?.length ? selectedCard.reversed : selTrans.keywords.length ? selTrans.keywords : selectedCard.keywords as kw}
+										<span
+											class="rounded-full bg-surface-container px-2.5 py-1 text-xs text-on-surface"
+											>{translateKeyword(kw, $locale)}</span
+										>
 									{/each}
 								</div>
 								{#if selTrans.meaningReversed}
-									<p class="text-xs text-on-surface-variant/90 leading-relaxed border-t border-white/5 pt-2">
+									<p
+										class="border-t border-white/5 pt-2 text-xs leading-relaxed text-on-surface-variant/90"
+									>
 										{selTrans.meaningReversed}
 									</p>
 								{/if}
@@ -239,10 +273,10 @@
 						</div>
 					</div>
 
-					<div class="flex items-center justify-between pt-6 border-t border-outline-variant/30">
+					<div class="flex items-center justify-between border-t border-outline-variant/30 pt-6">
 						<div class="flex items-center gap-2">
-							<span class="w-2 h-2 rounded-full bg-secondary animate-ping"></span>
-							<span class="text-xs font-mono-data text-outline">
+							<span class="h-2 w-2 animate-ping rounded-full bg-secondary"></span>
+							<span class="font-mono-data text-xs text-outline">
 								{$locale === 'my' ? 'ကတ်အချက်အလက် စစ်ဆေးပြီး' : 'Card detail synced'}
 							</span>
 						</div>
@@ -255,33 +289,39 @@
 			</div>
 		{/if}
 
-		<div class="flex items-center justify-between mb-6">
+		<div class="mb-6 flex items-center justify-between">
 			<div class="flex items-center gap-3">
 				<h3 class="font-headline text-lg text-on-surface">
 					{$locale === 'my' ? 'တားရော့ကတ်များ စုစည်းမှု' : 'Card Gallery'}
 				</h3>
-				<span class="px-2.5 py-0.5 rounded-full bg-surface-container-high text-on-surface-variant text-[10px] font-mono-data">
-					{$locale === 'my' ? `ကတ်ပေါင်း ${filtered.length} ကတ် ပြသထားသည်` : `Displaying ${filtered.length} cards`}
+				<span
+					class="font-mono-data rounded-full bg-surface-container-high px-2.5 py-0.5 text-[10px] text-on-surface-variant"
+				>
+					{$locale === 'my'
+						? `ကတ်ပေါင်း ${filtered.length} ကတ် ပြသထားသည်`
+						: `Displaying ${filtered.length} cards`}
 				</span>
 			</div>
-			<span class="text-xs font-mono-data text-outline hidden sm:block">
+			<span class="font-mono-data hidden text-xs text-outline sm:block">
 				{$locale === 'my' ? 'အသေးစိတ်ကြည့်ရန် ကတ်ကိုနှိပ်ပါ' : 'Select a card to inspect'}
 			</span>
 		</div>
 
-		<div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+		<div class="grid grid-cols-2 gap-4 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5">
 			{#each filtered as card (card.card)}
 				{@const el = elementOf(card)}
 				{@const cardTrans = getCardTranslation(card.name, $locale)}
 				<button
 					type="button"
 					onclick={() => selectCard(card)}
-					class="group relative flex flex-col p-3 rounded-xl text-left transition-all duration-300 hover:-translate-y-1.5
+					class="group relative flex flex-col rounded-xl p-3 text-left transition-all duration-300 hover:-translate-y-1.5
 						{selectedCard === card
-							? 'bg-surface-container-high shadow-[0_12px_32px_rgba(124,58,237,0.3)]'
-							: 'bg-surface-container-lowest/80 hover:shadow-[0_12px_32px_rgba(124,58,237,0.2)]'}"
+						? 'bg-surface-container-high shadow-[0_12px_32px_rgba(124,58,237,0.3)]'
+						: 'bg-surface-container-lowest/80 hover:shadow-[0_12px_32px_rgba(124,58,237,0.2)]'}"
 				>
-					<div class="relative w-full aspect-2/3 rounded-lg overflow-hidden mb-3 bg-linear-to-br from-surface-container-high to-surface-container flex items-center justify-center">
+					<div
+						class="relative mb-3 flex aspect-2/3 w-full items-center justify-center overflow-hidden rounded-lg bg-linear-to-br from-surface-container-high to-surface-container"
+					>
 						{#if card.image}
 							<img
 								src={cardImage(card.image, 220)}
@@ -293,23 +333,33 @@
 						{:else}
 							<span class="material-symbols-outlined text-4xl {el.text} opacity-80">{el.icon}</span>
 						{/if}
-						<span class="absolute top-2 left-2 px-2 py-0.5 rounded bg-surface-container-lowest/90 text-secondary text-[9px] font-mono-data uppercase tracking-wider">
+						<span
+							class="font-mono-data absolute top-2 left-2 rounded bg-surface-container-lowest/90 px-2 py-0.5 text-[9px] tracking-wider text-secondary uppercase"
+						>
 							{cardBadge(card)}
 						</span>
-						<span class="absolute top-2 right-2 px-2 py-0.5 rounded {el.bg} {el.text} text-[9px] font-mono-data">
+						<span
+							class="absolute top-2 right-2 rounded px-2 py-0.5 {el.bg} {el.text} font-mono-data text-[9px]"
+						>
 							{el.localizedLabel}
 						</span>
 					</div>
-					<div class="flex flex-col grow justify-between">
-						<h4 class="font-headline text-sm text-on-surface group-hover:text-primary transition-colors line-clamp-1">
+					<div class="flex grow flex-col justify-between">
+						<h4
+							class="font-headline line-clamp-1 text-sm text-on-surface transition-colors group-hover:text-primary"
+						>
 							{cardTrans.name || card.name}
 						</h4>
-						<p class="text-[11px] text-on-surface-variant capitalize mb-2">{cardTrans.arcana || card.arcana}</p>
-						<div class="pt-1 flex items-center justify-between">
-							<span class="text-[10px] font-mono-data text-outline truncate max-w-[90px]">
+						<p class="mb-2 text-[11px] text-on-surface-variant capitalize">
+							{cardTrans.arcana || card.arcana}
+						</p>
+						<div class="flex items-center justify-between pt-1">
+							<span class="font-mono-data max-w-[90px] truncate text-[10px] text-outline">
 								{cardTrans.keywords?.[0] || card.keywords?.[0] || ''}
 							</span>
-							<span class="flex items-center gap-1 text-secondary group-hover:text-primary text-[10px] font-mono-data transition-colors">
+							<span
+								class="font-mono-data flex items-center gap-1 text-[10px] text-secondary transition-colors group-hover:text-primary"
+							>
 								{$locale === 'my' ? 'ကြည့်မည်' : 'Inspect'}
 								<span class="material-symbols-outlined text-xs">arrow_forward</span>
 							</span>

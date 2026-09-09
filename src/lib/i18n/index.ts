@@ -84,9 +84,12 @@ export function translate(
 	return text;
 }
 
-export const t = derived(locale, ($loc) => (key: string, params?: Record<string, string | number>) => {
-	return translate(key, $loc, params);
-});
+export const t = derived(
+	locale,
+	($loc) => (key: string, params?: Record<string, string | number>) => {
+		return translate(key, $loc, params);
+	}
+);
 
 // Re-export all domain data and translation helpers
 export * from './types';

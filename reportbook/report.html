@@ -1,546 +1,1007 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
-<head>
-<meta charset="UTF-8">
-<title>AstroLogic Project Report</title>
-<style>
-  @page {
-    size: A4;
-    margin: 25mm 22mm 25mm 22mm;
-  }
-  @page :first {
-    margin: 0;
-  }
-  * { box-sizing: border-box; }
-  html, body {
-    margin: 0; padding: 0;
-    font-family: "Times New Roman", Times, serif;
-    font-size: 12pt;
-    line-height: 1.5;
-    color: #111;
-    background: #fff;
-  }
-  h1, h2, h3, h4 { font-family: "Times New Roman", Times, serif; color: #0a2540; page-break-after: avoid; }
-  h1 { font-size: 20pt; margin: 0 0 10pt; }
-  h2 { font-size: 16pt; border-bottom: 2pt solid #0f7a72; padding-bottom: 4pt; margin: 26pt 0 12pt; }
-  h3 { font-size: 13.5pt; color: #0f7a72; margin: 18pt 0 8pt; }
-  h4 { font-size: 12pt; margin: 12pt 0 6pt; }
-  p { margin: 0 0 10pt; text-align: justify; }
-  ul, ol { margin: 0 0 10pt; padding-left: 22pt; }
-  li { margin-bottom: 4pt; }
-  a { color: #0f7a72; }
-  .section { page-break-before: always; }
-  .no-break { page-break-inside: avoid; }
+	<head>
+		<meta charset="UTF-8" />
+		<title>AstroLogic Project Report</title>
+		<style>
+			@page {
+				size: A4;
+				margin: 25mm 22mm 25mm 22mm;
+			}
+			@page :first {
+				margin: 0;
+			}
+			* {
+				box-sizing: border-box;
+			}
+			html,
+			body {
+				margin: 0;
+				padding: 0;
+				font-family: 'Times New Roman', Times, serif;
+				font-size: 12pt;
+				line-height: 1.5;
+				color: #111;
+				background: #fff;
+			}
+			h1,
+			h2,
+			h3,
+			h4 {
+				font-family: 'Times New Roman', Times, serif;
+				color: #0a2540;
+				page-break-after: avoid;
+			}
+			h1 {
+				font-size: 20pt;
+				margin: 0 0 10pt;
+			}
+			h2 {
+				font-size: 16pt;
+				border-bottom: 2pt solid #0f7a72;
+				padding-bottom: 4pt;
+				margin: 26pt 0 12pt;
+			}
+			h3 {
+				font-size: 13.5pt;
+				color: #0f7a72;
+				margin: 18pt 0 8pt;
+			}
+			h4 {
+				font-size: 12pt;
+				margin: 12pt 0 6pt;
+			}
+			p {
+				margin: 0 0 10pt;
+				text-align: justify;
+			}
+			ul,
+			ol {
+				margin: 0 0 10pt;
+				padding-left: 22pt;
+			}
+			li {
+				margin-bottom: 4pt;
+			}
+			a {
+				color: #0f7a72;
+			}
+			.section {
+				page-break-before: always;
+			}
+			.no-break {
+				page-break-inside: avoid;
+			}
 
-  /* ---------- Cover Page ---------- */
-  .cover {
-    width: 210mm;
-    height: 297mm;
-    padding: 30mm 25mm;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-    page-break-after: always;
-  }
-  .cover .uni-name { font-size: 15pt; font-weight: bold; margin-top: 6mm; }
-  .cover .meta { font-size: 12pt; margin: 3pt 0; }
-  .logo {
-    width: 42mm; height: 42mm;
-    margin-top: 18mm;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .logo svg { width: 100%; height: 100%; }
-  .cover .title-block {
-    margin-top: 30mm;
-    font-size: 17pt;
-    font-weight: bold;
-    max-width: 140mm;
-  }
-  .cover .subtitle {
-    font-size: 11.5pt;
-    font-weight: normal;
-    font-style: italic;
-    color: #333;
-    margin-top: 6pt;
-  }
-  .cover .submit-block {
-    margin-top: auto;
-    padding-top: 30mm;
-    font-size: 12pt;
-  }
-  .cover .submit-block div { margin: 2pt 0; }
+			/* ---------- Cover Page ---------- */
+			.cover {
+				width: 210mm;
+				height: 297mm;
+				padding: 30mm 25mm;
+				display: flex;
+				flex-direction: column;
+				align-items: center;
+				text-align: center;
+				page-break-after: always;
+			}
+			.cover .uni-name {
+				font-size: 15pt;
+				font-weight: bold;
+				margin-top: 6mm;
+			}
+			.cover .meta {
+				font-size: 12pt;
+				margin: 3pt 0;
+			}
+			.logo {
+				width: 42mm;
+				height: 42mm;
+				margin-top: 18mm;
+				display: flex;
+				align-items: center;
+				justify-content: center;
+			}
+			.logo svg {
+				width: 100%;
+				height: 100%;
+			}
+			.cover .title-block {
+				margin-top: 30mm;
+				font-size: 17pt;
+				font-weight: bold;
+				max-width: 140mm;
+			}
+			.cover .subtitle {
+				font-size: 11.5pt;
+				font-weight: normal;
+				font-style: italic;
+				color: #333;
+				margin-top: 6pt;
+			}
+			.cover .submit-block {
+				margin-top: auto;
+				padding-top: 30mm;
+				font-size: 12pt;
+			}
+			.cover .submit-block div {
+				margin: 2pt 0;
+			}
 
-  /* ---------- Tables ---------- */
-  table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 8pt 0 14pt;
-    font-size: 11pt;
-  }
-  th, td {
-    border: 0.75pt solid #999;
-    padding: 6pt 8pt;
-    text-align: left;
-    vertical-align: top;
-  }
-  th {
-    background: #0f7a72;
-    color: #fff;
-    font-weight: bold;
-  }
-  tr:nth-child(even) td { background: #f4f8f7; }
+			/* ---------- Tables ---------- */
+			table {
+				width: 100%;
+				border-collapse: collapse;
+				margin: 8pt 0 14pt;
+				font-size: 11pt;
+			}
+			th,
+			td {
+				border: 0.75pt solid #999;
+				padding: 6pt 8pt;
+				text-align: left;
+				vertical-align: top;
+			}
+			th {
+				background: #0f7a72;
+				color: #fff;
+				font-weight: bold;
+			}
+			tr:nth-child(even) td {
+				background: #f4f8f7;
+			}
 
-  /* ---------- Code ---------- */
-  pre {
-    background: #0d1b1e;
-    color: #d8f3ec;
-    padding: 10pt;
-    border-radius: 4pt;
-    font-family: "Consolas", "Courier New", monospace;
-    font-size: 9.3pt;
-    line-height: 1.45;
-    overflow-x: auto;
-    page-break-inside: avoid;
-    white-space: pre-wrap;
-    word-break: break-word;
-  }
-  code {
-    font-family: "Consolas", "Courier New", monospace;
-    background: #eef3f2;
-    padding: 1pt 3pt;
-    border-radius: 2pt;
-    font-size: 10.5pt;
-  }
-  .code-caption {
-    font-size: 9.5pt;
-    color: #444;
-    font-style: italic;
-    margin: -8pt 0 12pt;
-  }
+			/* ---------- Code ---------- */
+			pre {
+				background: #0d1b1e;
+				color: #d8f3ec;
+				padding: 10pt;
+				border-radius: 4pt;
+				font-family: 'Consolas', 'Courier New', monospace;
+				font-size: 9.3pt;
+				line-height: 1.45;
+				overflow-x: auto;
+				page-break-inside: avoid;
+				white-space: pre-wrap;
+				word-break: break-word;
+			}
+			code {
+				font-family: 'Consolas', 'Courier New', monospace;
+				background: #eef3f2;
+				padding: 1pt 3pt;
+				border-radius: 2pt;
+				font-size: 10.5pt;
+			}
+			.code-caption {
+				font-size: 9.5pt;
+				color: #444;
+				font-style: italic;
+				margin: -8pt 0 12pt;
+			}
 
-  /* ---------- Diagram box ---------- */
-  .diagram {
-    background: #f7faf9;
-    border: 1pt solid #cfe3df;
-    border-radius: 4pt;
-    padding: 12pt;
-    font-family: Consolas, monospace;
-    font-size: 9.5pt;
-    white-space: pre;
-    line-height: 1.4;
-    margin: 8pt 0 14pt;
-    page-break-inside: avoid;
-    overflow-x: auto;
-  }
+			/* ---------- Diagram box ---------- */
+			.diagram {
+				background: #f7faf9;
+				border: 1pt solid #cfe3df;
+				border-radius: 4pt;
+				padding: 12pt;
+				font-family: Consolas, monospace;
+				font-size: 9.5pt;
+				white-space: pre;
+				line-height: 1.4;
+				margin: 8pt 0 14pt;
+				page-break-inside: avoid;
+				overflow-x: auto;
+			}
 
-  .toc-list { list-style: none; padding-left: 0; font-size: 12pt; }
-  .toc-list li { display: flex; align-items: baseline; margin-bottom: 8pt; }
-  .toc-list .num { display: inline-block; width: 22pt; flex: 0 0 auto; }
-  .toc-list .toc-title { flex: 0 0 auto; }
-  .toc-list .toc-dots {
-    flex: 1 1 auto;
-    margin: 0 6pt;
-    border-bottom: 1pt dotted #888;
-    transform: translateY(-3pt);
-  }
-  .toc-list .toc-page { flex: 0 0 auto; text-align: right; min-width: 18pt; font-weight: bold; }
-  .toc-sub { padding-left: 20pt; font-size: 11pt; }
+			.toc-list {
+				list-style: none;
+				padding-left: 0;
+				font-size: 12pt;
+			}
+			.toc-list li {
+				display: flex;
+				align-items: baseline;
+				margin-bottom: 8pt;
+			}
+			.toc-list .num {
+				display: inline-block;
+				width: 22pt;
+				flex: 0 0 auto;
+			}
+			.toc-list .toc-title {
+				flex: 0 0 auto;
+			}
+			.toc-list .toc-dots {
+				flex: 1 1 auto;
+				margin: 0 6pt;
+				border-bottom: 1pt dotted #888;
+				transform: translateY(-3pt);
+			}
+			.toc-list .toc-page {
+				flex: 0 0 auto;
+				text-align: right;
+				min-width: 18pt;
+				font-weight: bold;
+			}
+			.toc-sub {
+				padding-left: 20pt;
+				font-size: 11pt;
+			}
 
-  .callout {
-    border-left: 3pt solid #0f7a72;
-    background: #f2f8f7;
-    padding: 8pt 12pt;
-    margin: 10pt 0;
-    font-size: 11pt;
-  }
-  .footer-note { font-size: 9.5pt; color: #666; text-align: center; margin-top: 20pt; }
+			.callout {
+				border-left: 3pt solid #0f7a72;
+				background: #f2f8f7;
+				padding: 8pt 12pt;
+				margin: 10pt 0;
+				font-size: 11pt;
+			}
+			.footer-note {
+				font-size: 9.5pt;
+				color: #666;
+				text-align: center;
+				margin-top: 20pt;
+			}
 
-  /* Used only during two-pass PDF rendering to split front matter
+			/* Used only during two-pass PDF rendering to split front matter
      (unnumbered) from body content (page-numbered from 1). */
-  body.print-front-only .section:not(.front-section) { display: none !important; }
-  body.print-body-only .cover,
-  body.print-body-only .front-section { display: none !important; }
-  .badge {
-    display: inline-block;
-    background: #eef3f2;
-    border: 0.75pt solid #cfe3df;
-    border-radius: 3pt;
-    padding: 1pt 6pt;
-    font-size: 9.5pt;
-    margin: 1pt 2pt;
-  }
-</style>
-</head>
-<body>
+			body.print-front-only .section:not(.front-section) {
+				display: none !important;
+			}
+			body.print-body-only .cover,
+			body.print-body-only .front-section {
+				display: none !important;
+			}
+			.badge {
+				display: inline-block;
+				background: #eef3f2;
+				border: 0.75pt solid #cfe3df;
+				border-radius: 3pt;
+				padding: 1pt 6pt;
+				font-size: 9.5pt;
+				margin: 1pt 2pt;
+			}
+		</style>
+	</head>
+	<body>
+		<!-- ============================================================ -->
+		<!-- COVER PAGE -->
+		<!-- ============================================================ -->
+		<div class="cover">
+			<div class="logo">
+				<img
+					src="data:image/png;base64,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0p8zAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAADAFBMVEUAAAD////g3+Dd3t/b3d7a3d7Z3N3Y3N3M1tjW29zJ1dfV29zU2tuMub+bwMWoxsqtyMyvyc23zdC4zdC6ztG8z9LE09XD0tTF09XH1NbT2tvS2doHfYoIfYoJfosKfosLf4wMf4wNgIwOgI0PgY0QgY4QgY0Rgo4Sgo4Tgo8Ug48Vg48WhJAXhJAYhZEZhZEahpIbhpIchpIdh5MeiJMfiJQgiJQhiZQiiZUjipUkipYli5Ymi5YnjJcojJcpjJcqjZgrjZgsjpktjpkvj5owj5owkJoxkJsykZszkZs0kZw1kpw2k502kpw3k504k505lJ46lJ48lZ8+lqA/lqBAl6FBl6FCmKFDmKJEmaJFmaNGmqNHmqNImqRJm6RKnKVLnKVMnKVNnaZOnaZPnqdQnqdSn6hToKhVoKlUoKhWoalXoapYoqpao6tZoqpcpKxbo6tco6tdpKxfpa1gpa1jp69ipq5kp69lqK9mqLBnqbBoqbFpqrFoqbBrqrJqqrFsq7Jtq7JurLNvrLNwrbRxrbRzrrV1r7Z0rrV4sLd3sLZ5sbd6sbd7srh9s7l8srh+s7mAtLqCtbuBtLqDtbuFtryHt7yJuL6It72IuL2Kub6Lub6Nur+Ou8CPu8COur+RvMGQu8CSvMGUvcKWvsOXvsOZv8SawMScwcWbwMSewsadwcWfwsagwsahw8ejxMikxMimxcmsyMuuycywys2yy86xys20zM+zy861zM+0y8690NK/0dO+0NLA0dPB0tTC0tTP2NnR2drQ2NkIfYkKf4suj5k7lZ49lp9PnqZRn6depaxhpq1ip65yrrR2sLZ1r7V/tLmCtbqEtruGt7yTvcGVvsKYv8OixMelxcinxsmpx8qryMuqx8q2zc+6z9G5ztC7z9HI1dbK1tfL1tfN19jO2NnG1NXX3Nza3d3c3t7e39/j4eHi4eHh4ODg4ODf39////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQmx8xAAAA8nRSTlP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AJA0f2kAADUSSURBVHjarNi9ihRBEAfwv3UsIlx8wWbCgkjjUYH4BgdeZnYIhj6B+ABGZ3DJPYCBkXL3ACaCuaBQCAUKB4KBBoJgIuIkBrs7uz3TH1U9Oyw7uzuzP/qrarqbfu/0IOz0sHAhOk3lwhIKFo9MZQv9aSoXAEBXUpjKRVrdI5dW9cin1TxyahWPvFrZI7dW9MivlTxq0AoetWh5j5q0rEdtWs6jRi3jUauW9qhZ672uyJm15a1dNytxDg0IXTeblSrr0o5kb1ZsO5cmZ/fuhBK3pS1ERGTz1+0vq1/A/4b9S7myXZ0C4P4SAwxsxF+CEx6PF8rW9HJcu+94tvzwVL6BvyTGH3nabY4HADCXRzjk5HgmVy8wAMgbAJ/S8UG+Pj3GDQEOsvFGvhHyA38Anmfjl7zj7RpzIX7JqUk5H5BLO5FKfiFX2R7W8su6K2xx+soyg1IAAWrgfpYu6rp0Zq+raKvK2stX1tZtN9nTOCrq3juDtonZqvfEoG1lFEt99yradr4ren8BAPeToqaz8cCLkvnnl8Di8THw8aigxc+Kgfe8964LzoGrF8zMbwva4EkWexcLQOTWbZH34GovpJ6zsbfPAC5eA3GOuykA5G5CG80Chu23POJ7vjIz84eENp6juOJD6xMyh6eW+Z3ZU9vs0+ipdW5s8tQ+czd46llXVD31rXoqnnrXZEVP/SvGgqct69msp22r7YynrXsBSU/bdyoSnk7ZRxl5Om2XZ+DVApng8appgeDw6kmLTGmtf+1id1F1874DznH8BwAA///c2bFLw0AUx/FfDwc393ZyjuCji5uDCBYcXMTJIriITgquDooOgn9DFwcXNxF0dBEFh4fd3JVODm4OUoc2NJdcLu/dBQSntiR8SXKXo/nE/BOZTWrKJWNGrQd6J8dWB/QmUMCsSGblMCuRWQXM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"
+					alt="UIT logo"
+					style="width: 100%; height: 100%; object-fit: contain"
+				/>
+			</div>
+			<div class="uni-name">University of Information Technology</div>
+			<div class="meta">2025&ndash;2026 Academic Year</div>
+			<div class="meta">CST-4104 (Artificial Intelligence)</div>
 
-<!-- ============================================================ -->
-<!-- COVER PAGE -->
-<!-- ============================================================ -->
-<div class="cover">
-  <div class="logo"><img src="data:image/png;base64,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0p8zAAAABGdBTUEAALGOfPtRkwAAACBjSFJNAAB6JQAAgIMAAPn/AACA6QAAdTAAAOpgAAA6mAAAF2+SX8VGAAADAFBMVEUAAAD////g3+Dd3t/b3d7a3d7Z3N3Y3N3M1tjW29zJ1dfV29zU2tuMub+bwMWoxsqtyMyvyc23zdC4zdC6ztG8z9LE09XD0tTF09XH1NbT2tvS2doHfYoIfYoJfosKfosLf4wMf4wNgIwOgI0PgY0QgY4QgY0Rgo4Sgo4Tgo8Ug48Vg48WhJAXhJAYhZEZhZEahpIbhpIchpIdh5MeiJMfiJQgiJQhiZQiiZUjipUkipYli5Ymi5YnjJcojJcpjJcqjZgrjZgsjpktjpkvj5owj5owkJoxkJsykZszkZs0kZw1kpw2k502kpw3k504k505lJ46lJ48lZ8+lqA/lqBAl6FBl6FCmKFDmKJEmaJFmaNGmqNHmqNImqRJm6RKnKVLnKVMnKVNnaZOnaZPnqdQnqdSn6hToKhVoKlUoKhWoalXoapYoqpao6tZoqpcpKxbo6tco6tdpKxfpa1gpa1jp69ipq5kp69lqK9mqLBnqbBoqbFpqrFoqbBrqrJqqrFsq7Jtq7JurLNvrLNwrbRxrbRzrrV1r7Z0rrV4sLd3sLZ5sbd6sbd7srh9s7l8srh+s7mAtLqCtbuBtLqDtbuFtryHt7yJuL6It72IuL2Kub6Lub6Nur+Ou8CPu8COur+RvMGQu8CSvMGUvcKWvsOXvsOZv8SawMScwcWbwMSewsadwcWfwsagwsahw8ejxMikxMimxcmsyMuuycywys2yy86xys20zM+zy861zM+0y8690NK/0dO+0NLA0dPB0tTC0tTP2NnR2drQ2NkIfYkKf4suj5k7lZ49lp9PnqZRn6depaxhpq1ip65yrrR2sLZ1r7V/tLmCtbqEtruGt7yTvcGVvsKYv8OixMelxcinxsmpx8qryMuqx8q2zc+6z9G5ztC7z9HI1dbK1tfL1tfN19jO2NnG1NXX3Nza3d3c3t7e39/j4eHi4eHh4ODg4ODf39////8AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAADQmx8xAAAA8nRSTlP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AJA0f2kAADUSSURBVHjarNi9ihRBEAfwv3UsIlx8wWbCgkjjUYH4BgdeZnYIhj6B+ABGZ3DJPYCBkXL3ACaCuaBQCAUKB4KBBoJgIuIkBrs7uz3TH1U9Oyw7uzuzP/qrarqbfu/0IOz0sHAhOk3lwhIKFo9MZQv9aSoXAEBXUpjKRVrdI5dW9cin1TxyahWPvFrZI7dW9MivlTxq0AoetWh5j5q0rEdtWs6jRi3jUauW9qhZ672uyJm15a1dNytxDg0IXTeblSrr0o5kb1ZsO5cmZ/fuhBK3pS1ERGTz1+0vq1/A/4b9S7myXZ0C4P4SAwxsxF+CEx6PF8rW9HJcu+94tvzwVL6BvyTGH3nabY4HADCXRzjk5HgmVy8wAMgbAJ/S8UG+Pj3GDQEOsvFGvhHyA38Anmfjl7zj7RpzIX7JqUk5H5BLO5FKfiFX2R7W8su6K2xx+soyg1IAAWrgfpYu6rp0Zq+raKvK2stX1tZtN9nTOCrq3juDtonZqvfEoG1lFEt99yradr4ren8BAPeToqaz8cCLkvnnl8Di8THw8aigxc+Kgfe8964LzoGrF8zMbwva4EkWexcLQOTWbZH34GovpJ6zsbfPAC5eA3GOuykA5G5CG80Chu23POJ7vjIz84eENp6juOJD6xMyh6eW+Z3ZU9vs0+ipdW5s8tQ+czd46llXVD31rXoqnnrXZEVP/SvGgqct69msp22r7YynrXsBSU/bdyoSnk7ZRxl5Om2XZ+DVApng8appgeDw6kmLTGmtf+1id1F1874DznH8BwAA///c2bFLw0AUx/FfDwc393ZyjuCji5uDCBYcXMTJIriITgquDooOgn9DFwcXNxF0dBEFh4fd3JVODm4OUoc2NJdcLu/dBQSntiR8SXKXo/nE/BOZTWrKJWNGrQd6J8dWB/QmUMCsSGblMCuRWQXM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" alt="UIT logo" style="width:100%;height:100%;object-fit:contain;"></div>
-  <div class="uni-name">University of Information Technology</div>
-  <div class="meta">2025&ndash;2026 Academic Year</div>
-  <div class="meta">CST-4104 (Artificial Intelligence)</div>
+			<div class="title-block">
+				AstroLogic
+				<div class="subtitle">
+					A Prolog-Driven Symbolic Reasoning System for Zodiac Profiling,<br />Tarot Interpretation,
+					and Compatibility Analysis
+				</div>
+			</div>
 
-  <div class="title-block">
-    AstroLogic
-    <div class="subtitle">A Prolog-Driven Symbolic Reasoning System for Zodiac Profiling,<br>Tarot Interpretation, and Compatibility Analysis</div>
-  </div>
+			<div class="submit-block">
+				<div>Submitted by Group &ndash; 6</div>
+				<div>Section ( A ), Semester IV</div>
+				<div>Department of Computer Science and Technology</div>
+				<div>September, 2026</div>
+			</div>
+		</div>
 
-  <div class="submit-block">
-    <div>Submitted by Group &ndash; 6</div>
-    <div>Section ( A ), Semester IV</div>
-    <div>Department of Computer Science and Technology</div>
-    <div>September, 2026</div>
-  </div>
-</div>
+		<!-- ============================================================ -->
+		<!-- GROUP MEMBERS / ROLES / TOC -->
+		<!-- ============================================================ -->
+		<div class="section front-section">
+			<h2>Group Members</h2>
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 20%">Student ID</th>
+						<th style="width: 40%">Name</th>
+						<th style="width: 40%">Email</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>TNT-2384</td>
+						<td>La Yaung Htut</td>
+						<td>layaunghtut@uit.edu.mm</td>
+					</tr>
+					<tr>
+						<td>TNT-2331</td>
+						<td>Bhone Myat Khaing</td>
+						<td>bhonemyatkhaing@uit.edu.mm</td>
+					</tr>
+					<tr>
+						<td>TNT-2347</td>
+						<td>Aye Thandar Kyaw</td>
+						<td>atdkyaw@uit.edu.mm</td>
+					</tr>
+					<tr>
+						<td>TNT-2354</td>
+						<td>May Myat Noe Latt</td>
+						<td>mmnlatt@uit.edu.mm</td>
+					</tr>
+					<tr>
+						<td>TNT-2338</td>
+						<td>Pwint Thazin Myint</td>
+						<td>ptzmyint@uit.edu.mm</td>
+					</tr>
+					<tr>
+						<td>TNT-2414</td>
+						<td>Khaing Yadanar</td>
+						<td>khaingyadanar@uit.edu.mm</td>
+					</tr>
+				</tbody>
+			</table>
 
-<!-- ============================================================ -->
-<!-- GROUP MEMBERS / ROLES / TOC -->
-<!-- ============================================================ -->
-<div class="section front-section">
-<h2>Group Members</h2>
-<table>
-  <thead><tr><th style="width:20%">Student ID</th><th style="width:40%">Name</th><th style="width:40%">Email</th></tr></thead>
-  <tbody>
-    <tr><td>TNT-2384</td><td>La Yaung Htut</td><td>layaunghtut@uit.edu.mm</td></tr>
-    <tr><td>TNT-2331</td><td>Bhone Myat Khaing</td><td>bhonemyatkhaing@uit.edu.mm</td></tr>
-    <tr><td>TNT-2347</td><td>Aye Thandar Kyaw</td><td>atdkyaw@uit.edu.mm</td></tr>
-    <tr><td>TNT-2354</td><td>May Myat Noe Latt</td><td>mmnlatt@uit.edu.mm</td></tr>
-    <tr><td>TNT-2338</td><td>Pwint Thazin Myint</td><td>ptzmyint@uit.edu.mm</td></tr>
-    <tr><td>TNT-2414</td><td>Khaing Yadanar</td><td>khaingyadanar@uit.edu.mm</td></tr>
-  </tbody>
-</table>
+			<h2 style="margin-top: 24pt">Roles and Responsibilities</h2>
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 30%">Name</th>
+						<th style="width: 70%">Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Bhone Myat Khaing</td>
+						<td>
+							Prolog knowledge base design &ndash; zodiac profile rules, trait derivation, and
+							reasoning trace generation (Module 1).
+						</td>
+					</tr>
+					<tr>
+						<td>May Myat Noe Latt</td>
+						<td>
+							Prolog card-selection module &ndash; tarot theme classification, eligibility
+							filtering, and spread ranking (Module 2).
+						</td>
+					</tr>
+					<tr>
+						<td>Pwint Thazin Myint</td>
+						<td>
+							Prolog reading-analysis and synastry modules &ndash; theme/conflict detection and
+							weighted compatibility scoring (Modules 3 &amp; 4).
+						</td>
+					</tr>
+					<tr>
+						<td>La Yaung Htut</td>
+						<td>
+							FastAPI backend integration &ndash; PrologService bridge, OpenRouter LLM
+							orchestration, REST API endpoints.
+						</td>
+					</tr>
+					<tr>
+						<td>Khaing Yadanar</td>
+						<td>
+							SvelteKit frontend &ndash; UI/UX design, page routing, reasoning-trace visualization.
+						</td>
+					</tr>
+					<tr>
+						<td>Aye Thandar Kyaw</td>
+						<td>
+							Testing, documentation, and database design &ndash; SQLite schema, API docs, report
+							compilation.
+						</td>
+					</tr>
+				</tbody>
+			</table>
 
-<h2 style="margin-top:24pt;">Roles and Responsibilities</h2>
-<table>
-  <thead><tr><th style="width:30%">Name</th><th style="width:70%">Description</th></tr></thead>
-  <tbody>
-    <tr><td>Bhone Myat Khaing</td><td>Prolog knowledge base design &ndash; zodiac profile rules, trait derivation, and reasoning trace generation (Module 1).</td></tr>
-    <tr><td>May Myat Noe Latt</td><td>Prolog card-selection module &ndash; tarot theme classification, eligibility filtering, and spread ranking (Module 2).</td></tr>
-    <tr><td>Pwint Thazin Myint</td><td>Prolog reading-analysis and synastry modules &ndash; theme/conflict detection and weighted compatibility scoring (Modules 3 &amp; 4).</td></tr>
-    <tr><td>La Yaung Htut</td><td>FastAPI backend integration &ndash; PrologService bridge, OpenRouter LLM orchestration, REST API endpoints.</td></tr>
-    <tr><td>Khaing Yadanar</td><td>SvelteKit frontend &ndash; UI/UX design, page routing, reasoning-trace visualization.</td></tr>
-    <tr><td>Aye Thandar Kyaw</td><td>Testing, documentation, and database design &ndash; SQLite schema, API docs, report compilation.</td></tr>
-  </tbody>
-</table>
+			<h2 style="margin-top: 24pt">Contents</h2>
+			<ul class="toc-list">
+				<li>
+					<span class="num">1.</span><span class="toc-title">Introduction</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-introduction">1</span>
+				</li>
+				<li>
+					<span class="num">2.</span><span class="toc-title">Objectives</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-objectives">3</span>
+				</li>
+				<li>
+					<span class="num">3.</span><span class="toc-title">Requirements</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-requirements">4</span>
+				</li>
+				<li>
+					<span class="num">4.</span><span class="toc-title">Algorithms</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-algorithms">7</span>
+				</li>
+				<li>
+					<span class="num">5.</span><span class="toc-title">Prolog Codes</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-prolog-codes">10</span>
+				</li>
+				<li>
+					<span class="num">6.</span><span class="toc-title">Current Limitations</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-limitations">16</span>
+				</li>
+				<li>
+					<span class="num">7.</span><span class="toc-title">System Implementation (UI Design)</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-implementation">17</span>
+				</li>
+				<li>
+					<span class="num">8.</span><span class="toc-title">Conclusion</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-conclusion">20</span>
+				</li>
+				<li>
+					<span class="num">9.</span><span class="toc-title">Further Extension</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-extension">21</span>
+				</li>
+				<li>
+					<span class="num">10.</span><span class="toc-title">References</span
+					><span class="toc-dots"></span
+					><span class="toc-page" data-target="sec-references">22</span>
+				</li>
+			</ul>
+		</div>
 
-<h2 style="margin-top:24pt;">Contents</h2>
-<ul class="toc-list">
-  <li><span class="num">1.</span><span class="toc-title">Introduction</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-introduction">1</span></li>
-  <li><span class="num">2.</span><span class="toc-title">Objectives</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-objectives">3</span></li>
-  <li><span class="num">3.</span><span class="toc-title">Requirements</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-requirements">4</span></li>
-  <li><span class="num">4.</span><span class="toc-title">Algorithms</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-algorithms">7</span></li>
-  <li><span class="num">5.</span><span class="toc-title">Prolog Codes</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-prolog-codes">10</span></li>
-  <li><span class="num">6.</span><span class="toc-title">Current Limitations</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-limitations">16</span></li>
-  <li><span class="num">7.</span><span class="toc-title">System Implementation (UI Design)</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-implementation">17</span></li>
-  <li><span class="num">8.</span><span class="toc-title">Conclusion</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-conclusion">20</span></li>
-  <li><span class="num">9.</span><span class="toc-title">Further Extension</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-extension">21</span></li>
-  <li><span class="num">10.</span><span class="toc-title">References</span><span class="toc-dots"></span><span class="toc-page" data-target="sec-references">22</span></li>
-</ul>
-</div>
+		<!-- ============================================================ -->
+		<!-- 1. INTRODUCTION -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-introduction">1. Introduction</h2>
+			<p>
+				AstroLogic is a full-stack, AI-assisted web application that reinterprets Western zodiac
+				astrology and tarot practice as a
+				<strong>symbolic knowledge-representation and reasoning problem</strong>. Rather than
+				treating horoscopes and tarot readings as arbitrary text generated by a language model,
+				AstroLogic encodes the domain &ndash; zodiac signs, elements, modalities, ruling planets,
+				personality traits, the 78-card tarot deck, spreads, and compatibility rules &ndash; as a
+				formal <strong>Prolog knowledge base</strong>. A large language model (LLM) is used only at
+				the very last step, to translate the structured symbolic output produced by Prolog into
+				natural, readable language. This design keeps the "reasoning" auditable, deterministic, and
+				explainable, while still producing an engaging, conversational user experience.
+			</p>
+			<p>The system is organized as a three-tier architecture:</p>
+			<ul>
+				<li>
+					<strong>SvelteKit 5 frontend</strong> (TypeScript, Tailwind CSS) &ndash; the interactive
+					web client, including a dashboard, tarot reading flow, horoscope generator, compatibility
+					checker, an AI chat assistant, and a reasoning-trace visualizer.
+				</li>
+				<li>
+					<strong>Python FastAPI backend</strong> &ndash; the orchestration and API layer that
+					classifies user questions, queries the Prolog engine, calls the OpenRouter LLM service,
+					and persists history to SQLite.
+				</li>
+				<li>
+					<strong>SWI-Prolog knowledge base</strong> &ndash; the symbolic reasoning core: zodiac
+					facts, tarot facts, and four dedicated reasoning modules that derive profiles, select
+					cards, analyze readings, and score compatibility.
+				</li>
+			</ul>
+			<div class="diagram">
+				┌───────────────────────────────────┐ │ SvelteKit 5 │ │ Frontend (TypeScript/Tailwind) │
+				└───────────────┬───────────────────┘ │ HTTP / REST (JSON)
+				┌───────────────▼───────────────────┐ │ Python FastAPI │ │ API + Orchestration Layer │
+				└──────┬────────────────┬───────────┘ │ │ ┌──────▼──────┐ ┌──────▼──────┐ │ SWI-Prolog │ │
+				OpenRouter │ │ Reasoning │ │ LLM (NLG) │ │ Engine │ │ │ └──────┬──────┘ └─────────────┘ │
+				┌──────▼──────┐ │ SQLite │ │ Storage │ └─────────────┘
+			</div>
+			<p>
+				The core design principle is a strict <strong>separation of concerns</strong>: Prolog
+				decides <em>what</em> the system reasons (facts, rules, and inference), Python decides
+				<em>how</em> the system orchestrates that reasoning, the LLM decides <em>how</em> the result
+				is expressed in natural language, and SvelteKit decides <em>how</em> the user experiences
+				all of it. If the LLM provider is unreachable, the application degrades gracefully to
+				deterministic, Prolog-derived interpretations rather than failing outright.
+			</p>
+			<div class="callout">
+				AstroLogic is framed explicitly as a <strong>reflective / entertainment</strong> tool. The
+				system prompt and UI copy avoid claims of scientific prediction or medical/psychological
+				diagnosis; the Prolog rules model traditional astrological/tarot symbolism, not empirical
+				claims about personality or the future.
+			</div>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 1. INTRODUCTION -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-introduction">1. Introduction</h2>
-<p>
-AstroLogic is a full-stack, AI-assisted web application that reinterprets Western zodiac
-astrology and tarot practice as a <strong>symbolic knowledge-representation and reasoning
-problem</strong>. Rather than treating horoscopes and tarot readings as arbitrary text
-generated by a language model, AstroLogic encodes the domain &ndash; zodiac signs, elements,
-modalities, ruling planets, personality traits, the 78-card tarot deck, spreads, and
-compatibility rules &ndash; as a formal <strong>Prolog knowledge base</strong>. A large language
-model (LLM) is used only at the very last step, to translate the structured symbolic
-output produced by Prolog into natural, readable language. This design keeps the
-"reasoning" auditable, deterministic, and explainable, while still producing an engaging,
-conversational user experience.
-</p>
-<p>
-The system is organized as a three-tier architecture:
-</p>
-<ul>
-  <li><strong>SvelteKit 5 frontend</strong> (TypeScript, Tailwind CSS) &ndash; the interactive
-  web client, including a dashboard, tarot reading flow, horoscope generator, compatibility
-  checker, an AI chat assistant, and a reasoning-trace visualizer.</li>
-  <li><strong>Python FastAPI backend</strong> &ndash; the orchestration and API layer that
-  classifies user questions, queries the Prolog engine, calls the OpenRouter LLM service,
-  and persists history to SQLite.</li>
-  <li><strong>SWI-Prolog knowledge base</strong> &ndash; the symbolic reasoning core: zodiac
-  facts, tarot facts, and four dedicated reasoning modules that derive profiles, select
-  cards, analyze readings, and score compatibility.</li>
-</ul>
-<div class="diagram">┌───────────────────────────────────┐
-│          SvelteKit 5              │
-│  Frontend (TypeScript/Tailwind)   │
-└───────────────┬───────────────────┘
-                │ HTTP / REST (JSON)
-┌───────────────▼───────────────────┐
-│         Python FastAPI            │
-│     API + Orchestration Layer     │
-└──────┬────────────────┬───────────┘
-       │                │
-┌──────▼──────┐  ┌──────▼──────┐
-│ SWI-Prolog  │  │  OpenRouter  │
-│  Reasoning  │  │  LLM (NLG)   │
-│   Engine    │  │              │
-└──────┬──────┘  └─────────────┘
-       │
-┌──────▼──────┐
-│   SQLite    │
-│  Storage    │
-└─────────────┘</div>
-<p>
-The core design principle is a strict <strong>separation of concerns</strong>: Prolog decides
-<em>what</em> the system reasons (facts, rules, and inference), Python decides <em>how</em>
-the system orchestrates that reasoning, the LLM decides <em>how</em> the result is expressed
-in natural language, and SvelteKit decides <em>how</em> the user experiences all of it. If the
-LLM provider is unreachable, the application degrades gracefully to deterministic,
-Prolog-derived interpretations rather than failing outright.
-</p>
-<div class="callout">
-AstroLogic is framed explicitly as a <strong>reflective / entertainment</strong> tool. The
-system prompt and UI copy avoid claims of scientific prediction or medical/psychological
-diagnosis; the Prolog rules model traditional astrological/tarot symbolism, not empirical
-claims about personality or the future.
-</div>
-</div>
+		<!-- ============================================================ -->
+		<!-- 2. OBJECTIVES -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-objectives">2. Objectives</h2>
+			<p>The objectives below define the scope of Version 1 (V1) of AstroLogic.</p>
+			<ol>
+				<li>
+					<strong>Model zodiac knowledge symbolically.</strong> Represent all 12 zodiac signs with
+					their elements, modalities, ruling planets, symbolic traits, and date ranges as Prolog
+					facts, and derive strengths, challenges, and full personality profiles through inference
+					rather than hard-coded text.
+				</li>
+				<li>
+					<strong>Model the tarot deck symbolically.</strong> Represent the full 78-card deck (22
+					Major Arcana + 56 Minor Arcana) with keywords, upright/reversed meanings, and thematic
+					categories, and use these facts to drive card selection.
+				</li>
+				<li>
+					<strong>Provide context-aware card selection.</strong> Classify a user's free-text
+					question into a category (e.g. love, career, decision) and use Prolog rules to filter
+					eligible cards and recommend an appropriate spread (single card, three-card, Celtic Cross,
+					decision spread, etc.).
+				</li>
+				<li>
+					<strong>Produce explainable readings.</strong> Analyze a set of drawn cards for recurring
+					themes, dominant elements/suits, and conflicting or complementary themes, and expose the
+					underlying rule firings as a <strong>reasoning trace</strong> the user can inspect.
+				</li>
+				<li>
+					<strong>Score zodiac compatibility transparently.</strong> Compute a weighted
+					compatibility score between two signs from four independent factors (element, modality,
+					trait, and planetary symbolism) rather than a single opaque lookup table.
+				</li>
+				<li>
+					<strong>Layer natural-language generation on top of symbolic output.</strong> Use an LLM
+					(via OpenRouter) purely as a presentation layer that narrates Prolog's structured facts,
+					with a deterministic fallback when the LLM is unavailable.
+				</li>
+				<li>
+					<strong>Deliver the reasoning through a usable web application.</strong> Build a SvelteKit
+					interface (dashboard, zodiac explorer, tarot reading, horoscope, compatibility, chat,
+					history, analytics) backed by a documented REST API.
+				</li>
+			</ol>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 2. OBJECTIVES -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-objectives">2. Objectives</h2>
-<p>The objectives below define the scope of Version 1 (V1) of AstroLogic.</p>
-<ol>
-  <li><strong>Model zodiac knowledge symbolically.</strong> Represent all 12 zodiac signs
-  with their elements, modalities, ruling planets, symbolic traits, and date ranges as
-  Prolog facts, and derive strengths, challenges, and full personality profiles through
-  inference rather than hard-coded text.</li>
-  <li><strong>Model the tarot deck symbolically.</strong> Represent the full 78-card deck
-  (22 Major Arcana + 56 Minor Arcana) with keywords, upright/reversed meanings, and thematic
-  categories, and use these facts to drive card selection.</li>
-  <li><strong>Provide context-aware card selection.</strong> Classify a user's free-text
-  question into a category (e.g. love, career, decision) and use Prolog rules to filter
-  eligible cards and recommend an appropriate spread (single card, three-card, Celtic
-  Cross, decision spread, etc.).</li>
-  <li><strong>Produce explainable readings.</strong> Analyze a set of drawn cards for
-  recurring themes, dominant elements/suits, and conflicting or complementary themes, and
-  expose the underlying rule firings as a <strong>reasoning trace</strong> the user can
-  inspect.</li>
-  <li><strong>Score zodiac compatibility transparently.</strong> Compute a weighted
-  compatibility score between two signs from four independent factors (element, modality,
-  trait, and planetary symbolism) rather than a single opaque lookup table.</li>
-  <li><strong>Layer natural-language generation on top of symbolic output.</strong>
-  Use an LLM (via OpenRouter) purely as a presentation layer that narrates Prolog's
-  structured facts, with a deterministic fallback when the LLM is unavailable.</li>
-  <li><strong>Deliver the reasoning through a usable web application.</strong> Build a
-  SvelteKit interface (dashboard, zodiac explorer, tarot reading, horoscope, compatibility,
-  chat, history, analytics) backed by a documented REST API.</li>
-</ol>
-</div>
+		<!-- ============================================================ -->
+		<!-- 3. REQUIREMENTS -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-requirements">3. Requirements</h2>
 
-<!-- ============================================================ -->
-<!-- 3. REQUIREMENTS -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-requirements">3. Requirements</h2>
+			<h3>3.1 Functional Requirements</h3>
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 8%">ID</th>
+						<th style="width: 38%">Requirement</th>
+						<th>Description</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>FR-01</td>
+						<td>Zodiac profile lookup</td>
+						<td>
+							User selects/enters a birth date; system returns sign, element, modality, ruling
+							planet, traits, strengths and challenges.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-02</td>
+						<td>Tarot card draw</td>
+						<td>
+							System draws N cards for a chosen spread and returns card identity, orientation, and
+							position-aware meaning.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-02a</td>
+						<td>Custom-count draw</td>
+						<td>
+							User picks any card count from 1&ndash;10 for an open, non-fixed-layout spread instead
+							of a predefined one.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-02b</td>
+						<td>Manual card selection</td>
+						<td>
+							User hand-picks specific cards (and orientation) directly from the 78-card deck; the
+							reading is generated from exactly that selection instead of a random draw.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-03</td>
+						<td>Question classification</td>
+						<td>
+							Free-text question is classified into a category to drive spread recommendation and
+							card eligibility.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-04</td>
+						<td>Reading analysis</td>
+						<td>
+							System detects dominant themes, elements, arcana balance, and theme conflicts across a
+							multi-card reading.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-05</td>
+						<td>Horoscope generation</td>
+						<td>
+							System generates a themed daily horoscope (theme, guidance, reflection, opportunity,
+							caution) from zodiac + mood input.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-06</td>
+						<td>Compatibility analysis</td>
+						<td>
+							System scores compatibility between two zodiac signs with a full component breakdown
+							and explanation.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-07</td>
+						<td>AI chat assistant</td>
+						<td>
+							Conversational endpoint answers questions about signs, cards, and readings using
+							Prolog context + LLM narration.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-08</td>
+						<td>Reasoning-trace visualization</td>
+						<td>
+							Every Prolog inference exposes a structured trace (rule, input, result, explanation)
+							renderable in the UI.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-09</td>
+						<td>History &amp; persistence</td>
+						<td>
+							Readings and chat sessions are stored in SQLite and retrievable/deletable via the
+							History page.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-10</td>
+						<td>Graceful LLM fallback</td>
+						<td>
+							If OpenRouter is unreachable or times out (30s), the system serves deterministic
+							Prolog-derived text.
+						</td>
+					</tr>
+				</tbody>
+			</table>
 
-<h3>3.1 Functional Requirements</h3>
-<table>
-  <thead><tr><th style="width:8%">ID</th><th style="width:38%">Requirement</th><th>Description</th></tr></thead>
-  <tbody>
-    <tr><td>FR-01</td><td>Zodiac profile lookup</td><td>User selects/enters a birth date; system returns sign, element, modality, ruling planet, traits, strengths and challenges.</td></tr>
-    <tr><td>FR-02</td><td>Tarot card draw</td><td>System draws N cards for a chosen spread and returns card identity, orientation, and position-aware meaning.</td></tr>
-    <tr><td>FR-02a</td><td>Custom-count draw</td><td>User picks any card count from 1&ndash;10 for an open, non-fixed-layout spread instead of a predefined one.</td></tr>
-    <tr><td>FR-02b</td><td>Manual card selection</td><td>User hand-picks specific cards (and orientation) directly from the 78-card deck; the reading is generated from exactly that selection instead of a random draw.</td></tr>
-    <tr><td>FR-03</td><td>Question classification</td><td>Free-text question is classified into a category to drive spread recommendation and card eligibility.</td></tr>
-    <tr><td>FR-04</td><td>Reading analysis</td><td>System detects dominant themes, elements, arcana balance, and theme conflicts across a multi-card reading.</td></tr>
-    <tr><td>FR-05</td><td>Horoscope generation</td><td>System generates a themed daily horoscope (theme, guidance, reflection, opportunity, caution) from zodiac + mood input.</td></tr>
-    <tr><td>FR-06</td><td>Compatibility analysis</td><td>System scores compatibility between two zodiac signs with a full component breakdown and explanation.</td></tr>
-    <tr><td>FR-07</td><td>AI chat assistant</td><td>Conversational endpoint answers questions about signs, cards, and readings using Prolog context + LLM narration.</td></tr>
-    <tr><td>FR-08</td><td>Reasoning-trace visualization</td><td>Every Prolog inference exposes a structured trace (rule, input, result, explanation) renderable in the UI.</td></tr>
-    <tr><td>FR-09</td><td>History &amp; persistence</td><td>Readings and chat sessions are stored in SQLite and retrievable/deletable via the History page.</td></tr>
-    <tr><td>FR-10</td><td>Graceful LLM fallback</td><td>If OpenRouter is unreachable or times out (30s), the system serves deterministic Prolog-derived text.</td></tr>
-  </tbody>
-</table>
+			<h3>3.2 Non-Functional Requirements</h3>
+			<ul>
+				<li>
+					<strong>Explainability</strong> &ndash; every symbolic conclusion must be traceable to the
+					specific Prolog rule(s) that produced it.
+				</li>
+				<li>
+					<strong>Separation of concerns</strong> &ndash; the LLM must never perform core reasoning;
+					it only narrates facts supplied by Prolog.
+				</li>
+				<li>
+					<strong>Resilience</strong> &ndash; the system must degrade gracefully (fallback
+					templates) rather than fail when the LLM provider is down.
+				</li>
+				<li>
+					<strong>Responsiveness</strong> &ndash; REST endpoints should respond within a few seconds
+					for typical queries; LLM calls are bounded by a 30s timeout.
+				</li>
+				<li>
+					<strong>Maintainability</strong> &ndash; the Prolog knowledge base is split into cohesive
+					modules (base facts vs. reasoning modules) to keep rules easy to extend.
+				</li>
+				<li>
+					<strong>Ethical framing</strong> &ndash; content must present itself as
+					reflective/entertainment, avoiding predictive or diagnostic claims.
+				</li>
+			</ul>
 
-<h3>3.2 Non-Functional Requirements</h3>
-<ul>
-  <li><strong>Explainability</strong> &ndash; every symbolic conclusion must be traceable to the specific Prolog rule(s) that produced it.</li>
-  <li><strong>Separation of concerns</strong> &ndash; the LLM must never perform core reasoning; it only narrates facts supplied by Prolog.</li>
-  <li><strong>Resilience</strong> &ndash; the system must degrade gracefully (fallback templates) rather than fail when the LLM provider is down.</li>
-  <li><strong>Responsiveness</strong> &ndash; REST endpoints should respond within a few seconds for typical queries; LLM calls are bounded by a 30s timeout.</li>
-  <li><strong>Maintainability</strong> &ndash; the Prolog knowledge base is split into cohesive modules (base facts vs. reasoning modules) to keep rules easy to extend.</li>
-  <li><strong>Ethical framing</strong> &ndash; content must present itself as reflective/entertainment, avoiding predictive or diagnostic claims.</li>
-</ul>
+			<h3>3.3 Technology Stack</h3>
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 28%">Layer</th>
+						<th>Technology</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Frontend</td>
+						<td>SvelteKit 5, TypeScript, Tailwind CSS, Vite, Vitest</td>
+					</tr>
+					<tr>
+						<td>Backend / API</td>
+						<td>Python, FastAPI, Pydantic schemas</td>
+					</tr>
+					<tr>
+						<td>Symbolic Reasoning</td>
+						<td>SWI-Prolog knowledge base (13 modules, ~4,480 lines of rules/facts)</td>
+					</tr>
+					<tr>
+						<td>Natural-Language Generation</td>
+						<td>OpenRouter LLM API (e.g. GPT-3.5-class model)</td>
+					</tr>
+					<tr>
+						<td>Persistence</td>
+						<td>SQLite (schema.sql), Docker Compose for local orchestration</td>
+					</tr>
+					<tr>
+						<td>Tooling</td>
+						<td>ESLint, Prettier, pytest, svelte-check</td>
+					</tr>
+				</tbody>
+			</table>
+		</div>
 
-<h3>3.3 Technology Stack</h3>
-<table>
-  <thead><tr><th style="width:28%">Layer</th><th>Technology</th></tr></thead>
-  <tbody>
-    <tr><td>Frontend</td><td>SvelteKit 5, TypeScript, Tailwind CSS, Vite, Vitest</td></tr>
-    <tr><td>Backend / API</td><td>Python, FastAPI, Pydantic schemas</td></tr>
-    <tr><td>Symbolic Reasoning</td><td>SWI-Prolog knowledge base (13 modules, ~4,480 lines of rules/facts)</td></tr>
-    <tr><td>Natural-Language Generation</td><td>OpenRouter LLM API (e.g. GPT-3.5-class model)</td></tr>
-    <tr><td>Persistence</td><td>SQLite (schema.sql), Docker Compose for local orchestration</td></tr>
-    <tr><td>Tooling</td><td>ESLint, Prettier, pytest, svelte-check</td></tr>
-  </tbody>
-</table>
-</div>
+		<!-- ============================================================ -->
+		<!-- 4. ALGORITHMS -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-algorithms">4. Algorithms</h2>
 
-<!-- ============================================================ -->
-<!-- 4. ALGORITHMS -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-algorithms">4. Algorithms</h2>
+			<h3>4.1 End-to-End Reasoning Pipeline</h3>
+			<p>
+				Every user-facing request (tarot reading, horoscope, compatibility check, chat message)
+				follows the same seven-step pipeline:
+			</p>
+			<ol>
+				<li>User input is captured by the SvelteKit frontend and sent to FastAPI over REST.</li>
+				<li>
+					FastAPI performs lightweight NLP to classify the question (e.g. love / career / decision /
+					general).
+				</li>
+				<li>FastAPI's <code>PrologService</code> queries SWI-Prolog with the classified inputs.</li>
+				<li>
+					Prolog executes rule-based inference and returns
+					<strong>structured symbolic results</strong> (facts, scores, traces) &ndash; never free
+					text.
+				</li>
+				<li>
+					FastAPI forwards the structured results to OpenRouter with a constrained system prompt.
+				</li>
+				<li>
+					OpenRouter returns natural-language narration grounded in those facts (or, on failure,
+					FastAPI substitutes a deterministic template built directly from the Prolog output).
+				</li>
+				<li>
+					The combined response (symbolic data + narrative + reasoning trace) is returned to
+					SvelteKit and rendered to the user.
+				</li>
+			</ol>
 
-<h3>4.1 End-to-End Reasoning Pipeline</h3>
-<p>Every user-facing request (tarot reading, horoscope, compatibility check, chat message) follows the same seven-step pipeline:</p>
-<ol>
-  <li>User input is captured by the SvelteKit frontend and sent to FastAPI over REST.</li>
-  <li>FastAPI performs lightweight NLP to classify the question (e.g. love / career / decision / general).</li>
-  <li>FastAPI's <code>PrologService</code> queries SWI-Prolog with the classified inputs.</li>
-  <li>Prolog executes rule-based inference and returns <strong>structured symbolic results</strong> (facts, scores, traces) &ndash; never free text.</li>
-  <li>FastAPI forwards the structured results to OpenRouter with a constrained system prompt.</li>
-  <li>OpenRouter returns natural-language narration grounded in those facts (or, on failure, FastAPI substitutes a deterministic template built directly from the Prolog output).</li>
-  <li>The combined response (symbolic data + narrative + reasoning trace) is returned to SvelteKit and rendered to the user.</li>
-</ol>
+			<h3>4.2 Zodiac Profile Derivation</h3>
+			<p>
+				Given a sign, <code>generate_profile/2</code> composes four independent derivations &ndash;
+				base facts (element, modality, ruling planet, traits), an element-personality mapping, a
+				modality-approach mapping, and a planetary-influence mapping &ndash; into one profile term.
+				Strengths and challenges are derived per-trait via <code>trait_strength/2</code> and
+				<code>trait_challenge/2</code>, so a sign's five traits expand into five strengths and five
+				challenges automatically, without any sign-specific hard-coding. Birth-date &rarr; sign
+				mapping (<code>zodiac_from_date/3</code>) uses ordered date-boundary rules with cut-fail so
+				exactly one sign is returned per date.
+			</p>
 
-<h3>4.2 Zodiac Profile Derivation</h3>
-<p>
-Given a sign, <code>generate_profile/2</code> composes four independent derivations &ndash;
-base facts (element, modality, ruling planet, traits), an element-personality mapping,
-a modality-approach mapping, and a planetary-influence mapping &ndash; into one profile term.
-Strengths and challenges are derived per-trait via <code>trait_strength/2</code> and
-<code>trait_challenge/2</code>, so a sign's five traits expand into five strengths and five
-challenges automatically, without any sign-specific hard-coding. Birth-date &rarr; sign
-mapping (<code>zodiac_from_date/3</code>) uses ordered date-boundary rules with cut-fail
-so exactly one sign is returned per date.</p>
+			<h3>4.3 Question Classification and Card Selection</h3>
+			<p>
+				A free-text question is classified into a category (love, career, decision, general,
+				&hellip;). The category, together with the user's zodiac sign, forms a <em>context</em> that
+				is passed through a filtering pipeline: <code>card_matches_theme/2</code>,
+				<code>card_matches_question/2</code>, <code>card_matches_element/2</code>, and
+				<code>card_matches_sign/2</code> each contribute a boolean signal;
+				<code>card_eligible/2</code> combines them, <code>select_eligible_cards/3</code> produces
+				the eligible set, and <code>card_priority/3</code> + <code>rank_cards/3</code> order
+				candidates before the top N are drawn for the recommended spread.
+			</p>
 
-<h3>4.3 Question Classification and Card Selection</h3>
-<p>
-A free-text question is classified into a category (love, career, decision, general, &hellip;).
-The category, together with the user's zodiac sign, forms a <em>context</em> that is passed
-through a filtering pipeline: <code>card_matches_theme/2</code>, <code>card_matches_question/2</code>,
-<code>card_matches_element/2</code>, and <code>card_matches_sign/2</code> each contribute a
-boolean signal; <code>card_eligible/2</code> combines them, <code>select_eligible_cards/3</code>
-produces the eligible set, and <code>card_priority/3</code> + <code>rank_cards/3</code> order
-candidates before the top N are drawn for the recommended spread.</p>
+			<h3>4.4 Reading Analysis (Multi-Card Interpretation)</h3>
+			<p>
+				<code>analyze_reading/3</code> aggregates per-card analyses across the whole spread: it
+				collects each card's themes via <code>reading_themes/2</code>, determines the
+				<code>dominant_theme/2</code> by frequency, checks every theme pair against a
+				<code>theme_conflict/3</code> table (e.g. <em>action</em> vs. <em>patience</em>,
+				<em>independence</em> vs. <em>cooperation</em>) to surface tension in the reading, and
+				separately flags complementary themes. Each card position (past, present, future, challenge,
+				guidance, &hellip;) applies its own interpretive lens through
+				<code>position_meaning_modifier/2</code>, so the same card yields a different interpretation
+				depending on where it lands in the spread.
+			</p>
 
-<h3>4.4 Reading Analysis (Multi-Card Interpretation)</h3>
-<p>
-<code>analyze_reading/3</code> aggregates per-card analyses across the whole spread:
-it collects each card's themes via <code>reading_themes/2</code>, determines the
-<code>dominant_theme/2</code> by frequency, checks every theme pair against a
-<code>theme_conflict/3</code> table (e.g. <em>action</em> vs. <em>patience</em>,
-<em>independence</em> vs. <em>cooperation</em>) to surface tension in the reading, and
-separately flags complementary themes. Each card position (past, present, future,
-challenge, guidance, &hellip;) applies its own interpretive lens through
-<code>position_meaning_modifier/2</code>, so the same card yields a different
-interpretation depending on where it lands in the spread.</p>
+			<h3>4.5 Weighted Compatibility Scoring</h3>
+			<p>
+				<code>zodiac_compatibility/3</code> is a genuine multi-factor weighted algorithm rather than
+				a static lookup table:
+			</p>
+			<table>
+				<thead>
+					<tr>
+						<th>Factor</th>
+						<th>Weight</th>
+						<th>Basis</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td>Element compatibility</td>
+						<td>35%</td>
+						<td>Fire/Air vs. Water/Earth affinity table</td>
+					</tr>
+					<tr>
+						<td>Modality compatibility</td>
+						<td>20%</td>
+						<td>Cardinal / Fixed / Mutable interaction</td>
+					</tr>
+					<tr>
+						<td>Trait compatibility</td>
+						<td>30%</td>
+						<td>Count of complementary trait pairs between the two signs</td>
+					</tr>
+					<tr>
+						<td>Planetary symbolism</td>
+						<td>15%</td>
+						<td>Ruling-planet relationship</td>
+					</tr>
+				</tbody>
+			</table>
+			<p>
+				The four component scores are combined as
+				<code>Overall = 0.35&middot;E + 0.20&middot;M + 0.30&middot;T + 0.15&middot;P</code>, then
+				thresholded into <code>high</code> (&ge;65), <code>moderate</code> (&ge;45), or
+				<code>low</code> levels. Because every component is independently queryable, the system can
+				also produce a full <strong>score breakdown</strong> and a natural-language
+				<strong>explanation</strong> for transparency.
+			</p>
+			<p>
+				An earlier version of this scoring gave every component an artificially high floor (e.g. a
+				trait score of at least 40/100 even for two signs sharing <em>no</em> traits and
+				<em>no</em> complementary traits, and a flat 55/100 default for any unlisted planetary
+				pairing), which mathematically compressed every possible sign pair into a narrow 44&ndash;90
+				band &ndash; in practice this meant almost every pairing was reported as
+				&ldquo;moderate&rdquo;, with no pair ever reaching &ldquo;high&rdquo;. The component-score
+				tables and the classification thresholds above were subsequently rebalanced so that a
+				genuinely poor elemental/modality/trait match can score low and a genuinely strong one can
+				score high, verified by exhaustively scoring all 66 distinct sign pairs and confirming the
+				result spans the full range (roughly 35&ndash;90) with a realistic high/moderate/low split.
+			</p>
 
-<h3>4.5 Weighted Compatibility Scoring</h3>
-<p>
-<code>zodiac_compatibility/3</code> is a genuine multi-factor weighted algorithm rather
-than a static lookup table:
-</p>
-<table>
-  <thead><tr><th>Factor</th><th>Weight</th><th>Basis</th></tr></thead>
-  <tbody>
-    <tr><td>Element compatibility</td><td>35%</td><td>Fire/Air vs. Water/Earth affinity table</td></tr>
-    <tr><td>Modality compatibility</td><td>20%</td><td>Cardinal / Fixed / Mutable interaction</td></tr>
-    <tr><td>Trait compatibility</td><td>30%</td><td>Count of complementary trait pairs between the two signs</td></tr>
-    <tr><td>Planetary symbolism</td><td>15%</td><td>Ruling-planet relationship</td></tr>
-  </tbody>
-</table>
-<p>
-The four component scores are combined as
-<code>Overall = 0.35&middot;E + 0.20&middot;M + 0.30&middot;T + 0.15&middot;P</code>, then
-thresholded into <code>high</code> (&ge;65), <code>moderate</code> (&ge;45), or <code>low</code>
-levels. Because every component is independently queryable, the system can also produce a
-full <strong>score breakdown</strong> and a natural-language <strong>explanation</strong> for
-transparency.</p>
-<p>
-An earlier version of this scoring gave every component an artificially high floor
-(e.g. a trait score of at least 40/100 even for two signs sharing <em>no</em> traits and
-<em>no</em> complementary traits, and a flat 55/100 default for any unlisted planetary
-pairing), which mathematically compressed every possible sign pair into a narrow
-44&ndash;90 band &ndash; in practice this meant almost every pairing was reported as
-&ldquo;moderate&rdquo;, with no pair ever reaching &ldquo;high&rdquo;. The component-score
-tables and the classification thresholds above were subsequently rebalanced so that a
-genuinely poor elemental/modality/trait match can score low and a genuinely strong one can
-score high, verified by exhaustively scoring all 66 distinct sign pairs and confirming the
-result spans the full range (roughly 35&ndash;90) with a realistic high/moderate/low split.</p>
+			<h3>4.6 Open &amp; Manual Tarot Draws</h3>
+			<p>
+				Beyond the six fixed-layout spreads (one card, three card, decision, self reflection,
+				relationship, career), the system supports two additional draw modes that reuse the same
+				Prolog analysis pipeline (<code>analyze_reading_oriented/4</code>, theme/conflict/direction
+				detection) rather than duplicating it:
+			</p>
+			<ul>
+				<li>
+					<strong>Custom-count draw.</strong> <code>custom_spread_recommendation/4</code> generates
+					<code>N</code> generic, order-based positions (&ldquo;Card 1&rdquo; &hellip; &ldquo;Card
+					N&rdquo;) for any seeker-chosen count from 1&ndash;10, still grounding the recommendation
+					in the seeker's zodiac element/modality the way a fixed spread does.
+				</li>
+				<li>
+					<strong>Manual card selection.</strong> The seeker picks specific cards (and their
+					orientation) directly from the 78-card deck instead of a random draw; the backend builds
+					the same per-card data structure a random draw would have produced, in the exact order and
+					orientation chosen, and feeds it through the identical reading pipeline &ndash; themes,
+					dominant theme, direction, advice, conflicts, and the full reasoning trace are all
+					generated from the seeker's own selection.
+				</li>
+			</ul>
+			<p>
+				Supporting either mode surfaced a latent bug in <code>position_meaning_modifier/2</code>: it
+				had no catch-all clause, so a position label outside the five fixed-spread names (such as
+				&ldquo;Card 6&rdquo; in an open ten-card draw) made
+				<code>interpret_card_position/4</code> fail silently for that card &ndash; it still appeared
+				in the UI, but received no per-card interpretation. A catch-all clause was added so every
+				drawn or selected card, in any spread, is always individually interpreted.
+			</p>
 
-<h3>4.6 Open &amp; Manual Tarot Draws</h3>
-<p>
-Beyond the six fixed-layout spreads (one card, three card, decision, self reflection,
-relationship, career), the system supports two additional draw modes that reuse the same
-Prolog analysis pipeline (<code>analyze_reading_oriented/4</code>, theme/conflict/direction
-detection) rather than duplicating it:
-</p>
-<ul>
-  <li><strong>Custom-count draw.</strong> <code>custom_spread_recommendation/4</code>
-  generates <code>N</code> generic, order-based positions (&ldquo;Card 1&rdquo; &hellip;
-  &ldquo;Card N&rdquo;) for any seeker-chosen count from 1&ndash;10, still grounding the
-  recommendation in the seeker's zodiac element/modality the way a fixed spread does.</li>
-  <li><strong>Manual card selection.</strong> The seeker picks specific cards (and their
-  orientation) directly from the 78-card deck instead of a random draw; the backend builds
-  the same per-card data structure a random draw would have produced, in the exact order and
-  orientation chosen, and feeds it through the identical reading pipeline &ndash; themes,
-  dominant theme, direction, advice, conflicts, and the full reasoning trace are all
-  generated from the seeker's own selection.</li>
-</ul>
-<p>
-Supporting either mode surfaced a latent bug in <code>position_meaning_modifier/2</code>:
-it had no catch-all clause, so a position label outside the five fixed-spread names (such as
-&ldquo;Card 6&rdquo; in an open ten-card draw) made <code>interpret_card_position/4</code>
-fail silently for that card &ndash; it still appeared in the UI, but received no per-card
-interpretation. A catch-all clause was added so every drawn or selected card, in any spread,
-is always individually interpreted.</p>
+			<h3>4.7 Fallback Algorithm</h3>
+			<p>
+				Before any OpenRouter call, FastAPI starts a 30-second timeout. On timeout, network error,
+				or malformed response, the orchestration layer substitutes a template-based generator that
+				consumes the same structured Prolog output the LLM would have received (themes, scores,
+				traits) and fills a deterministic sentence template &ndash; guaranteeing the user always
+				receives a complete, non-empty response.
+			</p>
+		</div>
 
-<h3>4.7 Fallback Algorithm</h3>
-<p>
-Before any OpenRouter call, FastAPI starts a 30-second timeout. On timeout, network error,
-or malformed response, the orchestration layer substitutes a template-based generator that
-consumes the same structured Prolog output the LLM would have received (themes, scores,
-traits) and fills a deterministic sentence template &ndash; guaranteeing the user always
-receives a complete, non-empty response.</p>
-</div>
+		<!-- ============================================================ -->
+		<!-- 5. PROLOG CODES -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-prolog-codes">5. Prolog Codes</h2>
+			<p>
+				The knowledge base contains 13 files (~4,480 lines total) organized as two base fact
+				libraries and four functional reasoning modules, orchestrated by a single entry point.
+			</p>
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 26%">File</th>
+						<th style="width: 14%">Role</th>
+						<th>Purpose</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><code>zodiac.pl</code></td>
+						<td>Base facts</td>
+						<td>
+							12 signs, elements, modalities, ruling planets, traits, date ranges, symbols (110
+							lines)
+						</td>
+					</tr>
+					<tr>
+						<td><code>tarot.pl</code></td>
+						<td>Base facts</td>
+						<td>78-card deck: arcana, keywords, upright/reversed meanings, themes (470 lines)</td>
+					</tr>
+					<tr>
+						<td><code>zodiac_profile.pl</code></td>
+						<td>Module 1</td>
+						<td>
+							Profile generation, strengths/challenges, birth-date mapping, element/modality
+							compatibility (709 lines)
+						</td>
+					</tr>
+					<tr>
+						<td><code>card_selection.pl</code></td>
+						<td>Module 2</td>
+						<td>Card theming, eligibility filtering, spread selection and ranking (817 lines)</td>
+					</tr>
+					<tr>
+						<td><code>reading_analysis.pl</code></td>
+						<td>Module 3</td>
+						<td>Per-card and multi-card analysis, theme/conflict detection, advice (743 lines)</td>
+					</tr>
+					<tr>
+						<td><code>synastry.pl</code></td>
+						<td>Module 4</td>
+						<td>Weighted compatibility scoring and synastry explanation (495 lines)</td>
+					</tr>
+					<tr>
+						<td><code>horoscope_rules.pl</code></td>
+						<td>Support</td>
+						<td>Mood &rarr; theme mapping for horoscope generation (164 lines)</td>
+					</tr>
+					<tr>
+						<td><code>spread_rules.pl</code></td>
+						<td>Support</td>
+						<td>Question classification &rarr; spread recommendation (179 lines)</td>
+					</tr>
+					<tr>
+						<td><code>recommendation_rules.pl</code></td>
+						<td>Support</td>
+						<td>Card recommendation heuristics (195 lines)</td>
+					</tr>
+					<tr>
+						<td><code>reasoning.pl</code></td>
+						<td>Support</td>
+						<td>Cross-module orchestration (147 lines)</td>
+					</tr>
+					<tr>
+						<td><code>compatibility.pl</code></td>
+						<td>Support</td>
+						<td>Legacy/simple compatibility helpers (152 lines)</td>
+					</tr>
+					<tr>
+						<td><code>history_analysis.pl</code></td>
+						<td>Support</td>
+						<td>Aggregate analysis over stored reading history (215 lines)</td>
+					</tr>
+					<tr>
+						<td><code>main.pl</code></td>
+						<td>Entry point</td>
+						<td>Loads all modules; exposes convenience queries (84 lines)</td>
+					</tr>
+				</tbody>
+			</table>
 
-<!-- ============================================================ -->
-<!-- 5. PROLOG CODES -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-prolog-codes">5. Prolog Codes</h2>
-<p>
-The knowledge base contains 13 files (~4,480 lines total) organized as two base fact
-libraries and four functional reasoning modules, orchestrated by a single entry point.
-</p>
-<table>
-  <thead><tr><th style="width:26%">File</th><th style="width:14%">Role</th><th>Purpose</th></tr></thead>
-  <tbody>
-    <tr><td><code>zodiac.pl</code></td><td>Base facts</td><td>12 signs, elements, modalities, ruling planets, traits, date ranges, symbols (110 lines)</td></tr>
-    <tr><td><code>tarot.pl</code></td><td>Base facts</td><td>78-card deck: arcana, keywords, upright/reversed meanings, themes (470 lines)</td></tr>
-    <tr><td><code>zodiac_profile.pl</code></td><td>Module 1</td><td>Profile generation, strengths/challenges, birth-date mapping, element/modality compatibility (709 lines)</td></tr>
-    <tr><td><code>card_selection.pl</code></td><td>Module 2</td><td>Card theming, eligibility filtering, spread selection and ranking (817 lines)</td></tr>
-    <tr><td><code>reading_analysis.pl</code></td><td>Module 3</td><td>Per-card and multi-card analysis, theme/conflict detection, advice (743 lines)</td></tr>
-    <tr><td><code>synastry.pl</code></td><td>Module 4</td><td>Weighted compatibility scoring and synastry explanation (495 lines)</td></tr>
-    <tr><td><code>horoscope_rules.pl</code></td><td>Support</td><td>Mood &rarr; theme mapping for horoscope generation (164 lines)</td></tr>
-    <tr><td><code>spread_rules.pl</code></td><td>Support</td><td>Question classification &rarr; spread recommendation (179 lines)</td></tr>
-    <tr><td><code>recommendation_rules.pl</code></td><td>Support</td><td>Card recommendation heuristics (195 lines)</td></tr>
-    <tr><td><code>reasoning.pl</code></td><td>Support</td><td>Cross-module orchestration (147 lines)</td></tr>
-    <tr><td><code>compatibility.pl</code></td><td>Support</td><td>Legacy/simple compatibility helpers (152 lines)</td></tr>
-    <tr><td><code>history_analysis.pl</code></td><td>Support</td><td>Aggregate analysis over stored reading history (215 lines)</td></tr>
-    <tr><td><code>main.pl</code></td><td>Entry point</td><td>Loads all modules; exposes convenience queries (84 lines)</td></tr>
-  </tbody>
-</table>
-
-<h3>5.1 Base Facts &ndash; Zodiac Knowledge</h3>
-<pre>% --- Elements ---
+			<h3>5.1 Base Facts &ndash; Zodiac Knowledge</h3>
+			<pre>
+% --- Elements ---
 element(aries, fire).
 element(taurus, earth).
 element(gemini, air).
@@ -563,10 +1024,13 @@ zodiac_traits(taurus, [patience, reliability, sensuality,
 % --- Helper: Get all signs of a given element ---
 signs_of_element(Element, Signs) :-
     findall(Sign, element(Sign, Element), Signs).</pre>
-<p class="code-caption">Excerpt from <code>prolog/zodiac.pl</code> &ndash; declarative facts for all 12 signs.</p>
+			<p class="code-caption">
+				Excerpt from <code>prolog/zodiac.pl</code> &ndash; declarative facts for all 12 signs.
+			</p>
 
-<h3>5.2 Module 1 &ndash; Zodiac Profile Generation</h3>
-<pre>:- use_module(zodiac).
+			<h3>5.2 Module 1 &ndash; Zodiac Profile Generation</h3>
+			<pre>
+:- use_module(zodiac).
 
 % --- get_element/2 ---
 get_element(Sign, Element) :-
@@ -591,10 +1055,14 @@ generate_profile(Sign, Profile) :-
         modality_approach: ModalityDesc,
         planetary_influence: PlanetDesc
     }).</pre>
-<p class="code-caption">Excerpt from <code>prolog/zodiac_profile.pl</code> &ndash; every trait maps to a strength and a challenge, so profiles are derived, not hand-written per sign.</p>
+			<p class="code-caption">
+				Excerpt from <code>prolog/zodiac_profile.pl</code> &ndash; every trait maps to a strength
+				and a challenge, so profiles are derived, not hand-written per sign.
+			</p>
 
-<h3>5.3 Module 2 &ndash; Card Theme Classification &amp; Selection</h3>
-<pre>:- use_module(zodiac).
+			<h3>5.3 Module 2 &ndash; Card Theme Classification &amp; Selection</h3>
+			<pre>
+:- use_module(zodiac).
 :- use_module(tarot).
 :- use_module(zodiac_profile).
 
@@ -616,10 +1084,14 @@ card_eligible(Card, Context) :-
 select_eligible_cards(Context, AllEligible, Filtered) :-
     findall(C, card_eligible(C, Context), AllEligible),
     rank_cards(AllEligible, Context, Filtered).</pre>
-<p class="code-caption">Excerpt from <code>prolog/card_selection.pl</code> &ndash; each of the 78 cards is tagged with multiple themes, then filtered/ranked per question context.</p>
+			<p class="code-caption">
+				Excerpt from <code>prolog/card_selection.pl</code> &ndash; each of the 78 cards is tagged
+				with multiple themes, then filtered/ranked per question context.
+			</p>
 
-<h3>5.4 Module 4 &ndash; Weighted Synastry Scoring</h3>
-<pre>:- use_module(zodiac).
+			<h3>5.4 Module 4 &ndash; Weighted Synastry Scoring</h3>
+			<pre>
+:- use_module(zodiac).
 :- use_module(zodiac_profile).
 :- use_module(card_selection).
 
@@ -655,10 +1127,15 @@ element_compatibility_score(air, air, 80)   :- !.
 element_compatibility_score(earth, earth, 85) :- !.
 element_compatibility_score(fire, water, 22) :- !.  % most friction-prone pairing
 element_compatibility_score(water, fire, 22) :- !.</pre>
-<p class="code-caption">Excerpt from <code>prolog/synastry.pl</code> &ndash; a genuinely weighted, multi-factor scoring rule with cut-guarded lookup clauses. Thresholds and component scores shown are the rebalanced values (see &sect;4.5).</p>
+			<p class="code-caption">
+				Excerpt from <code>prolog/synastry.pl</code> &ndash; a genuinely weighted, multi-factor
+				scoring rule with cut-guarded lookup clauses. Thresholds and component scores shown are the
+				rebalanced values (see &sect;4.5).
+			</p>
 
-<h3>5.5 Entry Point and Module Loading</h3>
-<pre>:- use_module(zodiac).
+			<h3>5.5 Entry Point and Module Loading</h3>
+			<pre>
+:- use_module(zodiac).
 :- use_module(tarot).
 :- use_module(zodiac_profile).
 :- use_module(card_selection).
@@ -685,11 +1162,18 @@ zodiac_info(Sign, Info) :-
         ruling_planet: Planet, traits: Traits,
         date_range: DateRange, symbol: Symbol
     }.</pre>
-<p class="code-caption">Excerpt from <code>prolog/main.pl</code> &ndash; single load point for all 12 modules plus convenience queries used directly by <code>PrologService</code>.</p>
+			<p class="code-caption">
+				Excerpt from <code>prolog/main.pl</code> &ndash; single load point for all 12 modules plus
+				convenience queries used directly by <code>PrologService</code>.
+			</p>
 
-<h3>5.6 Reasoning Trace Format</h3>
-<p>Every module returns machine-readable trace entries the frontend renders as a step-by-step explanation of the inference:</p>
-<pre>[
+			<h3>5.6 Reasoning Trace Format</h3>
+			<p>
+				Every module returns machine-readable trace entries the frontend renders as a step-by-step
+				explanation of the inference:
+			</p>
+			<pre>
+[
   {
     "rule": "element(aries, fire)",
     "input": "aries",
@@ -697,77 +1181,166 @@ zodiac_info(Sign, Info) :-
     "explanation": "Fire element defines personality style"
   }
 ]</pre>
-</div>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 6. CURRENT LIMITATIONS -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-limitations">6. Current Limitations</h2>
-<ul>
-  <li><strong>Sun-sign only astrology.</strong> V1 computes only the Sun sign from a birth
-  date. Moon sign and Rising (Ascendant) sign require birth time and location and are
-  <em>not</em> calculated in the current version, even though <code>chart_profile/4</code>
-  already reserves fields for them.</li>
-  <li><strong>Western tropical zodiac boundaries only.</strong> Sidereal/Vedic zodiac
-  systems and alternative astrological traditions are out of scope.</li>
-  <li><strong>Static trait vocabulary.</strong> Strength/challenge phrasing is drawn from a
-  fixed <code>trait_strength/2</code> / <code>trait_challenge/2</code> table; it does not
-  adapt to combinations of traits beyond simple aggregation.</li>
-  <li><strong>LLM dependency for narrative depth.</strong> Rich, varied prose depends on
-  OpenRouter availability; the deterministic fallback is functionally correct but
-  noticeably more templated and repetitive.</li>
-  <li><strong>Single-language support.</strong> The knowledge base and generated content are
-  English-only; no localization layer exists yet.</li>
-  <li><strong>No user accounts / multi-tenant isolation.</strong> Reading history is stored
-  in a local SQLite database without authenticated, per-user separation.</li>
-  <li><strong>Compatibility model is symbolic, not empirical.</strong> The weighted scoring
-  formula encodes traditional astrological symbolism; it is not validated against
-  psychological or relationship-outcome data, and is presented purely as a reflective tool.</li>
-  <li><strong>Question classification is heuristic.</strong> Category detection uses
-  keyword/pattern-based NLP rather than a trained classifier, so ambiguous or multi-topic
-  questions can be mis-categorized.</li>
-</ul>
-</div>
+		<!-- ============================================================ -->
+		<!-- 6. CURRENT LIMITATIONS -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-limitations">6. Current Limitations</h2>
+			<ul>
+				<li>
+					<strong>Sun-sign only astrology.</strong> V1 computes only the Sun sign from a birth date.
+					Moon sign and Rising (Ascendant) sign require birth time and location and are
+					<em>not</em> calculated in the current version, even though
+					<code>chart_profile/4</code> already reserves fields for them.
+				</li>
+				<li>
+					<strong>Western tropical zodiac boundaries only.</strong> Sidereal/Vedic zodiac systems
+					and alternative astrological traditions are out of scope.
+				</li>
+				<li>
+					<strong>Static trait vocabulary.</strong> Strength/challenge phrasing is drawn from a
+					fixed <code>trait_strength/2</code> / <code>trait_challenge/2</code> table; it does not
+					adapt to combinations of traits beyond simple aggregation.
+				</li>
+				<li>
+					<strong>LLM dependency for narrative depth.</strong> Rich, varied prose depends on
+					OpenRouter availability; the deterministic fallback is functionally correct but noticeably
+					more templated and repetitive.
+				</li>
+				<li>
+					<strong>Single-language support.</strong> The knowledge base and generated content are
+					English-only; no localization layer exists yet.
+				</li>
+				<li>
+					<strong>No user accounts / multi-tenant isolation.</strong> Reading history is stored in a
+					local SQLite database without authenticated, per-user separation.
+				</li>
+				<li>
+					<strong>Compatibility model is symbolic, not empirical.</strong> The weighted scoring
+					formula encodes traditional astrological symbolism; it is not validated against
+					psychological or relationship-outcome data, and is presented purely as a reflective tool.
+				</li>
+				<li>
+					<strong>Question classification is heuristic.</strong> Category detection uses
+					keyword/pattern-based NLP rather than a trained classifier, so ambiguous or multi-topic
+					questions can be mis-categorized.
+				</li>
+			</ul>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 7. SYSTEM IMPLEMENTATION (UI DESIGN) -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-implementation">7. System Implementation (UI Design)</h2>
+		<!-- ============================================================ -->
+		<!-- 7. SYSTEM IMPLEMENTATION (UI DESIGN) -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-implementation">7. System Implementation (UI Design)</h2>
 
-<h3>7.1 Application Pages</h3>
-<table>
-  <thead><tr><th style="width:22%">Route</th><th>Purpose</th></tr></thead>
-  <tbody>
-    <tr><td><code>/dashboard</code></td><td>Landing overview &ndash; quick access to readings, horoscope, and recent history.</td></tr>
-    <tr><td><code>/zodiac</code></td><td>Browse all 12 signs; view element, modality, ruling planet, traits, strengths and challenges.</td></tr>
-    <tr><td><code>/birth-chart</code></td><td>Enter a birth date to resolve a Sun-sign profile.</td></tr>
-    <tr><td><code>/tarot</code></td><td>Browse the 78-card deck; view keywords and upright/reversed meanings.</td></tr>
-    <tr><td><code>/reading</code></td><td>Ask a question, then either let the app draw a recommended (or custom 1&ndash;10-card) spread at random, or hand-pick specific cards straight from the deck; view the AI-narrated interpretation either way.</td></tr>
-    <tr><td><code>/horoscope</code></td><td>Generate a themed daily horoscope from sign and mood.</td></tr>
-    <tr><td><code>/compatibility</code></td><td>Compare two zodiac signs and view the weighted score breakdown and explanation.</td></tr>
-    <tr><td><code>/chat</code></td><td>Conversational AI assistant grounded in Prolog facts and reading context.</td></tr>
-    <tr><td><code>/reasoning</code></td><td>Dedicated reasoning-trace explorer &ndash; visualizes the rule chain behind a result.</td></tr>
-    <tr><td><code>/history</code></td><td>Review, revisit, and delete past readings and chat sessions.</td></tr>
-    <tr><td><code>/analytics</code></td><td>Aggregate statistics across a user's reading history.</td></tr>
-    <tr><td><code>/scan</code></td><td>Auxiliary input/scan flow feeding into a reading.</td></tr>
-    <tr><td><code>/about</code></td><td>Project description and ethical framing.</td></tr>
-  </tbody>
-</table>
+			<h3>7.1 Application Pages</h3>
+			<table>
+				<thead>
+					<tr>
+						<th style="width: 22%">Route</th>
+						<th>Purpose</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr>
+						<td><code>/dashboard</code></td>
+						<td>
+							Landing overview &ndash; quick access to readings, horoscope, and recent history.
+						</td>
+					</tr>
+					<tr>
+						<td><code>/zodiac</code></td>
+						<td>
+							Browse all 12 signs; view element, modality, ruling planet, traits, strengths and
+							challenges.
+						</td>
+					</tr>
+					<tr>
+						<td><code>/birth-chart</code></td>
+						<td>Enter a birth date to resolve a Sun-sign profile.</td>
+					</tr>
+					<tr>
+						<td><code>/tarot</code></td>
+						<td>Browse the 78-card deck; view keywords and upright/reversed meanings.</td>
+					</tr>
+					<tr>
+						<td><code>/reading</code></td>
+						<td>
+							Ask a question, then either let the app draw a recommended (or custom 1&ndash;10-card)
+							spread at random, or hand-pick specific cards straight from the deck; view the
+							AI-narrated interpretation either way.
+						</td>
+					</tr>
+					<tr>
+						<td><code>/horoscope</code></td>
+						<td>Generate a themed daily horoscope from sign and mood.</td>
+					</tr>
+					<tr>
+						<td><code>/compatibility</code></td>
+						<td>Compare two zodiac signs and view the weighted score breakdown and explanation.</td>
+					</tr>
+					<tr>
+						<td><code>/chat</code></td>
+						<td>Conversational AI assistant grounded in Prolog facts and reading context.</td>
+					</tr>
+					<tr>
+						<td><code>/reasoning</code></td>
+						<td>
+							Dedicated reasoning-trace explorer &ndash; visualizes the rule chain behind a result.
+						</td>
+					</tr>
+					<tr>
+						<td><code>/history</code></td>
+						<td>Review, revisit, and delete past readings and chat sessions.</td>
+					</tr>
+					<tr>
+						<td><code>/analytics</code></td>
+						<td>Aggregate statistics across a user's reading history.</td>
+					</tr>
+					<tr>
+						<td><code>/scan</code></td>
+						<td>Auxiliary input/scan flow feeding into a reading.</td>
+					</tr>
+					<tr>
+						<td><code>/about</code></td>
+						<td>Project description and ethical framing.</td>
+					</tr>
+				</tbody>
+			</table>
 
-<h3>7.2 Key UI Components</h3>
-<ul>
-  <li><code>TarotCard</code> &ndash; renders card art, name, orientation, and meaning.</li>
-  <li><code>CardPicker</code> &ndash; searchable/filterable deck browser for manual card selection, with a reorderable selection tray (up to 10 cards) supporting per-card orientation toggling.</li>
-  <li><code>ZodiacBadge</code> / <code>ElementBadge</code> &ndash; compact visual tags for sign and element.</li>
-  <li><code>ReasoningStep</code> &ndash; renders one entry of a Prolog reasoning trace (rule, input, result, explanation).</li>
-  <li><code>LoadingSpinner</code>, <code>StarField</code>, <code>Navigation</code> &ndash; shared visual/interaction chrome.</li>
-</ul>
-<p>State is managed through dedicated Svelte stores &ndash; <code>Profile</code>, <code>Reading</code>, <code>Chat</code>, and <code>Loading</code> &ndash; with a typed API client that centralizes error handling for all backend calls.</p>
+			<h3>7.2 Key UI Components</h3>
+			<ul>
+				<li><code>TarotCard</code> &ndash; renders card art, name, orientation, and meaning.</li>
+				<li>
+					<code>CardPicker</code> &ndash; searchable/filterable deck browser for manual card
+					selection, with a reorderable selection tray (up to 10 cards) supporting per-card
+					orientation toggling.
+				</li>
+				<li>
+					<code>ZodiacBadge</code> / <code>ElementBadge</code> &ndash; compact visual tags for sign
+					and element.
+				</li>
+				<li>
+					<code>ReasoningStep</code> &ndash; renders one entry of a Prolog reasoning trace (rule,
+					input, result, explanation).
+				</li>
+				<li>
+					<code>LoadingSpinner</code>, <code>StarField</code>, <code>Navigation</code> &ndash;
+					shared visual/interaction chrome.
+				</li>
+			</ul>
+			<p>
+				State is managed through dedicated Svelte stores &ndash; <code>Profile</code>,
+				<code>Reading</code>, <code>Chat</code>, and <code>Loading</code> &ndash; with a typed API
+				client that centralizes error handling for all backend calls.
+			</p>
 
-<h3>7.3 REST API Surface</h3>
-<pre>GET  /api/health
+			<h3>7.3 REST API Surface</h3>
+			<pre>
+GET  /api/health
 GET  /api/zodiac
 GET  /api/zodiac/{sign}
 GET  /api/tarot
@@ -781,94 +1354,147 @@ POST /api/chat                { message, zodiac_sign, current_reading }
 GET    /api/history
 GET    /api/history/{id}
 DELETE /api/history/{id}</pre>
-<p class="code-caption">Base URL: <code>http://localhost:8000/api</code> (from <code>docs/api.md</code>).</p>
+			<p class="code-caption">
+				Base URL: <code>http://localhost:8000/api</code> (from <code>docs/api.md</code>).
+			</p>
 
-<h3>7.4 Backend Service Layer</h3>
-<p>
-FastAPI is organized into <code>api</code> (route handlers), <code>services</code>
-(<code>PrologService</code>, <code>OpenRouterService</code>, <code>TarotService</code>,
-<code>HoroscopeService</code>, <code>AnalyticsService</code>), <code>schemas</code>
-(Pydantic request/response models), <code>models</code>, and <code>database</code>
-(SQLite access). <code>PrologService</code> is the single bridge between Python and
-SWI-Prolog, exposing typed methods for every predicate in each of the four reasoning
-modules (e.g. <code>get_zodiac_profile</code>, <code>select_eligible_cards</code>,
-<code>analyze_reading</code>, <code>analyze_synastry</code>).</p>
+			<h3>7.4 Backend Service Layer</h3>
+			<p>
+				FastAPI is organized into <code>api</code> (route handlers),
+				<code>services</code> (<code>PrologService</code>, <code>OpenRouterService</code>,
+				<code>TarotService</code>, <code>HoroscopeService</code>, <code>AnalyticsService</code>),
+				<code>schemas</code> (Pydantic request/response models), <code>models</code>, and
+				<code>database</code> (SQLite access). <code>PrologService</code> is the single bridge
+				between Python and SWI-Prolog, exposing typed methods for every predicate in each of the
+				four reasoning modules (e.g. <code>get_zodiac_profile</code>,
+				<code>select_eligible_cards</code>, <code>analyze_reading</code>,
+				<code>analyze_synastry</code>).
+			</p>
 
-<h3>7.5 Visual/UX Design Notes</h3>
-<ul>
-  <li>Dark, star-field themed interface (via the <code>StarField</code> component) consistent with the astrology/tarot subject matter.</li>
-  <li>Reasoning is never hidden: every generated result links to a reasoning-trace view so users can see <em>why</em> the system produced that answer.</li>
-  <li>Responsive layout built with Tailwind CSS utility classes; component styles kept local to each Svelte component.</li>
-  <li>Card art is served through an image-resizing proxy (wsrv.nl) rather than linked directly to the source tarot API: the source serves full-resolution scans (&sim;1150&times;1900px, &sim;1.1MB each) for every card, which on a slow, congested, or metered network can stall or fail before a thumbnail-sized image ever needs that much data &ndash; the proxy re-encodes each card as a right-sized WebP (e.g. a 300px-wide thumbnail drops from &sim;1.1MB to &sim;45KB) and edge-caches it, which also incidentally routes around networks that block the source host directly.</li>
-</ul>
-</div>
+			<h3>7.5 Visual/UX Design Notes</h3>
+			<ul>
+				<li>
+					Dark, star-field themed interface (via the <code>StarField</code> component) consistent
+					with the astrology/tarot subject matter.
+				</li>
+				<li>
+					Reasoning is never hidden: every generated result links to a reasoning-trace view so users
+					can see <em>why</em> the system produced that answer.
+				</li>
+				<li>
+					Responsive layout built with Tailwind CSS utility classes; component styles kept local to
+					each Svelte component.
+				</li>
+				<li>
+					Card art is served through an image-resizing proxy (wsrv.nl) rather than linked directly
+					to the source tarot API: the source serves full-resolution scans (&sim;1150&times;1900px,
+					&sim;1.1MB each) for every card, which on a slow, congested, or metered network can stall
+					or fail before a thumbnail-sized image ever needs that much data &ndash; the proxy
+					re-encodes each card as a right-sized WebP (e.g. a 300px-wide thumbnail drops from
+					&sim;1.1MB to &sim;45KB) and edge-caches it, which also incidentally routes around
+					networks that block the source host directly.
+				</li>
+			</ul>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 8. CONCLUSION -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-conclusion">8. Conclusion</h2>
-<p>
-AstroLogic demonstrates that a large, traditionally free-text domain &ndash; astrology and
-tarot &ndash; can be modeled as a structured, rule-based reasoning system. By encoding zodiac
-and tarot knowledge as declarative Prolog facts and layering four purpose-built reasoning
-modules on top (profile derivation, card selection, reading analysis, and synastry
-scoring), the project produces results that are <strong>explainable and reproducible</strong>:
-every output can be traced back to the specific facts and rules that generated it. The
-LLM is deliberately confined to natural-language presentation, which keeps the system's
-actual "intelligence" auditable rather than opaque, and provides a robust deterministic
-fallback path. Combined with a modern SvelteKit interface and a documented FastAPI backend,
-AstroLogic delivers a coherent, end-to-end example of symbolic AI applied to an engaging,
-user-facing product &ndash; and shows in practice how classical logic-programming techniques
-(fact bases, Horn-clause rules, weighted scoring, cut-guarded lookup) remain a powerful,
-transparent complement to modern generative AI.
-</p>
-</div>
+		<!-- ============================================================ -->
+		<!-- 8. CONCLUSION -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-conclusion">8. Conclusion</h2>
+			<p>
+				AstroLogic demonstrates that a large, traditionally free-text domain &ndash; astrology and
+				tarot &ndash; can be modeled as a structured, rule-based reasoning system. By encoding
+				zodiac and tarot knowledge as declarative Prolog facts and layering four purpose-built
+				reasoning modules on top (profile derivation, card selection, reading analysis, and synastry
+				scoring), the project produces results that are
+				<strong>explainable and reproducible</strong>: every output can be traced back to the
+				specific facts and rules that generated it. The LLM is deliberately confined to
+				natural-language presentation, which keeps the system's actual "intelligence" auditable
+				rather than opaque, and provides a robust deterministic fallback path. Combined with a
+				modern SvelteKit interface and a documented FastAPI backend, AstroLogic delivers a coherent,
+				end-to-end example of symbolic AI applied to an engaging, user-facing product &ndash; and
+				shows in practice how classical logic-programming techniques (fact bases, Horn-clause rules,
+				weighted scoring, cut-guarded lookup) remain a powerful, transparent complement to modern
+				generative AI.
+			</p>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 9. FURTHER EXTENSION -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-extension">9. Further Extension</h2>
-<ul>
-  <li><strong>Full natal chart support.</strong> Extend <code>chart_profile/4</code> with
-  ephemeris data to compute Moon sign, Rising sign, and planetary house placements from
-  birth time and location.</li>
-  <li><strong>Trained question classifier.</strong> Replace the heuristic category detector
-  with a lightweight trained NLP model for more accurate spread recommendation.</li>
-  <li><strong>Personalization over history.</strong> Use <code>history_analysis.pl</code>
-  more extensively to surface long-term patterns (recurring themes, sign trends) back to
-  the user through the Analytics page.</li>
-  <li><strong>Multi-language support.</strong> Localize both the Prolog trait/theme text and
-  the LLM prompts for non-English users.</li>
-  <li><strong>User accounts and multi-tenancy.</strong> Add authentication so reading
-  history is securely scoped per user.</li>
-  <li><strong>Alternative zodiac systems.</strong> Add optional sidereal/Vedic rule sets
-  alongside the existing Western tropical rules.</li>
-  <li><strong>Expanded compatibility model.</strong> Incorporate additional symbolic factors
-  (e.g. house overlays, aspect angles) once full chart data is available.</li>
-  <li><strong>Offline/edge deployment.</strong> Package the Prolog engine and a small local
-  LLM together for an offline-capable version of the app.</li>
-</ul>
-</div>
+		<!-- ============================================================ -->
+		<!-- 9. FURTHER EXTENSION -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-extension">9. Further Extension</h2>
+			<ul>
+				<li>
+					<strong>Full natal chart support.</strong> Extend <code>chart_profile/4</code> with
+					ephemeris data to compute Moon sign, Rising sign, and planetary house placements from
+					birth time and location.
+				</li>
+				<li>
+					<strong>Trained question classifier.</strong> Replace the heuristic category detector with
+					a lightweight trained NLP model for more accurate spread recommendation.
+				</li>
+				<li>
+					<strong>Personalization over history.</strong> Use <code>history_analysis.pl</code> more
+					extensively to surface long-term patterns (recurring themes, sign trends) back to the user
+					through the Analytics page.
+				</li>
+				<li>
+					<strong>Multi-language support.</strong> Localize both the Prolog trait/theme text and the
+					LLM prompts for non-English users.
+				</li>
+				<li>
+					<strong>User accounts and multi-tenancy.</strong> Add authentication so reading history is
+					securely scoped per user.
+				</li>
+				<li>
+					<strong>Alternative zodiac systems.</strong> Add optional sidereal/Vedic rule sets
+					alongside the existing Western tropical rules.
+				</li>
+				<li>
+					<strong>Expanded compatibility model.</strong> Incorporate additional symbolic factors
+					(e.g. house overlays, aspect angles) once full chart data is available.
+				</li>
+				<li>
+					<strong>Offline/edge deployment.</strong> Package the Prolog engine and a small local LLM
+					together for an offline-capable version of the app.
+				</li>
+			</ul>
+		</div>
 
-<!-- ============================================================ -->
-<!-- 10. REFERENCES -->
-<!-- ============================================================ -->
-<div class="section">
-<h2 id="sec-references">10. References</h2>
-<ol>
-  <li>SWI-Prolog Reference Manual. <em>SWI-Prolog Development Team.</em> https://www.swi-prolog.org/pldoc/doc_for?object=manual</li>
-  <li>Bratko, I. <em>PROLOG Programming for Artificial Intelligence</em>, 4th ed. Pearson, 2011.</li>
-  <li>Russell, S., &amp; Norvig, P. <em>Artificial Intelligence: A Modern Approach</em>, 4th ed. Pearson, 2020.</li>
-  <li>FastAPI Documentation. https://fastapi.tiangolo.com/</li>
-  <li>SvelteKit Documentation. https://svelte.dev/docs/kit</li>
-  <li>OpenRouter API Documentation. https://openrouter.ai/docs</li>
-  <li>AstroLogic Project Documentation &ndash; <code>docs/architecture.md</code>, <code>docs/prolog-reasoning.md</code>, <code>docs/ai-integration.md</code>, <code>docs/api.md</code>, <code>docs/database.md</code> (internal project repository).</li>
-</ol>
-</div>
+		<!-- ============================================================ -->
+		<!-- 10. REFERENCES -->
+		<!-- ============================================================ -->
+		<div class="section">
+			<h2 id="sec-references">10. References</h2>
+			<ol>
+				<li>
+					SWI-Prolog Reference Manual.
+					<em>SWI-Prolog Development Team.</em>
+					https://www.swi-prolog.org/pldoc/doc_for?object=manual
+				</li>
+				<li>
+					Bratko, I. <em>PROLOG Programming for Artificial Intelligence</em>, 4th ed. Pearson, 2011.
+				</li>
+				<li>
+					Russell, S., &amp; Norvig, P. <em>Artificial Intelligence: A Modern Approach</em>, 4th ed.
+					Pearson, 2020.
+				</li>
+				<li>FastAPI Documentation. https://fastapi.tiangolo.com/</li>
+				<li>SvelteKit Documentation. https://svelte.dev/docs/kit</li>
+				<li>OpenRouter API Documentation. https://openrouter.ai/docs</li>
+				<li>
+					AstroLogic Project Documentation &ndash; <code>docs/architecture.md</code>,
+					<code>docs/prolog-reasoning.md</code>, <code>docs/ai-integration.md</code>,
+					<code>docs/api.md</code>, <code>docs/database.md</code> (internal project repository).
+				</li>
+			</ol>
+		</div>
 
-<div class="footer-note">AstroLogic &mdash; CST-4104 Artificial Intelligence Project Report &mdash; University of Information Technology</div>
-
-</body>
+		<div class="footer-note">
+			AstroLogic &mdash; CST-4104 Artificial Intelligence Project Report &mdash; University of
+			Information Technology
+		</div>
+	</body>
 </html>

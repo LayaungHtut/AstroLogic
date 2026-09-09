@@ -94,7 +94,8 @@
 				<div class="glass-card mb-6 flex flex-col items-center gap-3 p-6 text-center">
 					<ZodiacBadge sign={currentProfile.zodiac_sign} size="lg" />
 					<h2 class="font-headline text-xl font-bold capitalize">
-						{getZodiacTranslation(currentProfile.zodiac_sign, $locale).name || currentProfile.zodiac_sign}
+						{getZodiacTranslation(currentProfile.zodiac_sign, $locale).name ||
+							currentProfile.zodiac_sign}
 					</h2>
 					<p class="text-sm text-on-surface-variant">{$t('horoscope.howFeeling')}</p>
 				</div>
@@ -189,9 +190,20 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">bolt</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-primary">{$t('horoscope.guidance')}</h3>
+						<h3 class="font-headline text-sm font-semibold text-primary">
+							{$t('horoscope.guidance')}
+						</h3>
 					</div>
-					<MarkdownText content={formatHoroscopeGuidance(result.guidance, result.zodiac_sign, result.theme, result.mood, $locale)} class="text-sm text-on-surface/80" />
+					<MarkdownText
+						content={formatHoroscopeGuidance(
+							result.guidance,
+							result.zodiac_sign,
+							result.theme,
+							result.mood,
+							$locale
+						)}
+						class="text-sm text-on-surface/80"
+					/>
 				</div>
 
 				<div class="glass-card glass-card-hover flex flex-col gap-3 p-5">
@@ -201,9 +213,14 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">dark_mode</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-secondary">{$t('horoscope.reflection')}</h3>
+						<h3 class="font-headline text-sm font-semibold text-secondary">
+							{$t('horoscope.reflection')}
+						</h3>
 					</div>
-					<MarkdownText content={formatHoroscopeReflection(result.reflection, result.theme, $locale)} class="text-sm text-on-surface/80 italic" />
+					<MarkdownText
+						content={formatHoroscopeReflection(result.reflection, result.theme, $locale)}
+						class="text-sm text-on-surface/80 italic"
+					/>
 				</div>
 
 				<div class="glass-card glass-card-hover flex flex-col gap-3 p-5">
@@ -213,9 +230,14 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-tertiary">{$t('horoscope.opportunity')}</h3>
+						<h3 class="font-headline text-sm font-semibold text-tertiary">
+							{$t('horoscope.opportunity')}
+						</h3>
 					</div>
-					<MarkdownText content={formatHoroscopeOpportunity(result.opportunity, result.theme, $locale)} class="text-sm text-on-surface/80" />
+					<MarkdownText
+						content={formatHoroscopeOpportunity(result.opportunity, result.theme, $locale)}
+						class="text-sm text-on-surface/80"
+					/>
 				</div>
 
 				<div class="glass-card glass-card-hover flex flex-col gap-3 p-5">
@@ -225,9 +247,14 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">shield</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-error">{$t('horoscope.caution')}</h3>
+						<h3 class="font-headline text-sm font-semibold text-error">
+							{$t('horoscope.caution')}
+						</h3>
 					</div>
-					<MarkdownText content={formatHoroscopeCaution(result.caution, result.theme, result.element, $locale)} class="text-sm text-on-surface/80" />
+					<MarkdownText
+						content={formatHoroscopeCaution(result.caution, result.theme, result.element, $locale)}
+						class="text-sm text-on-surface/80"
+					/>
 				</div>
 			</div>
 

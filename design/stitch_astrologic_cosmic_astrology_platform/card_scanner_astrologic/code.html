@@ -1,568 +1,1329 @@
-<!DOCTYPE html>
+<!doctype html>
 
-<html class="dark" lang="en"><head><meta charset="utf-8"/><meta content="width=device-width, initial-scale=1.0" name="viewport"/><link href="https://fonts.googleapis.com" rel="preconnect"/><link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/><link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet"/><link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" rel="stylesheet"/>
-<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/><style>@layer base { html, body { margin: 0; padding: 0; } body { overscroll-behavior: none; } main > :first-child { margin-top: 0 !important; } main > :last-child { margin-bottom: 0 !important; } } ::-webkit-scrollbar { display: none; } .cosmic-stars { background-image: radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 60px 90px, #acedff, rgba(0,0,0,0)), radial-gradient(1px 1px at 150px 70px, #d2bbff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 210px 180px, #ffffff, rgba(0,0,0,0)), radial-gradient(2px 2px at 320px 120px, #4cd7f6, rgba(0,0,0,0)), radial-gradient(1px 1px at 400px 240px, #ffffff, rgba(0,0,0,0)), radial-gradient(1.5px 1.5px at 480px 60px, #cebdff, rgba(0,0,0,0)); background-repeat: repeat; background-size: 550px 350px; }</style><script src="https://cdn.tailwindcss.com"></script><script id="tailwind-config">tailwind.config = { darkMode: "class", theme: { extend: { "colors": { "inverse-primary": "#732ee4", "surface-variant": "#333345", "inverse-surface": "#e3e0f8", "surface-container-highest": "#333345", "tertiary-fixed": "#e8ddff", "on-surface": "#e3e0f8", "surface-dim": "#121222", "on-tertiary-container": "#ebe1ff", "on-surface-variant": "#ccc3d8", "on-secondary-fixed": "#001f26", "secondary-fixed": "#acedff", "primary": "#d2bbff", "surface-container-high": "#29283a", "primary-container": "#7c3aed", "on-tertiary": "#381385", "surface-tint": "#d2bbff", "on-primary": "#3f008e", "primary-fixed": "#eaddff", "tertiary": "#cebdff", "secondary": "#4cd7f6", "on-primary-fixed": "#25005a", "on-secondary-container": "#00424e", "on-primary-fixed-variant": "#5a00c6", "secondary-container": "#03b5d3", "inverse-on-surface": "#2f2f40", "on-secondary": "#003640", "surface-container-low": "#1a1a2b", "secondary-fixed-dim": "#4cd7f6", "surface-container": "#1e1e2f", "surface-container-lowest": "#0c0c1d", "on-tertiary-fixed-variant": "#4f319c", "error": "#ffb4ab", "on-secondary-fixed-variant": "#004e5c", "on-primary-container": "#ede0ff", "tertiary-fixed-dim": "#cebdff", "on-error-container": "#ffdad6", "outline": "#958da1", "surface": "#121222", "background": "#121222", "error-container": "#93000a", "on-tertiary-fixed": "#21005e", "on-error": "#690005", "outline-variant": "#4a4455", "primary-fixed-dim": "#d2bbff", "on-background": "#e3e0f8", "tertiary-container": "#6f54bf", "surface-bright": "#38374a" }, "borderRadius": { "DEFAULT": "0.25rem", "lg": "0.5rem", "xl": "0.75rem", "full": "9999px" }, "spacing": { "space-lg": "1.5rem", "space-2xs": "0.25rem", "space-xl": "2rem", "gutter-mobile": "1rem", "space-2xl": "3rem", "margin-mobile": "1.25rem", "gutter-desktop": "1.5rem", "space-sm": "0.75rem", "space-md": "1rem", "space-3xl": "4rem", "margin-desktop": "3rem", "space-xs": "0.5rem" }, "fontFamily": { "headline-sm": [ "sora" ], "body-md": [ "inter" ], "display-lg": [ "sora" ], "body-sm": [ "inter" ], "body-lg": [ "inter" ], "headline-md": [ "sora" ], "label-code-sm": [ "jetbrainsMono" ], "label-code-md": [ "jetbrainsMono" ], "headline-lg-mobile": [ "sora" ], "headline-lg": [ "sora" ], "display-lg-mobile": [ "sora" ], "pill-tag": [ "jetbrainsMono" ] }, "fontSize": { "headline-sm": [ "18px", { "lineHeight": "26px", "fontWeight": "600" } ], "body-md": [ "14px", { "lineHeight": "22px", "fontWeight": "400" } ], "display-lg": [ "48px", { "lineHeight": "56px", "fontWeight": "600" } ], "body-sm": [ "12px", { "lineHeight": "18px", "fontWeight": "400" } ], "body-lg": [ "16px", { "lineHeight": "26px", "fontWeight": "400" } ], "headline-md": [ "22px", { "lineHeight": "30px", "fontWeight": "500" } ], "label-code-sm": [ "11px", { "lineHeight": "16px", "fontWeight": "400" } ], "label-code-md": [ "13px", { "lineHeight": "18px", "fontWeight": "500" } ], "headline-lg-mobile": [ "24px", { "lineHeight": "32px", "fontWeight": "500" } ], "headline-lg": [ "32px", { "lineHeight": "40px", "fontWeight": "500" } ], "display-lg-mobile": [ "32px", { "lineHeight": "40px", "fontWeight": "600" } ], "pill-tag": [ "10px", { "lineHeight": "12px", "fontWeight": "600" } ] } } } };</script></head><body class="bg-background font-body-md text-body-md text-on-surface min-h-screen relative selection:bg-primary-container selection:text-on-primary-container"><div class="fixed inset-0 pointer-events-none cosmic-stars opacity-40 z-0"></div><header class="fixed top-0 w-full z-50 bg-surface-container-lowest/80 backdrop-blur-md border-b border-outline-variant/30 shadow-[0_4px_30px_rgba(0,0,0,0.5)]"><div class="h-16 max-w-7xl mx-auto px-6 lg:px-12 flex items-center justify-between gap-4"><div class="flex items-center gap-3 shrink-0"><img alt="AstroLogic Emblem" class="h-8 w-auto object-contain" src="https://lh3.googleusercontent.com/aida/AEtjO1VfiGozCCUXO_8FqxqveKQFHzchohl1tff_8RcvnqMh3SFjAQc86Wx-ByhvqHskYokS4OB6j2jNNhJhl-e8Pk4YIZdsQPoxn1tqh-A0pK-5rTu3UGqwhL6WVtvilbjsxP_b-L-mlb9Dml2htrsFjjQPHEyC9Vxt7qZvkIHGzis7Nno7y1Oh2D0tg40Hubswd-KVfwH4U93amMSawtkeZck8YBKs0cAjifYCxm94iZoTYiLcmN3sl8ByPrf0"/><a class="font-headline-sm text-headline-sm tracking-tight bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text text-transparent hover:opacity-90 transition-opacity" data-path="home" href="#">AstroLogic</a></div><nav class="hidden xl:flex items-center gap-1 overflow-x-auto py-1" data-active-classes="bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]"><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="home" href="#">Home</a><a aria-current="page" class="px-3 py-1.5 rounded-full transition-all bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]" data-path="dashboard" href="#">Dashboard</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tarot-reading" href="#">Tarot Reading</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="birth-chart" href="#">Birth Chart</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="zodiac" href="#">Zodiac</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="tarot-deck" href="#">Tarot Deck</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="ai-guide" href="#">AI Guide</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="compatibility" href="#">Compatibility</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="horoscope" href="#">Horoscope</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="card-scanner" href="#">Card Scanner</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="history" href="#">History</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="analytics" href="#">Analytics</a><a class="px-3 py-1.5 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-all" data-path="about" href="#">About</a></nav><div class="flex items-center gap-3 shrink-0"><button class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-sm text-body-sm font-medium shadow-[0_0_20px_rgba(124,58,237,0.35)] hover:shadow-[0_0_24px_rgba(76,215,246,0.5)] transition-all" type="button"><span class="material-symbols-outlined text-base">auto_awesome</span><span>New Reading</span></button><button aria-label="Notifications" class="relative p-2 rounded-full text-on-surface-variant hover:text-on-surface hover:bg-surface-container-high transition-colors" type="button"><span class="material-symbols-outlined">notifications</span><span class="absolute top-1.5 right-1.5 w-2 h-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6]"></span></button><div class="relative p-0.5 rounded-full bg-gradient-to-tr from-primary via-secondary to-tertiary shadow-[0_0_12px_rgba(206,189,255,0.4)]"><img alt="Profile" class="w-8 h-8 rounded-full object-cover block" src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSV7G4_DEeDlwa2Rh3F3KalyNxpnNh7UTQTXyBW9QwReJ4keNr8GY4iLIsgogUWE9-aDhso5fQFeWClly8lXyAWfvNKne5azfUFMyJjxd_-X2cFNicdglSfrTRa4o2J1ywBVzT0fu8-RdywOAvjLI4K-k7wyPoAOQfTvGUrV7RaltIj9nCHAAeDrg_ZWFTnWfnVVVDErtiAFPC26CjiZHN0cMgTKO2aBPLI9Zv9SBXHTyROhjCeM7Ppw"/></div></div></div></header><main class="relative z-10 w-full pt-16 bg-transparent"><div class="max-w-7xl mx-auto px-6 lg:px-12 py-8"><div class="flex flex-col w-full">
-<!-- Dynamic Atmospheric Glow Orbs -->
-<div class="relative w-full overflow-hidden">
-<div class="absolute -top-24 -left-20 w-96 h-96 rounded-full bg-primary-container/20 blur-[120px] pointer-events-none"></div>
-<div class="absolute top-1/3 -right-24 w-80 h-80 rounded-full bg-secondary-container/20 blur-[110px] pointer-events-none"></div>
-<div class="absolute -bottom-32 left-1/3 w-[500px] h-72 rounded-full bg-tertiary-container/15 blur-[130px] pointer-events-none"></div>
-<!-- Header Section -->
-<section class="relative z-10 pt-4 pb-8 flex flex-col md:flex-row md:items-end justify-between gap-6">
-<div class="space-y-2 max-w-3xl">
-<div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/60 backdrop-blur-md shadow-sm">
-<span class="w-1.5 h-1.5 rounded-full bg-secondary animate-ping"></span>
-<span class="font-pill-tag text-pill-tag uppercase text-secondary tracking-widest">Optical Telemetry v4.8 • Prolog Vision Active</span>
-</div>
-<h1 class="font-headline-lg text-headline-lg text-on-surface tracking-tight bg-gradient-to-r from-on-surface via-primary to-secondary bg-clip-text text-transparent">
-          Autonomous Card Scanner &amp; Computer Vision Array
-        </h1>
-<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-          Drop a photograph or scan of physical tarot cards to extract identity, orientation, confidence metrics, and deterministic symbolic readings in real time.
-        </p>
-</div>
-<!-- Quick Status Widget -->
-<div class="flex items-center gap-3 shrink-0 bg-surface-container-low/70 backdrop-blur-md px-4 py-2.5 rounded-xl shadow-md">
-<div class="p-2 rounded-lg bg-surface-container-high text-secondary">
-<span class="material-symbols-outlined text-lg">document_scanner</span>
-</div>
-<div class="flex flex-col">
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase tracking-wider">Neural Sensor Model</span>
-<span class="font-label-code-md text-label-code-md text-on-surface font-medium">Arcana-ResNet-101 (Calibrated)</span>
-</div>
-</div>
-</section>
-<!-- Main Workspace Bento Layout -->
-<div class="relative z-10 grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
-<!-- Left Column: Input Array & Calibration Controls (5 cols) -->
-<div class="lg:col-span-5 flex flex-col gap-6">
-<!-- Interactive Scanner Drag & Drop Reticle Box -->
-<div class="relative group bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-6 shadow-xl transition-all duration-300" id="dropZoneContainer">
-<!-- Outer holographic neon ambient glow on hover -->
-<div class="absolute inset-0 rounded-xl bg-gradient-to-b from-primary-container/10 via-transparent to-secondary-container/10 pointer-events-none"></div>
-<div class="flex items-center justify-between mb-4">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary text-sm">filter_center_focus</span>
-<span class="font-label-code-md text-label-code-md uppercase tracking-wider text-secondary">Optical Aperture</span>
-</div>
-<div class="flex items-center gap-1.5 font-label-code-sm text-label-code-sm text-on-surface-variant">
-<span class="inline-block w-2 h-2 rounded-full bg-secondary"></span>
-<span>SPECTRAL READ: READY</span>
-</div>
-</div>
-<!-- Drag and Drop Canvas Area -->
-<div class="relative overflow-hidden rounded-lg bg-surface-container-lowest/90 p-8 flex flex-col items-center justify-center text-center cursor-pointer min-h-[360px] group-hover:bg-surface-container-lowest/70 transition-all duration-300" id="dropZone">
-<!-- Reticle Target Lines SVG -->
-<svg class="absolute inset-0 w-full h-full pointer-events-none opacity-40 group-hover:opacity-75 transition-opacity" preserveaspectratio="none" viewbox="0 0 400 360">
-<defs>
-<lineargradient id="neonReticle" x1="0%" x2="100%" y1="0%" y2="100%">
-<stop offset="0%" stop-color="#7c3aed" stop-opacity="0.8"></stop>
-<stop offset="50%" stop-color="#4cd7f6" stop-opacity="0.4"></stop>
-<stop offset="100%" stop-color="#cebdff" stop-opacity="0.8"></stop>
-</lineargradient>
-</defs>
-<!-- Framing Corners -->
-<path d="M 20 50 L 20 20 L 50 20" fill="none" stroke="url(#neonReticle)" stroke-width="2"></path>
-<path d="M 380 50 L 380 20 L 350 20" fill="none" stroke="url(#neonReticle)" stroke-width="2"></path>
-<path d="M 20 310 L 20 340 L 50 340" fill="none" stroke="url(#neonReticle)" stroke-width="2"></path>
-<path d="M 380 310 L 380 340 L 350 340" fill="none" stroke="url(#neonReticle)" stroke-width="2"></path>
-<!-- Crosshairs in Center -->
-<line stroke="#4cd7f6" stroke-dasharray="3 3" stroke-width="1" x1="180" x2="220" y1="180" y2="180"></line>
-<line stroke="#4cd7f6" stroke-dasharray="3 3" stroke-width="1" x1="200" x2="200" y1="160" y2="200"></line>
-<circle class="animate-spin" cx="200" cy="180" fill="none" r="48" stroke="#7c3aed" stroke-dasharray="4 4" stroke-width="1" style="transform-origin: 200px 180px; animation-duration: 25s;"></circle>
-</svg>
-<!-- Holographic Beam Pulse Scan Line -->
-<div class="absolute left-0 right-0 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent shadow-[0_0_12px_#4cd7f6] opacity-0 transition-opacity duration-300 pointer-events-none" id="scannerLaser"></div>
-<!-- Idle Upload Graphics & Text -->
-<div class="relative z-10 flex flex-col items-center gap-3" id="dropZoneContent">
-<div class="relative w-16 h-16 rounded-full bg-gradient-to-tr from-primary-container/40 to-secondary-container/40 flex items-center justify-center text-secondary shadow-lg group-hover:scale-110 transition-transform duration-300">
-<span class="material-symbols-outlined text-3xl">add_a_photo</span>
-<span class="absolute -inset-1 rounded-full bg-secondary/15 animate-ping"></span>
-</div>
-<div class="mt-2 space-y-1">
-<p class="font-headline-sm text-headline-sm text-on-surface">Feed Physical Arcana Card</p>
-<p class="font-body-sm text-body-sm text-on-surface-variant max-w-xs">
-                  Drag &amp; drop high-resolution photo, capture via optical webcam, or inspect files
-                </p>
-</div>
-<div class="mt-3 flex items-center gap-2">
-<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">RAW</span>
-<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">PNG</span>
-<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">JPEG</span>
-<span class="px-2.5 py-1 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">WEBP</span>
-</div>
-<input accept="image/*" class="hidden" id="fileInput" type="file"/>
-<button class="mt-2 px-5 py-2 rounded-full bg-surface-container-high hover:bg-surface-variant text-primary font-body-sm text-body-sm font-medium transition-colors" onclick="document.getElementById('fileInput').click()" type="button">
-                Browse Files
-              </button>
-</div>
-</div>
-<!-- Quick Test / Benchmark Controls -->
-<div class="mt-4 pt-4 flex flex-col sm:flex-row items-center justify-between gap-3">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-on-surface-variant text-base">batch_prediction</span>
-<span class="font-body-sm text-body-sm text-on-surface-variant">Benchmark Library:</span>
-</div>
-<div class="flex items-center gap-2 w-full sm:w-auto">
-<button class="w-full sm:w-auto px-4 py-1.5 rounded-full bg-primary-container/20 hover:bg-primary-container/35 text-primary-fixed font-label-code-sm text-label-code-sm transition-all flex items-center justify-center gap-2 shadow-sm" id="loadSampleBtn" type="button">
-<span class="material-symbols-outlined text-sm">stars</span>
-<span>Load Sample: The Star</span>
-</button>
-<button class="p-1.5 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface-variant transition-colors shrink-0" id="reScanBtn" title="Recalibrate Vision Stream" type="button">
-<span class="material-symbols-outlined text-base">autorenew</span>
-</button>
-</div>
-</div>
-</div>
-<!-- Computer Vision Diagnostic Terminal -->
-<div class="bg-surface-container-lowest/80 backdrop-blur-xl rounded-xl p-5 shadow-lg flex flex-col gap-3">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2 font-label-code-sm text-label-code-sm text-secondary tracking-wider">
-<span class="w-2 h-2 rounded-full bg-secondary animate-pulse"></span>
-<span>CV LOG // INFERENCE PIPELINE</span>
-</div>
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Latency: 41ms</span>
-</div>
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant/90 space-y-1.5 max-h-36 overflow-y-auto pr-1">
-<div class="flex items-start gap-2">
-<span class="text-tertiary">[03:14:02.109]</span>
-<span>Calibrating lens distortion matrix &amp; luminance curves...</span>
-</div>
-<div class="flex items-start gap-2">
-<span class="text-tertiary">[03:14:02.122]</span>
-<span>Applying Laplacian edge operator: 4 bounding vertices identified.</span>
-</div>
-<div class="flex items-start gap-2">
-<span class="text-secondary">[03:14:02.138]</span>
-<span>Orthogonal transformation applied. Aspect ratio normalized to 1:1.72.</span>
-</div>
-<div class="flex items-start gap-2">
-<span class="text-primary">[03:14:02.150]</span>
-<span>Archetype matched: Major Arcana XVII (L1 distance: 0.0054). Orientation upright confirmed.</span>
-</div>
-</div>
-</div>
-<!-- Optical Environmental Parameters Card -->
-<div class="bg-surface-container-low/60 backdrop-blur-md rounded-xl p-5 shadow-sm space-y-4">
-<div class="flex items-center justify-between">
-<span class="font-body-md text-body-md text-on-surface font-medium">Environmental Capture Settings</span>
-<span class="material-symbols-outlined text-on-surface-variant text-base">tune</span>
-</div>
-<div class="grid grid-cols-2 gap-3">
-<div class="p-3 rounded-lg bg-surface-container-high/40">
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">Lighting Vector</div>
-<div class="font-label-code-md text-label-code-md text-on-surface font-semibold mt-1">45° Diffused Solar</div>
-</div>
-<div class="p-3 rounded-lg bg-surface-container-high/40">
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">Card Deck Type</div>
-<div class="font-label-code-md text-label-code-md text-on-surface font-semibold mt-1">Rider-Waite-Smith</div>
-</div>
-<div class="p-3 rounded-lg bg-surface-container-high/40">
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">Surface Reflection</div>
-<div class="font-label-code-md text-label-code-md text-secondary font-semibold mt-1">&lt; 3.2% (Polarized)</div>
-</div>
-<div class="p-3 rounded-lg bg-surface-container-high/40">
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">Prolog Rule Base</div>
-<div class="font-label-code-md text-label-code-md text-primary font-semibold mt-1">Hermetic Axioms v2</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Right Column: Vision Telemetry Analysis Card & Synthesis (7 cols) -->
-<div class="lg:col-span-7 flex flex-col gap-6">
-<!-- Top Telemetry Card with Deep Glass & Edge Gradients -->
-<div class="relative bg-surface-container-low/90 backdrop-blur-2xl rounded-xl p-6 shadow-2xl overflow-hidden">
-<!-- Subtle Top Highlight Flare -->
-<div class="absolute top-0 left-0 right-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-50"></div>
-<!-- Header of Analysis -->
-<div class="flex flex-col sm:flex-row sm:items-center justify-between pb-6 gap-4">
-<div class="flex items-center gap-4">
-<div class="w-14 h-14 rounded-xl bg-gradient-to-br from-primary-container to-secondary-container flex items-center justify-center text-on-primary font-headline-md text-headline-md shadow-lg shrink-0">
-                XVII
-              </div>
-<div>
-<div class="flex items-center gap-2">
-<h2 class="font-headline-md text-headline-md text-on-surface font-semibold">The Star</h2>
-<span class="px-2.5 py-0.5 rounded-full bg-secondary-container/20 text-secondary font-label-code-sm text-label-code-sm uppercase">Major Arcana</span>
-</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant">
-                  Calculated Archetype ID: <span class="font-label-code-sm text-label-code-sm text-primary">TAROT_MAJ_17_STAR</span>
-</p>
-</div>
-</div>
-<!-- Orientation Pill Tag -->
-<div class="flex flex-col sm:items-end">
-<div class="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-secondary/10 text-secondary font-label-code-md text-label-code-md shadow-sm">
-<span class="material-symbols-outlined text-base">vertical_align_top</span>
-<span>Upright Orientation</span>
-</div>
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-1">Confidence: <span class="text-secondary font-semibold">99.4%</span></span>
-</div>
-</div>
-<!-- Keypoint Heatmap & Visual Telemetry Inspection Matrix -->
-<div class="grid grid-cols-1 md:grid-cols-12 gap-5 pt-2">
-<!-- Visual Card Representation with Heatmap HUD -->
-<div class="md:col-span-6 flex flex-col items-center">
-<div class="relative w-full max-w-[260px] aspect-[2/3.4] rounded-xl overflow-hidden shadow-2xl bg-surface-container-lowest flex items-center justify-center">
-<!-- Card Image Placeholder with Rich Visual Alt Prompt -->
-<img class="w-full h-full object-cover" data-alt="Mystical tarot card The Star in ethereal cosmic style. A glowing celestial maiden pouring crystalline water from two golden urns into a dark sapphire reflecting pool and onto lush violet moss. Brilliant eight-pointed cosmic diamond star radiating cyan light overhead surrounded by seven smaller lavender constellations. Intricate celestial observatory aesthetic with deep navy shadows and glowing neon highlights." id="activeCardImage" src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhsOIW4K56FwNEcuYPewLm67Y2BfmuDG-QhNaGFxLHpuyqod-zWloTl-w4TRIN6XGcQ5gRUHLa1qy2MlIjkYMM3-KLkE6259L8XFqI8St-Kmj1lWS5U3UK2ZjRw552vJjDJ30kNUvJHVN5iQRi1p6M9OrmdDrrV8Viq1REfiahZ45vOwCwIxIVakGnAecEsQkWOFPH1E9dFyh7T7qp0STYV10GwywA6rb0B0Lqj6trZZr8AcHkeccbsA"/>
-<!-- Computer Vision HUD Overlay: Corner points, Keypoints & Heatmap -->
-<div class="absolute inset-0 pointer-events-none p-3 flex flex-col justify-between">
-<!-- Corner Trackers -->
-<div class="flex justify-between items-start">
-<div class="flex flex-col">
-<span class="w-3 h-3 border-t-2 border-l-2 border-secondary"></span>
-<span class="font-label-code-sm text-[9px] text-secondary">P1(0,0)</span>
-</div>
-<div class="flex flex-col items-end">
-<span class="w-3 h-3 border-t-2 border-r-2 border-secondary"></span>
-<span class="font-label-code-sm text-[9px] text-secondary">P2(1080,0)</span>
-</div>
-</div>
-<!-- Center Keypoint Cluster Graphic -->
-<div class="relative w-full flex items-center justify-center">
-<div class="w-24 h-24 rounded-full bg-secondary/15 blur-sm absolute"></div>
-<!-- Inline SVG Keypoint Constellation -->
-<svg class="w-32 h-32" viewbox="0 0 100 100">
-<!-- Coordinate connection lines -->
-<polygon fill="none" opacity="0.8" points="50,15 78,35 68,75 32,75 22,35" stroke="#4cd7f6" stroke-dasharray="2 1" stroke-width="0.75"></polygon>
-<line stroke="#cebdff" stroke-dasharray="1 1" stroke-width="0.5" x1="50" x2="50" y1="15" y2="85"></line>
-<line stroke="#cebdff" stroke-dasharray="1 1" stroke-width="0.5" x1="15" x2="85" y1="50" y2="50"></line>
-<!-- Nodes -->
-<circle cx="50" cy="15" fill="#4cd7f6" r="2.5"></circle>
-<circle cx="78" cy="35" fill="#4cd7f6" r="2.5"></circle>
-<circle cx="68" cy="75" fill="#4cd7f6" r="2.5"></circle>
-<circle cx="32" cy="75" fill="#4cd7f6" r="2.5"></circle>
-<circle cx="22" cy="35" fill="#4cd7f6" r="2.5"></circle>
-<circle class="animate-ping" cx="50" cy="50" fill="#d2bbff" r="3.5" style="transform-origin: 50px 50px;"></circle>
-</svg>
-</div>
-<!-- Bottom Trackers -->
-<div class="flex justify-between items-end">
-<div class="flex flex-col">
-<span class="font-label-code-sm text-[9px] text-secondary">P3(0,1860)</span>
-<span class="w-3 h-3 border-b-2 border-l-2 border-secondary"></span>
-</div>
-<div class="flex flex-col items-end">
-<span class="font-label-code-sm text-[9px] text-secondary">P4(1080,1860)</span>
-<span class="w-3 h-3 border-b-2 border-r-2 border-secondary"></span>
-</div>
-</div>
-</div>
-<!-- Bottom Scan Tag Badge -->
-<div class="absolute bottom-2 left-2 right-2 bg-surface-container-lowest/80 backdrop-blur-md px-2.5 py-1 rounded flex items-center justify-between">
-<span class="font-label-code-sm text-[10px] text-secondary">FEATURE DENSITY</span>
-<span class="font-label-code-sm text-[10px] text-on-surface font-semibold">98.2 / 100</span>
-</div>
-</div>
-<p class="font-label-code-sm text-label-code-sm text-on-surface-variant mt-2 text-center">
-                Visual Matrix Heatmap // 418 Archetypal Points
-              </p>
-</div>
-<!-- Telemetry Attributes & Metaphysical Correspondence -->
-<div class="md:col-span-6 flex flex-col justify-between gap-3">
-<!-- Decan & Planetary Regent Module -->
-<div class="bg-surface-container-high/50 backdrop-blur-sm rounded-lg p-3.5 space-y-1">
-<div class="flex items-center justify-between">
-<span class="font-label-code-sm text-label-code-sm text-secondary uppercase">Astrological Decan</span>
-<span class="material-symbols-outlined text-secondary text-sm">cyclone</span>
-</div>
-<div class="font-headline-sm text-headline-sm text-on-surface">Third Decan of Aquarius</div>
-<p class="font-body-sm text-body-sm text-on-surface-variant">
-                  Planetary Regent: <span class="text-primary font-medium">Venus &amp; Uranus (Sub-Harmonic)</span>
-</p>
-</div>
-<!-- Elemental Harmony Chipset -->
-<div class="bg-surface-container-high/50 backdrop-blur-sm rounded-lg p-3.5 space-y-2">
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase">Elemental Resonance</span>
-<div class="flex flex-wrap gap-2">
-<!-- Air Tag -->
-<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-secondary-container/15 text-secondary font-pill-tag text-pill-tag uppercase">
-<span class="material-symbols-outlined text-xs">air</span>
-<span>Air (Fixed)</span>
-</div>
-<!-- Water Tag -->
-<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-primary-container/20 text-primary font-pill-tag text-pill-tag uppercase">
-<span class="material-symbols-outlined text-xs">water_drop</span>
-<span>Ethereal Water</span>
-</div>
-<!-- Numerology Tag -->
-<div class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-surface-container-highest text-on-surface font-pill-tag text-pill-tag uppercase">
-<span>17 = 1+7 = 8 (Strength)</span>
-</div>
-</div>
-</div>
-<!-- Confidence Metric Sparkline Bars -->
-<div class="bg-surface-container-high/50 backdrop-blur-sm rounded-lg p-3.5 space-y-2.5">
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase">Neural Classification Metrics</span>
-<div class="space-y-2">
-<div>
-<div class="flex justify-between font-label-code-sm text-label-code-sm mb-1">
-<span class="text-on-surface">Major Arcana Recognition</span>
-<span class="text-secondary font-semibold">99.8%</span>
-</div>
-<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full" style="width: 99.8%"></div>
-</div>
-</div>
-<div>
-<div class="flex justify-between font-label-code-sm text-label-code-sm mb-1">
-<span class="text-on-surface">Spatial Axis Angle (0.4° Deviation)</span>
-<span class="text-secondary font-semibold">99.4%</span>
-</div>
-<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full" style="width: 99.4%"></div>
-</div>
-</div>
-<div>
-<div class="flex justify-between font-label-code-sm text-label-code-sm mb-1">
-<span class="text-on-surface">Deck Variant: RWS Standard Edition</span>
-<span class="text-primary font-semibold">97.1%</span>
-</div>
-<div class="w-full h-1.5 bg-surface-container rounded-full overflow-hidden">
-<div class="h-full bg-gradient-to-r from-primary to-secondary rounded-full" style="width: 97.1%"></div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-</div>
-<!-- Comparative Hermetic Meanings: Upright vs Reversed -->
-<div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-<!-- Upright Panel (Active State) -->
-<div class="relative bg-surface-container-low/80 backdrop-blur-xl rounded-xl p-5 shadow-lg space-y-3 overflow-hidden">
-<!-- Active indicator glow line -->
-<div class="absolute top-0 left-0 bottom-0 w-1 bg-secondary shadow-[0_0_8px_#4cd7f6]"></div>
-<div class="flex items-center justify-between pl-2">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-secondary text-base">check_circle</span>
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Detected: Upright Meaning</h3>
-</div>
-<span class="font-pill-tag text-pill-tag uppercase px-2 py-0.5 rounded bg-secondary/15 text-secondary">Active</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant pl-2 leading-relaxed">
-              Renewed inspiration, profound peace after upheaval, and crystal-clear lucidity. Signifies harmony between subconscious currents (water poured on water) and temporal embodiment (water on soil). 
-            </p>
-<div class="pl-2 pt-1 flex flex-wrap gap-1.5">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">Faith Restored</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">Divine Guidance</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">Cosmic Conduit</span>
-</div>
-</div>
-<!-- Reversed Panel (Inactive State / Comparative Context) -->
-<div class="bg-surface-container-lowest/60 backdrop-blur-md rounded-xl p-5 shadow-sm space-y-3 opacity-70 hover:opacity-100 transition-opacity">
-<div class="flex items-center justify-between">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-outline text-base">swap_vert</span>
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Alternative: Reversed Meaning</h3>
-</div>
-<span class="font-pill-tag text-pill-tag uppercase px-2 py-0.5 rounded bg-surface-container text-on-surface-variant">Counterpart</span>
-</div>
-<p class="font-body-md text-body-md text-on-surface-variant leading-relaxed">
-              Temporary despondency, creative blockage, or disconnect from celestial rhythm. Indicates pouring psychic energies into barren projects or holding cynic disbelief in divine serendipity.
-            </p>
-<div class="pt-1 flex flex-wrap gap-1.5">
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">Doubt</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">Spiritual Fatigue</span>
-<span class="px-2 py-0.5 rounded bg-surface-container text-on-surface-variant font-label-code-sm text-label-code-sm">Misalignment</span>
-</div>
-</div>
-</div>
-<!-- Synthesizer Action Buttons Section -->
-<div class="bg-surface-container-low/70 backdrop-blur-xl rounded-xl p-5 shadow-lg flex flex-col sm:flex-row items-center justify-between gap-4">
-<div class="flex items-center gap-3">
-<div class="p-2.5 rounded-full bg-primary-container/20 text-primary">
-<span class="material-symbols-outlined text-xl">insights</span>
-</div>
-<div>
-<div class="font-body-md text-body-md text-on-surface font-medium">Deterministic Synthesis Engine</div>
-<div class="font-body-sm text-body-sm text-on-surface-variant">Cross-reference with natal transit charts &amp; planetary decans</div>
-</div>
-</div>
-<div class="flex flex-wrap items-center gap-2.5 w-full sm:w-auto justify-end">
-<button class="px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm font-medium transition-all shadow-sm flex items-center gap-1.5" id="exportBtn" type="button">
-<span class="material-symbols-outlined text-base">download</span>
-<span>Export Inspection Data</span>
-</button>
-<button class="px-4 py-2 rounded-full bg-surface-container hover:bg-surface-container-high text-on-surface font-body-sm text-body-sm font-medium transition-all shadow-sm flex items-center gap-1.5" id="journalBtn" type="button">
-<span class="material-symbols-outlined text-base">book_2</span>
-<span>Add to Daily Journal</span>
-</button>
-<button class="px-5 py-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container text-on-primary font-body-sm text-body-sm font-medium transition-all shadow-lg hover:shadow-[0_0_24px_rgba(76,215,246,0.4)] flex items-center gap-2" id="synthesizeBtn" type="button">
-<span class="material-symbols-outlined text-base">hub</span>
-<span>Synthesize with Ephemeris</span>
-</button>
-</div>
-</div>
-</div>
-</div>
-<!-- Additional Detail: Historical Inspection Strip -->
-<section class="relative z-10 mt-10 pt-6">
-<div class="flex items-center justify-between mb-4">
-<div class="flex items-center gap-2">
-<span class="material-symbols-outlined text-primary text-base">history</span>
-<h3 class="font-headline-sm text-headline-sm text-on-surface">Recent Telemetry Captures</h3>
-</div>
-<span class="font-label-code-sm text-label-code-sm text-on-surface-variant">Session ID: #OBS-9924-CV</span>
-</div>
-<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-<!-- Capture 1 -->
-<div class="bg-surface-container-low/60 backdrop-blur-md rounded-xl p-3.5 flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
-<div class="w-10 h-14 rounded bg-surface-container-highest flex items-center justify-center text-primary font-headline-sm text-sm">
-            I
-          </div>
-<div class="min-w-0 flex-1">
-<div class="font-body-md text-body-md text-on-surface font-medium truncate">The Magician</div>
-<div class="font-body-sm text-body-sm text-secondary truncate">Upright • 99.1% conf</div>
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">03:12:45 UTC</div>
-</div>
-</div>
-<!-- Capture 2 -->
-<div class="bg-surface-container-low/60 backdrop-blur-md rounded-xl p-3.5 flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
-<div class="w-10 h-14 rounded bg-surface-container-highest flex items-center justify-center text-secondary font-headline-sm text-sm">
-            II
-          </div>
-<div class="min-w-0 flex-1">
-<div class="font-body-md text-body-md text-on-surface font-medium truncate">The High Priestess</div>
-<div class="font-body-sm text-body-sm text-secondary truncate">Upright • 98.7% conf</div>
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">03:09:12 UTC</div>
-</div>
-</div>
-<!-- Capture 3 -->
-<div class="bg-surface-container-low/60 backdrop-blur-md rounded-xl p-3.5 flex items-center gap-3 hover:bg-surface-container-low transition-colors cursor-pointer shadow-sm">
-<div class="w-10 h-14 rounded bg-surface-container-highest flex items-center justify-center text-tertiary font-headline-sm text-sm">
-            XVIII
-          </div>
-<div class="min-w-0 flex-1">
-<div class="font-body-md text-body-md text-on-surface font-medium truncate">The Moon</div>
-<div class="font-body-sm text-body-sm text-error truncate">Reversed • 96.4% conf</div>
-<div class="font-label-code-sm text-label-code-sm text-on-surface-variant truncate">02:58:30 UTC</div>
-</div>
-</div>
-<!-- Capture 4 (New Scan Placeholder) -->
-<div class="bg-surface-container-low/30 backdrop-blur-md rounded-xl p-3.5 flex items-center justify-center gap-2 hover:bg-surface-container-low/50 transition-colors cursor-pointer shadow-sm text-on-surface-variant hover:text-on-surface" onclick="document.getElementById('fileInput').click()">
-<span class="material-symbols-outlined text-lg">add_circle</span>
-<span class="font-body-sm text-body-sm font-medium">New Optical Scan</span>
-</div>
-</div>
-</section>
-</div>
-<!-- Micro-interactions Script -->
-<script>
-    (function() {
-      const dropZone = document.getElementById('dropZone');
-      const scannerLaser = document.getElementById('scannerLaser');
-      const loadSampleBtn = document.getElementById('loadSampleBtn');
-      const reScanBtn = document.getElementById('reScanBtn');
-      const fileInput = document.getElementById('fileInput');
-      const synthesizeBtn = document.getElementById('synthesizeBtn');
-      const journalBtn = document.getElementById('journalBtn');
-      const exportBtn = document.getElementById('exportBtn');
+<html class="dark" lang="en">
+	<head>
+		<meta charset="utf-8" />
+		<meta content="width=device-width, initial-scale=1.0" name="viewport" />
+		<link href="https://fonts.googleapis.com" rel="preconnect" />
+		<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect" />
+		<link
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&amp;family=JetBrains+Mono:wght@400;500;600&amp;family=Sora:wght@400;500;600;700&amp;display=swap"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200"
+			rel="stylesheet"
+		/>
+		<link
+			href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap"
+			rel="stylesheet"
+		/>
+		<style>
+			@layer base {
+				html,
+				body {
+					margin: 0;
+					padding: 0;
+				}
+				body {
+					overscroll-behavior: none;
+				}
+				main > :first-child {
+					margin-top: 0 !important;
+				}
+				main > :last-child {
+					margin-bottom: 0 !important;
+				}
+			}
+			::-webkit-scrollbar {
+				display: none;
+			}
+			.cosmic-stars {
+				background-image:
+					radial-gradient(1px 1px at 20px 30px, #ffffff, rgba(0, 0, 0, 0)),
+					radial-gradient(1.5px 1.5px at 60px 90px, #acedff, rgba(0, 0, 0, 0)),
+					radial-gradient(1px 1px at 150px 70px, #d2bbff, rgba(0, 0, 0, 0)),
+					radial-gradient(1.5px 1.5px at 210px 180px, #ffffff, rgba(0, 0, 0, 0)),
+					radial-gradient(2px 2px at 320px 120px, #4cd7f6, rgba(0, 0, 0, 0)),
+					radial-gradient(1px 1px at 400px 240px, #ffffff, rgba(0, 0, 0, 0)),
+					radial-gradient(1.5px 1.5px at 480px 60px, #cebdff, rgba(0, 0, 0, 0));
+				background-repeat: repeat;
+				background-size: 550px 350px;
+			}
+		</style>
+		<script src="https://cdn.tailwindcss.com"></script>
+		<script id="tailwind-config">
+			tailwind.config = {
+				darkMode: 'class',
+				theme: {
+					extend: {
+						colors: {
+							'inverse-primary': '#732ee4',
+							'surface-variant': '#333345',
+							'inverse-surface': '#e3e0f8',
+							'surface-container-highest': '#333345',
+							'tertiary-fixed': '#e8ddff',
+							'on-surface': '#e3e0f8',
+							'surface-dim': '#121222',
+							'on-tertiary-container': '#ebe1ff',
+							'on-surface-variant': '#ccc3d8',
+							'on-secondary-fixed': '#001f26',
+							'secondary-fixed': '#acedff',
+							primary: '#d2bbff',
+							'surface-container-high': '#29283a',
+							'primary-container': '#7c3aed',
+							'on-tertiary': '#381385',
+							'surface-tint': '#d2bbff',
+							'on-primary': '#3f008e',
+							'primary-fixed': '#eaddff',
+							tertiary: '#cebdff',
+							secondary: '#4cd7f6',
+							'on-primary-fixed': '#25005a',
+							'on-secondary-container': '#00424e',
+							'on-primary-fixed-variant': '#5a00c6',
+							'secondary-container': '#03b5d3',
+							'inverse-on-surface': '#2f2f40',
+							'on-secondary': '#003640',
+							'surface-container-low': '#1a1a2b',
+							'secondary-fixed-dim': '#4cd7f6',
+							'surface-container': '#1e1e2f',
+							'surface-container-lowest': '#0c0c1d',
+							'on-tertiary-fixed-variant': '#4f319c',
+							error: '#ffb4ab',
+							'on-secondary-fixed-variant': '#004e5c',
+							'on-primary-container': '#ede0ff',
+							'tertiary-fixed-dim': '#cebdff',
+							'on-error-container': '#ffdad6',
+							outline: '#958da1',
+							surface: '#121222',
+							background: '#121222',
+							'error-container': '#93000a',
+							'on-tertiary-fixed': '#21005e',
+							'on-error': '#690005',
+							'outline-variant': '#4a4455',
+							'primary-fixed-dim': '#d2bbff',
+							'on-background': '#e3e0f8',
+							'tertiary-container': '#6f54bf',
+							'surface-bright': '#38374a'
+						},
+						borderRadius: { DEFAULT: '0.25rem', lg: '0.5rem', xl: '0.75rem', full: '9999px' },
+						spacing: {
+							'space-lg': '1.5rem',
+							'space-2xs': '0.25rem',
+							'space-xl': '2rem',
+							'gutter-mobile': '1rem',
+							'space-2xl': '3rem',
+							'margin-mobile': '1.25rem',
+							'gutter-desktop': '1.5rem',
+							'space-sm': '0.75rem',
+							'space-md': '1rem',
+							'space-3xl': '4rem',
+							'margin-desktop': '3rem',
+							'space-xs': '0.5rem'
+						},
+						fontFamily: {
+							'headline-sm': ['sora'],
+							'body-md': ['inter'],
+							'display-lg': ['sora'],
+							'body-sm': ['inter'],
+							'body-lg': ['inter'],
+							'headline-md': ['sora'],
+							'label-code-sm': ['jetbrainsMono'],
+							'label-code-md': ['jetbrainsMono'],
+							'headline-lg-mobile': ['sora'],
+							'headline-lg': ['sora'],
+							'display-lg-mobile': ['sora'],
+							'pill-tag': ['jetbrainsMono']
+						},
+						fontSize: {
+							'headline-sm': ['18px', { lineHeight: '26px', fontWeight: '600' }],
+							'body-md': ['14px', { lineHeight: '22px', fontWeight: '400' }],
+							'display-lg': ['48px', { lineHeight: '56px', fontWeight: '600' }],
+							'body-sm': ['12px', { lineHeight: '18px', fontWeight: '400' }],
+							'body-lg': ['16px', { lineHeight: '26px', fontWeight: '400' }],
+							'headline-md': ['22px', { lineHeight: '30px', fontWeight: '500' }],
+							'label-code-sm': ['11px', { lineHeight: '16px', fontWeight: '400' }],
+							'label-code-md': ['13px', { lineHeight: '18px', fontWeight: '500' }],
+							'headline-lg-mobile': ['24px', { lineHeight: '32px', fontWeight: '500' }],
+							'headline-lg': ['32px', { lineHeight: '40px', fontWeight: '500' }],
+							'display-lg-mobile': ['32px', { lineHeight: '40px', fontWeight: '600' }],
+							'pill-tag': ['10px', { lineHeight: '12px', fontWeight: '600' }]
+						}
+					}
+				}
+			};
+		</script>
+	</head>
+	<body
+		class="font-body-md text-body-md relative min-h-screen bg-background text-on-surface selection:bg-primary-container selection:text-on-primary-container"
+	>
+		<div class="cosmic-stars pointer-events-none fixed inset-0 z-0 opacity-40"></div>
+		<header
+			class="fixed top-0 z-50 w-full border-b border-outline-variant/30 bg-surface-container-lowest/80 shadow-[0_4px_30px_rgba(0,0,0,0.5)] backdrop-blur-md"
+		>
+			<div class="mx-auto flex h-16 max-w-7xl items-center justify-between gap-4 px-6 lg:px-12">
+				<div class="flex shrink-0 items-center gap-3">
+					<img
+						alt="AstroLogic Emblem"
+						class="h-8 w-auto object-contain"
+						src="https://lh3.googleusercontent.com/aida/AEtjO1VfiGozCCUXO_8FqxqveKQFHzchohl1tff_8RcvnqMh3SFjAQc86Wx-ByhvqHskYokS4OB6j2jNNhJhl-e8Pk4YIZdsQPoxn1tqh-A0pK-5rTu3UGqwhL6WVtvilbjsxP_b-L-mlb9Dml2htrsFjjQPHEyC9Vxt7qZvkIHGzis7Nno7y1Oh2D0tg40Hubswd-KVfwH4U93amMSawtkeZck8YBKs0cAjifYCxm94iZoTYiLcmN3sl8ByPrf0"
+					/><a
+						class="font-headline-sm text-headline-sm bg-gradient-to-r from-primary via-tertiary to-secondary bg-clip-text tracking-tight text-transparent transition-opacity hover:opacity-90"
+						data-path="home"
+						href="#"
+						>AstroLogic</a
+					>
+				</div>
+				<nav
+					class="hidden items-center gap-1 overflow-x-auto py-1 xl:flex"
+					data-active-classes="bg-primary-container text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)]"
+				>
+					<a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="home"
+						href="#"
+						>Home</a
+					><a
+						aria-current="page"
+						class="rounded-full bg-primary-container px-3 py-1.5 text-on-primary-container shadow-[0_0_15px_rgba(124,58,237,0.5)] transition-all"
+						data-path="dashboard"
+						href="#"
+						>Dashboard</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="tarot-reading"
+						href="#"
+						>Tarot Reading</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="birth-chart"
+						href="#"
+						>Birth Chart</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="zodiac"
+						href="#"
+						>Zodiac</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="tarot-deck"
+						href="#"
+						>Tarot Deck</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="ai-guide"
+						href="#"
+						>AI Guide</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="compatibility"
+						href="#"
+						>Compatibility</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="horoscope"
+						href="#"
+						>Horoscope</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="card-scanner"
+						href="#"
+						>Card Scanner</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="history"
+						href="#"
+						>History</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="analytics"
+						href="#"
+						>Analytics</a
+					><a
+						class="rounded-full px-3 py-1.5 text-on-surface-variant transition-all hover:bg-surface-container-high hover:text-on-surface"
+						data-path="about"
+						href="#"
+						>About</a
+					>
+				</nav>
+				<div class="flex shrink-0 items-center gap-3">
+					<button
+						class="font-body-sm text-body-sm inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container px-4 py-2 font-medium text-on-primary shadow-[0_0_20px_rgba(124,58,237,0.35)] transition-all hover:shadow-[0_0_24px_rgba(76,215,246,0.5)]"
+						type="button"
+					>
+						<span class="material-symbols-outlined text-base">auto_awesome</span
+						><span>New Reading</span></button
+					><button
+						aria-label="Notifications"
+						class="relative rounded-full p-2 text-on-surface-variant transition-colors hover:bg-surface-container-high hover:text-on-surface"
+						type="button"
+					>
+						<span class="material-symbols-outlined">notifications</span
+						><span
+							class="absolute top-1.5 right-1.5 h-2 w-2 rounded-full bg-secondary shadow-[0_0_8px_#4cd7f6]"
+						></span>
+					</button>
+					<div
+						class="relative rounded-full bg-gradient-to-tr from-primary via-secondary to-tertiary p-0.5 shadow-[0_0_12px_rgba(206,189,255,0.4)]"
+					>
+						<img
+							alt="Profile"
+							class="block h-8 w-8 rounded-full object-cover"
+							src="https://lh3.googleusercontent.com/aida-public/AB6AXuDSV7G4_DEeDlwa2Rh3F3KalyNxpnNh7UTQTXyBW9QwReJ4keNr8GY4iLIsgogUWE9-aDhso5fQFeWClly8lXyAWfvNKne5azfUFMyJjxd_-X2cFNicdglSfrTRa4o2J1ywBVzT0fu8-RdywOAvjLI4K-k7wyPoAOQfTvGUrV7RaltIj9nCHAAeDrg_ZWFTnWfnVVVDErtiAFPC26CjiZHN0cMgTKO2aBPLI9Zv9SBXHTyROhjCeM7Ppw"
+						/>
+					</div>
+				</div>
+			</div>
+		</header>
+		<main class="relative z-10 w-full bg-transparent pt-16">
+			<div class="mx-auto max-w-7xl px-6 py-8 lg:px-12">
+				<div class="flex w-full flex-col">
+					<!-- Dynamic Atmospheric Glow Orbs -->
+					<div class="relative w-full overflow-hidden">
+						<div
+							class="pointer-events-none absolute -top-24 -left-20 h-96 w-96 rounded-full bg-primary-container/20 blur-[120px]"
+						></div>
+						<div
+							class="pointer-events-none absolute top-1/3 -right-24 h-80 w-80 rounded-full bg-secondary-container/20 blur-[110px]"
+						></div>
+						<div
+							class="pointer-events-none absolute -bottom-32 left-1/3 h-72 w-[500px] rounded-full bg-tertiary-container/15 blur-[130px]"
+						></div>
+						<!-- Header Section -->
+						<section
+							class="relative z-10 flex flex-col justify-between gap-6 pt-4 pb-8 md:flex-row md:items-end"
+						>
+							<div class="max-w-3xl space-y-2">
+								<div
+									class="inline-flex items-center gap-2 rounded-full bg-surface-container-high/60 px-3 py-1 shadow-sm backdrop-blur-md"
+								>
+									<span class="h-1.5 w-1.5 animate-ping rounded-full bg-secondary"></span>
+									<span class="font-pill-tag text-pill-tag tracking-widest text-secondary uppercase"
+										>Optical Telemetry v4.8 • Prolog Vision Active</span
+									>
+								</div>
+								<h1
+									class="font-headline-lg text-headline-lg bg-gradient-to-r from-on-surface via-primary to-secondary bg-clip-text tracking-tight text-on-surface text-transparent"
+								>
+									Autonomous Card Scanner &amp; Computer Vision Array
+								</h1>
+								<p class="font-body-md text-body-md leading-relaxed text-on-surface-variant">
+									Drop a photograph or scan of physical tarot cards to extract identity,
+									orientation, confidence metrics, and deterministic symbolic readings in real time.
+								</p>
+							</div>
+							<!-- Quick Status Widget -->
+							<div
+								class="flex shrink-0 items-center gap-3 rounded-xl bg-surface-container-low/70 px-4 py-2.5 shadow-md backdrop-blur-md"
+							>
+								<div class="rounded-lg bg-surface-container-high p-2 text-secondary">
+									<span class="material-symbols-outlined text-lg">document_scanner</span>
+								</div>
+								<div class="flex flex-col">
+									<span
+										class="font-label-code-sm text-label-code-sm tracking-wider text-on-surface-variant uppercase"
+										>Neural Sensor Model</span
+									>
+									<span class="font-label-code-md text-label-code-md font-medium text-on-surface"
+										>Arcana-ResNet-101 (Calibrated)</span
+									>
+								</div>
+							</div>
+						</section>
+						<!-- Main Workspace Bento Layout -->
+						<div class="relative z-10 grid grid-cols-1 items-start gap-6 lg:grid-cols-12">
+							<!-- Left Column: Input Array & Calibration Controls (5 cols) -->
+							<div class="flex flex-col gap-6 lg:col-span-5">
+								<!-- Interactive Scanner Drag & Drop Reticle Box -->
+								<div
+									class="group relative rounded-xl bg-surface-container-low/80 p-6 shadow-xl backdrop-blur-xl transition-all duration-300"
+									id="dropZoneContainer"
+								>
+									<!-- Outer holographic neon ambient glow on hover -->
+									<div
+										class="pointer-events-none absolute inset-0 rounded-xl bg-gradient-to-b from-primary-container/10 via-transparent to-secondary-container/10"
+									></div>
+									<div class="mb-4 flex items-center justify-between">
+										<div class="flex items-center gap-2">
+											<span class="material-symbols-outlined text-sm text-secondary"
+												>filter_center_focus</span
+											>
+											<span
+												class="font-label-code-md text-label-code-md tracking-wider text-secondary uppercase"
+												>Optical Aperture</span
+											>
+										</div>
+										<div
+											class="font-label-code-sm text-label-code-sm flex items-center gap-1.5 text-on-surface-variant"
+										>
+											<span class="inline-block h-2 w-2 rounded-full bg-secondary"></span>
+											<span>SPECTRAL READ: READY</span>
+										</div>
+									</div>
+									<!-- Drag and Drop Canvas Area -->
+									<div
+										class="relative flex min-h-[360px] cursor-pointer flex-col items-center justify-center overflow-hidden rounded-lg bg-surface-container-lowest/90 p-8 text-center transition-all duration-300 group-hover:bg-surface-container-lowest/70"
+										id="dropZone"
+									>
+										<!-- Reticle Target Lines SVG -->
+										<svg
+											class="pointer-events-none absolute inset-0 h-full w-full opacity-40 transition-opacity group-hover:opacity-75"
+											preserveaspectratio="none"
+											viewbox="0 0 400 360"
+										>
+											<defs>
+												<lineargradient id="neonReticle" x1="0%" x2="100%" y1="0%" y2="100%">
+													<stop offset="0%" stop-color="#7c3aed" stop-opacity="0.8"></stop>
+													<stop offset="50%" stop-color="#4cd7f6" stop-opacity="0.4"></stop>
+													<stop offset="100%" stop-color="#cebdff" stop-opacity="0.8"></stop>
+												</lineargradient>
+											</defs>
+											<!-- Framing Corners -->
+											<path
+												d="M 20 50 L 20 20 L 50 20"
+												fill="none"
+												stroke="url(#neonReticle)"
+												stroke-width="2"
+											></path>
+											<path
+												d="M 380 50 L 380 20 L 350 20"
+												fill="none"
+												stroke="url(#neonReticle)"
+												stroke-width="2"
+											></path>
+											<path
+												d="M 20 310 L 20 340 L 50 340"
+												fill="none"
+												stroke="url(#neonReticle)"
+												stroke-width="2"
+											></path>
+											<path
+												d="M 380 310 L 380 340 L 350 340"
+												fill="none"
+												stroke="url(#neonReticle)"
+												stroke-width="2"
+											></path>
+											<!-- Crosshairs in Center -->
+											<line
+												stroke="#4cd7f6"
+												stroke-dasharray="3 3"
+												stroke-width="1"
+												x1="180"
+												x2="220"
+												y1="180"
+												y2="180"
+											></line>
+											<line
+												stroke="#4cd7f6"
+												stroke-dasharray="3 3"
+												stroke-width="1"
+												x1="200"
+												x2="200"
+												y1="160"
+												y2="200"
+											></line>
+											<circle
+												class="animate-spin"
+												cx="200"
+												cy="180"
+												fill="none"
+												r="48"
+												stroke="#7c3aed"
+												stroke-dasharray="4 4"
+												stroke-width="1"
+												style="transform-origin: 200px 180px; animation-duration: 25s"
+											></circle>
+										</svg>
+										<!-- Holographic Beam Pulse Scan Line -->
+										<div
+											class="pointer-events-none absolute right-0 left-0 h-1 bg-gradient-to-r from-transparent via-secondary to-transparent opacity-0 shadow-[0_0_12px_#4cd7f6] transition-opacity duration-300"
+											id="scannerLaser"
+										></div>
+										<!-- Idle Upload Graphics & Text -->
+										<div
+											class="relative z-10 flex flex-col items-center gap-3"
+											id="dropZoneContent"
+										>
+											<div
+												class="relative flex h-16 w-16 items-center justify-center rounded-full bg-gradient-to-tr from-primary-container/40 to-secondary-container/40 text-secondary shadow-lg transition-transform duration-300 group-hover:scale-110"
+											>
+												<span class="material-symbols-outlined text-3xl">add_a_photo</span>
+												<span
+													class="absolute -inset-1 animate-ping rounded-full bg-secondary/15"
+												></span>
+											</div>
+											<div class="mt-2 space-y-1">
+												<p class="font-headline-sm text-headline-sm text-on-surface">
+													Feed Physical Arcana Card
+												</p>
+												<p class="font-body-sm text-body-sm max-w-xs text-on-surface-variant">
+													Drag &amp; drop high-resolution photo, capture via optical webcam, or
+													inspect files
+												</p>
+											</div>
+											<div class="mt-3 flex items-center gap-2">
+												<span
+													class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2.5 py-1 text-on-surface-variant"
+													>RAW</span
+												>
+												<span
+													class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2.5 py-1 text-on-surface-variant"
+													>PNG</span
+												>
+												<span
+													class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2.5 py-1 text-on-surface-variant"
+													>JPEG</span
+												>
+												<span
+													class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2.5 py-1 text-on-surface-variant"
+													>WEBP</span
+												>
+											</div>
+											<input accept="image/*" class="hidden" id="fileInput" type="file" />
+											<button
+												class="font-body-sm text-body-sm mt-2 rounded-full bg-surface-container-high px-5 py-2 font-medium text-primary transition-colors hover:bg-surface-variant"
+												onclick="document.getElementById('fileInput').click()"
+												type="button"
+											>
+												Browse Files
+											</button>
+										</div>
+									</div>
+									<!-- Quick Test / Benchmark Controls -->
+									<div
+										class="mt-4 flex flex-col items-center justify-between gap-3 pt-4 sm:flex-row"
+									>
+										<div class="flex items-center gap-2">
+											<span class="material-symbols-outlined text-base text-on-surface-variant"
+												>batch_prediction</span
+											>
+											<span class="font-body-sm text-body-sm text-on-surface-variant"
+												>Benchmark Library:</span
+											>
+										</div>
+										<div class="flex w-full items-center gap-2 sm:w-auto">
+											<button
+												class="font-label-code-sm text-label-code-sm flex w-full items-center justify-center gap-2 rounded-full bg-primary-container/20 px-4 py-1.5 text-primary-fixed shadow-sm transition-all hover:bg-primary-container/35 sm:w-auto"
+												id="loadSampleBtn"
+												type="button"
+											>
+												<span class="material-symbols-outlined text-sm">stars</span>
+												<span>Load Sample: The Star</span>
+											</button>
+											<button
+												class="shrink-0 rounded-full bg-surface-container p-1.5 text-on-surface-variant transition-colors hover:bg-surface-container-high"
+												id="reScanBtn"
+												title="Recalibrate Vision Stream"
+												type="button"
+											>
+												<span class="material-symbols-outlined text-base">autorenew</span>
+											</button>
+										</div>
+									</div>
+								</div>
+								<!-- Computer Vision Diagnostic Terminal -->
+								<div
+									class="flex flex-col gap-3 rounded-xl bg-surface-container-lowest/80 p-5 shadow-lg backdrop-blur-xl"
+								>
+									<div class="flex items-center justify-between">
+										<div
+											class="font-label-code-sm text-label-code-sm flex items-center gap-2 tracking-wider text-secondary"
+										>
+											<span class="h-2 w-2 animate-pulse rounded-full bg-secondary"></span>
+											<span>CV LOG // INFERENCE PIPELINE</span>
+										</div>
+										<span class="font-label-code-sm text-label-code-sm text-on-surface-variant"
+											>Latency: 41ms</span
+										>
+									</div>
+									<div
+										class="font-label-code-sm text-label-code-sm max-h-36 space-y-1.5 overflow-y-auto pr-1 text-on-surface-variant/90"
+									>
+										<div class="flex items-start gap-2">
+											<span class="text-tertiary">[03:14:02.109]</span>
+											<span>Calibrating lens distortion matrix &amp; luminance curves...</span>
+										</div>
+										<div class="flex items-start gap-2">
+											<span class="text-tertiary">[03:14:02.122]</span>
+											<span>Applying Laplacian edge operator: 4 bounding vertices identified.</span>
+										</div>
+										<div class="flex items-start gap-2">
+											<span class="text-secondary">[03:14:02.138]</span>
+											<span
+												>Orthogonal transformation applied. Aspect ratio normalized to 1:1.72.</span
+											>
+										</div>
+										<div class="flex items-start gap-2">
+											<span class="text-primary">[03:14:02.150]</span>
+											<span
+												>Archetype matched: Major Arcana XVII (L1 distance: 0.0054). Orientation
+												upright confirmed.</span
+											>
+										</div>
+									</div>
+								</div>
+								<!-- Optical Environmental Parameters Card -->
+								<div
+									class="space-y-4 rounded-xl bg-surface-container-low/60 p-5 shadow-sm backdrop-blur-md"
+								>
+									<div class="flex items-center justify-between">
+										<span class="font-body-md text-body-md font-medium text-on-surface"
+											>Environmental Capture Settings</span
+										>
+										<span class="material-symbols-outlined text-base text-on-surface-variant"
+											>tune</span
+										>
+									</div>
+									<div class="grid grid-cols-2 gap-3">
+										<div class="rounded-lg bg-surface-container-high/40 p-3">
+											<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">
+												Lighting Vector
+											</div>
+											<div
+												class="font-label-code-md text-label-code-md mt-1 font-semibold text-on-surface"
+											>
+												45° Diffused Solar
+											</div>
+										</div>
+										<div class="rounded-lg bg-surface-container-high/40 p-3">
+											<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">
+												Card Deck Type
+											</div>
+											<div
+												class="font-label-code-md text-label-code-md mt-1 font-semibold text-on-surface"
+											>
+												Rider-Waite-Smith
+											</div>
+										</div>
+										<div class="rounded-lg bg-surface-container-high/40 p-3">
+											<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">
+												Surface Reflection
+											</div>
+											<div
+												class="font-label-code-md text-label-code-md mt-1 font-semibold text-secondary"
+											>
+												&lt; 3.2% (Polarized)
+											</div>
+										</div>
+										<div class="rounded-lg bg-surface-container-high/40 p-3">
+											<div class="font-label-code-sm text-label-code-sm text-on-surface-variant">
+												Prolog Rule Base
+											</div>
+											<div
+												class="font-label-code-md text-label-code-md mt-1 font-semibold text-primary"
+											>
+												Hermetic Axioms v2
+											</div>
+										</div>
+									</div>
+								</div>
+							</div>
+							<!-- Right Column: Vision Telemetry Analysis Card & Synthesis (7 cols) -->
+							<div class="flex flex-col gap-6 lg:col-span-7">
+								<!-- Top Telemetry Card with Deep Glass & Edge Gradients -->
+								<div
+									class="relative overflow-hidden rounded-xl bg-surface-container-low/90 p-6 shadow-2xl backdrop-blur-2xl"
+								>
+									<!-- Subtle Top Highlight Flare -->
+									<div
+										class="absolute top-0 right-0 left-0 h-px bg-gradient-to-r from-transparent via-secondary to-transparent opacity-50"
+									></div>
+									<!-- Header of Analysis -->
+									<div class="flex flex-col justify-between gap-4 pb-6 sm:flex-row sm:items-center">
+										<div class="flex items-center gap-4">
+											<div
+												class="font-headline-md text-headline-md flex h-14 w-14 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-primary-container to-secondary-container text-on-primary shadow-lg"
+											>
+												XVII
+											</div>
+											<div>
+												<div class="flex items-center gap-2">
+													<h2
+														class="font-headline-md text-headline-md font-semibold text-on-surface"
+													>
+														The Star
+													</h2>
+													<span
+														class="font-label-code-sm text-label-code-sm rounded-full bg-secondary-container/20 px-2.5 py-0.5 text-secondary uppercase"
+														>Major Arcana</span
+													>
+												</div>
+												<p class="font-body-sm text-body-sm text-on-surface-variant">
+													Calculated Archetype ID:
+													<span class="font-label-code-sm text-label-code-sm text-primary"
+														>TAROT_MAJ_17_STAR</span
+													>
+												</p>
+											</div>
+										</div>
+										<!-- Orientation Pill Tag -->
+										<div class="flex flex-col sm:items-end">
+											<div
+												class="font-label-code-md text-label-code-md inline-flex items-center gap-2 rounded-full bg-secondary/10 px-3 py-1.5 text-secondary shadow-sm"
+											>
+												<span class="material-symbols-outlined text-base">vertical_align_top</span>
+												<span>Upright Orientation</span>
+											</div>
+											<span
+												class="font-label-code-sm text-label-code-sm mt-1 text-on-surface-variant"
+												>Confidence: <span class="font-semibold text-secondary">99.4%</span></span
+											>
+										</div>
+									</div>
+									<!-- Keypoint Heatmap & Visual Telemetry Inspection Matrix -->
+									<div class="grid grid-cols-1 gap-5 pt-2 md:grid-cols-12">
+										<!-- Visual Card Representation with Heatmap HUD -->
+										<div class="flex flex-col items-center md:col-span-6">
+											<div
+												class="relative flex aspect-[2/3.4] w-full max-w-[260px] items-center justify-center overflow-hidden rounded-xl bg-surface-container-lowest shadow-2xl"
+											>
+												<!-- Card Image Placeholder with Rich Visual Alt Prompt -->
+												<img
+													class="h-full w-full object-cover"
+													data-alt="Mystical tarot card The Star in ethereal cosmic style. A glowing celestial maiden pouring crystalline water from two golden urns into a dark sapphire reflecting pool and onto lush violet moss. Brilliant eight-pointed cosmic diamond star radiating cyan light overhead surrounded by seven smaller lavender constellations. Intricate celestial observatory aesthetic with deep navy shadows and glowing neon highlights."
+													id="activeCardImage"
+													src="https://lh3.googleusercontent.com/aida-public/AB6AXuAhsOIW4K56FwNEcuYPewLm67Y2BfmuDG-QhNaGFxLHpuyqod-zWloTl-w4TRIN6XGcQ5gRUHLa1qy2MlIjkYMM3-KLkE6259L8XFqI8St-Kmj1lWS5U3UK2ZjRw552vJjDJ30kNUvJHVN5iQRi1p6M9OrmdDrrV8Viq1REfiahZ45vOwCwIxIVakGnAecEsQkWOFPH1E9dFyh7T7qp0STYV10GwywA6rb0B0Lqj6trZZr8AcHkeccbsA"
+												/>
+												<!-- Computer Vision HUD Overlay: Corner points, Keypoints & Heatmap -->
+												<div
+													class="pointer-events-none absolute inset-0 flex flex-col justify-between p-3"
+												>
+													<!-- Corner Trackers -->
+													<div class="flex items-start justify-between">
+														<div class="flex flex-col">
+															<span class="h-3 w-3 border-t-2 border-l-2 border-secondary"></span>
+															<span class="font-label-code-sm text-[9px] text-secondary"
+																>P1(0,0)</span
+															>
+														</div>
+														<div class="flex flex-col items-end">
+															<span class="h-3 w-3 border-t-2 border-r-2 border-secondary"></span>
+															<span class="font-label-code-sm text-[9px] text-secondary"
+																>P2(1080,0)</span
+															>
+														</div>
+													</div>
+													<!-- Center Keypoint Cluster Graphic -->
+													<div class="relative flex w-full items-center justify-center">
+														<div
+															class="absolute h-24 w-24 rounded-full bg-secondary/15 blur-sm"
+														></div>
+														<!-- Inline SVG Keypoint Constellation -->
+														<svg class="h-32 w-32" viewbox="0 0 100 100">
+															<!-- Coordinate connection lines -->
+															<polygon
+																fill="none"
+																opacity="0.8"
+																points="50,15 78,35 68,75 32,75 22,35"
+																stroke="#4cd7f6"
+																stroke-dasharray="2 1"
+																stroke-width="0.75"
+															></polygon>
+															<line
+																stroke="#cebdff"
+																stroke-dasharray="1 1"
+																stroke-width="0.5"
+																x1="50"
+																x2="50"
+																y1="15"
+																y2="85"
+															></line>
+															<line
+																stroke="#cebdff"
+																stroke-dasharray="1 1"
+																stroke-width="0.5"
+																x1="15"
+																x2="85"
+																y1="50"
+																y2="50"
+															></line>
+															<!-- Nodes -->
+															<circle cx="50" cy="15" fill="#4cd7f6" r="2.5"></circle>
+															<circle cx="78" cy="35" fill="#4cd7f6" r="2.5"></circle>
+															<circle cx="68" cy="75" fill="#4cd7f6" r="2.5"></circle>
+															<circle cx="32" cy="75" fill="#4cd7f6" r="2.5"></circle>
+															<circle cx="22" cy="35" fill="#4cd7f6" r="2.5"></circle>
+															<circle
+																class="animate-ping"
+																cx="50"
+																cy="50"
+																fill="#d2bbff"
+																r="3.5"
+																style="transform-origin: 50px 50px"
+															></circle>
+														</svg>
+													</div>
+													<!-- Bottom Trackers -->
+													<div class="flex items-end justify-between">
+														<div class="flex flex-col">
+															<span class="font-label-code-sm text-[9px] text-secondary"
+																>P3(0,1860)</span
+															>
+															<span class="h-3 w-3 border-b-2 border-l-2 border-secondary"></span>
+														</div>
+														<div class="flex flex-col items-end">
+															<span class="font-label-code-sm text-[9px] text-secondary"
+																>P4(1080,1860)</span
+															>
+															<span class="h-3 w-3 border-r-2 border-b-2 border-secondary"></span>
+														</div>
+													</div>
+												</div>
+												<!-- Bottom Scan Tag Badge -->
+												<div
+													class="absolute right-2 bottom-2 left-2 flex items-center justify-between rounded bg-surface-container-lowest/80 px-2.5 py-1 backdrop-blur-md"
+												>
+													<span class="font-label-code-sm text-[10px] text-secondary"
+														>FEATURE DENSITY</span
+													>
+													<span class="font-label-code-sm text-[10px] font-semibold text-on-surface"
+														>98.2 / 100</span
+													>
+												</div>
+											</div>
+											<p
+												class="font-label-code-sm text-label-code-sm mt-2 text-center text-on-surface-variant"
+											>
+												Visual Matrix Heatmap // 418 Archetypal Points
+											</p>
+										</div>
+										<!-- Telemetry Attributes & Metaphysical Correspondence -->
+										<div class="flex flex-col justify-between gap-3 md:col-span-6">
+											<!-- Decan & Planetary Regent Module -->
+											<div
+												class="space-y-1 rounded-lg bg-surface-container-high/50 p-3.5 backdrop-blur-sm"
+											>
+												<div class="flex items-center justify-between">
+													<span
+														class="font-label-code-sm text-label-code-sm text-secondary uppercase"
+														>Astrological Decan</span
+													>
+													<span class="material-symbols-outlined text-sm text-secondary"
+														>cyclone</span
+													>
+												</div>
+												<div class="font-headline-sm text-headline-sm text-on-surface">
+													Third Decan of Aquarius
+												</div>
+												<p class="font-body-sm text-body-sm text-on-surface-variant">
+													Planetary Regent:
+													<span class="font-medium text-primary"
+														>Venus &amp; Uranus (Sub-Harmonic)</span
+													>
+												</p>
+											</div>
+											<!-- Elemental Harmony Chipset -->
+											<div
+												class="space-y-2 rounded-lg bg-surface-container-high/50 p-3.5 backdrop-blur-sm"
+											>
+												<span
+													class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase"
+													>Elemental Resonance</span
+												>
+												<div class="flex flex-wrap gap-2">
+													<!-- Air Tag -->
+													<div
+														class="font-pill-tag text-pill-tag inline-flex items-center gap-1.5 rounded-full bg-secondary-container/15 px-2.5 py-1 text-secondary uppercase"
+													>
+														<span class="material-symbols-outlined text-xs">air</span>
+														<span>Air (Fixed)</span>
+													</div>
+													<!-- Water Tag -->
+													<div
+														class="font-pill-tag text-pill-tag inline-flex items-center gap-1.5 rounded-full bg-primary-container/20 px-2.5 py-1 text-primary uppercase"
+													>
+														<span class="material-symbols-outlined text-xs">water_drop</span>
+														<span>Ethereal Water</span>
+													</div>
+													<!-- Numerology Tag -->
+													<div
+														class="font-pill-tag text-pill-tag inline-flex items-center gap-1.5 rounded-full bg-surface-container-highest px-2.5 py-1 text-on-surface uppercase"
+													>
+														<span>17 = 1+7 = 8 (Strength)</span>
+													</div>
+												</div>
+											</div>
+											<!-- Confidence Metric Sparkline Bars -->
+											<div
+												class="space-y-2.5 rounded-lg bg-surface-container-high/50 p-3.5 backdrop-blur-sm"
+											>
+												<span
+													class="font-label-code-sm text-label-code-sm text-on-surface-variant uppercase"
+													>Neural Classification Metrics</span
+												>
+												<div class="space-y-2">
+													<div>
+														<div
+															class="font-label-code-sm text-label-code-sm mb-1 flex justify-between"
+														>
+															<span class="text-on-surface">Major Arcana Recognition</span>
+															<span class="font-semibold text-secondary">99.8%</span>
+														</div>
+														<div
+															class="h-1.5 w-full overflow-hidden rounded-full bg-surface-container"
+														>
+															<div
+																class="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
+																style="width: 99.8%"
+															></div>
+														</div>
+													</div>
+													<div>
+														<div
+															class="font-label-code-sm text-label-code-sm mb-1 flex justify-between"
+														>
+															<span class="text-on-surface"
+																>Spatial Axis Angle (0.4° Deviation)</span
+															>
+															<span class="font-semibold text-secondary">99.4%</span>
+														</div>
+														<div
+															class="h-1.5 w-full overflow-hidden rounded-full bg-surface-container"
+														>
+															<div
+																class="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
+																style="width: 99.4%"
+															></div>
+														</div>
+													</div>
+													<div>
+														<div
+															class="font-label-code-sm text-label-code-sm mb-1 flex justify-between"
+														>
+															<span class="text-on-surface"
+																>Deck Variant: RWS Standard Edition</span
+															>
+															<span class="font-semibold text-primary">97.1%</span>
+														</div>
+														<div
+															class="h-1.5 w-full overflow-hidden rounded-full bg-surface-container"
+														>
+															<div
+																class="h-full rounded-full bg-gradient-to-r from-primary to-secondary"
+																style="width: 97.1%"
+															></div>
+														</div>
+													</div>
+												</div>
+											</div>
+										</div>
+									</div>
+								</div>
+								<!-- Comparative Hermetic Meanings: Upright vs Reversed -->
+								<div class="grid grid-cols-1 gap-4 md:grid-cols-2">
+									<!-- Upright Panel (Active State) -->
+									<div
+										class="relative space-y-3 overflow-hidden rounded-xl bg-surface-container-low/80 p-5 shadow-lg backdrop-blur-xl"
+									>
+										<!-- Active indicator glow line -->
+										<div
+											class="absolute top-0 bottom-0 left-0 w-1 bg-secondary shadow-[0_0_8px_#4cd7f6]"
+										></div>
+										<div class="flex items-center justify-between pl-2">
+											<div class="flex items-center gap-2">
+												<span class="material-symbols-outlined text-base text-secondary"
+													>check_circle</span
+												>
+												<h3 class="font-headline-sm text-headline-sm text-on-surface">
+													Detected: Upright Meaning
+												</h3>
+											</div>
+											<span
+												class="font-pill-tag text-pill-tag rounded bg-secondary/15 px-2 py-0.5 text-secondary uppercase"
+												>Active</span
+											>
+										</div>
+										<p
+											class="font-body-md text-body-md pl-2 leading-relaxed text-on-surface-variant"
+										>
+											Renewed inspiration, profound peace after upheaval, and crystal-clear
+											lucidity. Signifies harmony between subconscious currents (water poured on
+											water) and temporal embodiment (water on soil).
+										</p>
+										<div class="flex flex-wrap gap-1.5 pt-1 pl-2">
+											<span
+												class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2 py-0.5 text-on-surface-variant"
+												>Faith Restored</span
+											>
+											<span
+												class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2 py-0.5 text-on-surface-variant"
+												>Divine Guidance</span
+											>
+											<span
+												class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2 py-0.5 text-on-surface-variant"
+												>Cosmic Conduit</span
+											>
+										</div>
+									</div>
+									<!-- Reversed Panel (Inactive State / Comparative Context) -->
+									<div
+										class="space-y-3 rounded-xl bg-surface-container-lowest/60 p-5 opacity-70 shadow-sm backdrop-blur-md transition-opacity hover:opacity-100"
+									>
+										<div class="flex items-center justify-between">
+											<div class="flex items-center gap-2">
+												<span class="material-symbols-outlined text-base text-outline"
+													>swap_vert</span
+												>
+												<h3 class="font-headline-sm text-headline-sm text-on-surface">
+													Alternative: Reversed Meaning
+												</h3>
+											</div>
+											<span
+												class="font-pill-tag text-pill-tag rounded bg-surface-container px-2 py-0.5 text-on-surface-variant uppercase"
+												>Counterpart</span
+											>
+										</div>
+										<p class="font-body-md text-body-md leading-relaxed text-on-surface-variant">
+											Temporary despondency, creative blockage, or disconnect from celestial rhythm.
+											Indicates pouring psychic energies into barren projects or holding cynic
+											disbelief in divine serendipity.
+										</p>
+										<div class="flex flex-wrap gap-1.5 pt-1">
+											<span
+												class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2 py-0.5 text-on-surface-variant"
+												>Doubt</span
+											>
+											<span
+												class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2 py-0.5 text-on-surface-variant"
+												>Spiritual Fatigue</span
+											>
+											<span
+												class="font-label-code-sm text-label-code-sm rounded bg-surface-container px-2 py-0.5 text-on-surface-variant"
+												>Misalignment</span
+											>
+										</div>
+									</div>
+								</div>
+								<!-- Synthesizer Action Buttons Section -->
+								<div
+									class="flex flex-col items-center justify-between gap-4 rounded-xl bg-surface-container-low/70 p-5 shadow-lg backdrop-blur-xl sm:flex-row"
+								>
+									<div class="flex items-center gap-3">
+										<div class="rounded-full bg-primary-container/20 p-2.5 text-primary">
+											<span class="material-symbols-outlined text-xl">insights</span>
+										</div>
+										<div>
+											<div class="font-body-md text-body-md font-medium text-on-surface">
+												Deterministic Synthesis Engine
+											</div>
+											<div class="font-body-sm text-body-sm text-on-surface-variant">
+												Cross-reference with natal transit charts &amp; planetary decans
+											</div>
+										</div>
+									</div>
+									<div class="flex w-full flex-wrap items-center justify-end gap-2.5 sm:w-auto">
+										<button
+											class="font-body-sm text-body-sm flex items-center gap-1.5 rounded-full bg-surface-container px-4 py-2 font-medium text-on-surface shadow-sm transition-all hover:bg-surface-container-high"
+											id="exportBtn"
+											type="button"
+										>
+											<span class="material-symbols-outlined text-base">download</span>
+											<span>Export Inspection Data</span>
+										</button>
+										<button
+											class="font-body-sm text-body-sm flex items-center gap-1.5 rounded-full bg-surface-container px-4 py-2 font-medium text-on-surface shadow-sm transition-all hover:bg-surface-container-high"
+											id="journalBtn"
+											type="button"
+										>
+											<span class="material-symbols-outlined text-base">book_2</span>
+											<span>Add to Daily Journal</span>
+										</button>
+										<button
+											class="font-body-sm text-body-sm flex items-center gap-2 rounded-full bg-gradient-to-r from-primary-container to-secondary-container px-5 py-2 font-medium text-on-primary shadow-lg transition-all hover:shadow-[0_0_24px_rgba(76,215,246,0.4)]"
+											id="synthesizeBtn"
+											type="button"
+										>
+											<span class="material-symbols-outlined text-base">hub</span>
+											<span>Synthesize with Ephemeris</span>
+										</button>
+									</div>
+								</div>
+							</div>
+						</div>
+						<!-- Additional Detail: Historical Inspection Strip -->
+						<section class="relative z-10 mt-10 pt-6">
+							<div class="mb-4 flex items-center justify-between">
+								<div class="flex items-center gap-2">
+									<span class="material-symbols-outlined text-base text-primary">history</span>
+									<h3 class="font-headline-sm text-headline-sm text-on-surface">
+										Recent Telemetry Captures
+									</h3>
+								</div>
+								<span class="font-label-code-sm text-label-code-sm text-on-surface-variant"
+									>Session ID: #OBS-9924-CV</span
+								>
+							</div>
+							<div class="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
+								<!-- Capture 1 -->
+								<div
+									class="flex cursor-pointer items-center gap-3 rounded-xl bg-surface-container-low/60 p-3.5 shadow-sm backdrop-blur-md transition-colors hover:bg-surface-container-low"
+								>
+									<div
+										class="font-headline-sm flex h-14 w-10 items-center justify-center rounded bg-surface-container-highest text-sm text-primary"
+									>
+										I
+									</div>
+									<div class="min-w-0 flex-1">
+										<div class="font-body-md text-body-md truncate font-medium text-on-surface">
+											The Magician
+										</div>
+										<div class="font-body-sm text-body-sm truncate text-secondary">
+											Upright • 99.1% conf
+										</div>
+										<div
+											class="font-label-code-sm text-label-code-sm truncate text-on-surface-variant"
+										>
+											03:12:45 UTC
+										</div>
+									</div>
+								</div>
+								<!-- Capture 2 -->
+								<div
+									class="flex cursor-pointer items-center gap-3 rounded-xl bg-surface-container-low/60 p-3.5 shadow-sm backdrop-blur-md transition-colors hover:bg-surface-container-low"
+								>
+									<div
+										class="font-headline-sm flex h-14 w-10 items-center justify-center rounded bg-surface-container-highest text-sm text-secondary"
+									>
+										II
+									</div>
+									<div class="min-w-0 flex-1">
+										<div class="font-body-md text-body-md truncate font-medium text-on-surface">
+											The High Priestess
+										</div>
+										<div class="font-body-sm text-body-sm truncate text-secondary">
+											Upright • 98.7% conf
+										</div>
+										<div
+											class="font-label-code-sm text-label-code-sm truncate text-on-surface-variant"
+										>
+											03:09:12 UTC
+										</div>
+									</div>
+								</div>
+								<!-- Capture 3 -->
+								<div
+									class="flex cursor-pointer items-center gap-3 rounded-xl bg-surface-container-low/60 p-3.5 shadow-sm backdrop-blur-md transition-colors hover:bg-surface-container-low"
+								>
+									<div
+										class="font-headline-sm flex h-14 w-10 items-center justify-center rounded bg-surface-container-highest text-sm text-tertiary"
+									>
+										XVIII
+									</div>
+									<div class="min-w-0 flex-1">
+										<div class="font-body-md text-body-md truncate font-medium text-on-surface">
+											The Moon
+										</div>
+										<div class="font-body-sm text-body-sm truncate text-error">
+											Reversed • 96.4% conf
+										</div>
+										<div
+											class="font-label-code-sm text-label-code-sm truncate text-on-surface-variant"
+										>
+											02:58:30 UTC
+										</div>
+									</div>
+								</div>
+								<!-- Capture 4 (New Scan Placeholder) -->
+								<div
+									class="flex cursor-pointer items-center justify-center gap-2 rounded-xl bg-surface-container-low/30 p-3.5 text-on-surface-variant shadow-sm backdrop-blur-md transition-colors hover:bg-surface-container-low/50 hover:text-on-surface"
+									onclick="document.getElementById('fileInput').click()"
+								>
+									<span class="material-symbols-outlined text-lg">add_circle</span>
+									<span class="font-body-sm text-body-sm font-medium">New Optical Scan</span>
+								</div>
+							</div>
+						</section>
+					</div>
+					<!-- Micro-interactions Script -->
+					<script>
+						(function () {
+							const dropZone = document.getElementById('dropZone');
+							const scannerLaser = document.getElementById('scannerLaser');
+							const loadSampleBtn = document.getElementById('loadSampleBtn');
+							const reScanBtn = document.getElementById('reScanBtn');
+							const fileInput = document.getElementById('fileInput');
+							const synthesizeBtn = document.getElementById('synthesizeBtn');
+							const journalBtn = document.getElementById('journalBtn');
+							const exportBtn = document.getElementById('exportBtn');
 
-      // Scanner laser animation trigger
-      function triggerScanAnimation() {
-        if (!scannerLaser) return;
-        scannerLaser.style.opacity = '1';
-        scannerLaser.style.top = '0%';
-        
-        let position = 0;
-        let direction = 1;
-        let passes = 0;
-        
-        const interval = setInterval(() => {
-          position += 2 * direction;
-          scannerLaser.style.top = position + '%';
-          
-          if (position >= 96) {
-            direction = -1;
-            passes++;
-          } else if (position <= 2) {
-            direction = 1;
-            passes++;
-          }
-          
-          if (passes >= 3) {
-            clearInterval(interval);
-            setTimeout(() => {
-              scannerLaser.style.opacity = '0';
-            }, 200);
-          }
-        }, 16);
-      }
+							// Scanner laser animation trigger
+							function triggerScanAnimation() {
+								if (!scannerLaser) return;
+								scannerLaser.style.opacity = '1';
+								scannerLaser.style.top = '0%';
 
-      // Sample reload interaction
-      if (loadSampleBtn) {
-        loadSampleBtn.addEventListener('click', () => {
-          triggerScanAnimation();
-          loadSampleBtn.classList.add('scale-95');
-          setTimeout(() => loadSampleBtn.classList.remove('scale-95'), 150);
-        });
-      }
+								let position = 0;
+								let direction = 1;
+								let passes = 0;
 
-      if (reScanBtn) {
-        reScanBtn.addEventListener('click', () => {
-          reScanBtn.classList.add('rotate-180');
-          triggerScanAnimation();
-          setTimeout(() => reScanBtn.classList.remove('rotate-180'), 400);
-        });
-      }
+								const interval = setInterval(() => {
+									position += 2 * direction;
+									scannerLaser.style.top = position + '%';
 
-      // Drag & Drop visual feedbacks
-      if (dropZone) {
-        ['dragenter', 'dragover'].forEach(eventName => {
-          dropZone.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            dropZone.classList.add('bg-surface-container-high/40');
-          }, false);
-        });
+									if (position >= 96) {
+										direction = -1;
+										passes++;
+									} else if (position <= 2) {
+										direction = 1;
+										passes++;
+									}
 
-        ['dragleave', 'drop'].forEach(eventName => {
-          dropZone.addEventListener(eventName, (e) => {
-            e.preventDefault();
-            dropZone.classList.remove('bg-surface-container-high/40');
-            if (eventName === 'drop') {
-              triggerScanAnimation();
-            }
-          }, false);
-        });
-      }
+									if (passes >= 3) {
+										clearInterval(interval);
+										setTimeout(() => {
+											scannerLaser.style.opacity = '0';
+										}, 200);
+									}
+								}, 16);
+							}
 
-      if (fileInput) {
-        fileInput.addEventListener('change', () => {
-          if (fileInput.files.length > 0) {
-            triggerScanAnimation();
-          }
-        });
-      }
+							// Sample reload interaction
+							if (loadSampleBtn) {
+								loadSampleBtn.addEventListener('click', () => {
+									triggerScanAnimation();
+									loadSampleBtn.classList.add('scale-95');
+									setTimeout(() => loadSampleBtn.classList.remove('scale-95'), 150);
+								});
+							}
 
-      // Action buttons feedback
-      if (synthesizeBtn) {
-        synthesizeBtn.addEventListener('click', function() {
-          const originalText = this.innerHTML;
-          this.innerHTML = '<span class="material-symbols-outlined text-base animate-spin">progress_activity</span><span>Calculating Transits...</span>';
-          setTimeout(() => {
-            this.innerHTML = '<span class="material-symbols-outlined text-base">check</span><span>Synthesized</span>';
-            setTimeout(() => { this.innerHTML = originalText; }, 2000);
-          }, 1200);
-        });
-      }
+							if (reScanBtn) {
+								reScanBtn.addEventListener('click', () => {
+									reScanBtn.classList.add('rotate-180');
+									triggerScanAnimation();
+									setTimeout(() => reScanBtn.classList.remove('rotate-180'), 400);
+								});
+							}
 
-      if (journalBtn) {
-        journalBtn.addEventListener('click', function() {
-          const originalText = this.innerHTML;
-          this.innerHTML = '<span class="material-symbols-outlined text-base">check</span><span>Logged</span>';
-          setTimeout(() => { this.innerHTML = originalText; }, 1800);
-        });
-      }
+							// Drag & Drop visual feedbacks
+							if (dropZone) {
+								['dragenter', 'dragover'].forEach((eventName) => {
+									dropZone.addEventListener(
+										eventName,
+										(e) => {
+											e.preventDefault();
+											dropZone.classList.add('bg-surface-container-high/40');
+										},
+										false
+									);
+								});
 
-      if (exportBtn) {
-        exportBtn.addEventListener('click', function() {
-          const originalText = this.innerHTML;
-          this.innerHTML = '<span class="material-symbols-outlined text-base">file_download_done</span><span>Exported JSON</span>';
-          setTimeout(() => { this.innerHTML = originalText; }, 1800);
-        });
-      }
-    })();
-  </script>
-</div></div></main><footer class="relative z-10 w-full bg-surface-container-lowest/90 backdrop-blur-xl border-t border-outline-variant/20 py-12 mt-16"><div class="max-w-7xl mx-auto px-6 lg:px-12 flex flex-col md:flex-row items-center justify-between gap-6"><div class="flex items-center gap-4"><div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-surface-container-high/80 border border-secondary/30 font-pill-tag text-pill-tag uppercase text-secondary tracking-widest"><span class="w-1.5 h-1.5 rounded-full bg-secondary animate-pulse shadow-[0_0_6px_#4cd7f6]"></span><span>Prolog Symbolic Engine Active</span></div><span class="text-on-surface-variant font-body-sm text-body-sm">© 2024 AstroLogic Celestial Labs.</span></div><nav class="flex items-center gap-6 font-body-sm text-body-sm" data-active-classes="text-primary font-medium"><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="birth-chart" href="#">Ephemeris</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="tarot-deck" href="#">Arcana</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="ai-guide" href="#">Oracle Docs</a><a class="text-on-surface-variant hover:text-on-surface transition-colors" data-path="about" href="#">About</a></nav><p class="text-on-surface-variant/70 font-body-sm text-body-sm text-center md:text-right max-w-xs">Synthesizing deep-space telemetry with deterministic symbolic divination. For entertainment &amp; self-reflection purposes only.</p></div></footer></body></html>
+								['dragleave', 'drop'].forEach((eventName) => {
+									dropZone.addEventListener(
+										eventName,
+										(e) => {
+											e.preventDefault();
+											dropZone.classList.remove('bg-surface-container-high/40');
+											if (eventName === 'drop') {
+												triggerScanAnimation();
+											}
+										},
+										false
+									);
+								});
+							}
+
+							if (fileInput) {
+								fileInput.addEventListener('change', () => {
+									if (fileInput.files.length > 0) {
+										triggerScanAnimation();
+									}
+								});
+							}
+
+							// Action buttons feedback
+							if (synthesizeBtn) {
+								synthesizeBtn.addEventListener('click', function () {
+									const originalText = this.innerHTML;
+									this.innerHTML =
+										'<span class="material-symbols-outlined text-base animate-spin">progress_activity</span><span>Calculating Transits...</span>';
+									setTimeout(() => {
+										this.innerHTML =
+											'<span class="material-symbols-outlined text-base">check</span><span>Synthesized</span>';
+										setTimeout(() => {
+											this.innerHTML = originalText;
+										}, 2000);
+									}, 1200);
+								});
+							}
+
+							if (journalBtn) {
+								journalBtn.addEventListener('click', function () {
+									const originalText = this.innerHTML;
+									this.innerHTML =
+										'<span class="material-symbols-outlined text-base">check</span><span>Logged</span>';
+									setTimeout(() => {
+										this.innerHTML = originalText;
+									}, 1800);
+								});
+							}
+
+							if (exportBtn) {
+								exportBtn.addEventListener('click', function () {
+									const originalText = this.innerHTML;
+									this.innerHTML =
+										'<span class="material-symbols-outlined text-base">file_download_done</span><span>Exported JSON</span>';
+									setTimeout(() => {
+										this.innerHTML = originalText;
+									}, 1800);
+								});
+							}
+						})();
+					</script>
+				</div>
+			</div>
+		</main>
+		<footer
+			class="relative z-10 mt-16 w-full border-t border-outline-variant/20 bg-surface-container-lowest/90 py-12 backdrop-blur-xl"
+		>
+			<div
+				class="mx-auto flex max-w-7xl flex-col items-center justify-between gap-6 px-6 md:flex-row lg:px-12"
+			>
+				<div class="flex items-center gap-4">
+					<div
+						class="font-pill-tag text-pill-tag inline-flex items-center gap-2 rounded-full border border-secondary/30 bg-surface-container-high/80 px-3 py-1 tracking-widest text-secondary uppercase"
+					>
+						<span
+							class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary shadow-[0_0_6px_#4cd7f6]"
+						></span
+						><span>Prolog Symbolic Engine Active</span>
+					</div>
+					<span class="font-body-sm text-body-sm text-on-surface-variant"
+						>© 2024 AstroLogic Celestial Labs.</span
+					>
+				</div>
+				<nav
+					class="font-body-sm text-body-sm flex items-center gap-6"
+					data-active-classes="text-primary font-medium"
+				>
+					<a
+						class="text-on-surface-variant transition-colors hover:text-on-surface"
+						data-path="birth-chart"
+						href="#"
+						>Ephemeris</a
+					><a
+						class="text-on-surface-variant transition-colors hover:text-on-surface"
+						data-path="tarot-deck"
+						href="#"
+						>Arcana</a
+					><a
+						class="text-on-surface-variant transition-colors hover:text-on-surface"
+						data-path="ai-guide"
+						href="#"
+						>Oracle Docs</a
+					><a
+						class="text-on-surface-variant transition-colors hover:text-on-surface"
+						data-path="about"
+						href="#"
+						>About</a
+					>
+				</nav>
+				<p
+					class="font-body-sm text-body-sm max-w-xs text-center text-on-surface-variant/70 md:text-right"
+				>
+					Synthesizing deep-space telemetry with deterministic symbolic divination. For
+					entertainment &amp; self-reflection purposes only.
+				</p>
+			</div>
+		</footer>
+	</body>
+</html>

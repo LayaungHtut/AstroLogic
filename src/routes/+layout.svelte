@@ -11,10 +11,13 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<title>AstroLogic - AI Zodiac & Tarot Reasoning</title>
-	<meta name="description" content="An AI-powered Zodiac, Tarot, and Horoscope application with symbolic reasoning" />
+	<meta
+		name="description"
+		content="An AI-powered Zodiac, Tarot, and Horoscope application with symbolic reasoning"
+	/>
 </svelte:head>
 
-<div class="fixed inset-0 pointer-events-none cosmic-stars opacity-40 z-0"></div>
+<div class="cosmic-stars pointer-events-none fixed inset-0 z-0 opacity-40"></div>
 <StarField />
 <Navigation />
 <main class="relative z-10">
