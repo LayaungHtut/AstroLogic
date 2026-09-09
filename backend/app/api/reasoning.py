@@ -186,6 +186,15 @@ async def _finish_reading(
     if not ai_interpretation:
         ai_interpretation = _fallback_interpretation(cards, themes, category, zodiac_sign)
 
+    summary = _build_reading_summary(
+        cards=cards,
+        themes=themes,
+        dominant_theme=post["dominant_theme"],
+        direction=post["direction"],
+        category=category,
+        conflicts=conflicts,
+    )
+
     return {
         "question": question,
         "category": category,
@@ -203,6 +212,7 @@ async def _finish_reading(
         "conflicts": conflicts,
         "reasoning": post["reasoning"],
         "ai_interpretation": ai_interpretation,
+        "summary": summary,
         "facts": facts,
     }
 
@@ -326,6 +336,58 @@ async def generate_reading(data: dict):
         return {"id": row[0], "status": "saved"}
     finally:
         await db.close()
+
+
+_DIRECTION_LABELS = {
+    "optimistic": "leans optimistic",
+    "challenging": "carries some challenges to work through",
+    "reflective": "calls for quiet reflection",
+    "balanced": "sits in balance",
+}
+
+
+def _build_reading_summary(
+    cards: list[dict],
+    themes: list[str],
+    dominant_theme: str | None,
+    direction: str,
+    category: str,
+    conflicts: list[dict],
+) -> str:
+    """A short, scannable TL;DR of the reading — separate from the full
+    ai_interpretation prose — built deterministically from the same
+    Prolog-derived data (themes, direction, dominant theme, conflicts) so it
+    stays accurate even when the AI interpretation call fails and the
+    fallback text is used instead.
+
+    Kept to 1-2 sentences: card names + orientations, the dominant thread,
+    and how the reading is trending, so a seeker can grasp the gist before
+    reading the full interpretation.
+    """
+    card_bits = [
+        f"{c['name']}{' (reversed)' if c['is_reversed'] else ''}" for c in cards
+    ]
+    if len(card_bits) == 1:
+        cards_text = card_bits[0]
+    elif len(card_bits) == 2:
+        cards_text = " and ".join(card_bits)
+    else:
+        cards_text = ", ".join(card_bits[:-1]) + f", and {card_bits[-1]}"
+
+    direction_text = _DIRECTION_LABELS.get(direction, "is unfolding")
+
+    thread = dominant_theme or (themes[0] if themes else None)
+    thread_text = f", centered on {thread.replace('_', ' ')}" if thread else ""
+
+    summary = f"This {category} reading draws {cards_text}{thread_text}, and overall {direction_text}."
+
+    if conflicts:
+        summary += (
+            f" Watch for tension between {conflicts[0]['card1_name']} and "
+            f"{conflicts[0]['card2_name']}."
+        )
+
+    return summary
 
 
 def _fallback_interpretation(

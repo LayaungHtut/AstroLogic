@@ -583,6 +583,21 @@
 						{/if}
 					</div>
 
+					{#if reading.summary}
+						<div
+							class="relative z-10 flex items-start gap-3 rounded-xl border border-primary/20 bg-primary-container/15 p-4"
+						>
+							<span class="material-symbols-outlined mt-0.5 text-primary">summarize</span>
+							<div>
+								<span
+									class="font-mono-data block text-[10px] tracking-wider text-primary uppercase"
+									>Quick Summary</span
+								>
+								<p class="mt-1 text-sm text-on-surface">{reading.summary}</p>
+							</div>
+						</div>
+					{/if}
+
 					<div class="relative z-10 rounded-xl bg-surface-container-lowest/60 p-5">
 						<MarkdownText content={reading.ai_interpretation} />
 					</div>

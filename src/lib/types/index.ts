@@ -96,6 +96,7 @@ export interface ReadingResult {
 	conflicts?: ThemeConflict[];
 	reasoning: ReasoningStep[];
 	ai_interpretation: string;
+	summary?: string;
 	facts?: Record<string, unknown>;
 	created_at?: string;
 }
