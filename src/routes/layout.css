@@ -257,3 +257,12 @@ select.input-field option {
 .page-header p {
 	color: var(--color-on-surface-variant);
 }
+
+.hide-scrollbar {
+	scrollbar-width: none;
+	-ms-overflow-style: none;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+	display: none;
+}

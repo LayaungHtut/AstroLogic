@@ -414,37 +414,37 @@
 				<li>
 					<span class="num">4.</span><span class="toc-title">Algorithms</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-algorithms">7</span>
+					><span class="toc-page" data-target="sec-algorithms">8</span>
 				</li>
 				<li>
 					<span class="num">5.</span><span class="toc-title">Prolog Codes</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-prolog-codes">10</span>
+					><span class="toc-page" data-target="sec-prolog-codes">11</span>
 				</li>
 				<li>
 					<span class="num">6.</span><span class="toc-title">Current Limitations</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-limitations">16</span>
+					><span class="toc-page" data-target="sec-limitations">17</span>
 				</li>
 				<li>
 					<span class="num">7.</span><span class="toc-title">System Implementation (UI Design)</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-implementation">17</span>
+					><span class="toc-page" data-target="sec-implementation">18</span>
 				</li>
 				<li>
 					<span class="num">8.</span><span class="toc-title">Conclusion</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-conclusion">20</span>
+					><span class="toc-page" data-target="sec-conclusion">22</span>
 				</li>
 				<li>
 					<span class="num">9.</span><span class="toc-title">Further Extension</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-extension">21</span>
+					><span class="toc-page" data-target="sec-extension">23</span>
 				</li>
 				<li>
 					<span class="num">10.</span><span class="toc-title">References</span
 					><span class="toc-dots"></span
-					><span class="toc-page" data-target="sec-references">22</span>
+					><span class="toc-page" data-target="sec-references">24</span>
 				</li>
 			</ul>
 		</div>
@@ -667,6 +667,68 @@
 							Prolog-derived text.
 						</td>
 					</tr>
+					<tr>
+						<td>FR-11</td>
+						<td>Precise natal chart calculation</td>
+						<td>
+							Given birth date, time, and (optionally) place, the system computes exact Sun, Moon,
+							Ascendant, Midheaven, and outer-planet positions via the Swiss Ephemeris (NASA JPL
+							DE421 data), including sign degree and timezone resolution; falls back to a
+							date-only sign approximation when place/time is omitted.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-12</td>
+						<td>AI-narrated birth chart explanation</td>
+						<td>
+							System generates an in-depth, bilingual (English/Myanmar) psychological and
+							astrological explanation of a calculated chart &ndash; Big Three synthesis,
+							planetary archetypes, major aspects, and elemental constitution.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-13</td>
+						<td>Tarot card image scan</td>
+						<td>
+							User photographs or uploads a physical tarot card; a vision-capable LLM identifies
+							the card (with a local filename/keyword fallback when the vision API is unavailable)
+							and the system returns its meaning plus an AI-generated explanation.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-14</td>
+						<td>Bilingual interface (i18n)</td>
+						<td>
+							The entire UI, including zodiac, tarot, and horoscope content, is available in
+							English and Myanmar (Burmese); the chosen locale persists across sessions via
+							local storage.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-15</td>
+						<td>User profile persistence</td>
+						<td>
+							User-entered profile details (name, birth date/time/place, preferred zodiac sign)
+							are saved locally and reused to pre-fill readings, horoscope, and birth-chart forms.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-16</td>
+						<td>Deep synastry breakdown</td>
+						<td>
+							Beyond the headline compatibility score, a dedicated endpoint returns per-component
+							scoring, communication/balance themes, strengths, challenges, and complementary
+							trait pairs for two signs.
+						</td>
+					</tr>
+					<tr>
+						<td>FR-17</td>
+						<td>Topic classification</td>
+						<td>
+							Free-text questions can be classified into a tarot topic independently of a full
+							reading, returning the topic and its associated Prolog-derived profile.
+						</td>
+					</tr>
 				</tbody>
 			</table>
 
@@ -721,7 +783,21 @@
 					</tr>
 					<tr>
 						<td>Natural-Language Generation</td>
-						<td>OpenRouter LLM API (e.g. GPT-3.5-class model)</td>
+						<td>
+							OpenRouter LLM API (text narration + a vision-capable model for tarot card image
+							identification)
+						</td>
+					</tr>
+					<tr>
+						<td>Astronomical Calculation</td>
+						<td>
+							pyswisseph (Swiss Ephemeris) over the NASA JPL DE421 dataset, timezonefinder + tzdata
+							for birth-place timezone resolution
+						</td>
+					</tr>
+					<tr>
+						<td>Internationalization</td>
+						<td>Custom Svelte i18n store with English and Myanmar (Burmese) translation dictionaries</td>
 					</tr>
 					<tr>
 						<td>Persistence</td>
@@ -1190,10 +1266,10 @@ zodiac_info(Sign, Info) :-
 			<h2 id="sec-limitations">6. Current Limitations</h2>
 			<ul>
 				<li>
-					<strong>Sun-sign only astrology.</strong> V1 computes only the Sun sign from a birth date.
-					Moon sign and Rising (Ascendant) sign require birth time and location and are
-					<em>not</em> calculated in the current version, even though
-					<code>chart_profile/4</code> already reserves fields for them.
+					<strong>Precise chart requires birth time and place.</strong> Sun, Moon, Ascendant, and
+					Midheaven are computed exactly via the Swiss Ephemeris when birth time and location are
+					supplied; without a location the system still falls back to a Sun-sign-only
+					approximation, since Moon/Rising cannot be derived from date alone.
 				</li>
 				<li>
 					<strong>Western tropical zodiac boundaries only.</strong> Sidereal/Vedic zodiac systems
@@ -1210,8 +1286,11 @@ zodiac_info(Sign, Info) :-
 					more templated and repetitive.
 				</li>
 				<li>
-					<strong>Single-language support.</strong> The knowledge base and generated content are
-					English-only; no localization layer exists yet.
+					<strong>Localization limited to two languages.</strong> The UI, static content (signs,
+					cards, spreads, horoscope themes), and LLM-generated narration (readings, chat, birth
+					chart explanations) are available in English and Myanmar; the underlying Prolog
+					knowledge base itself &ndash; atoms, predicate names, rule identifiers &ndash; remains
+					English-only internally, and no additional languages are supported yet.
 				</li>
 				<li>
 					<strong>No user accounts / multi-tenant isolation.</strong> Reading history is stored in a
@@ -1260,7 +1339,12 @@ zodiac_info(Sign, Info) :-
 					</tr>
 					<tr>
 						<td><code>/birth-chart</code></td>
-						<td>Enter a birth date to resolve a Sun-sign profile.</td>
+						<td>
+							Enter birth date/time and, optionally, birth place for a precise Swiss
+							Ephemeris-based natal chart &ndash; Sun, Moon, Ascendant, Midheaven and planetary
+							degrees rendered on an interactive chart wheel, with an AI-narrated bilingual
+							explanation. Falls back to a date-only Sun-sign profile without a birth place.
+						</td>
 					</tr>
 					<tr>
 						<td><code>/tarot</code></td>
@@ -1302,7 +1386,11 @@ zodiac_info(Sign, Info) :-
 					</tr>
 					<tr>
 						<td><code>/scan</code></td>
-						<td>Auxiliary input/scan flow feeding into a reading.</td>
+						<td>
+							Photograph or upload a physical tarot card; a vision-capable LLM identifies it
+							(with a local keyword fallback), then returns its meaning and an AI-generated
+							explanation.
+						</td>
 					</tr>
 					<tr>
 						<td><code>/about</code></td>
@@ -1310,6 +1398,12 @@ zodiac_info(Sign, Info) :-
 					</tr>
 				</tbody>
 			</table>
+			<p>
+				A persistent <code>ProfileSettingsModal</code>, reachable from any page, lets the user save
+				a name, birth date/time/place, and preferred zodiac sign for reuse across the reading,
+				horoscope, and birth-chart forms; a language switcher (English / Myanmar) in the top bar
+				is likewise available on every page and its selection persists across sessions.
+			</p>
 
 			<h3>7.2 Key UI Components</h3>
 			<ul>
@@ -1328,14 +1422,35 @@ zodiac_info(Sign, Info) :-
 					input, result, explanation).
 				</li>
 				<li>
-					<code>LoadingSpinner</code>, <code>StarField</code>, <code>Navigation</code> &ndash;
-					shared visual/interaction chrome.
+					<code>NatalChartWheel</code> &ndash; SVG chart wheel plotting Sun/Moon/planet positions
+					and sign divisions from a calculated birth chart.
+				</li>
+				<li>
+					<code>BirthChartExplanation</code> &ndash; renders the AI-narrated, bilingual natal
+					chart breakdown returned by <code>/api/birth-chart/explain</code>.
+				</li>
+				<li>
+					<code>ProfileSettingsModal</code> &ndash; edits and persists the user's saved profile
+					(name, birth details, preferred sign) used to pre-fill other pages.
+				</li>
+				<li>
+					<code>LanguageSwitcher</code> &ndash; toggles the UI locale between English and Myanmar;
+					shown in the top bar on every page.
+				</li>
+				<li>
+					<code>MarkdownText</code> &ndash; renders lightweight Markdown (bold, italics, lists)
+					from LLM-generated responses safely as HTML.
+				</li>
+				<li>
+					<code>LoadingSpinner</code>, <code>StarField</code>, <code>Navigation</code> (top bar),
+					<code>Sidebar</code> (primary link navigation) &ndash; shared visual/interaction chrome.
 				</li>
 			</ul>
 			<p>
 				State is managed through dedicated Svelte stores &ndash; <code>Profile</code>,
 				<code>Reading</code>, <code>Chat</code>, and <code>Loading</code> &ndash; with a typed API
-				client that centralizes error handling for all backend calls.
+				client that centralizes error handling for all backend calls, and an <code>i18n</code>
+				locale store that drives every translated string in the app.
 			</p>
 
 			<h3>7.3 REST API Surface</h3>
@@ -1343,32 +1458,55 @@ zodiac_info(Sign, Info) :-
 GET  /api/health
 GET  /api/zodiac
 GET  /api/zodiac/{sign}
+GET  /api/zodiac/{sign}/profile
 GET  /api/tarot
+GET  /api/tarot/{card}
 POST /api/tarot/draw          { count, spread_type }
 POST /api/reading/analyze     { question, zodiac_sign, spread_type, card_count }
 POST /api/reading/analyze-selected  { question, zodiac_sign, cards: [{name, is_reversed}] }
 POST /api/reading/generate
 POST /api/horoscope/generate  { zodiac_sign, mood }
-POST /api/compatibility/analyze  { sign1, sign2 }
+POST /api/compatibility/analyze   { sign1, sign2 }
+POST /api/compatibility/synastry  { sign1, sign2 }
 POST /api/chat                { message, zodiac_sign, current_reading }
 GET    /api/history
 GET    /api/history/{id}
-DELETE /api/history/{id}</pre>
+DELETE /api/history/{id}
+GET  /api/analytics
+POST /api/birth-chart/calculate  { year?, month, day, hour, minute, latitude?, longitude? }
+POST /api/birth-chart/explain    { chart, locale }
+POST /api/tarot-scan/identify    (multipart image upload, max 10MB)
+POST /api/tarot-scan/explain     { card_id, is_reversed? }
+GET  /api/topics
+GET  /api/topics/{topic}
+POST /api/topics/classify     { question }</pre>
 			<p class="code-caption">
 				Base URL: <code>http://localhost:8000/api</code> (from <code>docs/api.md</code>).
+				<code>/api/birth-chart/calculate</code> returns a date-only Sun-sign profile when
+				<code>year</code>/<code>latitude</code>/<code>longitude</code> are omitted, and a precise,
+				degree-accurate chart (via the Swiss Ephemeris) when they are supplied.
 			</p>
 
 			<h3>7.4 Backend Service Layer</h3>
 			<p>
 				FastAPI is organized into <code>api</code> (route handlers),
-				<code>services</code> (<code>PrologService</code>, <code>OpenRouterService</code>,
-				<code>TarotService</code>, <code>HoroscopeService</code>, <code>AnalyticsService</code>),
+				<code>services</code> (<code>PrologService</code>, <code>TarotService</code>,
+				<code>TarotAPIClient</code>, <code>HoroscopeService</code>, <code>AnalyticsService</code>,
+				<code>ChatService</code>, plus the function-based <code>openrouter_service</code>,
+				<code>ephemeris_service</code>, and <code>birth_chart_explanation_service</code> modules),
 				<code>schemas</code> (Pydantic request/response models), <code>models</code>, and
 				<code>database</code> (SQLite access). <code>PrologService</code> is the single bridge
 				between Python and SWI-Prolog, exposing typed methods for every predicate in each of the
 				four reasoning modules (e.g. <code>get_zodiac_profile</code>,
 				<code>select_eligible_cards</code>, <code>analyze_reading</code>,
-				<code>analyze_synastry</code>).
+				<code>analyze_synastry</code>). <code>ephemeris_service.compute_natal_positions</code>
+				wraps pyswisseph to compute exact ecliptic positions (run off the event loop via
+				<code>asyncio.to_thread</code> to keep the API responsive under concurrent requests), and
+				<code>birth_chart_explanation_service.generate_birth_chart_explanation</code> turns a
+				calculated chart into a bilingual, LLM-narrated explanation, while
+				<code>openrouter_service</code> additionally exposes a vision-capable call path
+				(<code>scan_tarot_image</code>) used by <code>/api/tarot-scan/identify</code> to recognize
+				a photographed card.
 			</p>
 
 			<h3>7.5 Visual/UX Design Notes</h3>
@@ -1427,9 +1565,9 @@ DELETE /api/history/{id}</pre>
 			<h2 id="sec-extension">9. Further Extension</h2>
 			<ul>
 				<li>
-					<strong>Full natal chart support.</strong> Extend <code>chart_profile/4</code> with
-					ephemeris data to compute Moon sign, Rising sign, and planetary house placements from
-					birth time and location.
+					<strong>Planetary house placements.</strong> Extend the natal chart beyond sign/degree
+					positions to compute house cusps and placements (already have Ascendant/Midheaven as a
+					foundation), enabling house-based interpretation.
 				</li>
 				<li>
 					<strong>Trained question classifier.</strong> Replace the heuristic category detector with
@@ -1441,8 +1579,9 @@ DELETE /api/history/{id}</pre>
 					through the Analytics page.
 				</li>
 				<li>
-					<strong>Multi-language support.</strong> Localize both the Prolog trait/theme text and the
-					LLM prompts for non-English users.
+					<strong>Additional languages.</strong> Extend the existing English/Myanmar i18n layer
+					with further languages, now that the translation dictionary, locale-aware LLM prompts,
+					and static content structures are already in place.
 				</li>
 				<li>
 					<strong>User accounts and multi-tenancy.</strong> Add authentication so reading history is

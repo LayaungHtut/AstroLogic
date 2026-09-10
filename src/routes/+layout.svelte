@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import StarField from '$lib/components/StarField.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
+	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
@@ -20,7 +21,10 @@
 <div class="cosmic-stars pointer-events-none fixed inset-0 z-0 opacity-40"></div>
 <StarField />
 <Navigation />
-<main class="relative z-10">
-	{@render children()}
-</main>
-<Footer />
+<Sidebar />
+<div class="lg:pl-64">
+	<main class="relative z-10">
+		{@render children()}
+	</main>
+	<Footer />
+</div>
