@@ -32,3 +32,7 @@ backend/.env
 
 # Logs
 *.log
+
+# Skyfield ephemeris data (auto-downloaded at runtime by ephemeris_service)
+de421.bsp
+backend/de421.bsp

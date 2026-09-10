@@ -250,6 +250,7 @@ card_theme(king_of_pentacles, discipline).
 % ============================================================
 % Structured topic categories for tarot readings.
 
+tarot_topic(education).
 tarot_topic(love).
 tarot_topic(career).
 tarot_topic(finance).
@@ -258,6 +259,7 @@ tarot_topic(communication).
 tarot_topic(general).
 
 % --- Topic description ---
+topic_description(education, 'Guidance for studies, exams, learning, academic milestones, and intellectual growth.').
 topic_description(love, 'Matters of the heart, romantic relationships, self-love, and emotional connections.').
 topic_description(career, 'Professional life, work goals, job changes, leadership, and vocational path.').
 topic_description(finance, 'Financial matters, abundance, investments, material security, and prosperity.').
@@ -266,6 +268,7 @@ topic_description(communication, 'Expression, dialogue, social connections, trut
 topic_description(general, 'Broad life overview, daily guidance, and general reflections.').
 
 % --- Topic to category mapping ---
+topic_category(education, education).
 topic_category(love, relationship).
 topic_category(career, career).
 topic_category(finance, career).
@@ -274,6 +277,7 @@ topic_category(communication, general).
 topic_category(general, general).
 
 % --- Topic element affinity ---
+topic_element(education, air).
 topic_element(love, water).
 topic_element(career, earth).
 topic_element(finance, earth).
@@ -282,6 +286,14 @@ topic_element(communication, air).
 topic_element(general, air).
 
 % --- Topic card themes ---
+topic_relevant_theme(education, learning).
+topic_relevant_theme(education, wisdom).
+topic_relevant_theme(education, diligence).
+topic_relevant_theme(education, focus).
+topic_relevant_theme(education, new_skills).
+topic_relevant_theme(education, clarity).
+topic_relevant_theme(education, ambition).
+
 topic_relevant_theme(love, love).
 topic_relevant_theme(love, partnership).
 topic_relevant_theme(love, connection).
@@ -327,6 +339,7 @@ topic_relevant_theme(general, hope).
 topic_relevant_theme(general, cycles).
 
 % --- Topic spread recommendation ---
+topic_spread(education, three_card).
 topic_spread(love, relationship).
 topic_spread(career, career).
 topic_spread(finance, decision).
@@ -338,42 +351,62 @@ topic_spread(general, three_card).
 % Classify a question into a tarot topic.
 
 classify_topic(Input, Topic) :-
-    % NOTE: each keyword disjunction below MUST be wrapped in its own parens.
-    % `;` and `->` share the containing (...) without them, so
-    % `A ; B -> C ; D` parses as `A ; (B -> C) ; D`, not `(A ; B) -> C ; D` —
-    % matching keyword A would then succeed the whole clause *without ever
-    % binding Topic*, leaving it a dangling unbound variable. (This is what
-    % made classify_topic effectively non-functional before this fix.)
-    (   (   sub_string(Input, _, _, _, 'love') ; sub_string(Input, _, _, _, 'romantic') ;
+    (   (   sub_string(Input, _, _, _, 'education') ; sub_string(Input, _, _, _, 'study') ;
+            sub_string(Input, _, _, _, 'exam') ; sub_string(Input, _, _, _, 'test') ;
+            sub_string(Input, _, _, _, 'school') ; sub_string(Input, _, _, _, 'university') ;
+            sub_string(Input, _, _, _, 'college') ; sub_string(Input, _, _, _, 'pass') ;
+            sub_string(Input, _, _, _, 'fail') ; sub_string(Input, _, _, _, 'grade') ;
+            sub_string(Input, _, _, _, 'degree') ; sub_string(Input, _, _, _, 'major') ;
+            sub_string(Input, _, _, _, 'learning') ; sub_string(Input, _, _, _, 'academic') ;
+            sub_string(Input, _, _, _, 'စာမေးပွဲ') ; sub_string(Input, _, _, _, 'အောင်') ;
+            sub_string(Input, _, _, _, 'ကျောင်း') ; sub_string(Input, _, _, _, 'တက္ကသိုလ်') ;
+            sub_string(Input, _, _, _, 'ပညာရေး') ; sub_string(Input, _, _, _, 'ဘွဲ့') ;
+            sub_string(Input, _, _, _, 'သင်တန်း') ; sub_string(Input, _, _, _, 'စာသင်')
+        )
+    ->  Topic = education
+    ;   (   sub_string(Input, _, _, _, 'love') ; sub_string(Input, _, _, _, 'romantic') ;
             sub_string(Input, _, _, _, 'partner') ; sub_string(Input, _, _, _, 'relationship') ;
             sub_string(Input, _, _, _, 'heart') ; sub_string(Input, _, _, _, 'crush') ;
             sub_string(Input, _, _, _, 'date') ; sub_string(Input, _, _, _, 'marriage') ;
-            sub_string(Input, _, _, _, 'soulmate') ; sub_string(Input, _, _, _, 'attract')
+            sub_string(Input, _, _, _, 'soulmate') ; sub_string(Input, _, _, _, 'attract') ;
+            sub_string(Input, _, _, _, 'အချစ်') ; sub_string(Input, _, _, _, 'ချစ်သူ') ;
+            sub_string(Input, _, _, _, 'ရည်းစား') ; sub_string(Input, _, _, _, 'အိမ်ထောင်') ;
+            sub_string(Input, _, _, _, 'မင်္ဂလာဆောင်') ; sub_string(Input, _, _, _, 'ကြိုက်') ;
+            sub_string(Input, _, _, _, 'တွဲ') ; sub_string(Input, _, _, _, 'သဘောကျ')
         )
     ->  Topic = love
     ;   (   sub_string(Input, _, _, _, 'career') ; sub_string(Input, _, _, _, 'job') ;
             sub_string(Input, _, _, _, 'work') ; sub_string(Input, _, _, _, 'promotion') ;
             sub_string(Input, _, _, _, 'boss') ; sub_string(Input, _, _, _, 'colleague') ;
-            sub_string(Input, _, _, _, 'business') ; sub_string(Input, _, _, _, 'professional')
+            sub_string(Input, _, _, _, 'business') ; sub_string(Input, _, _, _, 'professional') ;
+            sub_string(Input, _, _, _, 'အလုပ်') ; sub_string(Input, _, _, _, 'ရာထူး') ;
+            sub_string(Input, _, _, _, 'စီးပွားရေး') ; sub_string(Input, _, _, _, 'အလုပ်အကိုင်') ;
+            sub_string(Input, _, _, _, 'အင်တာဗျူး')
         )
     ->  Topic = career
     ;   (   sub_string(Input, _, _, _, 'money') ; sub_string(Input, _, _, _, 'financ') ;
             sub_string(Input, _, _, _, 'invest') ; sub_string(Input, _, _, _, 'wealth') ;
             sub_string(Input, _, _, _, 'salary') ; sub_string(Input, _, _, _, 'budget') ;
-            sub_string(Input, _, _, _, 'spend') ; sub_string(Input, _, _, _, 'saving')
+            sub_string(Input, _, _, _, 'spend') ; sub_string(Input, _, _, _, 'saving') ;
+            sub_string(Input, _, _, _, 'ငွေ') ; sub_string(Input, _, _, _, 'ပိုက်ဆံ') ;
+            sub_string(Input, _, _, _, 'ကြွေး') ; sub_string(Input, _, _, _, 'ချမ်းသာ') ;
+            sub_string(Input, _, _, _, 'လစာ') ; sub_string(Input, _, _, _, 'ရင်းနှီးမြှုပ်နှံ')
         )
     ->  Topic = finance
     ;   (   sub_string(Input, _, _, _, 'grow') ; sub_string(Input, _, _, _, 'improve') ;
             sub_string(Input, _, _, _, 'heal') ; sub_string(Input, _, _, _, 'transform') ;
             sub_string(Input, _, _, _, 'purpose') ; sub_string(Input, _, _, _, 'meaning') ;
             sub_string(Input, _, _, _, 'develop') ; sub_string(Input, _, _, _, 'become') ;
-            sub_string(Input, _, _, _, 'myself') ; sub_string(Input, _, _, _, 'inner')
+            sub_string(Input, _, _, _, 'myself') ; sub_string(Input, _, _, _, 'inner') ;
+            sub_string(Input, _, _, _, 'ကိုယ့်ကိုယ်ကို') ; sub_string(Input, _, _, _, 'စိတ်ဓာတ်') ;
+            sub_string(Input, _, _, _, 'အတွင်းစိတ်')
         )
     ->  Topic = personal_growth
     ;   (   sub_string(Input, _, _, _, 'communicat') ; sub_string(Input, _, _, _, 'explain') ;
             sub_string(Input, _, _, _, 'tell') ; sub_string(Input, _, _, _, 'say') ;
             sub_string(Input, _, _, _, 'listen') ; sub_string(Input, _, _, _, 'understand') ;
-            sub_string(Input, _, _, _, 'express') ; sub_string(Input, _, _, _, 'speak')
+            sub_string(Input, _, _, _, 'express') ; sub_string(Input, _, _, _, 'speak') ;
+            sub_string(Input, _, _, _, 'စကားပြော') ; sub_string(Input, _, _, _, 'နားလည်')
         )
     ->  Topic = communication
     ;   Topic = general

@@ -1,9 +1,5 @@
 {
-  "permissions": {
-    "allow": [
-      "Bash(npm run *)",
-      "PowerShell(npm run check 2>&1)",
-      "PowerShell(npm run build 2>&1)"
-    ]
-  }
+	"permissions": {
+		"allow": ["Bash(npm run *)", "PowerShell(npm run check 2>&1)", "PowerShell(npm run build 2>&1)"]
+	}
 }

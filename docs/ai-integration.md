@@ -25,12 +25,14 @@ Final Reading (displayed in frontend)
 ### 1. Tarot Reading Interpretation
 
 Prolog provides:
+
 - Question category
 - Recommended spread
 - Card keywords and themes
 - Zodiac-element associations
 
 OpenRouter generates:
+
 - Narrative interpretation connecting cards to the question
 - Reflective guidance based on themes
 - Symbolic analysis of card combinations
@@ -38,6 +40,7 @@ OpenRouter generates:
 ### 2. Horoscope Generation
 
 Prolog provides:
+
 - Zodiac sign traits
 - Element and modality
 - Daily theme
@@ -45,6 +48,7 @@ Prolog provides:
 - Focus area
 
 OpenRouter generates:
+
 - Today's Theme (one sentence)
 - Guidance (reflective advice)
 - Reflection (thought-provoking question)
@@ -54,6 +58,7 @@ OpenRouter generates:
 ### 3. AI Chat Assistant
 
 The chatbot receives:
+
 - User's zodiac sign
 - Current reading context (if any)
 - Chat history (last 10 messages)
@@ -71,6 +76,7 @@ When OpenRouter is unavailable:
 ## Prompt Design
 
 The system prompt enforces:
+
 - No claims of scientific prediction
 - No medical/health diagnosis
 - Reflective entertainment framing

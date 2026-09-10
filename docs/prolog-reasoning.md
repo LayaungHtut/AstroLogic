@@ -58,6 +58,7 @@ generate_profile(Sign, Profile).
 ```
 
 `generate_profile` combines:
+
 - Base profile (element, modality, planet, traits)
 - Element personality derivation (`element_personality/2`)
 - Modality approach derivation (`modality_approach/2`)
@@ -78,6 +79,7 @@ chart_profile(Sign, BirthTime, BirthLocation, Chart).
 ```
 
 Distinguishes "known from birth date" from "requires birth time/location":
+
 - Known: Sun sign, element, modality, ruling planet, traits
 - Requires time/location: Moon sign, Rising sign (not calculated in V1)
 
@@ -183,6 +185,7 @@ analyze_reading_oriented(Cards, Positions, Orientations, Analysis).
 ```
 
 Detects:
+
 - Recurring themes
 - Dominant suits
 - Major/minor arcana balance
@@ -238,6 +241,7 @@ zodiac_compatibility(Sign1, Sign2, Result).
 ```
 
 Derives score from four factors:
+
 - Element compatibility (35% weight)
 - Modality compatibility (20% weight)
 - Trait compatibility (30% weight)
@@ -285,6 +289,7 @@ element_relationship_description(E1, E2, Desc).
 All Prolog queries are encapsulated in `PrologService`:
 
 ### Module 1 Methods
+
 ```python
 PrologService.get_zodiac_profile(sign)
 PrologService.generate_profile(sign)
@@ -302,6 +307,7 @@ PrologService.get_profile_reasoning_trace(sign)
 ```
 
 ### Module 2 Methods
+
 ```python
 PrologService.classify_question(question)
 PrologService.select_eligible_cards(sign, category)
@@ -314,6 +320,7 @@ PrologService.get_select_cards_reasoning(sign, category)
 ```
 
 ### Module 3 Methods
+
 ```python
 PrologService.analyze_card(card, orientation)
 PrologService.interpret_card_position(card, position, orientation)
@@ -329,6 +336,7 @@ PrologService.get_reading_analysis_trace(cards, positions)
 ```
 
 ### Module 4 Methods
+
 ```python
 PrologService.analyze_compatibility(sign1, sign2)
 PrologService.analyze_synastry(sign1, sign2)
@@ -345,12 +353,12 @@ All four modules produce structured reasoning traces:
 
 ```json
 [
-  {
-    "rule": "element(aries, fire)",
-    "input": "aries",
-    "result": "Aries belongs to fire element",
-    "explanation": "Fire element defines personality style"
-  }
+	{
+		"rule": "element(aries, fire)",
+		"input": "aries",
+		"result": "Aries belongs to fire element",
+		"explanation": "Fire element defines personality style"
+	}
 ]
 ```
 
@@ -358,16 +366,16 @@ The Python backend returns these to SvelteKit for visualization.
 
 ## File Reference
 
-| File | Module | Purpose |
-|------|--------|---------|
-| `zodiac.pl` | Base | Zodiac facts (signs, elements, modalities, planets, traits) |
-| `tarot.pl` | Base | 78-card tarot deck facts |
-| `zodiac_profile.pl` | **1** | Zodiac profiles, strengths, challenges, birth date mapping |
-| `card_selection.pl` | **2** | Card themes, filtering, eligibility, spreads |
-| `reading_analysis.pl` | **3** | Card analysis, position interpretation, themes, conflicts |
-| `synastry.pl` | **4** | Compatibility scoring, synastry, explanation |
-| `horoscope_rules` | Support | Horoscope generation rules |
-| `spread_rules` | Support | Spread recommendation rules |
-| `recommendation_rules` | Support | Card recommendation rules |
-| `reasoning` | Support | Orchestration of all modules |
-| `main.pl` | Entry | Module loading and helper queries |
+| File                   | Module  | Purpose                                                     |
+| ---------------------- | ------- | ----------------------------------------------------------- |
+| `zodiac.pl`            | Base    | Zodiac facts (signs, elements, modalities, planets, traits) |
+| `tarot.pl`             | Base    | 78-card tarot deck facts                                    |
+| `zodiac_profile.pl`    | **1**   | Zodiac profiles, strengths, challenges, birth date mapping  |
+| `card_selection.pl`    | **2**   | Card themes, filtering, eligibility, spreads                |
+| `reading_analysis.pl`  | **3**   | Card analysis, position interpretation, themes, conflicts   |
+| `synastry.pl`          | **4**   | Compatibility scoring, synastry, explanation                |
+| `horoscope_rules`      | Support | Horoscope generation rules                                  |
+| `spread_rules`         | Support | Spread recommendation rules                                 |
+| `recommendation_rules` | Support | Card recommendation rules                                   |
+| `reasoning`            | Support | Orchestration of all modules                                |
+| `main.pl`              | Entry   | Module loading and helper queries                           |

@@ -4,6 +4,7 @@
 	import type { HistoryItem } from '$lib/types';
 	import LoadingSpinner from '$lib/components/LoadingSpinner.svelte';
 	import MarkdownText from '$lib/components/MarkdownText.svelte';
+	import { locale, t, getZodiacTranslation, translateSpreadType, translateTopic } from '$lib/i18n';
 
 	let items = $state<HistoryItem[]>([]);
 	let loading = $state(true);
@@ -34,27 +35,27 @@
 </script>
 
 <svelte:head>
-	<title>Reading History - AstroLogic</title>
+	<title>{$t('history.title')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="page-container">
 	<div class="page-header flex flex-col gap-2">
 		<span class="font-mono-data text-xs tracking-widest text-on-surface-variant/80 uppercase"
-			>Archival Log • Chronological Record</span
+			>{$t('history.chronological')}</span
 		>
 		<div class="flex items-center gap-3">
 			<span class="material-symbols-outlined text-3xl text-primary">history</span>
 			<h1 class="font-headline text-3xl font-bold text-on-surface">
-				Reading <span class="gradient-text">History</span>
+				{$t('history.title')}
 			</h1>
 		</div>
 		<p class="text-on-surface-variant">
-			Review your past tarot readings and revisit their symbolic insights.
+			{$t('history.subtitle')}
 		</p>
 	</div>
 
 	{#if loading}
-		<LoadingSpinner text="Loading history..." />
+		<LoadingSpinner text={$t('common.loading')} />
 	{:else if items.length === 0}
 		<div
 			class="rounded-2xl bg-surface-container-lowest/80 p-12 text-center shadow-xl backdrop-blur-md"
@@ -62,9 +63,9 @@
 			<span class="material-symbols-outlined mb-4 text-5xl text-on-surface-variant/60"
 				>inventory_2</span
 			>
-			<h2 class="font-headline mb-2 text-lg font-bold text-on-surface">No Readings Yet</h2>
-			<p class="mb-4 text-on-surface-variant">Your reading history will appear here.</p>
-			<a href="/reading" class="btn-primary inline-block">Start a Reading</a>
+			<h2 class="font-headline mb-2 text-lg font-bold text-on-surface">{$t('history.empty')}</h2>
+			<p class="mb-4 text-on-surface-variant">{$t('history.emptyDesc')}</p>
+			<a href="/reading" class="btn-primary inline-block">{$t('history.startReading')}</a>
 		</div>
 	{:else}
 		<div class="relative">
@@ -86,23 +87,23 @@
 							>
 								<div class="min-w-0 flex-1">
 									<div class="truncate font-medium text-on-surface">
-										{item.question || 'Tarot Reading'}
+										{item.question || ($locale === 'my' ? 'တားရော့ဗေဒင်' : 'Tarot Reading')}
 									</div>
 									<div class="mt-2 flex flex-wrap items-center gap-2">
 										<span
 											class="font-mono-data inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] tracking-wider text-primary uppercase"
 										>
-											{item.zodiac_sign}
+											{getZodiacTranslation(item.zodiac_sign, $locale).name || item.zodiac_sign}
 										</span>
 										<span
 											class="font-mono-data inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] tracking-wider text-secondary uppercase"
 										>
-											{item.category}
+											{translateTopic(item.category, $locale)}
 										</span>
 										<span
 											class="font-mono-data inline-flex items-center gap-1 rounded-full bg-surface-container-high px-2.5 py-1 text-[11px] tracking-wider text-tertiary uppercase"
 										>
-											{item.spread_type}
+											{translateSpreadType(item.spread_type, $locale)}
 										</span>
 										<span
 											class="font-mono-data ml-auto text-[11px] text-on-surface-variant/70 sm:ml-0"
@@ -126,7 +127,7 @@
 											<span class="material-symbols-outlined text-base">auto_awesome</span>
 											<span
 												class="font-mono-data text-[11px] font-semibold tracking-wider uppercase"
-												>AI Interpretation</span
+												>{$t('history.aiInterpretation')}</span
 											>
 										</div>
 										<MarkdownText
@@ -140,14 +141,14 @@
 											class="font-body-sm inline-flex items-center gap-1.5 rounded-full bg-surface-container px-3 py-1.5 text-sm text-on-surface transition-colors hover:bg-surface-container-high"
 										>
 											<span class="material-symbols-outlined text-base">psychology</span>
-											View Reasoning
+											{$t('history.viewReasoning')}
 										</a>
 										<button
 											class="font-body-sm inline-flex items-center gap-1.5 rounded-full bg-error-container/30 px-3 py-1.5 text-sm text-error transition-colors hover:bg-error-container/50"
 											onclick={() => handleDelete(item.id)}
 										>
 											<span class="material-symbols-outlined text-base">delete</span>
-											Delete
+											{$t('history.delete')}
 										</button>
 									</div>
 								</div>

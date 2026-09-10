@@ -8,16 +8,26 @@
 	import ReasoningStep from '$lib/components/ReasoningStep.svelte';
 	import ProfileSettingsModal from '$lib/components/ProfileSettingsModal.svelte';
 	import MarkdownText from '$lib/components/MarkdownText.svelte';
+	import {
+		locale,
+		t,
+		getZodiacTranslation,
+		translateHoroscopeTheme,
+		formatHoroscopeGuidance,
+		formatHoroscopeReflection,
+		formatHoroscopeOpportunity,
+		formatHoroscopeCaution
+	} from '$lib/i18n';
 
 	const moods = [
-		{ id: 'happy', label: 'Happy', icon: '😄' },
-		{ id: 'calm', label: 'Calm', icon: '😌' },
-		{ id: 'excited', label: 'Excited', icon: '🤩' },
-		{ id: 'uncertain', label: 'Uncertain', icon: '😕' },
-		{ id: 'stressed', label: 'Stressed', icon: '😓' },
-		{ id: 'reflective', label: 'Reflective', icon: '🧘' },
-		{ id: 'curious', label: 'Curious', icon: '🤔' },
-		{ id: 'neutral', label: 'Neutral', icon: '😐' }
+		{ id: 'happy', key: 'horoscope.mood.happy', icon: '😄' },
+		{ id: 'calm', key: 'horoscope.mood.calm', icon: '😌' },
+		{ id: 'excited', key: 'horoscope.mood.excited', icon: '🤩' },
+		{ id: 'uncertain', key: 'horoscope.mood.uncertain', icon: '😕' },
+		{ id: 'stressed', key: 'horoscope.mood.stressed', icon: '😓' },
+		{ id: 'reflective', key: 'horoscope.mood.reflective', icon: '🧘' },
+		{ id: 'curious', key: 'horoscope.mood.curious', icon: '🤔' },
+		{ id: 'neutral', key: 'horoscope.mood.neutral', icon: '😐' }
 	];
 
 	let selectedMood = $state('neutral');
@@ -33,7 +43,7 @@
 		loading = true;
 		error = '';
 		try {
-			result = await generateHoroscope(currentProfile.zodiac_sign, selectedMood);
+			result = await generateHoroscope(currentProfile.zodiac_sign, selectedMood, $locale);
 		} catch (e) {
 			error = e instanceof Error ? e.message : 'Failed to generate horoscope';
 		} finally {
@@ -43,7 +53,7 @@
 </script>
 
 <svelte:head>
-	<title>Horoscope - AstroLogic</title>
+	<title>{$t('horoscope.title')} - {$t('brand.name')}</title>
 </svelte:head>
 
 <div class="page-container">
@@ -52,13 +62,13 @@
 			class="font-mono-data inline-flex w-fit items-center gap-2 rounded-full bg-surface-container-high/80 px-3 py-1 text-[10px] tracking-widest text-secondary uppercase"
 		>
 			<span class="h-1.5 w-1.5 animate-pulse rounded-full bg-secondary"></span>
-			Telemetry Stream Active
+			{$t('dashboard.telemetryActive')}
 		</div>
 		<h1 class="font-headline text-3xl font-extrabold">
-			Daily <span class="gradient-text">Horoscope</span>
+			{$t('horoscope.title')}
 		</h1>
 		<p class="text-on-surface-variant">
-			Personalized horoscope for {hasSign ? currentProfile.zodiac_sign : 'your sign'}
+			{$t('horoscope.subtitle')}
 		</p>
 	</div>
 
@@ -67,9 +77,9 @@
 			{#if !hasSign}
 				<div class="glass-card mb-6 flex flex-col items-center gap-3 p-6 text-center">
 					<span class="text-4xl">✦</span>
-					<h2 class="font-headline text-xl font-bold">Set Your Zodiac Sign</h2>
+					<h2 class="font-headline text-xl font-bold">{$t('dashboard.setSign')}</h2>
 					<p class="text-sm text-on-surface-variant">
-						Select your zodiac sign to receive personalized horoscopes.
+						{$t('dashboard.setSignPrompt')}
 					</p>
 					<button
 						type="button"
@@ -77,14 +87,17 @@
 						class="btn-primary mt-2"
 					>
 						<span class="material-symbols-outlined text-[18px]">edit</span>
-						Edit Profile
+						{$t('dashboard.editProfile')}
 					</button>
 				</div>
 			{:else}
 				<div class="glass-card mb-6 flex flex-col items-center gap-3 p-6 text-center">
 					<ZodiacBadge sign={currentProfile.zodiac_sign} size="lg" />
-					<h2 class="font-headline text-xl font-bold capitalize">{currentProfile.zodiac_sign}</h2>
-					<p class="text-sm text-on-surface-variant">How are you feeling today?</p>
+					<h2 class="font-headline text-xl font-bold capitalize">
+						{getZodiacTranslation(currentProfile.zodiac_sign, $locale).name ||
+							currentProfile.zodiac_sign}
+					</h2>
+					<p class="text-sm text-on-surface-variant">{$t('horoscope.howFeeling')}</p>
 				</div>
 
 				<div class="glass-card mb-6 p-6">
@@ -93,7 +106,7 @@
 						class="font-mono-data mb-4 flex items-center gap-1.5 text-xs tracking-widest text-on-surface-variant uppercase"
 					>
 						<span class="material-symbols-outlined text-[16px]">neurology</span>
-						Select Your Mood
+						{$t('horoscope.selectMood')}
 					</label>
 					<div id="mood" class="grid grid-cols-2 gap-3 sm:grid-cols-4">
 						{#each moods as mood}
@@ -105,7 +118,7 @@
 								onclick={() => (selectedMood = mood.id)}
 							>
 								<div class="mb-1 text-2xl">{mood.icon}</div>
-								<div class="text-xs">{mood.label}</div>
+								<div class="text-xs">{$t(mood.key)}</div>
 							</button>
 						{/each}
 					</div>
@@ -125,11 +138,11 @@
 					<span class="material-symbols-outlined text-[20px]"
 						>{loading ? 'autorenew' : 'satellite_alt'}</span
 					>
-					{loading ? 'Consulting the stars...' : 'Generate Horoscope'}
+					{loading ? $t('horoscope.consulting') : $t('horoscope.generate')}
 				</button>
 
 				{#if loading}
-					<LoadingSpinner text="Reading the cosmic influences..." />
+					<LoadingSpinner text={$t('horoscope.readingInfluences')} />
 				{/if}
 			{/if}
 		</div>
@@ -138,12 +151,14 @@
 			<!-- Sign summary -->
 			<div class="glass-card flex flex-col items-center gap-3 p-6 text-center">
 				<ZodiacBadge sign={result.zodiac_sign} element={result.element} size="lg" />
-				<h2 class="font-headline text-xl font-bold capitalize">{result.zodiac_sign}</h2>
+				<h2 class="font-headline text-xl font-bold capitalize">
+					{getZodiacTranslation(result.zodiac_sign, $locale).name || result.zodiac_sign}
+				</h2>
 				<div class="flex flex-wrap items-center justify-center gap-2">
 					<ElementBadge element={result.element} />
 					<span
 						class="font-mono-data rounded-full bg-surface-container-high px-3 py-1 text-xs tracking-wider text-on-surface-variant uppercase"
-						>{result.mood} mood</span
+						>{$t(`horoscope.mood.${result.mood}`) || result.mood}</span
 					>
 				</div>
 			</div>
@@ -158,10 +173,10 @@
 						class="font-mono-data inline-flex items-center gap-1.5 rounded-full bg-primary-container/30 px-3 py-1 text-[10px] tracking-widest text-primary uppercase"
 					>
 						<span class="material-symbols-outlined text-[14px]">auto_awesome</span>
-						Today's Theme
+						{$t('horoscope.theme')}
 					</span>
 					<p class="gradient-text font-headline text-xl leading-snug font-bold sm:text-2xl">
-						{result.theme}
+						{translateHoroscopeTheme(result.theme, $locale)}
 					</p>
 				</div>
 			</div>
@@ -175,9 +190,20 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">bolt</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-primary">Guidance</h3>
+						<h3 class="font-headline text-sm font-semibold text-primary">
+							{$t('horoscope.guidance')}
+						</h3>
 					</div>
-					<MarkdownText content={result.guidance} class="text-sm text-on-surface/80" />
+					<MarkdownText
+						content={formatHoroscopeGuidance(
+							result.guidance,
+							result.zodiac_sign,
+							result.theme,
+							result.mood,
+							$locale
+						)}
+						class="text-sm text-on-surface/80"
+					/>
 				</div>
 
 				<div class="glass-card glass-card-hover flex flex-col gap-3 p-5">
@@ -187,9 +213,14 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">dark_mode</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-secondary">Reflection</h3>
+						<h3 class="font-headline text-sm font-semibold text-secondary">
+							{$t('horoscope.reflection')}
+						</h3>
 					</div>
-					<MarkdownText content={result.reflection} class="text-sm text-on-surface/80 italic" />
+					<MarkdownText
+						content={formatHoroscopeReflection(result.reflection, result.theme, $locale)}
+						class="text-sm text-on-surface/80 italic"
+					/>
 				</div>
 
 				<div class="glass-card glass-card-hover flex flex-col gap-3 p-5">
@@ -199,9 +230,14 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">auto_awesome</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-tertiary">Opportunity</h3>
+						<h3 class="font-headline text-sm font-semibold text-tertiary">
+							{$t('horoscope.opportunity')}
+						</h3>
 					</div>
-					<MarkdownText content={result.opportunity} class="text-sm text-on-surface/80" />
+					<MarkdownText
+						content={formatHoroscopeOpportunity(result.opportunity, result.theme, $locale)}
+						class="text-sm text-on-surface/80"
+					/>
 				</div>
 
 				<div class="glass-card glass-card-hover flex flex-col gap-3 p-5">
@@ -211,9 +247,14 @@
 						>
 							<span class="material-symbols-outlined text-[18px]">shield</span>
 						</span>
-						<h3 class="font-headline text-sm font-semibold text-error">Caution</h3>
+						<h3 class="font-headline text-sm font-semibold text-error">
+							{$t('horoscope.caution')}
+						</h3>
 					</div>
-					<MarkdownText content={result.caution} class="text-sm text-on-surface/80" />
+					<MarkdownText
+						content={formatHoroscopeCaution(result.caution, result.theme, result.element, $locale)}
+						class="text-sm text-on-surface/80"
+					/>
 				</div>
 			</div>
 
@@ -225,7 +266,7 @@
 							class="h-2.5 w-2.5 animate-pulse rounded-full bg-secondary shadow-[0_0_10px_#4cd7f6]"
 						></span>
 						<h3 class="font-headline text-sm font-semibold text-on-surface">
-							Prolog Reasoning Trace
+							{$t('horoscope.prologTrace')}
 						</h3>
 					</div>
 					<div class="font-mono-data space-y-2">
@@ -241,7 +282,7 @@
 				onclick={() => (result = null)}
 			>
 				<span class="material-symbols-outlined text-[18px]">refresh</span>
-				New Horoscope
+				{$t('horoscope.newHoroscope')}
 			</button>
 		</div>
 	{/if}

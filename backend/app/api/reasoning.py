@@ -3,9 +3,9 @@ from app.services.prolog_service import PrologService
 from app.services.openrouter_service import generate_tarot_interpretation
 from app.services.tarot_service import TarotService
 from app.schemas.models import ReadingAnalyzeRequest, ReadingAnalyzeManualRequest
-from app.database import get_db
 import asyncio
 import json
+import re
 
 router = APIRouter(prefix="/api/reading", tags=["reading"])
 
@@ -13,27 +13,17 @@ router = APIRouter(prefix="/api/reading", tags=["reading"])
 def _classify_and_recommend(
     question: str, sign: str, requested_spread_type: str | None, card_count: int | None
 ) -> dict:
-    """Bundle of synchronous Prolog calls needed before cards are drawn.
-
-    If the caller (the UI's spread picker) asked for a specific spread type,
-    honor it instead of letting Prolog auto-recommend one from the question
-    text — recommend_spread/2 always overrode any client-chosen spread_type
-    before this, so picking a spread in the UI silently did nothing.
-
-    "custom" is not one of the fixed spread/4 layouts — it's an open draw of
-    however many cards (1-10) the seeker chose, so it's routed to its own
-    Prolog predicate that generates positions for that count instead of
-    looking up a fixed one.
-    """
+    sign = (sign or "cancer").lower().strip()
+    req_spread = requested_spread_type.lower().strip() if requested_spread_type else None
     category = PrologService.classify_question(question)
     topic = PrologService.classify_topic(question)
     topic_info = PrologService.get_topic_info(topic)
     spread_rec = None
-    if requested_spread_type == "custom":
+    if req_spread == "custom":
         count = card_count if card_count and 1 <= card_count <= 10 else 3
         spread_rec = PrologService.recommend_custom_spread(question, sign, count)
-    elif requested_spread_type:
-        spread_rec = PrologService.recommend_spread_for(question, sign, requested_spread_type)
+    elif req_spread:
+        spread_rec = PrologService.recommend_spread_for(question, sign, req_spread)
     if not spread_rec:
         spread_rec = PrologService.recommend_spread(question, sign)
     return {
@@ -112,6 +102,7 @@ async def _finish_reading(
     spread_rec: dict,
     cards: list[dict],
     spread_rationale: str,
+    locale: str = "en",
 ) -> dict:
     """Everything from a drawn/selected set of cards to the finished reading
     response: Prolog analysis, per-card affinity/ranking, conflict
@@ -165,6 +156,9 @@ async def _finish_reading(
         for c in post["conflicts"]
     ]
 
+    is_burmese = bool(re.search(r"[\u1000-\u109F]", question))
+    effective_locale = "my" if (locale == "my" or is_burmese) else "en"
+
     ai_interpretation = await generate_tarot_interpretation(
         question=question,
         zodiac_sign=zodiac_sign,
@@ -181,19 +175,12 @@ async def _finish_reading(
         ],
         themes=themes,
         category=category,
+        topic=topic,
+        locale=effective_locale,
     )
 
     if not ai_interpretation:
-        ai_interpretation = _fallback_interpretation(cards, themes, category, zodiac_sign)
-
-    summary = _build_reading_summary(
-        cards=cards,
-        themes=themes,
-        dominant_theme=post["dominant_theme"],
-        direction=post["direction"],
-        category=category,
-        conflicts=conflicts,
-    )
+        ai_interpretation = _fallback_interpretation(cards, themes, category, zodiac_sign, question=question, locale=effective_locale)
 
     return {
         "question": question,
@@ -212,7 +199,6 @@ async def _finish_reading(
         "conflicts": conflicts,
         "reasoning": post["reasoning"],
         "ai_interpretation": ai_interpretation,
-        "summary": summary,
         "facts": facts,
     }
 
@@ -229,17 +215,76 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     spread_rec = pre["spread_rec"]
 
     if not spread_rec:
-        spread_rec = {
-            "category": category,
-            "spread_type": "three_card",
-            "name": "Three Card",
-            "description": "Past, Present, Future",
-            "card_count": 3,
-            "positions": ["Past", "Present", "Future"],
-            "element": "fire",
-            "modality": "cardinal",
-            "emphasis": "Action & Initiative",
+        fixed_spreads = {
+            "one_card": {
+                "category": category,
+                "spread_type": "one_card",
+                "name": "One Card",
+                "description": "Simple guidance or daily insight",
+                "card_count": 1,
+                "positions": ["Guidance"],
+                "element": "water",
+                "modality": "cardinal",
+                "emphasis": "Emotions & Intuition",
+            },
+            "three_card": {
+                "category": category,
+                "spread_type": "three_card",
+                "name": "Three Card",
+                "description": "Past, Present, Future",
+                "card_count": 3,
+                "positions": ["Past", "Present", "Future"],
+                "element": "water",
+                "modality": "cardinal",
+                "emphasis": "Emotions & Intuition",
+            },
+            "decision": {
+                "category": category,
+                "spread_type": "decision",
+                "name": "Decision Spread",
+                "description": "Current Situation, Path A, Path B, Advice",
+                "card_count": 4,
+                "positions": ["Current Situation", "Path A", "Path B", "Advice"],
+                "element": "water",
+                "modality": "cardinal",
+                "emphasis": "Emotions & Intuition",
+            },
+            "self_reflection": {
+                "category": category,
+                "spread_type": "self_reflection",
+                "name": "Self Reflection",
+                "description": "Current Self, Hidden Influence, What to Understand, Guidance",
+                "card_count": 4,
+                "positions": ["Current Self", "Hidden Influence", "What to Understand", "Guidance"],
+                "element": "water",
+                "modality": "cardinal",
+                "emphasis": "Emotions & Intuition",
+            },
+            "relationship": {
+                "category": category,
+                "spread_type": "relationship",
+                "name": "Relationship Spread",
+                "description": "You, Other Person, Connection, Challenge, Guidance",
+                "card_count": 5,
+                "positions": ["You", "Other Person", "Connection", "Challenge", "Guidance"],
+                "element": "water",
+                "modality": "cardinal",
+                "emphasis": "Emotions & Intuition",
+            },
+            "career": {
+                "category": category,
+                "spread_type": "career",
+                "name": "Career Spread",
+                "description": "Current Position, Strength, Challenge, Opportunity, Advice",
+                "card_count": 5,
+                "positions": ["Current Position", "Strength", "Challenge", "Opportunity", "Advice"],
+                "element": "water",
+                "modality": "cardinal",
+                "emphasis": "Emotions & Intuition",
+            },
         }
+        spread_key = (request.spread_type or "").lower().strip()
+        spread_rec = fixed_spreads.get(spread_key, fixed_spreads["three_card"])
 
     cards = await TarotService.draw_cards_with_positions(
         spread_rec["positions"], request.zodiac_sign, category
@@ -261,6 +306,7 @@ async def analyze_reading(request: ReadingAnalyzeRequest):
     return await _finish_reading(
         request.question, request.zodiac_sign, category, pre["topic"], pre["topic_info"],
         spread_rec, cards, spread_rationale,
+        locale=request.locale or "en",
     )
 
 
@@ -306,6 +352,7 @@ async def analyze_selected_reading(request: ReadingAnalyzeManualRequest):
     return await _finish_reading(
         request.question, request.zodiac_sign, category, topic, topic_info,
         spread_rec, cards, spread_rationale,
+        locale=request.locale or "en",
     )
 
 
@@ -338,64 +385,77 @@ async def generate_reading(data: dict):
         await db.close()
 
 
-_DIRECTION_LABELS = {
-    "optimistic": "leans optimistic",
-    "challenging": "carries some challenges to work through",
-    "reflective": "calls for quiet reflection",
-    "balanced": "sits in balance",
-}
-
-
-def _build_reading_summary(
+def _fallback_interpretation(
     cards: list[dict],
     themes: list[str],
-    dominant_theme: str | None,
-    direction: str,
     category: str,
-    conflicts: list[dict],
-) -> str:
-    """A short, scannable TL;DR of the reading — separate from the full
-    ai_interpretation prose — built deterministically from the same
-    Prolog-derived data (themes, direction, dominant theme, conflicts) so it
-    stays accurate even when the AI interpretation call fails and the
-    fallback text is used instead.
-
-    Kept to 1-2 sentences: card names + orientations, the dominant thread,
-    and how the reading is trending, so a seeker can grasp the gist before
-    reading the full interpretation.
-    """
-    card_bits = [
-        f"{c['name']}{' (reversed)' if c['is_reversed'] else ''}" for c in cards
-    ]
-    if len(card_bits) == 1:
-        cards_text = card_bits[0]
-    elif len(card_bits) == 2:
-        cards_text = " and ".join(card_bits)
-    else:
-        cards_text = ", ".join(card_bits[:-1]) + f", and {card_bits[-1]}"
-
-    direction_text = _DIRECTION_LABELS.get(direction, "is unfolding")
-
-    thread = dominant_theme or (themes[0] if themes else None)
-    thread_text = f", centered on {thread.replace('_', ' ')}" if thread else ""
-
-    summary = f"This {category} reading draws {cards_text}{thread_text}, and overall {direction_text}."
-
-    if conflicts:
-        summary += (
-            f" Watch for tension between {conflicts[0]['card1_name']} and "
-            f"{conflicts[0]['card2_name']}."
-        )
-
-    return summary
-
-
-def _fallback_interpretation(
-    cards: list[dict], themes: list[str], category: str, zodiac: str
+    zodiac: str,
+    question: str = "",
+    locale: str = "en",
 ) -> str:
     card_names = [c["name"] for c in cards]
     cards_text = ", ".join(card_names)
     themes_text = ", ".join(themes) if themes else "reflection and balance"
+
+    is_burmese = (locale == "my") or bool(re.search(r"[\u1000-\u109F]", question))
+    if is_burmese:
+        category_map = {
+            "education": "ပညာရေးနှင့် စာမေးပွဲ",
+            "career": "အလုပ်အကိုင်နှင့် စီးပွားရေး",
+            "love": "အချစ်ရေးနှင့် သံယောဇဉ်",
+            "relationship": "အချစ်ရေးနှင့် ဆက်ဆံရေး",
+            "spiritual": "စိတ်ပိုင်းဆိုင်ရာနှင့် လမ်းပြမှု",
+            "finance": "ငွေကြေးနှင့် ဓနဥစ္စာ",
+            "health": "ကျန်းမာရေးနှင့် ညီညွတ်မျှတမှု",
+            "decision": "လမ်းခွဲရွေးချယ်မှု",
+            "friendship": "မိတ်ဆွေနှင့် သံယောဇဉ်",
+            "creativity": "တီထွင်ဖန်တီးမှုနှင့် အနုပညာ",
+            "future_planning": "အနာဂတ်အစီအစဉ်",
+            "self_reflection": "မိမိကိုယ်ကိုဆန်းစစ်ခြင်း",
+            "general": "အထွေထွေ ဘဝခရီးလမ်း",
+        }
+        category_my = category_map.get(category, "ဘဝကဏ္ဍ")
+        q_text = f"သင်၏ မေးခွန်းဖြစ်သော '{question}' နှင့် စပ်လျဉ်း၍ " if question else ""
+
+        cards_lines = []
+        for i, c in enumerate(cards):
+            orient = " (ပြောင်းပြန်)" if c.get("is_reversed") else " (မူမှန်)"
+            pos = c.get("position", f"ကတ် {i + 1}")
+            cards_lines.append(f"* **{c['name']}**{orient} - တည်နေရာ: {pos}")
+        cards_section = "\n".join(cards_lines)
+
+        zodiac_clean = (zodiac or "").lower().strip()
+        zodiac_guidance_map = {
+            "aries": "မိဿရာသီဖွား (မီးဓာတ်) အနေဖြင့် သင်၏ ပင်ကိုရဲရင့်ပြတ်သားမှုနှင့် ရှေ့ဆောင်ဦးဆောင်လိုစိတ်ကို အပြုသဘောဆောင် အသုံးချပါ။ အလျင်စလို ဆုံးဖြတ်ခြင်းကို ရှောင်ရှားပြီး ရေရှည်မျှော်တွေးကာ အဆင့်ဆင့် လျှောက်လှမ်းပါ။",
+            "taurus": "ပြိဿရာသီဖွား (မြေဓာတ်) အနေဖြင့် သင်၏ စိတ်ရှည်သည်းခံမှု၊ တည်ငြိမ်ခိုင်မာမှုနှင့် လက်တွေ့ကျသော အခြေခံများကို အားပြုပါ။ စိတ်လောကြီးခြင်းမရှိဘဲ ဖြည်းဖြည်းနှင့်မှန်မှန် ခိုင်မာစွာ တည်ဆောက်သွားပါ။",
+            "gemini": "မေထုန်ရာသီဖွား (လေဓာတ်) အနေဖြင့် သင်၏ ထက်မြက်သော ဉာဏ်ပညာ၊ စူးစမ်းရှာဖွေလိုစိတ်နှင့် ပွင့်လင်းစွာ ပြောဆိုဆက်ဆံနိုင်စွမ်းကို အသုံးချပါ။ စိတ်ဒွိဟဖြစ်မှုများကို ရှင်းလင်းပြတ်သားသော သတင်းအချက်အလက်များဖြင့် ဖြေရှင်းပါ။",
+            "cancer": "ကရကဋ်ရာသီဖွား (ရေဓာတ်) အနေဖြင့် သင်၏ နက်ရှိုင်းသော အလိုလိုသိစိတ်၊ နွေးထွေးသော စာနာနားလည်မှုနှင့် အတွင်းစိတ်ခွန်အားကို အပြည့်အဝ ယုံကြည်ပါ။ စိတ်ခံစားချက်များကို လုံခြုံစွာ ထိန်းသိမ်းပြီး အဆင်သင့်ဖြစ်ချိန်တွင် သဘာဝကျကျ ရှေ့ဆက်ပါ။",
+            "leo": "သိဟ်ရာသီဖွား (မီးဓာတ်) အနေဖြင့် သင်၏ မွန်မြတ်သော စေတနာ၊ နှလုံးသားခွန်အားနှင့် မိမိကိုယ်ကို ယုံကြည်မှုကို မဏ္ဍိုင်ပြုပါ။ မာနထက် နားလည်မှုကို ဦးစားပေးပြီး သင်၏ တောက်ပသော စွမ်းအင်ဖြင့် အောင်မြင်မှုကို အရယူပါ။",
+            "virgo": "ကန်ရာသီဖွား (မြေဓာတ်) အနေဖြင့် သင်၏ စေ့စပ်သေချာမှု၊ စနစ်တကျ ပြင်ဆင်နိုင်မှုနှင့် လက်တွေ့ကျကျ ဆန်းစစ်နိုင်စွမ်းကို အားပြုပါ။ အသေးစိတ်အချက်အလက်များကို အလေးထားသော်လည်း အရာရာ ပြီးပြည့်စုံလွန်းရမည်ဟူသော စိုးရိမ်စိတ်ကို လျှော့ချပါ။",
+            "libra": "တူရာသီဖွား (လေဓာတ်) အနေဖြင့် သင်၏ မျှတစွာ ချိန်ဆနိုင်မှု၊ သဟဇာတဖြစ်လိုစိတ်နှင့် လိမ္မာပါးနပ်သော သံတမန်ဆက်ဆံရေးကို အသုံးချပါ။ လမ်းကြောင်းနှစ်ခုကြား ဝေခွဲမရဖြစ်မနေဘဲ မိမိ၏ အတွင်းစိတ်အမှန်တရားအတိုင်း သတ္တိရှိရှိ ရွေးချယ်ပါ။",
+            "scorpio": "ဗြိစ္ဆာရာသီဖွား (ရေဓာတ်) အနေဖြင့် သင်၏ စူးရှထက်မြက်သော ထိုးထွင်းအမြင်၊ စိတ်ပိုင်းဖြတ်မှုနှင့် ဘဝကို အသွင်ပြောင်းလဲနိုင်သော စွမ်းအားကို ယုံကြည်ပါ။ အတိတ်ဟောင်းများကို လက်လွှတ်စွန့်လွှတ်ပြီး အသစ်တဖန် ပြန်လည်မွေးဖွားသည့်သဖွယ် အားသစ်မွေးပါ။",
+            "sagittarius": "ဓနုရာသီဖွား (မီးဓာတ်) အနေဖြင့် သင်၏ အကောင်းမြင်စိတ်၊ အမြင်ကျယ်မှုနှင့် အမှန်တရားရှာဖွေလိုစိတ်ကို အားဖြည့်ပါ။ ပန်းတိုင်ကို ရှင်းလင်းစွာ မြင်ယောင်ပြီး စိတ်အားထက်သန်စွာဖြင့် ဇွဲမလျှော့ဘဲ ဆက်လက်လျှောက်လှမ်းပါ။",
+            "capricorn": "မကာရရာသီဖွား (မြေဓာတ်) အနေဖြင့် သင်၏ စည်းကမ်းခိုင်မာမှု၊ မဆုတ်မနစ်သော ဇွဲလုံ့လနှင့် ရေရှည်ရည်မှန်းချက်ကြီးမားမှုကို အခြေပြုပါ။ အချိန်ယူတည်ဆောက်ရသောအရာများသည် ခိုင်ခံ့မြဲမြံစမြဲဖြစ်ကြောင်း သတိပြုကာ စိတ်ရှည်စွာ ရှေ့ဆက်ပါ။",
+            "aquarius": "ကုမ်ရာသီဖွား (လေဓာတ်) အနေဖြင့် သင်၏ ထူးခြားဆန်းသစ်သော အတွေးအခေါ်၊ လွတ်လပ်မှုနှင့် ရှေ့ပြေးအမြင်များကို လက်ကိုင်ထားပါ။ သမားရိုးကျ ဘောင်များမှ ခွဲထွက်ပြီး သင့်ကိုယ်ပိုင် နည်းလမ်းသစ်ဖြင့် ဖန်တီးတီထွင်ပါ။",
+            "pisces": "မိန်ရာသီဖွား (ရေဓာတ်) အနေဖြင့် သင်၏ နူးညံ့သိမ်မွေ့သော မေတ္တာ၊ အလိုလိုသိမြင်နိုင်သော စိတ်ဝိညာဉ်စွမ်းအားနှင့် အနုပညာဆန်သော စိတ်ကူးဉာဏ်ကို အသုံးချပါ။ စိတ်ကူးယဉ်မှုနှင့် လက်တွေ့ဘဝကို ဟန်ချက်ညီစေပြီး မိမိ၏ နှလုံးသားအသံကို နားထောင်ပါ။",
+        }
+        zodiac_advice = zodiac_guidance_map.get(
+            zodiac_clean,
+            "သင်၏ ပင်ကိုစွမ်းအင်နှင့် ဆင်ခြင်တွေးခေါ်မှုများကို သဟဇာတဖြစ်အောင် ညှိယူပါ။ ဤဟောကိန်းသည် အနာဂတ်ကို ကန့်သတ်ဟောကိန်းထုတ်ခြင်း မဟုတ်ဘဲ မိမိကိုယ်ကို ဆင်ခြင်သုံးသပ်ရန်အတွက် သင်္ကေတသဘော လမ်းညွှန်ချက်တစ်ခုသာ ဖြစ်ပါသည်။"
+        )
+
+        return (
+            f"**၁။ မေးခွန်းနှင့် ပတ်သက်သော တိုက်ရိုက်ဆန်းစစ်ချက် ({category_my})**\n"
+            f"{q_text}တားရော့ကတ်များအနက် {cards_text} တို့ ကျရောက်ခဲ့ပြီး {category_my}အတွက် အရေးပါသော လမ်းညွှန်ချက်များကို ပြသနေပါသည်။\n\n"
+            f"ဤမေးခွန်းအတွက် ကတ်များသည် စိတ်ရှည်တည်ငြိမ်စွာ စူးစိုက်ဆင်ခြင်ရန်နှင့် လက်ရှိအခြေအနေကို ဉာဏ်ပညာဖြင့် သုံးသပ်ဆုံးဖြတ်ရန် အကြံပြုထားပါသည်။ "
+            f"မိမိ၏ အရည်အချင်းနှင့် စိတ်အားထက်သန်မှုကို အပြည့်အဝ ယုံကြည်ပြီး ကြိုးစားအားထုတ်မှုဖြင့် အောင်မြင်မှုကို အရယူပါ။\n\n"
+            f"---\n\n"
+            f"**၂။ ကျရောက်သော ကတ်တစ်ခုချင်းစီ၏ လမ်းညွှန်ချက်**\n"
+            f"{cards_section}\n\n"
+            f"---\n\n"
+            f"**၃။ လက်တွေ့ကျင့်သုံးရန် အကြံပြုချက်**\n"
+            f"{zodiac_advice}"
+        )
 
     return (
         f"Your reading draws {cards_text}, creating a narrative around {themes_text}. "

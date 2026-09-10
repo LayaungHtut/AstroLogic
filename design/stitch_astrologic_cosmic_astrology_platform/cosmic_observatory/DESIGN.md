@@ -142,6 +142,7 @@ The visual style is **Glassmorphism fused with Cosmic Minimalist Futurism**. The
 The palette is rooted in the void of deep space, accented by chromatic nebulas and classical esoteric archetypes.
 
 ### Core Canvas & Accents
+
 - **Canvas / Void Background**: `#0a0a1a` (deep navy-black)
 - **Primary Mystic Indigo**: `#7c3aed` (symbolic insight, primary interactive state anchor)
 - **Secondary Cyan Glow**: `#06b6d4` (clarity, celestial vector links)
@@ -150,13 +151,16 @@ The palette is rooted in the void of deep space, accented by chromatic nebulas a
 - **Interactive Action Gradient**: 135deg linear from `#7c3aed` to `#2563eb` (primary triggers, high-order decisions)
 
 ### Elemental Quadrants
+
 To articulate astrological modalities and tarot suits with high specificity, four distinct elemental tokens govern contextual cards, glyphs, and micro-accents:
+
 - **Fire**: `#FF6B35` (Aries, Leo, Sagittarius; Wands) — warm radiant solar energy.
 - **Earth**: `#8B7355` (Taurus, Virgo, Capricorn; Pentacles) — grounded bronze-ochre mineral hue.
 - **Air**: `#87CEEB` (Gemini, Libra, Aquarius; Swords) — ethereal atmospheric sky-glow.
 - **Water**: `#4169E1` (Cancer, Scorpio, Pisces; Cups) — abyssal oceanic royal sapphire.
 
 ### Surface Tokens
+
 - **Glass Base**: `rgba(255, 255, 255, 0.03)`
 - **Glass Hover**: `rgba(255, 255, 255, 0.05)`
 - **Glass Active / Selected**: `rgba(255, 255, 255, 0.08)`
@@ -176,11 +180,13 @@ Typography establishes an intentional tension between cosmic grandeur and techni
 The layout is built on a responsive 12-column dynamic grid system engineered for analytical dashboards and multi-pane spatial canvases.
 
 ### Rhythm & Proportions
-- Spacing follows an absolute 4px/8px base cadence. 
+
+- Spacing follows an absolute 4px/8px base cadence.
 - Component internal paddings default to `1.5rem` (`24px`) for primary observatory panels and `1rem` (`16px`) for micro-widgets.
 - Card gaps maintain a rigid `1.5rem` (`24px`) interval on desktop displays to allow glass edge refraction to breathe without visual collisions.
 
 ### Responsive Behavior
+
 - **Desktop (> 1200px)**: 12 columns, `1.5rem` gutters, `3rem` lateral safe margins. Sidebars for houses/aspects are anchored in fixed or collapsible utility columns.
 - **Tablet (768px - 1199px)**: 8 columns, `1.25rem` gutters, `2rem` outer margins. Secondary symbolic traces collapse into tabbed navigation layers.
 - **Mobile (< 768px)**: 4 columns, `1rem` gutters, `1.25rem` outer margins. Cards stretch edge-to-edge within margins; complex aspect tables convert into stacked vertical glass modules.
@@ -209,6 +215,7 @@ Visual hierarchy does not rely on opaque stacking or harsh drop shadows. Depth i
    - Box Shadow: `0 20px 60px -10px rgba(0, 0, 0, 0.7), 0 0 30px rgba(124, 58, 237, 0.15)`
 
 ### Transition Timing
+
 All surface shifts, elevation changes, border highlight activations, and glow escalations follow a uniform curve:
 `transition: all 300ms cubic-bezier(0.16, 1, 0.3, 1)`.
 
@@ -224,19 +231,22 @@ The design system employs a refined medium radius (`roundedness: 2`, `0.5rem` / 
 ## Components
 
 ### Buttons
+
 - **Primary CTA**: Background gradient of `linear-gradient(135deg, #7c3aed, #2563eb)`, text in pure white (`#ffffff`), border `1px solid rgba(255, 255, 255, 0.2)`. Padding `0.75rem 1.5rem`. Pill-shaped. On hover: shadow escalates to `0 0 20px rgba(124, 58, 237, 0.5)`. 300ms ease transition.
 - **Ghost Glass Button**: Background `rgba(255, 255, 255, 0.03)`, border `1px solid rgba(255, 255, 255, 0.08)`. On hover: `background: rgba(255, 255, 255, 0.08)`, border color `rgba(167, 139, 250, 0.4)`.
 
 ### Elemental Badges & Chips
+
 - Fully pill-shaped (`9999px`), padding `0.25rem 0.75rem`.
 - Font: `JetBrains Mono`, uppercase, letter-spacing `0.08em`.
 - Tinted glass backgrounds with low-opacity fills (`rgba(color, 0.12)`) and crisp borders (`1px solid rgba(color, 0.35)`). Text matches the respective elemental hex token:
-  - *Fire*: Border/text `#FF6B35`
-  - *Earth*: Border/text `#8B7355`
-  - *Air*: Border/text `#87CEEB`
-  - *Water*: Border/text `#4169E1`
+  - _Fire_: Border/text `#FF6B35`
+  - _Earth_: Border/text `#8B7355`
+  - _Air_: Border/text `#87CEEB`
+  - _Water_: Border/text `#4169E1`
 
 ### Input Fields & Prompts
+
 - Background: `rgba(255, 255, 255, 0.02)`.
 - Border: `1px solid rgba(255, 255, 255, 0.08)`.
 - Border-radius: `0.5rem` (`8px`).
@@ -244,20 +254,24 @@ The design system employs a refined medium radius (`roundedness: 2`, `0.5rem` / 
 - Focus state: Border transitions to `#06b6d4`, subtle cyan field halo `0 0 16px rgba(6, 182, 212, 0.25)`. Outline is none.
 
 ### Checkboxes & Segmented Selectors
+
 - Custom boxes: `18px x 18px`, `4px` border radius.
 - Inactive: Border `1px solid rgba(255, 255, 255, 0.15)`, background `rgba(255, 255, 255, 0.02)`.
 - Selected: Background `linear-gradient(135deg, #7c3aed, #06b6d4)`, checkmark rendered in clean stark white.
 
 ### Lists & Aspect Tables
+
 - Borderless table rows separated by `1px solid rgba(255, 255, 255, 0.04)`.
 - Hover state: Row illuminates with `background: rgba(255, 255, 255, 0.02)` and a left border accent `2px solid #a78bfa`.
 - Monospace values right-aligned for clean astronomical reading.
 
 ### Cards & Observational Panels
+
 - Glassmorphic architecture: Background `rgba(255, 255, 255, 0.03)`, border `1px solid rgba(255, 255, 255, 0.08)`, backdrop-filter `blur(12px)`.
 - Top-edge subtle hairline highlight: Inset linear gradient simulating refraction (`inset 0 1px 0 rgba(255, 255, 255, 0.12)`).
 
 ### AI Symbolic Reasoning Stream
+
 - Specialized terminal-style component displaying astrological calculation logs.
 - Background: `rgba(5, 5, 15, 0.6)`.
 - Font: `JetBrains Mono` sm.

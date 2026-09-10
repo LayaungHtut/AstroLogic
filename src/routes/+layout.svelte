@@ -3,6 +3,7 @@
 	import favicon from '$lib/assets/favicon.svg';
 	import StarField from '$lib/components/StarField.svelte';
 	import Navigation from '$lib/components/Navigation.svelte';
+	import Sidebar from '$lib/components/Sidebar.svelte';
 	import Footer from '$lib/components/Footer.svelte';
 
 	let { children } = $props();
@@ -11,13 +12,19 @@
 <svelte:head>
 	<link rel="icon" href={favicon} />
 	<title>AstroLogic - AI Zodiac & Tarot Reasoning</title>
-	<meta name="description" content="An AI-powered Zodiac, Tarot, and Horoscope application with symbolic reasoning" />
+	<meta
+		name="description"
+		content="An AI-powered Zodiac, Tarot, and Horoscope application with symbolic reasoning"
+	/>
 </svelte:head>
 
-<div class="fixed inset-0 pointer-events-none cosmic-stars opacity-40 z-0"></div>
+<div class="cosmic-stars pointer-events-none fixed inset-0 z-0 opacity-40"></div>
 <StarField />
 <Navigation />
-<main class="relative z-10">
-	{@render children()}
-</main>
-<Footer />
+<Sidebar />
+<div class="lg:pl-64">
+	<main class="relative z-10">
+		{@render children()}
+	</main>
+	<Footer />
+</div>

@@ -44,26 +44,25 @@ async def calculate_birth_chart(data: dict):
     if not (0 <= minute <= 59):
         return {"error": "minute must be between 0 and 59"}
 
-    has_precise_inputs = year is not None and latitude is not None and longitude is not None
+    has_year = year is not None
 
-    if has_precise_inputs:
+    if has_year:
         try:
             year = int(year)
-            latitude = float(latitude)
-            longitude = float(longitude)
+            lat = float(latitude) if latitude is not None and str(latitude).strip() != "" else None
+            lon = float(longitude) if longitude is not None and str(longitude).strip() != "" else None
         except (ValueError, TypeError):
             return {"error": "year, latitude, and longitude must be numbers"}
 
-        if not (-90 <= latitude <= 90):
+        if lat is not None and not (-90 <= lat <= 90):
             return {"error": "latitude must be between -90 and 90"}
-        if not (-180 <= longitude <= 180):
+        if lon is not None and not (-180 <= lon <= 180):
             return {"error": "longitude must be between -180 and 180"}
 
-        # compute_natal_positions and every PrologService call are synchronous,
-        # blocking calls (pyswisseph, timezonefinder, pyswip) — run each off
-        # the event loop so one slow request doesn't stall every other one.
+        # compute_natal_positions runs NASA JPL DE421 ephemeris calculations off
+        # the event loop to ensure high concurrency.
         positions = await asyncio.to_thread(
-            compute_natal_positions, year, month, day, hour, minute, latitude, longitude
+            compute_natal_positions, year, month, day, hour, minute, lat, lon
         )
         if positions:
             chart = await asyncio.to_thread(
@@ -74,20 +73,56 @@ async def calculate_birth_chart(data: dict):
                 chart["sun_degree"] = positions["sun_degree"]
                 chart["moon_degree"] = positions["moon_degree"]
                 chart["rising_degree"] = positions["rising_degree"]
+                chart["mc_degree"] = positions.get("mc_degree")
+                chart["mc_sign"] = positions.get("mc_sign")
                 chart["timezone"] = positions["timezone"]
                 chart["precise"] = True
+                chart["has_exact_location"] = lat is not None and lon is not None
 
                 other_planets = positions.get("planets", {})
-                planet_signs = {name: info["sign"] for name, info in other_planets.items()}
+                standard_planets = {"mercury", "venus", "mars", "jupiter", "saturn", "uranus", "neptune", "pluto"}
+                planet_signs = {name: info["sign"] for name, info in other_planets.items() if name in standard_planets}
                 planets_profile = await asyncio.to_thread(
                     PrologService.get_planet_positions_profile, planet_signs
                 )
+                existing_names = {p["name"] for p in planets_profile}
+
+                # Helper to get element and modality for any sign
+                SIGN_PROPERTIES = {
+                    "aries": ("fire", "cardinal"), "taurus": ("earth", "fixed"), "gemini": ("air", "mutable"),
+                    "cancer": ("water", "cardinal"), "leo": ("fire", "fixed"), "virgo": ("earth", "mutable"),
+                    "libra": ("air", "cardinal"), "scorpio": ("water", "fixed"), "sagittarius": ("fire", "mutable"),
+                    "capricorn": ("earth", "cardinal"), "aquarius": ("air", "fixed"), "pisces": ("water", "mutable"),
+                }
+
+                extra_bodies = {
+                    "node": {"symbol": "☊", "influence": "Destiny & Spiritual Evolutionary Path"},
+                    "lilith": {"symbol": "⚸", "influence": "Unconscious Desires & Raw Primal Nature"},
+                    "chiron": {"symbol": "⚷", "influence": "The Wounded Healer & Deep Soul Wisdom"},
+                }
+                for name, meta in extra_bodies.items():
+                    if name in other_planets and name not in existing_names:
+                        info = other_planets[name]
+                        elem, mod = SIGN_PROPERTIES.get(info["sign"], ("", ""))
+                        planets_profile.append({
+                            "name": name,
+                            "sign": info["sign"],
+                            "symbol": meta["symbol"],
+                            "element": elem,
+                            "modality": mod,
+                            "influence": meta["influence"],
+                            "degree": info.get("degree"),
+                            "retrograde": info.get("retrograde", False),
+                        })
+
                 # Merge in the degree/retrograde data ephemeris computed but
                 # Prolog doesn't carry (it only reasons over the sign).
                 for p in planets_profile:
                     info = other_planets.get(p["name"], {})
-                    p["degree"] = info.get("degree")
-                    p["retrograde"] = info.get("retrograde", False)
+                    if "degree" not in p or p["degree"] is None:
+                        p["degree"] = info.get("degree")
+                    if "retrograde" not in p:
+                        p["retrograde"] = info.get("retrograde", False)
                 chart["planets"] = planets_profile
 
                 reasoning = await asyncio.to_thread(
@@ -100,8 +135,7 @@ async def calculate_birth_chart(data: dict):
                     positions["rising_degree"],
                 )
                 return {"chart": chart, "reasoning": reasoning}
-        # Ephemeris/timezone lookup failed (e.g. unresolvable coordinates) —
-        # fall through to the approximate calculation below.
+        # Fall through to approximate calculation if ephemeris somehow failed
 
     chart = await asyncio.to_thread(PrologService.get_full_birth_chart, month, day, hour)
     if not chart:
@@ -116,3 +150,24 @@ async def calculate_birth_chart(data: dict):
         "chart": chart,
         "reasoning": reasoning,
     }
+
+
+@router.post("/explain")
+async def explain_birth_chart(data: dict):
+    """Generate in-depth bilingual psychological and astrological explanation.
+
+    Accepts the calculated chart object and optional requested locale ('en' | 'my').
+    Returns deep breakdown of the Big Three, planetary archetypes, major aspects,
+    and elemental constitution.
+    """
+    chart = data.get("chart")
+    if not chart:
+        return {"error": "chart data is required"}
+    locale = data.get("locale", "en")
+    if locale not in ("en", "my"):
+        locale = "en"
+
+    from app.services.birth_chart_explanation_service import generate_birth_chart_explanation
+    explanation = await asyncio.to_thread(generate_birth_chart_explanation, chart, locale)
+    return {"explanation": explanation}
+

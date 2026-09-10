@@ -26,6 +26,7 @@ User (SvelteKit 5) --> REST API (FastAPI) --> Prolog (Reasoning) + OpenRouter (A
 ## Prolog Role
 
 SWI-Prolog maintains a knowledge base of:
+
 - 12 zodiac signs with elements, modalities, ruling planets, and traits
 - 78 tarot cards with keywords, meanings, and themes
 - Compatibility rules between elements and signs
@@ -36,6 +37,7 @@ SWI-Prolog maintains a knowledge base of:
 ## AI Role
 
 OpenRouter (LLM) is used for:
+
 - Generating natural language interpretations of tarot readings
 - Creating personalized horoscope content
 - Powering the AI chat assistant
@@ -55,11 +57,13 @@ OpenRouter (LLM) is used for:
 **Windows:** Download from https://www.swi-prolog.org/Download.html
 
 **macOS:**
+
 ```bash
 brew install swi-prolog
 ```
 
 **Linux (Ubuntu/Debian):**
+
 ```bash
 sudo apt-get install swi-prolog
 ```
@@ -99,22 +103,22 @@ Without an API key, the app uses fallback deterministic interpretations.
 
 ## API Endpoints
 
-| Method | Endpoint | Description |
-|--------|----------|-------------|
-| GET | `/api/health` | Health check |
-| GET | `/api/zodiac` | All zodiac signs |
-| GET | `/api/zodiac/{sign}` | Zodiac sign info |
-| GET | `/api/tarot` | All tarot cards |
-| POST | `/api/tarot/draw` | Draw random cards |
-| POST | `/api/reading/analyze` | Full reading with Prolog + AI |
-| POST | `/api/reading/generate` | Save reading to history |
-| POST | `/api/horoscope/generate` | Generate horoscope |
-| POST | `/api/compatibility/analyze` | Zodiac compatibility |
-| POST | `/api/chat` | AI chat assistant |
-| GET | `/api/history` | Reading history |
-| GET | `/api/history/{id}` | Single reading |
-| DELETE | `/api/history/{id}` | Delete reading |
-| GET | `/api/analytics` | Reading analytics |
+| Method | Endpoint                     | Description                   |
+| ------ | ---------------------------- | ----------------------------- |
+| GET    | `/api/health`                | Health check                  |
+| GET    | `/api/zodiac`                | All zodiac signs              |
+| GET    | `/api/zodiac/{sign}`         | Zodiac sign info              |
+| GET    | `/api/tarot`                 | All tarot cards               |
+| POST   | `/api/tarot/draw`            | Draw random cards             |
+| POST   | `/api/reading/analyze`       | Full reading with Prolog + AI |
+| POST   | `/api/reading/generate`      | Save reading to history       |
+| POST   | `/api/horoscope/generate`    | Generate horoscope            |
+| POST   | `/api/compatibility/analyze` | Zodiac compatibility          |
+| POST   | `/api/chat`                  | AI chat assistant             |
+| GET    | `/api/history`               | Reading history               |
+| GET    | `/api/history/{id}`          | Single reading                |
+| DELETE | `/api/history/{id}`          | Delete reading                |
+| GET    | `/api/analytics`             | Reading analytics             |
 
 ## Project Structure
 

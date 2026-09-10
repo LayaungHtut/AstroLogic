@@ -24,53 +24,76 @@ spread_positions(career, ['Current Position', 'Strength', 'Challenge', 'Opportun
 
 % --- Question Category Classification ---
 question_category(Input, Category) :-
-    (   sub_string(Input, _, _, _, 'career')
+    (   (   sub_string(Input, _, _, _, 'education') ; sub_string(Input, _, _, _, 'study') ;
+            sub_string(Input, _, _, _, 'school') ; sub_string(Input, _, _, _, 'university') ;
+            sub_string(Input, _, _, _, 'college') ; sub_string(Input, _, _, _, 'exam') ;
+            sub_string(Input, _, _, _, 'test') ; sub_string(Input, _, _, _, 'pass') ;
+            sub_string(Input, _, _, _, 'fail') ; sub_string(Input, _, _, _, 'grade') ;
+            sub_string(Input, _, _, _, 'major') ; sub_string(Input, _, _, _, 'degree') ;
+            sub_string(Input, _, _, _, 'learning') ; sub_string(Input, _, _, _, 'academic') ;
+            sub_string(Input, _, _, _, 'စာမေးပွဲ') ; sub_string(Input, _, _, _, 'အောင်') ;
+            sub_string(Input, _, _, _, 'ကျောင်း') ; sub_string(Input, _, _, _, 'တက္ကသိုလ်') ;
+            sub_string(Input, _, _, _, 'ပညာရေး') ; sub_string(Input, _, _, _, 'ဘွဲ့') ;
+            sub_string(Input, _, _, _, 'သင်တန်း') ; sub_string(Input, _, _, _, 'စာသင်')
+        )
+    ->  Category = education
+    ;   (   sub_string(Input, _, _, _, 'career') ; sub_string(Input, _, _, _, 'job') ;
+            sub_string(Input, _, _, _, 'work') ; sub_string(Input, _, _, _, 'promotion') ;
+            sub_string(Input, _, _, _, 'boss') ; sub_string(Input, _, _, _, 'interview') ;
+            sub_string(Input, _, _, _, 'business') ; sub_string(Input, _, _, _, 'professional') ;
+            sub_string(Input, _, _, _, 'အလုပ်') ; sub_string(Input, _, _, _, 'ရာထူး') ;
+            sub_string(Input, _, _, _, 'စီးပွားရေး') ; sub_string(Input, _, _, _, 'အလုပ်အကိုင်') ;
+            sub_string(Input, _, _, _, 'အင်တာဗျူး')
+        )
     ->  Category = career
-    ;   sub_string(Input, _, _, _, 'job')
-    ->  Category = career
-    ;   sub_string(Input, _, _, _, 'work')
-    ->  Category = career
-    ;   sub_string(Input, _, _, _, 'relationship')
+    ;   (   sub_string(Input, _, _, _, 'relationship') ; sub_string(Input, _, _, _, 'partner') ;
+            sub_string(Input, _, _, _, 'love') ; sub_string(Input, _, _, _, 'dating') ;
+            sub_string(Input, _, _, _, 'crush') ; sub_string(Input, _, _, _, 'marriage') ;
+            sub_string(Input, _, _, _, 'soulmate') ; sub_string(Input, _, _, _, 'boyfriend') ;
+            sub_string(Input, _, _, _, 'girlfriend') ;
+            sub_string(Input, _, _, _, 'အချစ်') ; sub_string(Input, _, _, _, 'ချစ်သူ') ;
+            sub_string(Input, _, _, _, 'ရည်းစား') ; sub_string(Input, _, _, _, 'အိမ်ထောင်') ;
+            sub_string(Input, _, _, _, 'မင်္ဂလာဆောင်') ; sub_string(Input, _, _, _, 'ကြိုက်') ;
+            sub_string(Input, _, _, _, 'တွဲ') ; sub_string(Input, _, _, _, 'သဘောကျ') ;
+            sub_string(Input, _, _, _, 'ကောင်လေး') ; sub_string(Input, _, _, _, 'ကောင်မလေး') ;
+            sub_string(Input, _, _, _, 'လက်ထပ်') ; sub_string(Input, _, _, _, 'သံယောဇဉ်') ;
+            sub_string(Input, _, _, _, 'ကြာဦးမှာလား')
+        )
     ->  Category = relationship
-    ;   sub_string(Input, _, _, _, 'partner')
-    ->  Category = relationship
-    ;   sub_string(Input, _, _, _, 'love')
-    ->  Category = relationship
-    ;   sub_string(Input, _, _, _, 'education')
-    ->  Category = education
-    ;   sub_string(Input, _, _, _, 'study')
-    ->  Category = education
-    ;   sub_string(Input, _, _, _, 'school')
-    ->  Category = education
-    ;   sub_string(Input, _, _, _, 'university')
-    ->  Category = education
-    ;   sub_string(Input, _, _, _, 'major')
-    ->  Category = education
-    ;   sub_string(Input, _, _, _, 'decision')
+    ;   (   sub_string(Input, _, _, _, 'money') ; sub_string(Input, _, _, _, 'finance') ;
+            sub_string(Input, _, _, _, 'salary') ; sub_string(Input, _, _, _, 'invest') ;
+            sub_string(Input, _, _, _, 'wealth') ; sub_string(Input, _, _, _, 'budget') ;
+            sub_string(Input, _, _, _, 'ငွေ') ; sub_string(Input, _, _, _, 'ပိုက်ဆံ') ;
+            sub_string(Input, _, _, _, 'ကြွေး') ; sub_string(Input, _, _, _, 'ချမ်းသာ') ;
+            sub_string(Input, _, _, _, 'လစာ') ; sub_string(Input, _, _, _, 'ရင်းနှီးမြှုပ်နှံ')
+        )
+    ->  Category = finance
+    ;   (   sub_string(Input, _, _, _, 'decision') ; sub_string(Input, _, _, _, 'choose') ;
+            sub_string(Input, _, _, _, 'choice') ; sub_string(Input, _, _, _, 'which') ;
+            sub_string(Input, _, _, _, 'ရွေးချယ်') ; sub_string(Input, _, _, _, 'ဆုံးဖြတ်') ;
+            sub_string(Input, _, _, _, 'ဘယ်ဟာ') ; sub_string(Input, _, _, _, 'လမ်းခွဲ')
+        )
     ->  Category = decision
-    ;   sub_string(Input, _, _, _, 'choose')
-    ->  Category = decision
-    ;   sub_string(Input, _, _, _, 'choice')
-    ->  Category = decision
-    ;   sub_string(Input, _, _, _, 'which')
-    ->  Category = decision
-    ;   sub_string(Input, _, _, _, 'friend')
+    ;   (   sub_string(Input, _, _, _, 'friend') ; sub_string(Input, _, _, _, 'friendship') ;
+            sub_string(Input, _, _, _, 'သူငယ်ချင်း') ; sub_string(Input, _, _, _, 'မိတ်ဆွေ')
+        )
     ->  Category = friendship
-    ;   sub_string(Input, _, _, _, 'creative')
+    ;   (   sub_string(Input, _, _, _, 'creative') ; sub_string(Input, _, _, _, 'art') ;
+            sub_string(Input, _, _, _, 'write') ; sub_string(Input, _, _, _, 'music') ;
+            sub_string(Input, _, _, _, 'အနုပညာ') ; sub_string(Input, _, _, _, 'တီထွင်')
+        )
     ->  Category = creativity
-    ;   sub_string(Input, _, _, _, 'art')
-    ->  Category = creativity
-    ;   sub_string(Input, _, _, _, 'write')
-    ->  Category = creativity
-    ;   sub_string(Input, _, _, _, 'future')
+    ;   (   sub_string(Input, _, _, _, 'future') ; sub_string(Input, _, _, _, 'plan') ;
+            sub_string(Input, _, _, _, 'destiny') ;
+            sub_string(Input, _, _, _, 'အနာဂတ်') ; sub_string(Input, _, _, _, 'အစီအစဉ်') ;
+            sub_string(Input, _, _, _, 'ရှေ့ရေး')
+        )
     ->  Category = future_planning
-    ;   sub_string(Input, _, _, _, 'plan')
-    ->  Category = future_planning
-    ;   sub_string(Input, _, _, _, 'myself')
-    ->  Category = self_reflection
-    ;   sub_string(Input, _, _, _, 'understand')
-    ->  Category = self_reflection
-    ;   sub_string(Input, _, _, _, 'meaning')
+    ;   (   sub_string(Input, _, _, _, 'myself') ; sub_string(Input, _, _, _, 'understand') ;
+            sub_string(Input, _, _, _, 'meaning') ; sub_string(Input, _, _, _, 'grow') ;
+            sub_string(Input, _, _, _, 'ကိုယ့်ကိုယ်ကို') ; sub_string(Input, _, _, _, 'စိတ်') ;
+            sub_string(Input, _, _, _, 'အဓိပ္ပာယ်')
+        )
     ->  Category = self_reflection
     ;   Category = general
     ).
@@ -103,13 +126,13 @@ element_position_emphasis(water, 'Emotions & Intuition').
 
 % --- Complete Spread Recommendation ---
 spread_recommendation(Input, Sign, Recommendation) :-
-    question_category(Input, Category),
-    recommended_spread(Category, SpreadType),
-    element(Sign, Element),
-    modality(Sign, Modality),
-    element_position_emphasis(Element, Emphasis),
-    spread(SpreadType, Name, Description, CardCount),
-    spread_positions(SpreadType, Positions),
+    (question_category(Input, Category) -> true ; Category = general),
+    (recommended_spread(Category, SpreadType) -> true ; SpreadType = three_card),
+    (element(Sign, Element) -> true ; Element = water),
+    (modality(Sign, Modality) -> true ; Modality = cardinal),
+    (element_position_emphasis(Element, Emphasis) -> true ; Emphasis = 'Emotions & Intuition'),
+    (spread(SpreadType, Name, Description, CardCount) -> true ; (SpreadType = three_card, Name = 'Three Card', Description = 'Past, Present, Future', CardCount = 3)),
+    (spread_positions(SpreadType, Positions) -> true ; Positions = ['Past', 'Present', 'Future']),
     Recommendation = spread_recommendation{
         category: Category,
         spread_type: SpreadType,
@@ -130,12 +153,12 @@ spread_recommendation(Input, Sign, Recommendation) :-
 % the spread itself is the one requested, not recommended_spread/2's guess.
 
 spread_recommendation_for(Input, Sign, SpreadType, Recommendation) :-
-    question_category(Input, Category),
-    element(Sign, Element),
-    modality(Sign, Modality),
-    element_position_emphasis(Element, Emphasis),
-    spread(SpreadType, Name, Description, CardCount),
-    spread_positions(SpreadType, Positions),
+    (question_category(Input, Category) -> true ; Category = general),
+    (element(Sign, Element) -> true ; Element = water),
+    (modality(Sign, Modality) -> true ; Modality = cardinal),
+    (element_position_emphasis(Element, Emphasis) -> true ; Emphasis = 'Emotions & Intuition'),
+    (spread(SpreadType, Name, Description, CardCount) -> true ; (SpreadType = three_card, Name = 'Three Card', Description = 'Past, Present, Future', CardCount = 3)),
+    (spread_positions(SpreadType, Positions) -> true ; Positions = ['Past', 'Present', 'Future']),
     Recommendation = spread_recommendation{
         category: Category,
         spread_type: SpreadType,
